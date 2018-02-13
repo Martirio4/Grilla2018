@@ -40,7 +40,7 @@ public class ControllerDatos {
                 nuevaAuditoria.setIdAuditoria("Audit_" + UUID.randomUUID());
                 idAuditInstanciada=nuevaAuditoria.getIdAuditoria();
                 nuevaAuditoria.setFechaAuditoria(determinarFecha());
-                nuevaAuditoria.setEsUltimaAuditoria(true);
+                nuevaAuditoria.setEsUltimaAuditoria(false);
                     
 //                    PRIMER ESE
                 

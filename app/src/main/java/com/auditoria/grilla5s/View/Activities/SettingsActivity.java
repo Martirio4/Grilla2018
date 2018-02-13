@@ -15,15 +15,15 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Area;
+import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterArea;
+import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
+import com.auditoria.grilla5s.View.Fragments.FragmentSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.adapter.AdapterArea;
-import com.nomad.audit5s.fragments.FragmentManageAreas;
-import com.nomad.audit5s.fragments.FragmentSettings;
-import com.nomad.audit5s.model.Area;
-import com.nomad.audit5s.model.Auditoria;
-import com.nomad.audit5s.model.Foto;
-import com.nomad.audit5s.model.SubItem;
+
 
 import java.io.File;
 
@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
 
 
     public void irALanding(){
-        Intent unIntent = new Intent(this, ActivityLanding.class);
+        Intent unIntent = new Intent(this, LandingActivity.class);
         startActivity(unIntent);
         this.finish();
     }
@@ -177,7 +177,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
 
     @Override
     public void salirDeAca() {
-        Intent intent=new Intent(this, ActivityLanding.class);
+        Intent intent=new Intent(this, LandingActivity.class);
         startActivity(intent);
         this.finish();
     }

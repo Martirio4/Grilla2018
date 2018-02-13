@@ -307,8 +307,19 @@
     <string name="titRating">Support this app</string>
     <string name="rateOurApp">Rate our app</string>
     <string name="bienvenido">Welcome </string>
-
-
+    <string name="quit">Quit</string>
+    <string name="delteAreaOk">Area was succesfully deleted</string>
+    <string name="deleteTituloDialog">Delete Selected Area</string>
+    <string name="elArea">The area: </string>
+    <string name="deletePermanente">and related audits will be permanently deleted.</string>
+    <string name="deseaContinuar">Do you wisht to continue?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="ingreseUsuarioValido">Please enter a valid username.</string>
+    <string name="ingreseContraseniaValida">Please enter a valid password.</string>
+    <string name="caracteresContrasenia">Password must be at least 6 characters</string>
+    <string name="contraseniasNoCoinciden">Passwords do not match.</string>
+    <string name="signOut">Log out</string>
 
 
 

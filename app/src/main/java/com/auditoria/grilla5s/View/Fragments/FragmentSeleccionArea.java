@@ -16,12 +16,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.auditoria.grilla5s.Model.Area;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterArea;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.adapter.AdapterArea;
-import com.nomad.audit5s.model.Area;
+
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -30,7 +30,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSeleccionAerea extends Fragment {
+public class FragmentSeleccionArea extends Fragment {
 
     private RealmList<Area> listaAreas;
     private RecyclerView recyclerAreas;
@@ -40,7 +40,7 @@ public class FragmentSeleccionAerea extends Fragment {
     private Notificable notificable;
     private LinearLayout linear;
 
-    public FragmentSeleccionAerea() {
+    public FragmentSeleccionArea() {
         // Required empty public constructor
     }
 

@@ -1,0 +1,70 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blancoNomad"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.Toolbar
+
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+    <TextView
+        android:textSize="20sp"
+        android:id="@+id/textoToolbar"
+        android:gravity="start"
+        android:layout_marginStart="@dimen/margenChico"
+        android:layout_marginEnd="@dimen/margenChico"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:layout_marginStart="@dimen/margenChico"
+        android:layout_marginEnd="@dimen/margenChico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sinAreas"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/secondary_text"
+        android:id="@+id/textoSinAreas"
+        android:visibility="gone"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerArea"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/margenChico"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+<LinearLayout
+    android:layout_gravity="bottom|start"
+    android:orientation="vertical"
+    android:id="@+id/vistaCentral"
+    android:layout_marginStart="60dp"
+    android:layout_marginBottom="60dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+</LinearLayout>
+</FrameLayout>

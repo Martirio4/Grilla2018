@@ -1,49 +1,33 @@
 package com.auditoria.grilla5s.Model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 9/2/2018.
  */
 
 public class Usuario extends RealmObject {
-    private String rutaFoto;
-    private String idFoto;
-    private String idAuditOArea;
-    private String idPregunta;
+    @PrimaryKey
+    private String mail;
+    private String pass;
 
     public Usuario() {
     }
 
-    public String getRutaFoto() {
-        return rutaFoto;
+    public String getMail() {
+        return mail;
     }
 
-    public void setRutaFoto(String rutaFoto) {
-        this.rutaFoto = rutaFoto;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
-    public String getIdFoto() {
-        return idFoto;
+    public String getPass() {
+        return pass;
     }
 
-    public void setIdFoto(String idFoto) {
-        this.idFoto = idFoto;
-    }
-
-    public String getIdAuditOArea() {
-        return idAuditOArea;
-    }
-
-    public void setIdAuditOArea(String idAuditOArea) {
-        this.idAuditOArea = idAuditOArea;
-    }
-
-    public String getIdPregunta() {
-        return idPregunta;
-    }
-
-    public void setIdPregunta(String idPregunta) {
-        this.idPregunta = idPregunta;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 }

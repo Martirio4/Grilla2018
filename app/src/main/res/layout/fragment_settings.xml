@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/contenedor_landing"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.auditoria.grilla5s.View.Activities.SettingsActivity">
+
+        <LinearLayout
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+            android:background="@color/tile1"
+            android:id="@+id/lin1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="50"
+            android:layout_height="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                        <ImageView
+                            android:visibility="invisible"
+                            android:id="@+id/targetnum"
+                            android:alpha="0"
+                            android:src="@drawable/azul1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+
+
+
+                        <Button
+
+                            android:textAlignment="viewStart"
+                            android:textSize="@dimen/textoSettings"
+                            android:background="@android:color/transparent"
+                            android:drawableStart="@drawable/azul1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/manageAuditAreas"
+                            android:id="@+id/botonManageAreas"
+                            android:textColor="@color/tile5"
+                            />
+
+                </FrameLayout>
+
+
+
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:paddingStart="@dimen/margenChico"
+            android:paddingEnd="@dimen/margenChico"
+            android:id="@+id/lin2"
+                android:background="@color/tile2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="50"
+            android:layout_height="0dp">
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                        <ImageView
+                            android:visibility="invisible"
+                            android:id="@+id/targetnum2"
+                            android:alpha="0"
+                            android:src="@drawable/azul2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                <Button
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/textoSettings"
+                    android:drawableStart="@drawable/azul2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/signOut"
+                    android:id="@+id/botonLogOut"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/tile5"
+                    />
+                </FrameLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:paddingStart="@dimen/margenChico"
+            android:paddingEnd="@dimen/margenChico"
+            android:background="@color/tile3"
+            android:id="@+id/lin3"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="50"
+            android:layout_height="0dp">
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                        <ImageView
+                            android:visibility="invisible"
+                            android:id="@+id/targetnum3"
+                            android:alpha="0"
+                            android:src="@drawable/azul3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                        <Button
+                            android:textAlignment="viewStart"
+                            android:textSize="@dimen/textoSettings"
+                            android:background="@android:color/transparent"
+                            android:id="@+id/botonTuto"
+                            android:drawableStart="@drawable/azul3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/tile5" />
+                </FrameLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:paddingStart="@dimen/margenChico"
+            android:paddingEnd="@dimen/margenChico"
+            android:background="@color/tile4"
+            android:id="@+id/lin4"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="50"
+            android:layout_height="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:visibility="invisible"
+                        android:id="@+id/targetnum4"
+                        android:alpha="0"
+                        android:src="@drawable/azul4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+                <Button
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/textoSettings"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/botonBorrarTodo"
+                    android:drawableStart="@drawable/azul4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/databaseAuditDelete"
+                    android:textColor="@color/tile3" />
+        </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingStart="@dimen/margenChico"
+            android:paddingEnd="@dimen/margenChico"
+            android:background="@color/tile4.5"
+            android:id="@+id/lin5"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="50"
+            android:layout_height="0dp">
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                        <ImageView
+                            android:visibility="invisible"
+                            android:id="@+id/targetnum5"
+                            android:alpha="0"
+                            android:src="@drawable/azul5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                        <Button
+                            android:textAlignment="viewStart"
+                            android:textSize="@dimen/textoSettings"
+                            android:background="@android:color/transparent"
+                            android:id="@+id/botonRateApp"
+                            android:drawableStart="@drawable/azul5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/rateOurApp"
+                            android:textColor="@color/tile2" />
+                </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingStart="@dimen/margenChico"
+            android:paddingEnd="@dimen/margenChico"
+            android:background="@color/tile5"
+            android:id="@+id/line4"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="50"
+            android:layout_height="0dp">
+                <Button
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/textoSettings"
+                    android:drawableStart="@drawable/blanco6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/goBack"
+                    android:id="@+id/botonVolver"
+                    android:textColor="@color/tile1"
+                    android:background="@android:color/transparent"
+                    />
+
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+
+

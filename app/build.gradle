@@ -40,4 +40,8 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
     compile 'com.github.tajchert:nammu:1.2.0'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+    compile 'com.google.firebase:firebase-auth:11.8.0'
+    compile 'com.google.firebase:firebase-database:11.8.0'
 }
+apply plugin: 'com.google.gms.google-services'
