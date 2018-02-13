@@ -320,6 +320,14 @@
     <string name="caracteresContrasenia">Password must be at least 6 characters</string>
     <string name="contraseniasNoCoinciden">Passwords do not match.</string>
     <string name="signOut">Log out</string>
+    <string name="verCriterios">Criteria</string>
+    <string name="criteriaTitulo">Criteria</string>
+    <string name="sacarFoto">Add photo</string>
+    <string name="guardarAuditoria">Save Audit</string>
+    <string name="salir">Quit</string>
+    <string name="manageAreas">Manage audit areas</string>
+    <string name="addNewArea">Add new Area</string>
+    <string name="generarPDF">Send PDF report</string>
 
 
 

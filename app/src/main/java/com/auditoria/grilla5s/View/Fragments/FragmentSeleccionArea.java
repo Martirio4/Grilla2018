@@ -21,6 +21,7 @@ import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterArea;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import io.realm.Realm;

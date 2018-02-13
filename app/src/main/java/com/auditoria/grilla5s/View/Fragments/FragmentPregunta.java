@@ -27,6 +27,7 @@ import android.widget.Toolbar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
@@ -38,13 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.activities.ActivityAuditoria;
-import com.nomad.audit5s.adapter.AdapterFotos;
-import com.nomad.audit5s.model.Auditoria;
-import com.nomad.audit5s.model.Foto;
-import com.nomad.audit5s.model.SubItem;
-import com.nomad.audit5s.utils.FuncionesPublicas;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +58,7 @@ import pl.tajchert.nammu.PermissionCallback;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSubitem extends Fragment {
+public class FragmentPregunta extends Fragment {
 
     public static final String ENUNCIADO="ENUNCIADO";
     public static final String OPCION1="OPCION1";
@@ -123,7 +118,7 @@ public class FragmentSubitem extends Fragment {
     private FloatingActionButton fabSalir;
 
 
-    public FragmentSubitem() {
+    public FragmentPregunta() {
         // Required empty public constructor
     }
 
@@ -268,21 +263,21 @@ public class FragmentSubitem extends Fragment {
                 if (FuncionesPublicas.isExternalStorageWritable()) {
                     if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         fabMenu.close(true);
-                        EasyImage.openCamera(FragmentSubitem.this, 1);
+                        EasyImage.openCamera(FragmentPregunta.this, 1);
                     }
                     else {
-                        if (Nammu.shouldShowRequestPermissionRationale(FragmentSubitem.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             //User already refused to give us this permission or removed it
                             //Now he/she can mark "never ask again" (sic!)
                             Snackbar.make(getView(), getResources().getString(R.string.appNecesitaPermiso),
                                     Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string.ok), new View.OnClickListener() {
                                 @Override public void onClick(View view) {
-                                    Nammu.askForPermission(FragmentSubitem.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                             new PermissionCallback() {
                                                 @Override
                                                 public void permissionGranted() {
                                                     fabMenu.close(true);
-                                                    EasyImage.openCamera(FragmentSubitem.this, 1);
+                                                    EasyImage.openCamera(FragmentPregunta.this, 1);
                                                 }
 
                                                 @Override
@@ -296,12 +291,12 @@ public class FragmentSubitem extends Fragment {
                             //First time asking for permission
                             // or phone doesn't offer permission
                             // or user marked "never ask again"
-                            Nammu.askForPermission(FragmentSubitem.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                     new PermissionCallback() {
                                         @Override
                                         public void permissionGranted() {
                                             fabMenu.close(true);
-                                            EasyImage.openCamera(FragmentSubitem.this, 1);
+                                            EasyImage.openCamera(FragmentPregunta.this, 1);
                                         }
 
                                         @Override
@@ -634,18 +629,18 @@ public class FragmentSubitem extends Fragment {
     }
 
 
-    public static FragmentSubitem CrearfragmentSubItem(SubItem unSubItem) {
-        FragmentSubitem detalleFragment = new FragmentSubitem();
+    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta) {
+        FragmentPregunta detalleFragment = new FragmentPregunta();
         Bundle unBundle = new Bundle();
 
-        unBundle.putString(ENUNCIADO, unSubItem.getEnunciado());
-        unBundle.putString(OPCION1, unSubItem.getPunto1());
-        unBundle.putString(OPCION2, unSubItem.getPunto2());
-        unBundle.putString(OPCION3, unSubItem.getPunto3());
-        unBundle.putString(OPCION4, unSubItem.getPunto4());
-        unBundle.putString(OPCION5, unSubItem.getPunto5());
-        unBundle.putString(ID, unSubItem.getId());
-        unBundle.putString(PERTENENCIA, unSubItem.getPertenencia());
+        unBundle.putString(ENUNCIADO, laPregunta.getEnunciado());
+        unBundle.putString(OPCION1, laPregunta.getPunto1());
+        unBundle.putString(OPCION2, laPregunta.getPunto2());
+        unBundle.putString(OPCION3, laPregunta.getPunto3());
+        unBundle.putString(OPCION4, laPregunta.getPunto4());
+        unBundle.putString(OPCION5, laPregunta.getPunto5());
+        unBundle.putString(ID, laPregunta.getId());
+        unBundle.putString(PERTENENCIA, laPregunta.getPertenencia());
         detalleFragment.setArguments(unBundle);
         return detalleFragment;
     }

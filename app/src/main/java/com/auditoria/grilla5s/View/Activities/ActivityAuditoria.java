@@ -20,18 +20,17 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.DAO.ControllerDatos;
+
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
+import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
+import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.adapter.AdapterPagerSubItems;
-import com.nomad.audit5s.controller.ControllerDatos;
-import com.nomad.audit5s.fragments.FragmentSubitem;
-import com.nomad.audit5s.model.Area;
-import com.nomad.audit5s.model.Auditoria;
-import com.nomad.audit5s.model.Foto;
-import com.nomad.audit5s.model.SubItem;
+
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -43,7 +42,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
-public class ActivityAuditoria extends AppCompatActivity implements FragmentSubitem.Avisable{
+public class ActivityAuditoria extends AppCompatActivity implements FragmentPregunta.Avisable{
 
     public static final String IDAUDITORIA ="IDAUDITORIA";
     public static final String IDAREA="IDAREA";
@@ -52,7 +51,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentSubi
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ViewPager pager;
-    private AdapterPagerSubItems adapterPager;
+    private AdapterPagerPreguntas adapterPager;
     public static String idAuditoria;
     public static String areaAuditada;
     private String resultadoInputFoto;
@@ -76,11 +75,10 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentSubi
         drawerLayout = (DrawerLayout) findViewById(R.id.elDrawer);
         navigationView = (NavigationView) findViewById(R.id.naview);
         pager=(ViewPager)findViewById(R.id.viewPagerAuditoria);
-        fabMenu=(FloatingActionMenu)findViewById(R.id.fab_menu);
 
 //        SETEAR EL VIEWPAGER
         controllerDatos=new ControllerDatos(this);
-        adapterPager=new AdapterPagerSubItems(getSupportFragmentManager());
+        adapterPager=new AdapterPagerEses(getSupportFragmentManager());
         adapterPager.setListaSubItems(controllerDatos.traerSubItems());
         adapterPager.setUnaListaTitulos(controllerDatos.traerTitulos());
         pager.setAdapter(adapterPager);

@@ -21,6 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Area;
+import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
+import com.auditoria.grilla5s.View.Adapter.AdapterArea;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.clans.fab.FloatingActionButton;
@@ -32,11 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.adapter.AdapterArea;
-import com.nomad.audit5s.model.Area;
-import com.nomad.audit5s.model.Foto;
-import com.nomad.audit5s.utils.FuncionesPublicas;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -115,7 +116,7 @@ public class FragmentManageAreas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_manage_aerea, container, false);
+        View view= inflater.inflate(R.layout.fragment_manage_area, container, false);
 
         linearSnackbar =view.findViewById(R.id.linearParaCoordinar);
 
@@ -399,7 +400,6 @@ public class FragmentManageAreas extends Fragment {
                         unArea.setNombreArea(input.toString());
                         unArea.setFotoArea(unaFoto);
                         unArea.setIdArea("area" + UUID.randomUUID());
-                        unArea.setUsuario(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
                         //guardo nueva area en Realm
                         Realm realm = Realm.getDefaultInstance();
@@ -427,7 +427,6 @@ public class FragmentManageAreas extends Fragment {
 
         if (user!=null) {
             final DatabaseReference reference = mDatabase.child("usuarios").child(user.getUid()).child("estadisticas").child("cantidadAreasCreadas");
-            final DatabaseReference referenceGlobal = mDatabase.child("estadisticas").child("cantidadAreasCreadas");
 
             //---LEER Y SUMAR UN AREA AL USUARIO---//
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -439,24 +438,6 @@ public class FragmentManageAreas extends Fragment {
                             reference.setValue(numeroAreas.toString());
                     } else {
                         reference.setValue("1");
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            //---LEER Y SUMAR UN AREA AL GLOBAL---//
-            referenceGlobal.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue()!=null) {
-                        String cantidadAreas =dataSnapshot.getValue().toString();
-                        Integer numeroAreas= Integer.parseInt(cantidadAreas)+1;
-                        referenceGlobal.setValue(numeroAreas.toString());
-                    } else {
-                        referenceGlobal.setValue("1");
                     }
                 }
 

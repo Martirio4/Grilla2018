@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_marginStart="@dimen/margenMini"
+        android:layout_marginTop="@dimen/margenMini"
+        android:layout_marginBottom="@dimen/margenMini"
+        android:layout_weight="30"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/altoTarjeta">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/imagenAreaResumenAuditorias"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:layout_marginTop="@dimen/margenChico"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="85"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:id="@+id/nombreAreaResumenAuditoria"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:layout_marginBottom="@dimen/margenChico"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                />
+
+
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:layout_marginBottom="@dimen/margenMini"
+        android:layout_weight="40"
+       android:layout_marginTop="@dimen/margenMini"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/altoTarjeta">
+
+        <LinearLayout
+            android:layout_margin="@dimen/margenChico"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="25"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:gravity="center"
+                    android:id="@+id/fechaAuditoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="25"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+                    android:text="1S:"
+                    android:gravity="center"
+                    android:id="@+id/tagPuntaje1S"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:text="Date"
+                    android:gravity="center"
+                    android:id="@+id/puntaje1s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="25"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+                    android:text="2S:"
+                    android:gravity="center"
+                    android:id="@+id/tagPuntaje2s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:text="Date"
+                    android:gravity="center"
+                    android:id="@+id/puntaje2s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="25"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+
+                    android:text="3S:"
+                    android:gravity="center"
+                    android:id="@+id/tagPuntaje3s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:text="Date"
+                    android:gravity="center"
+                    android:id="@+id/puntaje3s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="25"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+
+                    android:text="4S:"
+                    android:gravity="center"
+                    android:id="@+id/tagPuntaje4s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:text="Date"
+                    android:gravity="center"
+                    android:id="@+id/puntaje4s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="25"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+
+                    android:text="5S:"
+                    android:gravity="center"
+                    android:id="@+id/tagPuntaje5s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:text="Date"
+                    android:gravity="center"
+                    android:id="@+id/puntaje5s"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/tarjetaPuntaje"
+        android:layout_marginTop="@dimen/margenMini"
+        android:layout_marginEnd="@dimen/margenMini"
+        android:layout_marginBottom="@dimen/margenMini"
+        android:layout_weight="30"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/altoTarjeta">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:textColor="@color/primary_text"
+                android:id="@+id/tagPuntajeFinal"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:layout_marginTop="@dimen/margenChico"
+                android:text="@string/puntajeFinal"
+                android:maxLines="2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="30"
+                />
+            <TextView
+                android:textColor="@color/primary_text"
+                android:text="89%"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:id="@+id/textPuntajeFinal"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:layout_marginBottom="@dimen/margenChico"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="70"
+                />
+
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <ImageButton
+        android:background="@android:color/transparent"
+        android:id="@+id/botonEliminarAuditoria"
+        android:src="@drawable/exitmedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

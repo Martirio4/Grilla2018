@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/tile3"
+    >
+
+    <android.support.v7.widget.Toolbar
+
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+        <TextView
+            android:textSize="20sp"
+            android:id="@+id/textoToolbar"
+            android:gravity="start"
+            android:layout_marginStart="@dimen/margenChico"
+            android:layout_marginEnd="@dimen/margenChico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.DrawerLayout android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/elDrawer"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+
+
+        <android.support.design.internal.ScrimInsetsFrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/tile3"
+                tools:context="com.craps.myapplication.View.Activities.ActivityLogin">
+
+                <android.support.design.widget.TabLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tabLayout"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/tile3"
+                    app:tabIndicatorColor="@color/colorAccent"
+                    app:tabSelectedTextColor="@color/marfil"
+                   app:tabMode="scrollable"
+                    app:tabTextColor="@color/tile2"
+                    app:tabGravity="fill"/>
+
+                <android.support.design.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewPagerAuditoria"
+                        android:layout_width="match_parent"
+                        android:background="@color/marfil"
+                        android:layout_height="match_parent">
+                    </android.support.v4.view.ViewPager>
+
+                </android.support.design.widget.CoordinatorLayout>
+            </LinearLayout>
+
+        </android.support.design.internal.ScrimInsetsFrameLayout>
+
+
+
+        <android.support.design.widget.NavigationView
+            android:layout_width="wrap_content"
+            android:id="@+id/naview"
+            android:layout_height="match_parent"
+
+            android:background="@color/marfil"
+            android:layout_gravity="start"
+            app:menu="@menu/nav_menu"
+            app:headerLayout="@layout/header_drawer"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:itemTextColor="@color/secondary_text"
+            app:itemTextAppearance="@color/cardview_dark_background"
+            >
+
+
+        </android.support.design.widget.NavigationView>
+
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

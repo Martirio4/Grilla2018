@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.auditoria.grilla5s.Model.Pregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
 import com.nomad.audit5s.fragments.FragmentSubitem;
 import com.nomad.audit5s.model.SubItem;
 
@@ -17,14 +19,14 @@ import io.realm.RealmList;
  * Created by Pablo on 31/5/2017.
  */
 
-public class AdapterPagerSubItems extends FragmentStatePagerAdapter {
+public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
-    private RealmList<SubItem> listaSubItems = new RealmList<>();
+    private RealmList<Pregunta> listaPreguntas = new RealmList<>();
     private List<String> unaListaTitulos;
 
-    public AdapterPagerSubItems(FragmentManager fm) {
+    public AdapterPagerEses(FragmentManager fm) {
         super(fm);
 
         //INICIALIZO LA LISTA DE FRAGMENT
@@ -32,8 +34,8 @@ public class AdapterPagerSubItems extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        for (SubItem unSubItem : listaSubItems) {
-            listaFragments.add(FragmentSubitem.CrearfragmentSubItem(unSubItem));
+        for (Pregunta unaPreg : listaPreguntas) {
+            listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg));
 
         }
 
@@ -52,9 +54,9 @@ public class AdapterPagerSubItems extends FragmentStatePagerAdapter {
         return listaFragments.size();
     }
 
-    public void setListaSubItems(RealmList<SubItem> listaSubItems) {
-        this.listaSubItems = listaSubItems;
-        for (SubItem unSubItem : listaSubItems) {
+    public void setListaPreguntas(RealmList<SubItem> listaPreguntas) {
+        this.listaPreguntas = listaPreguntas;
+        for (SubItem unSubItem : listaPreguntas) {
             listaFragments.add(FragmentSubitem.CrearfragmentSubItem(unSubItem));
         }
         notifyDataSetChanged();

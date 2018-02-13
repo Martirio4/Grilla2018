@@ -23,6 +23,15 @@ import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Area;
+import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Ese;
+import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
+import com.auditoria.grilla5s.Model.Usuario;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Activities.LoginActivity;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,12 +41,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.activities.LoginActivity;
-import com.nomad.audit5s.model.Area;
-import com.nomad.audit5s.model.Auditoria;
-import com.nomad.audit5s.model.Foto;
-import com.nomad.audit5s.model.SubItem;
+
 
 import java.io.File;
 
@@ -220,8 +224,8 @@ public class FragmentSettings extends Fragment {
                     editor.putBoolean("primeraVezFragmentManage", true);
                     editor.putBoolean("primeraVezFragmentSeleccion", true);
                     editor.putBoolean("primeraVezFragmentLanding",true);
-
                     editor.commit();
+
                     tuto.setText(R.string.activarTuto);
                 }
             }
@@ -356,41 +360,38 @@ public class FragmentSettings extends Fragment {
 
         realm.executeTransaction(new Realm.Transaction() {
         @Override
-        public void execute(Realm realm) {
-
-            String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        public void execute(@NonNull Realm realm) {
 
             RealmResults<Area> lasAreas=realm.where(Area.class)
-                    .equalTo("usuario",usuario)
                     .findAll();
             lasAreas.deleteAllFromRealm();
 
-            RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
-                    .equalTo("usuario", usuario)
+            RealmResults<Pregunta> lasPreguntas=realm.where(Pregunta.class)
                     .findAll();
+            lasPreguntas.deleteAllFromRealm();
 
-            for (Auditoria audit:result2
-                 ) {
-                RealmResults<SubItem> Subitems=realm.where(SubItem.class)
-                        .equalTo("auditoria",audit.getIdAuditoria())
-                        .findAll();
-                Subitems.deleteAllFromRealm();
+            RealmResults<Item> losItem=realm.where(Item.class)
+                    .findAll();
+            losItem.deleteAllFromRealm();
 
-                RealmResults<Foto> fotos=realm.where(Foto.class)
-                        .equalTo("auditoria",audit.getIdAuditoria())
-                        .findAll();
-                fotos.deleteAllFromRealm();
-            }
-            result2.deleteAllFromRealm();
+            RealmResults<Ese> lasEses=realm.where(Ese.class)
+                    .findAll();
+            lasEses.deleteAllFromRealm();
 
+            RealmResults<Foto> lasFotos=realm.where(Foto.class)
+                    .findAll();
+            lasFotos.deleteAllFromRealm();
 
+            RealmResults<Auditoria> lasAuditorias=realm.where(Auditoria.class)
+                    .findAll();
+            lasAuditorias.deleteAllFromRealm();
 
-                //borrar directorios
-                File path = new File(getContext().getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s" +File.separator+FirebaseAuth.getInstance().getCurrentUser().getEmail());
-               if (deleteDirectory(path)){
-                   Snackbar.make(areas,getResources().getString(R.string.confirmaBorrarBaseDeDato), Snackbar.LENGTH_SHORT)
-                           .show();
-               }
+            //borrar directorios
+            File path = new File(getContext().getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s" +File.separator+FirebaseAuth.getInstance().getCurrentUser().getEmail());
+           if (deleteDirectory(path)){
+               Snackbar.make(areas,getResources().getString(R.string.confirmaBorrarBaseDeDato), Snackbar.LENGTH_SHORT)
+                       .show();
+           }
 
             }
 

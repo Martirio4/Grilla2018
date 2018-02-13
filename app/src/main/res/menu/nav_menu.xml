@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+    <item android:title="@string/seiriSeiri">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/item11"
+                    android:title="Item 1" />
+                <item
+
+                    android:id="@+id/item12"
+                    android:title="Item 2" />
+
+                <item
+
+                    android:id="@+id/item13"
+                    android:title="Item 3" />
+                <item
+                 
+                    android:id="@+id/item14"
+                    android:title="Item 4" />
+
+            </group>
+        </menu>
+    </item>
+
+
+    <item android:title="@string/seitonSeiton">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                   
+                    android:id="@+id/item21"
+                    android:title="Item 1" />
+                <item
+                   
+                    android:id="@+id/item22"
+                    android:title="Item 2" />
+
+                <item
+                   
+                    android:id="@+id/item23"
+                    android:title="Item 3" />
+                <item
+                   
+                    android:id="@+id/item24"
+                    android:title="Item 4" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/seisoSeiso">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    
+                    android:id="@+id/item31"
+                    android:title="Item 1" />
+                <item
+                    
+                    android:id="@+id/item32"
+                    android:title="Item 2" />
+
+                <item
+                    
+                    android:id="@+id/item33"
+                    android:title="Item 3" />
+                <item
+                    
+                    android:id="@+id/item34"
+                    android:title="Item 4" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/seiketsuSeiketsu">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    
+                    android:id="@+id/item41"
+                    android:title="Item 1" />
+                <item
+                    
+                    android:id="@+id/item42"
+                    android:title="Item 2" />
+
+                <item
+                    
+                    android:id="@+id/item43"
+                    android:title="Item 3" />
+                <item
+                    
+                    android:id="@+id/item44"
+                    android:title="Item 4" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/shitsukeShitsuke">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    
+                    android:id="@+id/item51"
+                    android:title="Item 1" />
+                <item
+                    
+                    android:id="@+id/item52"
+                    android:title="Item 2" />
+
+                <item
+                    
+                    android:id="@+id/item53"
+                    android:title="Item 3" />
+                <item
+                    
+                    android:id="@+id/item54"
+                    android:title="Item 4" />
+
+            </group>
+        </menu>
+    </item>
+
+
+</menu>
