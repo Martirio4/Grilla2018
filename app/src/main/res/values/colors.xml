@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196f3</color>
+    <color name="colorPrimaryDark">#1976d2</color>
+    <color name="colorAccent">#ff5722</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="marfil">#FFFFFF</color>
+
+
+    <color name="blancoNomad">#fcfbf5</color>
+
+
+    <color name="light_grey">#EEEEEE</color>
+    <color name="white_transparent">#99FFFFFF</color>
+    <color name="black">#000</color>
+
+
+    <color name="semaVerde">#2ecc71</color>
+    <color name="semaAmarillo">#f1c40f</color>
+    <color name="semaRojo">#e74c3c</color>
+
+
+    <color name="tile1">#e3f2fd</color>
+    <color name="tile2">#64b5f6</color>
+    <color name="tile3">#2196f3</color>
+    <color name="tile4">#1976d2</color>
+    <color name="tile4.5">#0f6ac3</color>
+    <color name="tile5">#0d47a1</color>
+
+
+
+    <color name="tutorial1">#ff9800</color>
+    <color name="tutorial2">#009688</color>
+
+
+</resources>

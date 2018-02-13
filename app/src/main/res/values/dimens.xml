@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margenChico">8dp</dimen>
+    <dimen name="altoTarjeta">140dp</dimen>
+
+    <dimen name="altoTarjeta2">195dp</dimen>
+    <dimen name="anchoTarjeta2">260dp</dimen>
+
+    <dimen name="altoTarjeta21">150dp</dimen>
+    <dimen name="anchoTarjeta21">200dp</dimen>
+    <dimen name="altoImageViewCargarArea">250dp</dimen>
+    <dimen name="margenGrande">16dp</dimen>
+
+    <dimen name="margenMini">4dp</dimen>
+    <dimen name="altoTarjeta3">84dp</dimen>
+    <dimen name="margenMicro">2dp</dimen>
+    <dimen name="titulosMain">40sp</dimen>
+    <dimen name="textoSettings">30sp</dimen>
+    <dimen name="textoAreaRevisarAudit">18sp</dimen>
+</resources>
