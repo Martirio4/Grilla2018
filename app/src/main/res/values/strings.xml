@@ -328,6 +328,7 @@
     <string name="manageAreas">Manage audit areas</string>
     <string name="addNewArea">Add new Area</string>
     <string name="generarPDF">Send PDF report</string>
+    <string name="errorPruebeNuevamente">Operation Failed, please try again.</string>
 
 
 

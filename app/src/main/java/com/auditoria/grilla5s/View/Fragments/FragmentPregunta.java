@@ -28,6 +28,8 @@ import android.widget.Toolbar;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Pregunta;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Activities.ActivityAuditoria;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
@@ -149,7 +151,7 @@ public class FragmentPregunta extends Fragment {
             criterio5=bundle.getString(OPCION5);
             id=bundle.getString(ID);
             enunciado=bundle.getString(ENUNCIADO);
-            pertenencia=ActivityAuditoria.idAuditoria+id;
+            pertenencia= ActivityAuditoria.idAuditoria+id;
         }
         rg1=(RadioGroup) view.findViewById(R.id.rg1);
         verCriterio=(Button)view.findViewById(R.id.btn_criterios);

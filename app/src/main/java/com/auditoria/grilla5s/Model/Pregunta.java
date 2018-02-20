@@ -15,6 +15,7 @@ public class Pregunta extends RealmObject {
     private String idPregunta;
     private Integer puntaje;
     private String idAudit;
+    private String idItem;
     private RealmList<Foto> listaFotos;
 
     public Pregunta() {
@@ -52,14 +53,24 @@ public class Pregunta extends RealmObject {
         this.idAudit = idAudit;
     }
 
-    public RealmList<Foto> getRealmListaFotos() {
+
+    public void addFoto(Foto unaFoto){
+        this.listaFotos.add(unaFoto);
+    }
+
+    public String getIdItem() {
+        return idItem;
+    }
+
+    public void setIdItem(String idItem) {
+        this.idItem = idItem;
+    }
+
+    public RealmList<Foto> getListaFotos() {
         return listaFotos;
     }
 
-    public void setRealmListaFotos(RealmList<Foto> RealmListaFotos) {
-        this.listaFotos = RealmListaFotos;
-    }
-    public void addFoto(Foto unaFoto){
-        this.listaFotos.add(unaFoto);
+    public void setListaFotos(RealmList<Foto> listaFotos) {
+        this.listaFotos = listaFotos;
     }
 }

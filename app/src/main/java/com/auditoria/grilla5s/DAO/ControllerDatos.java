@@ -9,7 +9,9 @@ import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -1100,12 +1102,21 @@ public class ControllerDatos {
 
         });
 
-
     return idAuditInstanciada;
     }
     private String determinarFecha(){
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         return sdf.format(cal.getTime());
+    }
+
+    public List<String> traerEses(){
+        List<String>lista =new ArrayList<>();
+        lista.add("1S Seiri");
+        lista.add("2S Seiton");
+        lista.add("3S Seiso");
+        lista.add("4S Seiketsu");
+        lista.add("5S Shitsuke");
+        return lista;
     }
 }

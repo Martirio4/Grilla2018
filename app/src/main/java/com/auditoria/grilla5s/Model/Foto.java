@@ -1,6 +1,7 @@
 package com.auditoria.grilla5s.Model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 9/2/2018.
@@ -10,6 +11,7 @@ public class Foto extends RealmObject {
 
     private String rutaFoto;
     private String idAudit;
+    @PrimaryKey
     private String idFoto;
     private String idPregunta;
 

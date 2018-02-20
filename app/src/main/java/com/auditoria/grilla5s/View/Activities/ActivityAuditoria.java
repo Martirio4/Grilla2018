@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
 
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
@@ -34,7 +35,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -45,15 +48,17 @@ import io.realm.RealmResults;
 public class ActivityAuditoria extends AppCompatActivity implements FragmentPregunta.Avisable{
 
     public static final String IDAUDITORIA ="IDAUDITORIA";
-    public static final String IDAREA="IDAREA";
+    public static final String IDITEM="IDITEM";
 
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
+    public static String idAuditoria;
+    public static String idItem;
+
+
+
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ViewPager pager;
     private AdapterPagerPreguntas adapterPager;
-    public static String idAuditoria;
-    public static String areaAuditada;
+
     private String resultadoInputFoto;
     private ControllerDatos controllerDatos;
     private FloatingActionMenu fabMenu;
@@ -65,42 +70,44 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         setContentView(R.layout.activity_auditoria);
 
 
-
         Intent intent= getIntent();
         Bundle bundle= intent.getExtras();
 
-        areaAuditada=bundle.getString(IDAREA);
-        instanciarNuevaAuditoria();
+        idAuditoria=bundle.getString(IDAUDITORIA);
+        idItem=bundle.getString(IDITEM);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.elDrawer);
-        navigationView = (NavigationView) findViewById(R.id.naview);
+
+
         pager=(ViewPager)findViewById(R.id.viewPagerAuditoria);
 
 //        SETEAR EL VIEWPAGER
         controllerDatos=new ControllerDatos(this);
-        adapterPager=new AdapterPagerEses(getSupportFragmentManager());
-        adapterPager.setListaSubItems(controllerDatos.traerSubItems());
-        adapterPager.setUnaListaTitulos(controllerDatos.traerTitulos());
+        adapterPager=new AdapterPagerPreguntas(getSupportFragmentManager());
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Pregunta>resultPregunta=realm.where(Pregunta.class)
+                .equalTo("idAuditoria",idAuditoria)
+                .beginsWith("idPregunta",idItem)
+                .findAll();
+
+        RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
+        listaPreguntasOriginales.addAll(resultPregunta);
+
+        //GENERO LISTA DE TITULOS ORDINALES
+        List<String> laListaDeTitulos=new ArrayList<>();
+        for (Integer i=0;i<listaPreguntasOriginales.size();i++){
+            Integer aux=i+1;
+            laListaDeTitulos.add(aux.toString()+"°");
+        }
+
         pager.setAdapter(adapterPager);
+        adapterPager.setListaPregunta(listaPreguntasOriginales);
+        adapterPager.setUnaListaTitulos(laListaDeTitulos);
+
         adapterPager.notifyDataSetChanged();
 
-//        CAMBIAR LA FUENTE DE LOS TITUTLOS DEL DRAWER
-       /* Menu menu = navigationView.getMenu();
-        MenuItem tools= menu.findItem(R.id.titulo1s);
-        SpannableString s = new SpannableString(tools.getTitle());
-        s.setSpan(new TextAppearanceSpan(this, R.style.tituloNav), 0, s.length(), 0);
-        tools.setTitle(s);
 
-        MenuItem tools1= menu.findItem(R.id.titulo2s);
-        SpannableString s1 = new SpannableString(tools1.getTitle());
-        s1.setSpan(new TextAppearanceSpan(this, R.style.tituloNav), 0, s1.length(), 0);
-        tools1.setTitle(s1);
 
-        MenuItem tools2= menu.findItem(R.id.titulo3s);
-        SpannableString s2 = new SpannableString(tools2.getTitle());
-        s2.setSpan(new TextAppearanceSpan(this, R.style.tituloNav), 0, s2.length(), 0);
-        tools2.setTitle(s2);
-*/
         // Get a support ActionBar corresponding to this toolbar
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -118,89 +125,8 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         }
 
-        View headerLayout = navigationView.getHeaderView(0);
-
-//        TOGGLE PARA EL BOTON HAMBURGUESA
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         actionBarDrawerToggle.getDrawerArrowDrawable().setColor(ContextCompat.getColor(this, R.color.marfil));
 
-
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
-//        ACCION DE LOS BOTONES DEL DRAWER
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                    switch (item.getItemId()) {
-                        case R.id.item11:
-                            pager.setCurrentItem(0);
-                            break;
-                        case R.id.item12:
-                            pager.setCurrentItem(1);
-                            break;
-                        case R.id.item13:
-                            pager.setCurrentItem(2);
-                            break;
-                        case R.id.item14:
-                            pager.setCurrentItem(3);
-                            break;
-                        case R.id.item21:
-                            pager.setCurrentItem(4);
-                            break;
-                        case R.id.item22:
-                            pager.setCurrentItem(5);
-                            break;
-                        case R.id.item23:
-                            pager.setCurrentItem(6);
-                            break;
-                        case R.id.item24:
-                            pager.setCurrentItem(7);
-                            break;
-                        case R.id.item31:
-                            pager.setCurrentItem(8);
-                            break;
-                        case R.id.item32:
-                            pager.setCurrentItem(9);
-                            break;
-                        case R.id.item33:
-                            pager.setCurrentItem(10);
-                            break;
-                        case R.id.item34:
-                            pager.setCurrentItem(11);
-                            break;
-                        case R.id.item41:
-                            pager.setCurrentItem(12);
-                            break;
-                        case R.id.item42:
-                            pager.setCurrentItem(13);
-                            break;
-                        case R.id.item43:
-                            pager.setCurrentItem(14);
-                            break;
-                        case R.id.item44:
-                            pager.setCurrentItem(15);
-                            break;
-                        case R.id.item51:
-                            pager.setCurrentItem(16);
-                            break;
-                        case R.id.item52:
-                            pager.setCurrentItem(17);
-                            break;
-                        case R.id.item53:
-                            pager.setCurrentItem(18);
-                            break;
-                        case R.id.item54:
-                            pager.setCurrentItem(19);
-                            break;
-
-
-                    }
-
-                drawerLayout.closeDrawers();
-                return true;
-            }
-        });
 //        SETEAR EL TABLAYOUT
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -239,12 +165,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             }
         });
 
-
-
-
-        //updateTabTextColors();
-
-
     }
 
 /*
@@ -274,39 +194,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
 
 
-    public void instanciarNuevaAuditoria(){
-//   CREAR UNA AUDITORIA NUEVA
-        final Auditoria nuevaAuditoria=new Auditoria();
-        Realm realm= Realm.getDefaultInstance();
-        nuevaAuditoria.setIdAuditoria("AUDIT-"+UUID.randomUUID());
-        idAuditoria=nuevaAuditoria.getIdAuditoria();
-        nuevaAuditoria.setFechaAuditoria(determinarFecha());
-        nuevaAuditoria.setUsuario(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-
-        Area mAreaAuditada = realm.where(Area.class)
-                .equalTo("idArea", areaAuditada)
-                .findFirst();
-        nuevaAuditoria.setAreaAuditada(mAreaAuditada);
-
-        //ESPACIO PARA GUARDAR EL USUARIO DE LA DATABASE
-        //ESPACIO PARA GUARDAR EL USUARIO DE LA DATABASE
-        //ESPACIO PARA GUARDAR EL USUARIO DE LA DATABASE
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-               Auditoria auditoriaRealm= realm.copyToRealmOrUpdate(nuevaAuditoria);
-                updateSubItems(realm, auditoriaRealm);
-            }
-        });
-
-    }
-    public String determinarFecha(){
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String date=sdf.format(cal.getTime());
-        return date;
-    }
 
     @Override
     public void cerrarAuditoria() {
@@ -321,9 +209,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     }
 
-    public void calcularPuntajeAuditoria(){
-
-    }
 
     @Override
     public void salirDeAca() {
@@ -332,39 +217,9 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         this.finish();
     }
 
-    public void pedirComment(){
 
-        new MaterialDialog.Builder(this)
-                .title(getResources().getString(R.string.agregarComentario))
-                .content(getResources().getString(R.string.favorAgregueComentario))
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        resultadoInputFoto=input.toString();
-                        entregarString();
-                    }
-                }).show();
-    }
 
-    private String entregarString() {
-        return resultadoInputFoto;
-    }
-
-    public void updateSubItems(Realm realm, final Auditoria unAudit){
-        ControllerDatos controler= new ControllerDatos(this);
-        RealmList<SubItem> unaListaDummie=controler.traerSubItems();
-
-        for (final SubItem sub:unaListaDummie
-                ) {
-            sub.setPertenencia(idAuditoria+sub.getId());
-            sub.setAuditoria(idAuditoria);
-            SubItem subItemSubidoARealm = realm.copyToRealmOrUpdate(sub);
-            unAudit.getSubItems().add(subItemSubidoARealm);
-
-        }
-    }
-
+    //----REESCRIBIR ESTE METODO----//
     @Override
     public void onBackPressed() {
         new MaterialDialog.Builder(this)
@@ -379,6 +234,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+                        /*
                         Realm realm = Realm.getDefaultInstance();
 
                         realm.executeTransaction(new Realm.Transaction() {
@@ -413,6 +269,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
                         ActivityAuditoria.this.finish();
                         ActivityAuditoria.super.onBackPressed();
+                        */
                     }
                 })
                 .negativeText(getResources().getString(R.string.cancel))
@@ -449,10 +306,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     }
 
-    public void cerrarSinGuardar(){
 
-
-
-    }
 
 }

@@ -1,12 +1,14 @@
 package com.auditoria.grilla5s.Model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 9/2/2018.
  */
 
 public class Area extends RealmObject {
+    @PrimaryKey
     private String idArea;
     private Foto fotoArea;
     private String nombreArea;

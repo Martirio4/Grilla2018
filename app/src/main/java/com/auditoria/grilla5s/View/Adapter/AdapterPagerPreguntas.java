@@ -10,7 +10,6 @@ import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +19,14 @@ import io.realm.RealmList;
  * Created by Pablo on 31/5/2017.
  */
 
-public class AdapterPagerEses extends FragmentStatePagerAdapter {
+public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
 
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
-    private RealmList<Item> listaItems = new RealmList<>();
+    private RealmList<Pregunta> listaPregunta = new RealmList<>();
     private List<String> unaListaTitulos;
 
-    public AdapterPagerEses(FragmentManager fm) {
+    public AdapterPagerPreguntas(FragmentManager fm) {
         super(fm);
 
         //INICIALIZO LA LISTA DE FRAGMENT
@@ -35,8 +34,9 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        for(Integer i=0;i<5;i++){
-            listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
+        for (Pregunta unaPreg:listaPregunta
+             ) {
+            FragmentPregunta.CrearfragmentPregunta(unaPreg);
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
@@ -65,4 +65,15 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
         this.unaListaTitulos = unaListaTitulos;
         notifyDataSetChanged();
     }
+
+    public RealmList<Pregunta> getListaPregunta() {
+        return listaPregunta;
+    }
+
+    public void setListaPregunta(RealmList<Pregunta> listaPregunta) {
+        this.listaPregunta = listaPregunta;
+        notifyDataSetChanged();
+    }
+
+
 }
