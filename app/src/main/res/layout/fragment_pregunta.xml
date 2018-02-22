@@ -35,6 +35,15 @@
             app:buttonTint="@color/tile4"
             android:layout_margin="@dimen/margenChico"
             android:textColor="@color/primary_text"
+            android:id="@+id/item0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:textColorHighlight="@color/colorAccent"
+            app:buttonTint="@color/tile4"
+            android:layout_margin="@dimen/margenChico"
+            android:textColor="@color/primary_text"
             android:id="@+id/item1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

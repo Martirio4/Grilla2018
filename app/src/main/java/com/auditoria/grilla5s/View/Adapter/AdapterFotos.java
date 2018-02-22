@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.model.Foto;
+import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -113,8 +113,8 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
 
         public void cargarFoto(Foto unFoto) {
 
-                if (unFoto.getComentario()!=null && !unFoto.getComentario().isEmpty()){
-                    textView.setText(unFoto.getComentario());
+                if (unFoto.getComentarioFoto()!=null && !unFoto.getComentarioFoto().isEmpty()){
+                    textView.setText(unFoto.getComentarioFoto());
                 }
 
                 File f = new File(unFoto.getRutaFoto());

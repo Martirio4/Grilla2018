@@ -212,7 +212,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public void salirDeAca() {
-        Intent intent= new Intent(this, ActivityLanding.class);
+        Intent intent= new Intent(this, LandingActivity.class);
         startActivity(intent);
         this.finish();
     }

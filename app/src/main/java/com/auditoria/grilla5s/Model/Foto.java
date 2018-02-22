@@ -14,8 +14,17 @@ public class Foto extends RealmObject {
     @PrimaryKey
     private String idFoto;
     private String idPregunta;
+    private String comentarioFoto;
 
     public Foto() {
+    }
+
+    public String getComentarioFoto() {
+        return comentarioFoto;
+    }
+
+    public void setComentarioFoto(String comentarioFoto) {
+        this.comentarioFoto = comentarioFoto;
     }
 
     public String getRutaFoto() {

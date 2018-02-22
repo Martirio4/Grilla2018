@@ -27,9 +27,12 @@ import android.widget.Toolbar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityAuditoria;
+import com.auditoria.grilla5s.View.Adapter.AdapterFotos;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
@@ -47,6 +50,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
 import io.realm.Realm;
@@ -62,14 +66,12 @@ import pl.tajchert.nammu.PermissionCallback;
  */
 public class FragmentPregunta extends Fragment {
 
-    public static final String ENUNCIADO="ENUNCIADO";
-    public static final String OPCION1="OPCION1";
-    public static final String OPCION2="OPCION2";
-    public static final String OPCION3="OPCION3";
-    public static final String OPCION4="OPCION4";
-    public static final String OPCION5="OPCION5";
-    public static final String PERTENENCIA="PERTENENCIA";
-    public static final String ID="ID";
+
+
+    public static final String ENUNCIADOPREGUNTA="ENUNCIADOPREGUNTA";
+    public static final String IDPREGUNTA="IDPREGUNTA";
+    public static final String IDITEM="IDITEM";
+    public static final String IDAUDITORIA="IDAUDITORIA";
 
     private File fotoOriginal;
     private File fotoComprimida;
@@ -79,32 +81,21 @@ public class FragmentPregunta extends Fragment {
     private Integer puntuacion;
 
     private Avisable avisable;
-
-    private Auditoria unaAuditoria;
-    private RealmList<SubItem> unaListaSubitems;
-
-    private DatabaseReference mDatabase;
-
     private SharedPreferences config;
-
     private LinearLayout linear;
     private Toolbar toolbar;
-
-
 
     RealmList<Foto> listaFotos;
 
     private String enunciado;
-    private String criterio1;
-    private String criterio2;
-    private String criterio3;
-    private String criterio4;
-    private String criterio5;
-    private String pertenencia;
-    private String id;
+    private String idPregunta;
+    private String idAudit;
+    private String idItem;
 
     private TextView textViewEnunciado;
     private RadioGroup rg1;
+
+    private AppCompatRadioButton rb0;
     private AppCompatRadioButton rb1;
     private AppCompatRadioButton rb2;
     private AppCompatRadioButton rb3;
@@ -118,6 +109,8 @@ public class FragmentPregunta extends Fragment {
     private FloatingActionButton fabCamara;
     private FloatingActionButton fabGuardar;
     private FloatingActionButton fabSalir;
+
+    private Foto unaFoto;
 
 
     public FragmentPregunta() {
@@ -135,7 +128,7 @@ public class FragmentPregunta extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view= inflater.inflate(R.layout.fragment_subitem, container, false);
+        final View view= inflater.inflate(R.layout.fragment_pregunta, container, false);
 
 
 
@@ -144,31 +137,31 @@ public class FragmentPregunta extends Fragment {
             Toast.makeText(getContext(), getResources().getString(R.string.noEncontroDatos), Toast.LENGTH_SHORT).show();
         }
         else{
-            criterio1=bundle.getString(OPCION1);
-            criterio2=bundle.getString(OPCION2);
-            criterio3=bundle.getString(OPCION3);
-            criterio4=bundle.getString(OPCION4);
-            criterio5=bundle.getString(OPCION5);
-            id=bundle.getString(ID);
-            enunciado=bundle.getString(ENUNCIADO);
-            pertenencia= ActivityAuditoria.idAuditoria+id;
+
+            idAudit=bundle.getString(IDAUDITORIA);
+            idItem=bundle.getString(IDITEM);
+            idPregunta=bundle.getString(IDPREGUNTA);
+            enunciado=bundle.getString(ENUNCIADOPREGUNTA);
         }
+
         rg1=(RadioGroup) view.findViewById(R.id.rg1);
         verCriterio=(Button)view.findViewById(R.id.btn_criterios);
-        rb1 =(AppCompatRadioButton) view.findViewById(R.id.item1);
-        rb2 =(AppCompatRadioButton) view.findViewById(R.id.item2);
-        rb3 =(AppCompatRadioButton) view.findViewById(R.id.item3);
-        rb4 =(AppCompatRadioButton) view.findViewById(R.id.item4);
-        rb5 =(AppCompatRadioButton) view.findViewById(R.id.item5);
-        textViewEnunciado=(TextView) view.findViewById(R.id.textoEnunciado);
+        rb0 = view.findViewById(R.id.item0);
+        rb1 = view.findViewById(R.id.item1);
+        rb2 = view.findViewById(R.id.item2);
+        rb3 = view.findViewById(R.id.item3);
+        rb4 = view.findViewById(R.id.item4);
+        rb5 = view.findViewById(R.id.item5);
+        textViewEnunciado= view.findViewById(R.id.textoEnunciado);
 
         linear=view.findViewById(R.id.vistaCentral);
 
-        rb1.setText("1");
-        rb2.setText("2");
-        rb3.setText("3");
-        rb4.setText("4");
-        rb5.setText("5");
+        rb0.setText("1");
+        rb1.setText("2");
+        rb2.setText("3");
+        rb3.setText("4");
+        rb4.setText("5");
+        rb5.setText("6");
         textViewEnunciado.setText(enunciado);
 
 
@@ -186,10 +179,11 @@ public class FragmentPregunta extends Fragment {
                     @Override
                     public void execute(Realm realm) {
 
-                        SubItem sub = realm.where(SubItem.class)
-                                .equalTo("pertenencia",pertenencia)
+                        Pregunta preg = realm.where(Pregunta.class)
+                                .equalTo("IdAudit",idAudit)
+                                .equalTo("idPregunta",idPregunta)
                                 .findFirst();
-                        sub.setPuntuacion1(puntuacion);
+                        preg.setPuntaje(puntuacion);
                     }
                 });
             }
@@ -204,7 +198,7 @@ public class FragmentPregunta extends Fragment {
                         .contentColor(ContextCompat.getColor(v.getContext(), R.color.primary_text))
                         .titleColor(ContextCompat.getColor(v.getContext(), R.color.tile4))
                         .backgroundColor(ContextCompat.getColor(v.getContext(), R.color.tile1))
-                        .content("1- "+criterio1+"\n"+"\n"+"2- "+criterio2+"\n"+"\n"+"3- "+criterio3+"\n"+"\n"+"4- "+criterio5+"\n"+"\n"+"5- "+criterio5)
+                        .content("MOSTRAR CRITERIOS")
                         .positiveText(getResources().getString(R.string.dismiss))
                         .show();
             }
@@ -217,7 +211,7 @@ public class FragmentPregunta extends Fragment {
 
 
 //        RecyclerView FOTOS
-        recyclerFotos= (RecyclerView)view.findViewById(R.id.recyclerFotos);
+        recyclerFotos= view.findViewById(R.id.recyclerFotos);
         layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerFotos.setLayoutManager(layoutManager);
         adapterFotos= new AdapterFotos();
@@ -487,71 +481,23 @@ public class FragmentPregunta extends Fragment {
     }
 
 
-    private void sumarAuditoriaFirebase() {
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase= FirebaseDatabase.getInstance().getReference();
-        if (user!=null) {
-            final DatabaseReference reference = mDatabase.child("usuarios").child(user.getUid()).child("estadisticas").child("cantidadAuditorias");
-            final DatabaseReference referenceGlobal = mDatabase.child("estadisticas").child("cantidadAuditorias");
-
-            //---leer cantidad de auditorias---//
-            reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue()!=null) {
-                        String cantAuditorias =dataSnapshot.getValue().toString();
-                        Integer numeroAudits= Integer.parseInt(cantAuditorias)+1;
-                        reference.setValue(numeroAudits.toString());
-                    } else {
-                        reference.setValue("1");
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            //---leer cantidad de auditorias---//
-            referenceGlobal.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue()!=null) {
-                        String cantAuditorias =dataSnapshot.getValue().toString();
-                        Integer numeroAudits= Integer.parseInt(cantAuditorias)+1;
-                        referenceGlobal.setValue(numeroAudits.toString());
-                    } else {
-                        referenceGlobal.setValue("1");
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
     private void completoTodosLosPuntos() {
         Integer cantFotos=0;
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<SubItem> result2 = realm.where(SubItem.class)
-                .equalTo("auditoria", ActivityAuditoria.idAuditoria)
+        RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
+                .equalTo("idAudit", idAudit)
+                .equalTo("idItem",idItem)
                 .findAll();
 
         List<String> unaLista=new ArrayList<>();
 
-        for (SubItem unSub:result2
+        for (Pregunta unaPreg :result2
              ) {
-            if (unSub.getPuntuacion1()==null||unSub.getPuntuacion1()==0){
-                unaLista.add(unSub.getId());
+            if (unaPreg.getPuntaje()==null|| unaPreg.getPuntaje()==0){
+                unaLista.add(unaPreg.getIdPregunta());
             }
-            if (unSub.getListaFotos()!=null&& unSub.getListaFotos().size()>0){
-                cantFotos=cantFotos+unSub.getListaFotos().size();
-            }
-        };
+        }
+
         if (unaLista.size()>0){
             new MaterialDialog.Builder(getContext())
                     .title("Warning!")
@@ -576,73 +522,23 @@ public class FragmentPregunta extends Fragment {
                     .show();
         }
         else{
-            sumarAuditoriaFirebase();
-            registrarCantidadFotosFirebase(cantFotos);
+
             avisable.cerrarAuditoria();
         }
     }
 
-    private void registrarCantidadFotosFirebase(final Integer cantFotos) {
 
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase= FirebaseDatabase.getInstance().getReference();
-
-        if (user!=null) {
-            final DatabaseReference reference = mDatabase.child("usuarios").child(user.getUid()).child("estadisticas").child("cantidadFotosTomadas");
-            final DatabaseReference referenceGlobal = mDatabase.child("estadisticas").child("cantidadFotosTomadas");
-
-            //---LEER Y SUMAR UN AREA AL USUARIO---//
-            reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue()!=null) {
-                        String cantidadFotos =dataSnapshot.getValue().toString();
-                        Integer numeroFotos= Integer.parseInt(cantidadFotos)+1;
-                        reference.setValue(numeroFotos.toString());
-                    } else {
-                        reference.setValue(cantFotos.toString());
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            //---LEER Y SUMAR UN AREA AL GLOBAL---//
-            referenceGlobal.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue()!=null) {
-                        String cantidadFotos =dataSnapshot.getValue().toString();
-                        Integer numeroFotos= Integer.parseInt(cantidadFotos)+1;
-                        referenceGlobal.setValue(numeroFotos.toString());
-                    } else {
-                        referenceGlobal.setValue("1");
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
 
 
     public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta) {
         FragmentPregunta detalleFragment = new FragmentPregunta();
         Bundle unBundle = new Bundle();
 
-        unBundle.putString(ENUNCIADO, laPregunta.getEnunciado());
-        unBundle.putString(OPCION1, laPregunta.getPunto1());
-        unBundle.putString(OPCION2, laPregunta.getPunto2());
-        unBundle.putString(OPCION3, laPregunta.getPunto3());
-        unBundle.putString(OPCION4, laPregunta.getPunto4());
-        unBundle.putString(OPCION5, laPregunta.getPunto5());
-        unBundle.putString(ID, laPregunta.getId());
-        unBundle.putString(PERTENENCIA, laPregunta.getPertenencia());
+            unBundle.putString(ENUNCIADOPREGUNTA, laPregunta.getTextoPregunta());
+            unBundle.putString(IDITEM, laPregunta.getIdItem());
+            unBundle.putString(IDPREGUNTA, laPregunta.getIdPregunta());
+            unBundle.putString(IDAUDITORIA, laPregunta.getIdAudit());
+
         detalleFragment.setArguments(unBundle);
         return detalleFragment;
     }
@@ -675,23 +571,52 @@ public class FragmentPregunta extends Fragment {
                             e.printStackTrace();
                         }
 
+                        unaFoto=new Foto();
+                        unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
+                        unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
+                        unaFoto.setIdAudit(idAudit);
+                        unaFoto.setIdPregunta(idPregunta);
+
 
                         Realm realm = Realm.getDefaultInstance();
-
-                        //In Activity
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                SubItem elsub = realm.where(SubItem.class)
-                                        .equalTo("pertenencia", pertenencia)
+                                Pregunta preg = realm.where(Pregunta.class)
+                                        .equalTo("idAudit", idAudit)
+                                        .equalTo("idPregunta", idPregunta)
                                         .findFirst();
-                                if (elsub != null) {
-                                    updateFotoSub(elsub, realm);
-                                }
+
+                                    realm.copyToRealmOrUpdate(unaFoto);
+
+                                final Foto foto = realm.where(Foto.class)
+                                        .equalTo("idFoto", unaFoto.getIdFoto())
+                                        .findFirst();
+
+                                preg.getListaFotos().add(foto);
+
+
+                                new MaterialDialog.Builder(getContext())
+                                        .title(getResources().getString(R.string.agregarComentario))
+                                        .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                                        .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                                        .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                                        .content(getResources().getString(R.string.favorAgregueComentario))
+                                        .inputType(InputType.TYPE_CLASS_TEXT)
+                                        .inputRange(0,40)
+                                        .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
+                                            @Override
+                                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                foto.setComentarioFoto(input.toString());
+                                                adapterFotos.notifyDataSetChanged();
+                                            }
+                                        }).show();
                             }
                         });
 
+                        listaFotos.add(unaFoto);
                         adapterFotos.notifyDataSetChanged();
+
                         Boolean seBorro = imageFile.delete();
                         if (seBorro) {
                             //                        Toast.makeText(getContext(), "borrada con exito", Toast.LENGTH_SHORT).show();
@@ -714,22 +639,6 @@ public class FragmentPregunta extends Fragment {
         });
     }
 
-    private void updateFotoSub(SubItem elsub, Realm realm) {
-
-        final Foto unaFoto=new Foto();
-
-        unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
-        unaFoto.setAuditoria(ActivityAuditoria.idAuditoria);
-        unaFoto.setSubItem(id);
-
-        crearDialogoComentarioParaFoto(unaFoto);
-        Foto fotoSubidaARealm = realm.copyToRealmOrUpdate(unaFoto);
-        elsub.getListaFotos().add(fotoSubidaARealm);
-        listaFotos.add(unaFoto);
-
-
-    }
-
 
     public Boolean  existeDirectorioImagenes(){
         Boolean sePudo=true;
@@ -745,17 +654,17 @@ public class FragmentPregunta extends Fragment {
         RealmList<Foto> unaLista= new RealmList<>();
 
         Realm realm = Realm.getDefaultInstance();
-        SubItem subIt=realm.where(SubItem.class)
-                .equalTo("pertenencia", pertenencia)
+        Pregunta preg=realm.where(Pregunta.class)
+                .equalTo("idAudit", idAudit)
+                .equalTo("idPregunta",idPregunta)
                 .findFirst();
 
-        if (subIt.getListaFotos()==null||subIt.getListaFotos().size()<1){
-
+        if (preg.getListaFotos()==null||preg.getListaFotos().size()<1){
             return new RealmList<>();
         }
         else{
-
-            return subIt.getListaFotos();
+            unaLista.addAll(preg.getListaFotos());
+            return unaLista;
         }
 
     }
@@ -767,47 +676,9 @@ public class FragmentPregunta extends Fragment {
     }
 
 
-
-        //helper method
-    public void update(Auditoria unaAuditoriaBuscada, Realm realm) {
-        //do update stuff
-
-        SubItem subItemAgregar= new SubItem();
-        subItemAgregar.setId(id);
-        subItemAgregar.setEnunciado(enunciado);
-        subItemAgregar.setPertenencia(pertenencia);
-        subItemAgregar.setAuditoria(ActivityAuditoria.idAuditoria);
-        subItemAgregar.setPunto1(criterio1);
-        subItemAgregar.setPunto2(criterio2);
-        subItemAgregar.setPunto3(criterio3);
-        subItemAgregar.setPunto4(criterio4);
-        subItemAgregar.setPunto5(criterio5);
-        subItemAgregar.setPuntuacion1(puntuacion);
-
-        SubItem elSubitem = realm.copyToRealmOrUpdate(subItemAgregar);
-
-
-    }
-
     public void crearDialogoComentarioParaFoto(final Foto unaFoto){
 
-                new MaterialDialog.Builder(getContext())
-                        .title(getResources().getString(R.string.agregarComentario))
-                        .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                        .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                        .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                        .content(getResources().getString(R.string.favorAgregueComentario))
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .inputRange(0,40)
-                        .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                unaFoto.setComentario(input.toString());
-                                actualizarFoto(unaFoto);
-                                adapterFotos.notifyDataSetChanged();
 
-                            }
-                        }).show();
 
     }
     public void crearDialogoParaModificarComentario(final Foto unaFoto){
@@ -828,8 +699,11 @@ public class FragmentPregunta extends Fragment {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                               unaFoto.setComentario(input.toString());
-                                adapterFotos.notifyDataSetChanged();
+                               Foto foto = realm.where(Foto.class)
+                                       .equalTo("idFoto",unaFoto.getIdFoto())
+                                       .findFirst();
+                               foto.setComentarioFoto(input.toString());
+                               adapterFotos.notifyDataSetChanged();
                             }
                         });
 
@@ -840,19 +714,8 @@ public class FragmentPregunta extends Fragment {
 
     }
 
-    private void actualizarFoto(final Foto unaFoto) {
-        Realm realm= Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+    //DOY DE ALTA LA FOTO EN REALM
 
-                    Foto lafoto = realm.copyToRealmOrUpdate(unaFoto);
-
-
-            }
-        });
-
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);

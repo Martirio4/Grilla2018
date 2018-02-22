@@ -11,6 +11,7 @@ import io.realm.RealmObject;
  */
 
 public class Pregunta extends RealmObject {
+    private String comentario;
     private String textoPregunta;
     private String idPregunta;
     private Integer puntaje;
@@ -19,6 +20,14 @@ public class Pregunta extends RealmObject {
     private RealmList<Foto> listaFotos;
 
     public Pregunta() {
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
     public String getTextoPregunta() {
