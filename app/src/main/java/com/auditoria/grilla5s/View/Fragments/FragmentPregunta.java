@@ -207,9 +207,6 @@ public class FragmentPregunta extends Fragment {
 
 
 
-        //traigo la lista de fotos de la base
-
-
 //        RecyclerView FOTOS
         recyclerFotos= view.findViewById(R.id.recyclerFotos);
         layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -262,6 +259,9 @@ public class FragmentPregunta extends Fragment {
                         EasyImage.openCamera(FragmentPregunta.this, 1);
                     }
                     else {
+
+//                      PIDO PERMISO PARA USAR LA MEMORIA EXTERNA
+
                         if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             //User already refused to give us this permission or removed it
                             //Now he/she can mark "never ask again" (sic!)
@@ -398,7 +398,6 @@ public class FragmentPregunta extends Fragment {
                 SharedPreferences.Editor editor = config.edit();
                 editor.putBoolean("primeraVezFragmentSubitem",true);
                 editor.commit();
-
                 seguirConTutorial();
             }
         }
@@ -594,26 +593,10 @@ public class FragmentPregunta extends Fragment {
                                         .findFirst();
 
                                 preg.getListaFotos().add(foto);
-
-
-                                new MaterialDialog.Builder(getContext())
-                                        .title(getResources().getString(R.string.agregarComentario))
-                                        .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                                        .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                                        .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                                        .content(getResources().getString(R.string.favorAgregueComentario))
-                                        .inputType(InputType.TYPE_CLASS_TEXT)
-                                        .inputRange(0,40)
-                                        .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
-                                            @Override
-                                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                                foto.setComentarioFoto(input.toString());
-                                                adapterFotos.notifyDataSetChanged();
-                                            }
-                                        }).show();
+                                //posible bug dejar esto adentro
                             }
                         });
-
+                        crearDialogoParaModificarComentario(unaFoto);
                         listaFotos.add(unaFoto);
                         adapterFotos.notifyDataSetChanged();
 
@@ -659,7 +642,7 @@ public class FragmentPregunta extends Fragment {
                 .equalTo("idPregunta",idPregunta)
                 .findFirst();
 
-        if (preg.getListaFotos()==null||preg.getListaFotos().size()<1){
+        if (preg==null||preg.getListaFotos().size()<1){
             return new RealmList<>();
         }
         else{
@@ -676,11 +659,6 @@ public class FragmentPregunta extends Fragment {
     }
 
 
-    public void crearDialogoComentarioParaFoto(final Foto unaFoto){
-
-
-
-    }
     public void crearDialogoParaModificarComentario(final Foto unaFoto){
 
         new MaterialDialog.Builder(getContext())
@@ -702,16 +680,15 @@ public class FragmentPregunta extends Fragment {
                                Foto foto = realm.where(Foto.class)
                                        .equalTo("idFoto",unaFoto.getIdFoto())
                                        .findFirst();
-                               foto.setComentarioFoto(input.toString());
-                               adapterFotos.notifyDataSetChanged();
+
+                                if (foto!=null) {
+                                    foto.setComentarioFoto(input.toString());
+                                }
+                                adapterFotos.notifyDataSetChanged();
                             }
                         });
-
-
-
                     }
                 }).show();
-
     }
 
     //DOY DE ALTA LA FOTO EN REALM

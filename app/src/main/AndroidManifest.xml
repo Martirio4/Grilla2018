@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.Activities.LandingActivity" />
-        <activity android:name=".View.Activities.ActivityPreAuditoria"></activity>
+        <activity android:name=".View.Activities.ActivityPreAuditoria"/>
+        <activity android:name=".View.Activities.ActivityMyAudits" />
     </application>
 
 </manifest>

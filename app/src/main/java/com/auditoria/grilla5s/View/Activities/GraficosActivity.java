@@ -30,10 +30,14 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
+import com.auditoria.grilla5s.View.Fragments.FragmentBarrasApiladas;
+import com.auditoria.grilla5s.View.Fragments.FragmentRadar;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.firebase.database.DatabaseReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -104,8 +108,11 @@ public class GraficosActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        idAudit = bundle.getString(AUDIT);
-        origenIntent = bundle.getString(ORIGEN);
+
+        if (bundle!=null) {
+            idAudit = bundle.getString(AUDIT);
+            origenIntent = bundle.getString(ORIGEN);
+        }
 
         //--guardar auditoria en firebase--//
 
@@ -114,11 +121,9 @@ public class GraficosActivity extends AppCompatActivity {
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
         FragmentRadar fragmentRadar = (FragmentRadar) fragmentManager.findFragmentByTag("radar");
 
-        calcularPuntajes();
-
         if (fragmentRadar != null && fragmentRadar.isVisible()) {
-
-        } else {
+        }
+        else {
             cargarGraficoRadar();
             cargarGraficoBarras();
         }
@@ -330,6 +335,20 @@ public class GraficosActivity extends AppCompatActivity {
 
 
     public void cargarGraficoRadar() {
+
+        Realm realm = Realm.getDefaultInstance();
+        Auditoria laAudit=realm.where(Auditoria.class)
+                .equalTo("idAuditoria",idAudit)
+                .findFirst();
+
+        if (laAudit!=null){
+            promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
+            promedioSeiton = laAudit.getListaEses().get(0).getPuntajeEse();
+            promedioSeiso = laAudit.getListaEses().get(0).getPuntajeEse();
+            promedioSeiketsu = laAudit.getListaEses().get(0).getPuntajeEse();
+            promedioShitsuke = laAudit.getListaEses().get(0).getPuntajeEse();
+        }
+
         FragmentRadar graficoFragment = new FragmentRadar();
         Bundle bundle = new Bundle();
         bundle.putDouble(FragmentRadar.PUNJTAJE1, promedioSeiri);
@@ -337,7 +356,7 @@ public class GraficosActivity extends AppCompatActivity {
         bundle.putDouble(FragmentRadar.PUNJTAJE3, promedioSeiso);
         bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu);
         bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke);
-        bundle.putString(FragmentRadar.AREA, areaAuditada);
+        bundle.putString(FragmentRadar.AREA, laAudit.getAreaAuditada().getNombreArea());
 
         graficoFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -351,7 +370,17 @@ public class GraficosActivity extends AppCompatActivity {
         FragmentBarrasApiladas fragmentBarrasApiladas = new FragmentBarrasApiladas();
 
         Bundle bundle = new Bundle();
-        bundle.putDouble(FragmentBarrasApiladas.PROMEDIO3S, promedio5s);
+
+        Realm realm = Realm.getDefaultInstance();
+        Auditoria laAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
+                .findFirst();
+
+        if (laAudit != null) {
+
+            bundle.putDouble(FragmentBarrasApiladas.PROMEDIO3S, laAudit.getPuntajeFinal());
+        }
+
         fragmentBarrasApiladas.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -360,95 +389,10 @@ public class GraficosActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void calcularPuntajes() {
-        ControllerDatos controllerDatos = new ControllerDatos(this);
-        List<String> listaSeiri = controllerDatos.traerSeiri();
-        List<String> listaSeiton = controllerDatos.traerSeiton();
-        List<String> listaSeiso = controllerDatos.traerSeiso();
-        List<String> listaSeiketsu = controllerDatos.traerSeiketsu();
-        List<String> listaShitsuke = controllerDatos.traerShitsuke();
-        Realm realm = Realm.getDefaultInstance();
 
-        Auditoria mAudit = realm.where(Auditoria.class)
-                .equalTo("idAuditoria", idAudit)
-                .findFirst();
-        areaAuditada = mAudit.getAreaAuditada().getNombreArea();
-
-        Integer sumaSeiri = 0;
-        Integer sumaSeiton = 0;
-        Integer sumaSeiso = 0;
-        Integer sumaSeiketsu = 0;
-        Integer sumaShitsuke = 0;
-
-        for (String unString : listaSeiri
-                ) {
-            SubItem resultSeiri = realm.where(SubItem.class)
-                    .equalTo("pertenencia", idAudit + unString)
-                    .findFirst();
-            if (resultSeiri.getPuntuacion1() != null) {
-                sumaSeiri = sumaSeiri + resultSeiri.getPuntuacion1();
-            }
-        }
-        for (String unString : listaSeiton
-                ) {
-            SubItem resultSeiton = realm.where(SubItem.class)
-                    .equalTo("pertenencia", idAudit + unString)
-                    .findFirst();
-            if (resultSeiton.getPuntuacion1() != null) {
-                sumaSeiton = sumaSeiton + resultSeiton.getPuntuacion1();
-            }
-        }
-        for (String unString : listaSeiso
-                ) {
-            SubItem resultSeiso = realm.where(SubItem.class)
-                    .equalTo("pertenencia", idAudit + unString)
-                    .findFirst();
-            if (resultSeiso.getPuntuacion1() != null) {
-                sumaSeiso = sumaSeiso + resultSeiso.getPuntuacion1();
-            }
-        }
-        for (String unString : listaSeiketsu
-                ) {
-            SubItem resultSeiketsu = realm.where(SubItem.class)
-                    .equalTo("pertenencia", idAudit + unString)
-                    .findFirst();
-            if (resultSeiketsu.getPuntuacion1() != null) {
-                sumaSeiketsu = sumaSeiketsu + resultSeiketsu.getPuntuacion1();
-            }
-        }
-        for (String unString : listaShitsuke
-                ) {
-            SubItem resultShitsuke = realm.where(SubItem.class)
-                    .equalTo("pertenencia", idAudit + unString)
-                    .findFirst();
-            if (resultShitsuke.getPuntuacion1() != null) {
-                sumaShitsuke = sumaShitsuke + resultShitsuke.getPuntuacion1();
-            }
-        }
-        promedioSeiri = ((sumaSeiri / 4.0) / 5.0);
-        promedioSeiton = ((sumaSeiton / 4.0) / 5.0);
-        promedioSeiso = ((sumaSeiso / 4.0) / 5.0);
-        promedioSeiketsu = ((sumaSeiketsu / 4.0) / 5.0);
-        promedioShitsuke = ((sumaShitsuke / 4.0) / 5.0);
-
-        promedio5s = (promedioSeiso + promedioSeiri + promedioSeiton + promedioSeiketsu + promedioShitsuke) / 5.0;
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Auditoria mAudit = realm.where(Auditoria.class)
-                        .equalTo("idAuditoria", idAudit)
-                        .findFirst();
-                mAudit.setPuntajeFinal(promedio5s);
-            }
-
-        });
-
-
-    }
 
     public void irALanding(){
-        Intent intent = new Intent(this, ActivityLanding.class);
+        Intent intent = new Intent(this, LandingActivity.class);
         startActivity(intent);
         GraficosActivity.this.finish();
     }

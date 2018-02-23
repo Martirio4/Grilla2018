@@ -10,9 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.adapter.AdapterPagerVerAudits;
-import com.nomad.audit5s.controller.ControllerDatos;
+import com.auditoria.grilla5s.DAO.ControllerDatos;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterPagerVerAudits;
+
 
 public class ActivityVerAuditorias extends AppCompatActivity {
 

@@ -13,7 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.auditoria.grilla5s.DAO.ControllerDatos;
+import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterPagerAudits;
+import com.auditoria.grilla5s.View.Fragments.FragmentMyAudits;
+import com.auditoria.grilla5s.View.Fragments.FragmentRanking;
 
 
 public class ActivityMyAudits extends AppCompatActivity implements FragmentMyAudits.Graficable, FragmentRanking.Graficable {
@@ -65,7 +69,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentMyAud
         });
 
         // Get a support ActionBar corresponding to this toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
 
@@ -78,14 +82,6 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentMyAud
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    private void cargarFragmentMyAudits() {
-        FragmentMyAudits fragment = new FragmentMyAudits();
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedorMyAudits,fragment);
-        fragmentTransaction.commit();
     }
 
     @Override

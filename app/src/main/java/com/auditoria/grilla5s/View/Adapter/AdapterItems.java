@@ -34,7 +34,6 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     private RealmList<Item> listaItemsFavoritos;
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
-    private Eliminable eliminable;
 
     public void setLongListener(View.OnLongClickListener unLongListener) {
         this.listenerLong = unLongListener;

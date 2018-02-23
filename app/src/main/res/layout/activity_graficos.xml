@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.auditoria.grilla5s.View.Activities.GraficosActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/contenedorGraficos"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+</ScrollView>
+    <ProgressBar
+        android:indeterminate="true"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_gravity="bottom|end"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menuSalida"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/margenGrande"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</FrameLayout>

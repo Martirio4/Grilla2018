@@ -5,8 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.nomad.audit5s.fragments.FragmentMyAudits;
-import com.nomad.audit5s.fragments.FragmentRanking;
+
+import com.auditoria.grilla5s.View.Fragments.FragmentMyAudits;
+import com.auditoria.grilla5s.View.Fragments.FragmentRanking;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,11 +18,10 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.controller.ControllerDatos;
-import com.nomad.audit5s.model.Auditoria;
-import com.nomad.audit5s.model.SubItem;
-import com.nomad.audit5s.utils.FuncionesPublicas;
+import com.auditoria.grilla5s.DAO.ControllerDatos;
+import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -33,8 +32,9 @@ import java.util.Locale;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-/**
- * Created by elmar on 18/5/2017.
+/** ultima modificaion
+ * 22/02/2018
+ * Martirio
  */
 
 public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
@@ -165,22 +165,22 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
             Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             imageView = (ImageView) itemView.findViewById(R.id.imagenAreaResumenAuditorias);
 
-            tag1s = (TextView) itemView.findViewById(R.id.tagPuntaje1S);
-            tag2s = (TextView) itemView.findViewById(R.id.tagPuntaje2s);
-            tag3s = (TextView) itemView.findViewById(R.id.tagPuntaje3s);
-            tagfinal = (TextView) itemView.findViewById(R.id.tagPuntajeFinal);
-            text1s = (TextView) itemView.findViewById(R.id.puntaje1s);
-            text2s = (TextView) itemView.findViewById(R.id.puntaje2s);
-            text3s = (TextView) itemView.findViewById(R.id.puntaje3s);
-            textFinal = (TextView) itemView.findViewById(R.id.textPuntajeFinal);
-            textFecha = (TextView) itemView.findViewById(R.id.fechaAuditoria);
-            textFoto = (TextView) itemView.findViewById(R.id.nombreAreaResumenAuditoria);
-            tarjetaPutaje=(CardView) itemView.findViewById(R.id.tarjetaPuntaje);
-            text4s = (TextView) itemView.findViewById(R.id.puntaje4s);
-            text5s = (TextView) itemView.findViewById(R.id.puntaje5s);
-            tag4s=(TextView)itemView.findViewById(R.id.tagPuntaje4s);
-            tag5s=(TextView)itemView.findViewById(R.id.tagPuntaje5s);
-            botonEliminarAuditoria = (ImageButton) itemView.findViewById(R.id.botonEliminarAuditoria);
+            tag1s =  itemView.findViewById(R.id.tagPuntaje1S);
+            tag2s =  itemView.findViewById(R.id.tagPuntaje2s);
+            tag3s =  itemView.findViewById(R.id.tagPuntaje3s);
+            tagfinal =  itemView.findViewById(R.id.tagPuntajeFinal);
+            text1s =  itemView.findViewById(R.id.puntaje1s);
+            text2s =  itemView.findViewById(R.id.puntaje2s);
+            text3s =  itemView.findViewById(R.id.puntaje3s);
+            textFinal =  itemView.findViewById(R.id.textPuntajeFinal);
+            textFecha =  itemView.findViewById(R.id.fechaAuditoria);
+            textFoto =  itemView.findViewById(R.id.nombreAreaResumenAuditoria);
+            tarjetaPutaje=itemView.findViewById(R.id.tarjetaPuntaje);
+            text4s =  itemView.findViewById(R.id.puntaje4s);
+            text5s =  itemView.findViewById(R.id.puntaje5s);
+            tag4s=itemView.findViewById(R.id.tagPuntaje4s);
+            tag5s=itemView.findViewById(R.id.tagPuntaje5s);
+            botonEliminarAuditoria =  itemView.findViewById(R.id.botonEliminarAuditoria);
 
 
             tag1s.setTypeface(roboto);
@@ -202,58 +202,10 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
         public void cargarAuditoria(Auditoria unAuditoria) {
 
 
-                //COMIENZA CALCULO PUNTAJES
-                if (unAuditoria.getIdAuditoria()!=null && !unAuditoria.getIdAuditoria().isEmpty()) {
-                    ControllerDatos controllerDatos=new ControllerDatos(context);
-                    List<String> listaSeiri=controllerDatos.traerSeiri();
-                    List<String>listaSeiton=controllerDatos.traerSeiton();
-                    List<String>listaSeiso=controllerDatos.traerSeiso();
-                    List<String>listaSeiketsu=controllerDatos.traerSeiketsu();
-                    List<String>listaShitsuke=controllerDatos.traerShitsuke();
+                    //COMIENZA CALCULO PUNTAJES
 
-                    Realm realm = Realm.getDefaultInstance();
+                        Double promedio5s = unAuditoria.getPuntajeFinal();
 
-                    Integer sumaSeiri=0;
-                    Integer sumaSeiton =0;
-                    Integer sumaSeiso=0;
-                    Integer sumaSeiketsu=0;
-                    Integer sumaShitsuke=0;
-
-                    for (SubItem sub:unAuditoria.getSubItems()
-                         ) {
-                        if (sub.getId().equals("1S 1")||sub.getId().equals("1S 2")||sub.getId().equals("1S 3")||sub.getId().equals("1S 4")){
-                            if (sub.getPuntuacion1()!=null) {
-                                sumaSeiri = sumaSeiri + sub.getPuntuacion1();
-                            }
-                        }
-                        if (sub.getId().equals("2S 1")||sub.getId().equals("2S 2")||sub.getId().equals("2S 3")||sub.getId().equals("2S 4")) {
-                            if (sub.getPuntuacion1()!=null) {
-                                sumaSeiton = sumaSeiton + sub.getPuntuacion1();
-                            }
-                        }
-                        if (sub.getId().equals("3S 1")||sub.getId().equals("3S 2")||sub.getId().equals("3S 3")||sub.getId().equals("3S 4")) {
-                            if (sub.getPuntuacion1()!=null) {
-                                sumaSeiso = sumaSeiso + sub.getPuntuacion1();
-                            }
-                        }
-                        if (sub.getId().equals("4S 1")||sub.getId().equals("4S 2")||sub.getId().equals("4S 3")||sub.getId().equals("4S 4")) {
-                            if (sub.getPuntuacion1()!=null) {
-                                sumaSeiketsu = sumaSeiketsu + sub.getPuntuacion1();
-                            }
-                        }
-                        if (sub.getId().equals("5S 1")||sub.getId().equals("5S 2")||sub.getId().equals("5S 3")||sub.getId().equals("5S 4")) {
-                            if (sub.getPuntuacion1()!=null) {
-                                sumaShitsuke = sumaShitsuke + sub.getPuntuacion1();
-                            }
-                        }
-                    }
-
-                    Double promedioSeiri=((sumaSeiri/4.0)/5.0);
-                    Double promedioSeiton=((sumaSeiton /4.0)/5.0);
-                    Double promedioSeiso=((sumaSeiso/4.0)/5.0);
-                    Double promedioSeiketsu=((sumaSeiketsu/4.0)/5.0);
-                    Double promedioShitsuke=((sumaShitsuke/4.0)/5.0);
-                    Double promedio5s =((promedioSeiso+promedioSeiri+promedioSeiton+promedioSeiketsu+promedioShitsuke)/5);
                     //FIN CALCULO PUNTAJES
 
                     if (promedio5s <=0.5f){
@@ -271,11 +223,11 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
 
                     Locale locale = new Locale("en","US");
                     NumberFormat format = NumberFormat.getPercentInstance(locale);
-                    String percentage1 = format.format(promedioSeiri);
-                    String percentage2 = format.format(promedioSeiton);
-                    String percentage3 = format.format(promedioSeiso);
-                    String percentage4 = format.format(promedioSeiketsu);
-                    String percentage5 = format.format(promedioShitsuke);
+                    String percentage1 = format.format(unAuditoria.getListaEses().get(0).getPuntajeEse());
+                    String percentage2 = format.format(unAuditoria.getListaEses().get(1).getPuntajeEse());
+                    String percentage3 = format.format(unAuditoria.getListaEses().get(2).getPuntajeEse());
+                    String percentage4 = format.format(unAuditoria.getListaEses().get(3).getPuntajeEse());
+                    String percentage5 = format.format(unAuditoria.getListaEses().get(4).getPuntajeEse());
                     String percentage6 = format.format(promedio5s);
 
                     text1s.setText(percentage1);
@@ -297,9 +249,6 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
         }
     }
 
-
-
-}
 
 
     // Decodes image and scales it to reduce memory consumption

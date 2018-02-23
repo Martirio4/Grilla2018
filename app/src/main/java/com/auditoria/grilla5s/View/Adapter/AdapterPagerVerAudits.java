@@ -5,13 +5,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.nomad.audit5s.fragments.FragmentRevisarAuditoria;
+
+import com.auditoria.grilla5s.View.Fragments.FragmentRevisarAuditoria;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Pablo on 31/5/2017.
+ * Martirio 2018
  */
 
 public class AdapterPagerVerAudits extends FragmentStatePagerAdapter {

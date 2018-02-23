@@ -10,10 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterAuditorias;
 import com.google.firebase.auth.FirebaseAuth;
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.adapter.AdapterAuditorias;
-import com.nomad.audit5s.model.Auditoria;
+
 
 import io.realm.Realm;
 import io.realm.RealmList;
