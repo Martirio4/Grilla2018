@@ -19,6 +19,7 @@ import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterArea;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSettings;
@@ -86,6 +87,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
 
     }
 
+
+    //este metodo anda bien?
     public void borrarDefinitivamente(final Area unArea){
 
         Realm realm = Realm.getDefaultInstance();
@@ -102,24 +105,12 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
 
                 for (Auditoria audit:result2
                         ) {
-                    if (audit.getAreaAuditada().getIdArea().equals(unArea.getIdArea())) {
-                        RealmResults<SubItem> Subitems=realm.where(SubItem.class)
-                                .equalTo("auditoria",audit.getIdAuditoria())
-                                .findAll();
-                        Subitems.deleteAllFromRealm();
+                    if (audit.getAreaAuditada().getIdArea().equals(unArea.getIdArea())){
 
-                        RealmResults<Foto> fotos=realm.where(Foto.class)
-                                .equalTo("auditoria",audit.getIdAuditoria())
-                                .findAll();
-                        for (Foto foti:fotos
-                             ) {
-                            File file = new File(foti.getRutaFoto());
-                            boolean deleted = file.delete();
-                        }
-                        fotos.deleteAllFromRealm();
+                        FuncionesPublicas.borrarAuditoriaSeleccionada(audit.getIdAuditoria());
 
-                        audit.deleteFromRealm();
                     }
+
                 }
 
 

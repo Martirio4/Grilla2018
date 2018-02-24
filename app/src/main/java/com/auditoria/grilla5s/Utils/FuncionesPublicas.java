@@ -5,7 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 
 import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Ese;
 import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -39,10 +42,10 @@ public class FuncionesPublicas {
 
                 String usuario = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-                RealmResults<SubItem> Subitems = realm.where(SubItem.class)
+                RealmResults<Pregunta> preguntas = realm.where(Pregunta.class)
                         .equalTo("auditoria", idAudit)
                         .findAll();
-                Subitems.deleteAllFromRealm();
+                preguntas.deleteAllFromRealm();
 
                 RealmResults<Foto> fotos = realm.where(Foto.class)
                         .equalTo("auditoria", idAudit)
@@ -53,6 +56,16 @@ public class FuncionesPublicas {
                     boolean deleted = file.delete();
                 }
                 fotos.deleteAllFromRealm();
+
+                RealmResults<Item> items = realm.where(Item.class)
+                        .equalTo("idAudit",idAudit)
+                        .findAll();
+                items.deleteAllFromRealm();
+
+                RealmResults<Ese> eses = realm.where(Ese.class)
+                        .equalTo("idAudit",idAudit)
+                        .findAll();
+                preguntas.deleteAllFromRealm();
 
                 Auditoria result2 = realm.where(Auditoria.class)
                         .equalTo("idAuditoria", idAudit)

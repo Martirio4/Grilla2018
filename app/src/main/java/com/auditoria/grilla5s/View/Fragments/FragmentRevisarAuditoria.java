@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.activities.ActivityVerAuditorias;
-import com.nomad.audit5s.adapter.AdapterVerAudit;
-import com.nomad.audit5s.model.Auditoria;
-import com.nomad.audit5s.model.SubItem;
+import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Pregunta;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Activities.ActivityVerAuditorias;
+import com.auditoria.grilla5s.View.Adapter.AdapterVerAudit;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -161,37 +161,37 @@ public class FragmentRevisarAuditoria extends Fragment {
 
         switch(idNumero){
             case "1":
-                cargarSeiri();
+                //cargarSeiri();
                 break;
             case "2":
-                cargarSeiton();
+                //cargarSeiton();
                 break;
             case "3":
-                cargarSeiso();
+                //cargarSeiso();
                 break;
             case "4":
-                cargarSeiketsu();
+                //cargarSeiketsu();
                 break;
             case "5":
-                cargarShitsuke();
+               // cargarShitsuke();
                 break;
         }
 
         return view;
     }
-
+/*
     public void cargarSeiri(){
-        RealmList<SubItem> lista=mAudit.getSubItems();
+        RealmList<Pregunta> lista=mAudit.g();
 
-        sub1.setText(lista.get(0).getEnunciado());
-        sub2.setText(lista.get(1).getEnunciado());
-        sub3.setText(lista.get(2).getEnunciado());
-        sub4.setText(lista.get(3).getEnunciado());
+        sub1.setText(lista.get(0).getTextoPregunta());
+        sub2.setText(lista.get(1).getTextoPregunta());
+        sub3.setText(lista.get(2).getTextoPregunta());
+        sub4.setText(lista.get(3).getTextoPregunta());
 
-        String aux0=lista.get(0).getPuntuacion1().toString();
-        String aux1=lista.get(1).getPuntuacion1().toString();
-        String aux2=lista.get(2).getPuntuacion1().toString();
-        String aux3=lista.get(3).getPuntuacion1().toString();
+        String aux0=lista.get(0).getPuntaje().toString();
+        String aux1=lista.get(1).getPuntaje().toString();
+        String aux2=lista.get(2).getPuntaje().toString();
+        String aux3=lista.get(3).getPuntaje().toString();
 
         punt1.setText(aux0);
         punt2.setText(aux1);
@@ -211,15 +211,15 @@ public class FragmentRevisarAuditoria extends Fragment {
     public void cargarSeiton(){
         RealmList<SubItem> lista=mAudit.getSubItems();
 
-        sub1.setText(lista.get(4).getEnunciado());
-        sub2.setText(lista.get(5).getEnunciado());
-        sub3.setText(lista.get(6).getEnunciado());
-        sub4.setText(lista.get(7).getEnunciado());
+        sub1.setText(lista.get(4).getTextoPregunta());
+        sub2.setText(lista.get(5).getTextoPregunta());
+        sub3.setText(lista.get(6).getTextoPregunta());
+        sub4.setText(lista.get(7).getTextoPregunta());
 
-        String aux0=lista.get(4).getPuntuacion1().toString();
-        String aux1=lista.get(5).getPuntuacion1().toString();
-        String aux2=lista.get(6).getPuntuacion1().toString();
-        String aux3=lista.get(7).getPuntuacion1().toString();
+        String aux0=lista.get(4).getPuntaje().toString();
+        String aux1=lista.get(5).getPuntaje().toString();
+        String aux2=lista.get(6).getPuntaje().toString();
+        String aux3=lista.get(7).getPuntaje().toString();
 
         punt1.setText(aux0);
         punt2.setText(aux1);
@@ -239,15 +239,15 @@ public class FragmentRevisarAuditoria extends Fragment {
     public void cargarSeiso(){
         RealmList<SubItem> lista=mAudit.getSubItems();
 
-        sub1.setText(lista.get(8).getEnunciado());
-        sub2.setText(lista.get(9).getEnunciado());
-        sub3.setText(lista.get(10).getEnunciado());
-        sub4.setText(lista.get(11).getEnunciado());
+        sub1.setText(lista.get(8).getTextoPregunta());
+        sub2.setText(lista.get(9).getTextoPregunta());
+        sub3.setText(lista.get(10).getTextoPregunta());
+        sub4.setText(lista.get(11).getTextoPregunta());
 
-        String aux0=lista.get(8).getPuntuacion1().toString();
-        String aux1=lista.get(9).getPuntuacion1().toString();
-        String aux2=lista.get(10).getPuntuacion1().toString();
-        String aux3=lista.get(11).getPuntuacion1().toString();
+        String aux0=lista.get(8).getPuntaje().toString();
+        String aux1=lista.get(9).getPuntaje().toString();
+        String aux2=lista.get(10).getPuntaje().toString();
+        String aux3=lista.get(11).getPuntaje().toString();
 
         punt1.setText(aux0);
         punt2.setText(aux1);
@@ -267,15 +267,15 @@ public class FragmentRevisarAuditoria extends Fragment {
     public void cargarSeiketsu(){
         RealmList<SubItem> lista=mAudit.getSubItems();
 
-        sub1.setText(lista.get(12).getEnunciado());
-        sub2.setText(lista.get(13).getEnunciado());
-        sub3.setText(lista.get(14).getEnunciado());
-        sub4.setText(lista.get(15).getEnunciado());
+        sub1.setText(lista.get(12).getTextoPregunta());
+        sub2.setText(lista.get(13).getTextoPregunta());
+        sub3.setText(lista.get(14).getTextoPregunta());
+        sub4.setText(lista.get(15).getTextoPregunta());
 
-        String aux0=lista.get(12).getPuntuacion1().toString();
-        String aux1=lista.get(13).getPuntuacion1().toString();
-        String aux2=lista.get(14).getPuntuacion1().toString();
-        String aux3=lista.get(15).getPuntuacion1().toString();
+        String aux0=lista.get(12).getPuntaje().toString();
+        String aux1=lista.get(13).getPuntaje().toString();
+        String aux2=lista.get(14).getPuntaje().toString();
+        String aux3=lista.get(15).getPuntaje().toString();
 
         punt1.setText(aux0);
         punt2.setText(aux1);
@@ -295,15 +295,15 @@ public class FragmentRevisarAuditoria extends Fragment {
     public void cargarShitsuke(){
         RealmList<SubItem> lista=mAudit.getSubItems();
 
-        sub1.setText(lista.get(16).getEnunciado());
-        sub2.setText(lista.get(17).getEnunciado());
-        sub3.setText(lista.get(18).getEnunciado());
-        sub4.setText(lista.get(19).getEnunciado());
+        sub1.setText(lista.get(16).getTextoPregunta());
+        sub2.setText(lista.get(17).getTextoPregunta());
+        sub3.setText(lista.get(18).getTextoPregunta());
+        sub4.setText(lista.get(19).getTextoPregunta());
 
-        String aux0=lista.get(16).getPuntuacion1().toString();
-        String aux1=lista.get(17).getPuntuacion1().toString();
-        String aux2=lista.get(18).getPuntuacion1().toString();
-        String aux3=lista.get(19).getPuntuacion1().toString();
+        String aux0=lista.get(16).getPuntaje().toString();
+        String aux1=lista.get(17).getPuntaje().toString();
+        String aux2=lista.get(18).getPuntaje().toString();
+        String aux3=lista.get(19).getPuntaje().toString();
 
         punt1.setText(aux0);
         punt2.setText(aux1);
@@ -320,6 +320,7 @@ public class FragmentRevisarAuditoria extends Fragment {
         adapter4.notifyDataSetChanged();
 
     }
+    */
 
 
     public static Fragment crearFragment(String unString) {

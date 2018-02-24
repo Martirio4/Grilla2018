@@ -29,6 +29,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentBarrasApiladas;
@@ -37,6 +39,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.io.File;
@@ -51,6 +54,7 @@ import crl.android.pdfwriter.PDFWriter;
 import crl.android.pdfwriter.PaperSize;
 import crl.android.pdfwriter.StandardFonts;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import pl.tajchert.nammu.Nammu;
 
 public class GraficosActivity extends AppCompatActivity {
@@ -470,7 +474,6 @@ public class GraficosActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... args) {
             enviarPDF();
-            registrarReportesEnviadosFirebase();
             return null;
         }
 
@@ -488,51 +491,7 @@ public class GraficosActivity extends AppCompatActivity {
         }
     }
 
-    private void registrarReportesEnviadosFirebase() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        if (user != null) {
-            final DatabaseReference reference = mDatabase.child("usuarios").child(user.getUid()).child("estadisticas").child("reportesEnviados");
-            final DatabaseReference referenceGlobal = mDatabase.child("estadisticas").child("reportesEnviados");
 
-            //---leer cantidad de auditorias---//
-            reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        String cantReportes = dataSnapshot.getValue().toString();
-                        Integer numeroReportes = Integer.parseInt(cantReportes) + 1;
-                        reference.setValue(numeroReportes.toString());
-                    } else {
-                        reference.setValue("1");
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            referenceGlobal.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        String cantReportes = dataSnapshot.getValue().toString();
-                        Integer numeroReportes = Integer.parseInt(cantReportes) + 1;
-                        referenceGlobal.setValue(numeroReportes.toString());
-                    } else {
-                        referenceGlobal.setValue("1");
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
 
     /*
     public void armarPagina(List<SubItem> unaLista){
@@ -720,42 +679,42 @@ public class GraficosActivity extends AppCompatActivity {
 
     public void enviarPDF() {
 
-        ControllerDatos controllerDatos = new ControllerDatos(this);
         Realm realm = Realm.getDefaultInstance();
-        Auditoria mAudit = realm.where(Auditoria.class)
-                .equalTo("idAuditoria", idAudit)
+        RealmResults<Pregunta> preguntasSeiri =realm.where(Pregunta.class)
+                .equalTo("idAuidit",idAudit)
+                .beginsWith("idPregunta","1")
+                .findAll();
+        RealmResults<Pregunta> preguntasSeiton =realm.where(Pregunta.class)
+                .equalTo("idAuidit",idAudit)
+                .beginsWith("idPregunta","1")
+                .findAll();
+        RealmResults<Pregunta> preguntasSeiso =realm.where(Pregunta.class)
+                .equalTo("idAuidit",idAudit)
+                .beginsWith("idPregunta","1")
+                .findAll();
+        RealmResults<Pregunta> preguntasSeiketsu =realm.where(Pregunta.class)
+                .equalTo("idAuidit",idAudit)
+                .beginsWith("idPregunta","1")
+                .findAll();
+        RealmResults<Pregunta> preguntasShitsuke =realm.where(Pregunta.class)
+                .equalTo("idAuidit",idAudit)
+                .beginsWith("idPregunta","1")
+                .findAll();
+        Auditoria mAudit=realm.where(Auditoria.class)
+                .equalTo("idAuditoria",idAudit)
                 .findFirst();
 
-        List<String> alistaSeiri = controllerDatos.traerSeiri();
-        List<String> alistaSeiton = controllerDatos.traerSeiton();
-        List<String> alistaSeiso = controllerDatos.traerSeiso();
-        List<String> alistaSeiketsu = controllerDatos.traerSeiketsu();
-        List<String> alistaShitsuke = controllerDatos.traerShitsuke();
 
-        List<SubItem> unListaSeiri = new ArrayList<>();
-        List<SubItem> unListaSeiton = new ArrayList<>();
-        List<SubItem> unListaSeiso = new ArrayList<>();
-        List<SubItem> unListaSeiketsu = new ArrayList<>();
-        List<SubItem> unListaShitsuke = new ArrayList<>();
-
-        for (SubItem sub : mAudit.getSubItems()
-                ) {
-            if (alistaSeiri.contains(sub.getId())) {
-                unListaSeiri.add(sub);
-            }
-            if (alistaSeiton.contains(sub.getId())) {
-                unListaSeiton.add(sub);
-            }
-            if (alistaSeiso.contains(sub.getId())) {
-                unListaSeiso.add(sub);
-            }
-            if (alistaSeiketsu.contains(sub.getId())) {
-                unListaSeiketsu.add(sub);
-            }
-            if (alistaShitsuke.contains(sub.getId())) {
-                unListaShitsuke.add(sub);
-            }
-        }
+        List<Pregunta> unListaSeiri = new ArrayList<>();
+        unListaSeiri.addAll(preguntasSeiri);
+        List<Pregunta> unListaSeiton = new ArrayList<>();
+        unListaSeiton.addAll(preguntasSeiton);
+        List<Pregunta> unListaSeiso = new ArrayList<>();
+        unListaSeiso.addAll(preguntasSeiso);
+        List<Pregunta> unListaSeiketsu = new ArrayList<>();
+        unListaSeiketsu.addAll(preguntasSeiketsu);
+        List<Pregunta> unListaShitsuke = new ArrayList<>();
+        unListaShitsuke.addAll(preguntasShitsuke);
 
         writer = new PDFWriter(PaperSize.LETTER_WIDTH, PaperSize.LETTER_HEIGHT);
         crearPdfEse(unListaSeiri);
@@ -779,7 +738,7 @@ public class GraficosActivity extends AppCompatActivity {
      * since Bitmap.createScaledBitmap(...) produces bad (blocky) quality bitmaps.)
      */
 
-    public void crearPdfEse(List<SubItem> laLista) {
+    public void crearPdfEse(List<Pregunta> laLista) {
 
         Integer cursorX = 0;
         Integer cursorY = 792;
@@ -802,7 +761,7 @@ public class GraficosActivity extends AppCompatActivity {
         writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.fecha) + mAudit.getFechaAuditoria());
         cursorY = cursorY - SALTO_LINEA;
         writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
-        writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getaQuePertenece());
+        writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getIdPregunta().substring(0,1));
 
         //linea separacion
         writer.addLine(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65), PaperSize.LETTER_WIDTH - MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65));
@@ -813,10 +772,10 @@ public class GraficosActivity extends AppCompatActivity {
         recorrerSubitemLista(laLista, cursorX, cursorY, mAudit.getFechaAuditoria());
     }
 
-    private void recorrerSubitemLista(List<SubItem> laLista, int x, int y, String fecha) {
+    private void recorrerSubitemLista(List<Pregunta> laLista, int x, int y, String fecha) {
         int cursorX = x;
         int cursorY = y;
-        for (SubItem sub : laLista) {
+        for (Pregunta sub : laLista) {
             cursorX = MARGEN_IZQUIERDO;
             cursorY = cursorY - (SEPARACIONFOTOS / 2);
             if (cursorY < 2 * MARGEN_IZQUIERDO) {
@@ -834,7 +793,7 @@ public class GraficosActivity extends AppCompatActivity {
                 writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.fecha) + fecha);
                 cursorY = cursorY - SALTO_LINEA;
                 writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
-                writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getaQuePertenece());
+                writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getIdPregunta().substring(0,1));
 
                 //linea separacion
                 writer.addLine(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65), PaperSize.LETTER_WIDTH - MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65));
@@ -844,9 +803,9 @@ public class GraficosActivity extends AppCompatActivity {
 
             }
 
-            writer.addText(cursorX, cursorY - SALTO_LINEA, 12, sub.getEnunciado());
+            writer.addText(cursorX, cursorY - SALTO_LINEA, 12, sub.getTextoPregunta());
             cursorY = cursorY - SALTO_LINEA;
-            writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.score) + sub.getPuntuacion1().toString());
+            writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.score) + sub.getPuntaje().toString());
             cursorY = cursorY - 2 * SALTO_LINEA;
 
             //renglonesFoto=Math.round(sub.getListaFotos().size()/3);
@@ -877,7 +836,7 @@ public class GraficosActivity extends AppCompatActivity {
                     writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.fecha) + fecha);
                     cursorY = cursorY - SALTO_LINEA;
                     writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
-                    writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getaQuePertenece());
+                    writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getIdPregunta().substring(0,1));
 
                     //linea separacion
                     writer.addLine(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65), PaperSize.LETTER_WIDTH - MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65));
@@ -887,7 +846,7 @@ public class GraficosActivity extends AppCompatActivity {
 
                     //FINALMENTE AGREGO LA FOTO
                     writer.addImage(cursorX, cursorY - bitmapScaled.getHeight(), bitmapScaled);
-                    writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, 10, unaFoto.getComentario());
+                    writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, 10, unaFoto.getComentarioFoto());
                     cursorX = cursorX + bitmapScaled.getWidth() + SALTO_LINEA;
                     cursorY = cursorY - bitmapScaled.getHeight();
                 } else {
@@ -898,19 +857,19 @@ public class GraficosActivity extends AppCompatActivity {
                         cursorX = MARGEN_IZQUIERDO;
                         cursorY = cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS;
                         writer.addImage(cursorX, cursorY, bitmapScaled);
-                        writer.addText(cursorX, cursorY - SEPARACIONFOTOS, 10, unaFoto.getComentario());
+                        writer.addText(cursorX, cursorY - SEPARACIONFOTOS, 10, unaFoto.getComentarioFoto());
                         cursorX = cursorX + bitmapScaled.getWidth();
 
                     } else {
                         if (cursorX == MARGEN_IZQUIERDO) {
                             writer.addImage(cursorX, cursorY - bitmapScaled.getHeight(), bitmapScaled);
-                            writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, 10, unaFoto.getComentario());
+                            writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, 10, unaFoto.getComentarioFoto());
                             cursorX = cursorX + bitmapScaled.getWidth();
                             cursorY = cursorY - bitmapScaled.getHeight();
                         } else {
 //                       ENTRA EN LA MISMA LINEA
                             writer.addImage(cursorX + SEPARACIONFOTOS, cursorY, bitmapScaled);
-                            writer.addText(cursorX + SEPARACIONFOTOS, cursorY - SEPARACIONFOTOS, 10, unaFoto.getComentario());
+                            writer.addText(cursorX + SEPARACIONFOTOS, cursorY - SEPARACIONFOTOS, 10, unaFoto.getComentarioFoto());
                             cursorX = cursorX + SEPARACIONFOTOS + bitmapScaled.getWidth();
                             cursorY = cursorY - SEPARACIONFOTOS;
                         }
@@ -994,8 +953,6 @@ public class GraficosActivity extends AppCompatActivity {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 editor.putBoolean("quiereVerRating", false);
                                 editor.commit();
-                                rateApp();
-                                registrarEnvioDeRating();
                             }
                         })
                         .negativeText(getResources().getString(R.string.no))
@@ -1035,27 +992,7 @@ public class GraficosActivity extends AppCompatActivity {
 
     }
 
-    private void registrarEnvioDeRating() {
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            if (user != null) {
-                final DatabaseReference reference = mDatabase.child("usuarios").child(user.getUid()).child("estadisticas").child("calificoApp");
-
-                //---leer cantidad de auditorias---//
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        reference.setValue("si");
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-    }
 
 
     public void metodoRatingOnBack() {
@@ -1079,7 +1016,6 @@ public class GraficosActivity extends AppCompatActivity {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 editor.putBoolean("quiereVerRating", false);
                                 editor.commit();
-                                rateApp();
                             }
                         })
                         .negativeText(getResources().getString(R.string.no))
@@ -1122,19 +1058,7 @@ public class GraficosActivity extends AppCompatActivity {
     }
 
 
-    public void rateApp()
-    {
-        try
-        {
-            Intent rateIntent = rateIntentForUrl("market://details");
-            startActivity(rateIntent);
-        }
-        catch (ActivityNotFoundException e)
-        {
-            Intent rateIntent = rateIntentForUrl("https://play.google.com/store/apps/details");
-            startActivity(rateIntent);
-        }
-    }
+
 
     private Intent rateIntentForUrl(String url)
     {

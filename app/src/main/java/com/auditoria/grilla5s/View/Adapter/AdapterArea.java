@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 
 import com.auditoria.grilla5s.Model.Area;
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

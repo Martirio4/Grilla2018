@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/marfil"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:text="@string/ResultadoFinal"
+        android:textSize="20sp"
+        android:textColor="@color/tile4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_marginEnd="@dimen/margenGrande"
+        android:layout_marginStart="@dimen/margenGrande"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="@dimen/margenGrande"
+        android:layout_marginStart="30dp"
+        android:id="@+id/chart1"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+         />
+    <LinearLayout
+
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@color/primary_text"
+            android:gravity="end"
+            android:paddingEnd="@dimen/margenGrande"
+            android:paddingStart="@dimen/margenMicro"
+            android:textSize="16sp"
+            android:text="@string/auditResult"
+            android:layout_weight="50"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:background="@color/tile4"
+            android:layout_width="2dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:textColor="@color/primary_text"
+            android:gravity="start"
+            android:textSize="16sp"
+            android:paddingStart="@dimen/margenGrande"
+            android:paddingEnd="@dimen/margenMicro"
+            android:text="@string/target"
+            android:layout_weight="50"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    
+
+
+</LinearLayout>

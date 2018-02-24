@@ -1,8 +1,5 @@
 package com.auditoria.grilla5s.View.Adapter;
-
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +9,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nomad.audit5s.R;
-import com.nomad.audit5s.model.Foto;
+import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
 import io.realm.RealmList;
 
-/**
- * Created by elmar on 18/5/2017.
- */
 
 public class AdapterVerAudit extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
@@ -31,7 +25,6 @@ public class AdapterVerAudit extends RecyclerView.Adapter implements View.OnClic
     private RealmList<Foto> listaFotosFavoritos;
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
-    private Favoritable favoritable;
 
     public void setLongListener(View.OnLongClickListener unLongListener) {
         this.listenerLong = unLongListener;
@@ -63,11 +56,8 @@ public class AdapterVerAudit extends RecyclerView.Adapter implements View.OnClic
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewCelda;
-        FragmentActivity unaActivity = (FragmentActivity) context;
-        FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
         viewCelda = layoutInflater.inflate(R.layout.detalle_celda_ver_audit, parent, false);
         //viewCelda.setOnClickListener(this);
-
         return new FotoViewHolder(viewCelda);
     }
 
@@ -113,8 +103,8 @@ public class AdapterVerAudit extends RecyclerView.Adapter implements View.OnClic
 
         public void cargarFoto(Foto unFoto) {
 
-                if (unFoto.getComentario()!=null && !unFoto.getComentario().isEmpty()){
-                    textView.setText(unFoto.getComentario());
+                if (unFoto.getComentarioFoto()!=null && !unFoto.getComentarioFoto().isEmpty()){
+                    textView.setText(unFoto.getComentarioFoto());
                 }
 
                 File f = new File(unFoto.getRutaFoto());
@@ -129,9 +119,7 @@ public class AdapterVerAudit extends RecyclerView.Adapter implements View.OnClic
 
     }
 
-    public interface Favoritable {
-        public void recibirFotoFavorito(Foto unFoto);
-    }
+
 
     // Decodes image and scales it to reduce memory consumption
     

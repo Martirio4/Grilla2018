@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.MyAxisValueFormatter;
+import com.auditoria.grilla5s.Utils.MyValueFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,9 +23,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.nomad.audit5s.MyAxisValueFormatter;
-import com.nomad.audit5s.MyValueFormatter;
-import com.nomad.audit5s.R;
+
 
 import java.util.ArrayList;
 
