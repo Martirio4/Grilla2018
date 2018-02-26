@@ -2,13 +2,17 @@ package com.auditoria.grilla5s.View.Fragments;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auditoria.grilla5s.Model.Item;
@@ -34,6 +38,7 @@ public class FragmentPreAudit extends Fragment {
 
     public interface Auditable{
         void auditarItem(Item unItem);
+        void titularToolbar();
     }
 
 
@@ -84,6 +89,8 @@ public class FragmentPreAudit extends Fragment {
         };
         adapterItems.setListener(listenerItem);
 
+        auditable.titularToolbar();
+
         return view;
     }
 
@@ -101,7 +108,14 @@ public class FragmentPreAudit extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+
+        auditable= (Auditable) context;
         super.onAttach(context);
-        Auditable auditable= (Auditable) context;
+    }
+
+    @Override
+    public void onResume() {
+        adapterItems.notifyDataSetChanged();
+        super.onResume();
     }
 }

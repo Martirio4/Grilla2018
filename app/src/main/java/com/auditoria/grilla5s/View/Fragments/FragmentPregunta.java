@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import android.widget.Toolbar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
@@ -37,6 +39,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -77,7 +80,12 @@ public class FragmentPregunta extends Fragment {
     private File fotoComprimida;
     private RecyclerView recyclerFotos;
     private AdapterFotos adapterFotos;
+    private AdapterFotos adapterFotosViejas;
+    TextView tagCommentNuevo;
+    TextView tagCommentViejo;
+
     private LinearLayoutManager layoutManager;
+    private LinearLayoutManager layoutManagerViejo;
     private Integer puntuacion;
 
     private Avisable avisable;
@@ -93,6 +101,8 @@ public class FragmentPregunta extends Fragment {
     private String idItem;
 
     private TextView textViewEnunciado;
+    private TextView textViewCommentNuevo;
+    private TextView textViewCommentViejo;
     private RadioGroup rg1;
 
     private AppCompatRadioButton rb0;
@@ -107,10 +117,12 @@ public class FragmentPregunta extends Fragment {
 
     private FloatingActionMenu fabMenu;
     private FloatingActionButton fabCamara;
+    private FloatingActionButton fabComment;
     private FloatingActionButton fabGuardar;
     private FloatingActionButton fabSalir;
 
     private Foto unaFoto;
+    private RecyclerView recyclerFotosViejas;
 
 
     public FragmentPregunta() {
@@ -153,26 +165,28 @@ public class FragmentPregunta extends Fragment {
         rb4 = view.findViewById(R.id.item4);
         rb5 = view.findViewById(R.id.item5);
         textViewEnunciado= view.findViewById(R.id.textoEnunciado);
+        textViewCommentNuevo = view.findViewById(R.id.tv_comment_nuevo);
+        textViewCommentViejo = view.findViewById(R.id.tv_comment_viejo);
+        tagCommentNuevo=view.findViewById(R.id.tv_tagCommentNuevo);
+        tagCommentViejo=view.findViewById(R.id.tv_tagCommentViejo);
 
         linear=view.findViewById(R.id.vistaCentral);
 
-        rb0.setText("1");
-        rb1.setText("2");
-        rb2.setText("3");
-        rb3.setText("4");
-        rb4.setText("5");
-        rb5.setText("6");
+        rb0.setText("0");
+        rb1.setText("1");
+        rb2.setText("2");
+        rb3.setText("3");
+        rb4.setText("4");
+        rb5.setText("5");
         textViewEnunciado.setText(enunciado);
 
 
 //        HANDLE RADIOGROUP
-
-        //In Activity
-
+        //LISTENER PARA EL RADIOGROUP
         rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()))+1;
+                puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()));
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
@@ -180,7 +194,7 @@ public class FragmentPregunta extends Fragment {
                     public void execute(Realm realm) {
 
                         Pregunta preg = realm.where(Pregunta.class)
-                                .equalTo("IdAudit",idAudit)
+                                .equalTo("idAudit",idAudit)
                                 .equalTo("idPregunta",idPregunta)
                                 .findFirst();
                         preg.setPuntaje(puntuacion);
@@ -188,6 +202,23 @@ public class FragmentPregunta extends Fragment {
                 });
             }
         });
+
+        //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
+        Realm realm = Realm.getDefaultInstance();
+        Pregunta pregunta = realm.where(Pregunta.class)
+                .equalTo("idAudit",idAudit)
+                .equalTo("idPregunta",idPregunta)
+                .findFirst();
+        if (pregunta!=null && pregunta.getPuntaje()!=null){
+            Integer puntaje=pregunta.getPuntaje();
+            RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje));
+            unRadioButton.setChecked(true);
+        }
+        if (pregunta!=null&&pregunta.getComentario()!=null){
+            tagCommentNuevo.setVisibility(View.VISIBLE);
+            textViewCommentNuevo.setText(pregunta.getComentario());
+        }
+
 
 
         verCriterio.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +238,7 @@ public class FragmentPregunta extends Fragment {
 
 
 
-//        RecyclerView FOTOS
+//      RECYCLERVIEW FOTOS
         recyclerFotos= view.findViewById(R.id.recyclerFotos);
         layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerFotos.setLayoutManager(layoutManager);
@@ -230,6 +261,22 @@ public class FragmentPregunta extends Fragment {
         };
         adapterFotos.setListener(listenerComentario);
         adapterFotos.notifyDataSetChanged();
+
+//      RECYCLERVIEW FOTOS AUDITORIA PREVIA Y COMMENT AUDITORIA VIEJA
+
+        recyclerFotosViejas= view.findViewById(R.id.recyclerFotosViejas);
+        layoutManagerViejo= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerFotosViejas.setLayoutManager(layoutManagerViejo);
+        adapterFotosViejas= new AdapterFotos();
+        adapterFotosViejas.setContext(getContext());
+
+//      ESTE METODO LE CARGA LAS FOTOS VIEJAS Y EL COMENTARIO GRAL
+        cargarFotosViejas();
+//
+        recyclerFotosViejas.setAdapter(adapterFotosViejas);
+        adapterFotosViejas.notifyDataSetChanged();
+
+
 
 
         //agregar los fabs al menu
@@ -314,6 +361,28 @@ public class FragmentPregunta extends Fragment {
                             .positiveText(getResources().getString(R.string.ok))
                             .show();
                 }
+            }
+        });
+
+
+        fabComment = new FloatingActionButton(getActivity());
+        fabComment.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+        fabComment.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fabComment.setLabelText(getString(R.string.agregarComentario));
+        fabComment.setImageResource(R.drawable.ic_comment_black_24dp);
+        fabMenu.addMenuButton(fabComment);
+
+        fabComment.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        fabComment.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+        fabComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crearDialogoCommentGeneral();
+
+                fabMenu.close(true);
             }
         });
 
@@ -403,6 +472,46 @@ public class FragmentPregunta extends Fragment {
         }
 
         return view;
+    }
+
+    private void cargarFotosViejas() {
+        RealmList<Foto>listaFotosViejas=new RealmList<>();
+        Pregunta laPreguntaVieja;
+
+        Realm realm = Realm.getDefaultInstance();
+        String idArea;
+        Auditoria auditActual= realm. where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
+                .findFirst();
+        idArea=auditActual.getAreaAuditada().getIdArea();
+
+        RealmResults<Auditoria>allAudits=realm.where(Auditoria.class)
+                .findAll();
+
+        for (Auditoria unAudit:allAudits
+             ) {
+            if (unAudit.getAreaAuditada().getIdArea().equals(idArea)&&unAudit.getEsUltimaAuditoria()){
+                 laPreguntaVieja = realm.where(Pregunta.class)
+                        .equalTo("idAudit",unAudit.getIdAuditoria())
+                        .equalTo("idPregunta",idPregunta)
+                        .findFirst();
+                 if (laPreguntaVieja!=null&&laPreguntaVieja.getListaFotos().size()>0){
+                     listaFotosViejas.addAll(laPreguntaVieja.getListaFotos());
+                     adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
+                     adapterFotosViejas.notifyDataSetChanged();
+                     if (laPreguntaVieja.getComentario()!=null) {
+                         tagCommentViejo.setVisibility(View.VISIBLE);
+                         textViewCommentViejo.setText(laPreguntaVieja.getComentario());
+                     }
+                     else {
+                         tagCommentViejo.setVisibility(View.GONE);
+                     }
+                     break;
+                 }
+            }
+        }
+        adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
+       adapterFotosViejas.notifyDataSetChanged();
     }
 
     private void seguirConTutorial() {
@@ -659,7 +768,7 @@ public class FragmentPregunta extends Fragment {
     }
 
 
-    public void crearDialogoParaModificarComentario(final Foto unaFoto){
+    public void crearDialogoParaModificarComentario(final Foto laFotoParaComentar){
 
         new MaterialDialog.Builder(getContext())
                 .title(getResources().getString(R.string.agregarComentario))
@@ -678,15 +787,54 @@ public class FragmentPregunta extends Fragment {
                             @Override
                             public void execute(Realm realm) {
                                Foto foto = realm.where(Foto.class)
-                                       .equalTo("idFoto",unaFoto.getIdFoto())
+                                       .equalTo("idFoto",laFotoParaComentar.getIdFoto())
                                        .findFirst();
-
                                 if (foto!=null) {
                                     foto.setComentarioFoto(input.toString());
                                 }
-                                adapterFotos.notifyDataSetChanged();
+
                             }
                         });
+                        unaFoto.setComentarioFoto(input.toString());
+                        adapterFotos.notifyDataSetChanged();
+                    }
+                }).show();
+    }
+
+    public void crearDialogoCommentGeneral(){
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(R.string.agregarComentario))
+                .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                .content(getResources().getString(R.string.favorAgregueComentarioGeneral))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, final CharSequence input) {
+                        String inputString=input.toString();
+                        if (!inputString.isEmpty()){
+                            tagCommentNuevo.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            tagCommentNuevo.setVisibility(View.GONE);
+                        }
+
+                        Realm realm= Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                Pregunta pregunta = realm.where(Pregunta.class)
+                                        .equalTo("idAudit",idAudit)
+                                        .equalTo("idPregunta",idPregunta)
+                                        .findFirst();
+
+                                if (pregunta!=null) {
+                                  pregunta.setComentario(input.toString());
+                                }
+                            }
+                        });
+                        textViewCommentNuevo.setText(input.toString());
                     }
                 }).show();
     }

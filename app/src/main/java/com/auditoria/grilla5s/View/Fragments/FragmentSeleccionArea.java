@@ -47,6 +47,7 @@ public class FragmentSeleccionArea extends Fragment {
 
     public interface Notificable{
         public void comenzarAuditoria(Area unArea);
+
     }
 
 
@@ -57,10 +58,10 @@ public class FragmentSeleccionArea extends Fragment {
         View view= inflater.inflate(R.layout.fragment_seleccion_aerea, container, false);
         linear=view.findViewById(R.id.vistaCentral);
         TextView textoSinAreas=(TextView)view.findViewById(R.id.textoSinAreas);
-        String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        //String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Area> result2 = realm.where(Area.class)
-                .equalTo("usuario", usuario)
+            //las areas son de todos los usuarios//    .equalTo("usuario", usuario)
                 .findAll();
 
         if  (result2.size()<1){

@@ -43,12 +43,12 @@ public class FuncionesPublicas {
                 String usuario = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
                 RealmResults<Pregunta> preguntas = realm.where(Pregunta.class)
-                        .equalTo("auditoria", idAudit)
+                        .equalTo("idAudit", idAudit)
                         .findAll();
                 preguntas.deleteAllFromRealm();
 
                 RealmResults<Foto> fotos = realm.where(Foto.class)
-                        .equalTo("auditoria", idAudit)
+                        .equalTo("idAudit", idAudit)
                         .findAll();
                 for (Foto foti : fotos
                         ) {

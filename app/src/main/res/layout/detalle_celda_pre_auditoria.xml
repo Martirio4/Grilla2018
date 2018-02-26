@@ -27,24 +27,44 @@
             android:layout_marginTop="@dimen/margenMini"
             android:orientation="horizontal">
             <TextView
+                android:paddingStart="@dimen/margenGrande"
+                android:paddingEnd="@dimen/margenGrande"
                 android:background="@color/tile4"
                 android:gravity="center"
                 android:textSize="30sp"
                 android:text="1"
                 android:textColor="@color/blancoNomad"
                 android:id="@+id/tv_numero_item"
-                android:layout_weight="20"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
-            <TextView
-                android:paddingStart="@dimen/margenChico"
-                android:paddingEnd="@dimen/margenChico"
-                android:text="texto de prueba numero uno, para identificar la cantidad de texto entrante en la elda"
-                android:gravity="center"
-                android:id="@+id/tv_descripcion_item"
-                android:layout_weight="80"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:maxLines="3"
+                    android:paddingStart="@dimen/margenChico"
+                    android:paddingEnd="@dimen/margenChico"
+                    android:text="texto de prueba numero uno, para identificar la cantidad de texto entrante en la elda"
+                    android:gravity="center"
+                    android:id="@+id/tv_descripcion_item"
+                    android:layout_width="match_parent"
+                    android:layout_weight="80"
+                    android:layout_height="0dp" />
+                <TextView
+                    android:textColor="@color/tile5"
+                    android:textSize="12sp"
+                    android:layout_weight="20"
+                    android:layout_gravity="bottom"
+                    android:text="@string/faltanPreguntas"
+                    android:id="@+id/tv_preguntasFaltantes"
+                    android:paddingStart="@dimen/margenChico"
+                    android:paddingEnd="@dimen/margenChico"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+
+            </LinearLayout>
+
 
 
         </LinearLayout>

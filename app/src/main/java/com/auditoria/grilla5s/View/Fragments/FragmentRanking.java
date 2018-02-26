@@ -33,6 +33,18 @@ public class FragmentRanking extends Fragment {
     private RealmList<Area> listaAreas;
     private Graficable graficable;
 
+    public void updateAdapter() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
+                .findAll();
+        listaAuditorias=new RealmList<>();
+        adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
+        listaAuditorias.addAll(result2);
+        adapterAudits.setListaAuditsOriginales(listaAuditorias);
+        adapterAudits.notifyDataSetChanged();
+
+    }
+
     public interface Graficable{
         public void GraficarAuditVieja(Auditoria unAuditoria);
     }
@@ -46,10 +58,8 @@ public class FragmentRanking extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_my_audits, container, false);
-        String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> result2=realm.where(Auditoria.class)
-                .equalTo("usuario",usuario)
                 .findAll();
          result2=result2.sort("puntajeFinal", Sort.DESCENDING);
 
@@ -103,4 +113,9 @@ public class FragmentRanking extends Fragment {
         this.graficable=(Graficable)context;
     }
 
+    @Override
+    public void onResume() {
+        adapterAudits.notifyDataSetChanged();
+        super.onResume();
+    }
 }

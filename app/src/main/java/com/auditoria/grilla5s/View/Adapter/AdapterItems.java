@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.squareup.picasso.Picasso;
 
@@ -31,13 +32,9 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
 
     private Context context;
     private RealmList<Item> listaItemsOriginales;
-    private RealmList<Item> listaItemsFavoritos;
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
 
-    public void setLongListener(View.OnLongClickListener unLongListener) {
-        this.listenerLong = unLongListener;
-    }
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
@@ -67,6 +64,8 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
 
         View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_pre_auditoria, parent, false);
         ItemViewHolder ItemsViewHolder = new ItemViewHolder(viewCelda);
+
+        viewCelda.setOnClickListener(this);
 
         return ItemsViewHolder;
     }
@@ -113,23 +112,43 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     private static class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewNumero;
         private TextView textViewDescripcion;
+        private TextView textViewFaltantes;
 
 
         public ItemViewHolder(View itemView) {
             super(itemView);
 
-            textViewNumero= (TextView) itemView.findViewById(R.id.tv_numero_item);
-            textViewDescripcion= (TextView) itemView.findViewById(R.id.tv_descripcion_item);
+            textViewNumero=  itemView.findViewById(R.id.tv_numero_item);
+            textViewDescripcion=  itemView.findViewById(R.id.tv_descripcion_item);
+            textViewFaltantes=itemView.findViewById(R.id.tv_preguntasFaltantes);
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             Typeface robotoR = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Regular.ttf");
             textViewNumero.setTypeface(robotoR);
             textViewDescripcion.setTypeface(robotoL);
+            textViewFaltantes.setTypeface(robotoL);
         }
 
         public void cargarItem(Item unItem) {
             String idItem=unItem.getIdItem().substring(unItem.getIdItem().length()-1);
             textViewNumero.setText(idItem);
             textViewDescripcion.setText(unItem.getCriterio());
+
+            Integer faltante=unItem.getListaPreguntas().size();
+
+            for (Pregunta preg:unItem.getListaPreguntas()
+                 ) {
+                if (preg.getPuntaje()!=null){
+                    faltante=faltante-1;
+                }
+            }
+            if (faltante==0){
+                textViewFaltantes.setText(textViewFaltantes.getContext().getResources().getString(R.string.preguntasCompletadas));
+            }
+            else{
+                String texto=textViewFaltantes.getContext().getResources().getString(R.string.faltanPreguntas)+" " + faltante + " " + textViewFaltantes.getContext().getResources().getString(R.string.pregunta);
+                textViewFaltantes.setText(texto);
+            }
+
         }
 
 

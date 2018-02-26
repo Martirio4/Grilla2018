@@ -60,7 +60,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
     @Override
     public void comenzarAuditoria(Area unArea) {
 
-        Intent intent = new Intent(this, ActivityAuditoria.class);
+        Intent intent = new Intent(this, ActivityPreAuditoria.class);
         Bundle bundle = new Bundle();
         bundle.putString(ActivityPreAuditoria.IDAREA, unArea.getIdArea());
         intent.putExtras(bundle);

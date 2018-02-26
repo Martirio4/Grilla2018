@@ -66,4 +66,11 @@ public class AdapterPagerAudits extends FragmentStatePagerAdapter {
     public void setUnaListaTitulos(List<String> unaListaTitulos) {
         this.unaListaTitulos = unaListaTitulos;
     }
+
+    public void updateAdapters(){
+        FragmentRanking fragmentRanking=(FragmentRanking)listaFragments.get(1);
+        fragmentRanking.updateAdapter();
+        FragmentMyAudits fragmentMyAudits=(FragmentMyAudits) listaFragments.get(0);
+        fragmentMyAudits.updateAdapter();
+    }
 }

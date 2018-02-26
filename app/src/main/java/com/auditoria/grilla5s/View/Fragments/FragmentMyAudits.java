@@ -16,6 +16,8 @@ import com.auditoria.grilla5s.View.Adapter.AdapterAuditorias;
 import com.google.firebase.auth.FirebaseAuth;
 
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -36,6 +38,19 @@ public class FragmentMyAudits extends Fragment {
     public FragmentMyAudits() {
         // Required empty public constructor
     }
+
+    public void updateAdapter() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
+                .findAll();
+        listaAuditorias=new RealmList<>();
+        adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
+        listaAuditorias.addAll(result2);
+        adapterAudits.setListaAuditsOriginales(listaAuditorias);
+        adapterAudits.notifyDataSetChanged();
+
+    }
+
     public interface Graficable{
        public void GraficarAuditVieja(Auditoria unAuditoria);
     }
@@ -49,7 +64,6 @@ public class FragmentMyAudits extends Fragment {
         String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
-                .equalTo("usuario", usuario)
                 .findAll();
         listaAuditorias=new RealmList<>();
         listaAuditorias.addAll(result2);

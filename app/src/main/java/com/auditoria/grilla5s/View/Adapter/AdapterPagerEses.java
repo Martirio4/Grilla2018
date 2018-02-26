@@ -16,15 +16,13 @@ import java.util.List;
 
 import io.realm.RealmList;
 
-/**
- * Created by Pablo on 31/5/2017.
- */
+
 
 public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
-    private RealmList<Item> listaItems = new RealmList<>();
+
     private List<String> unaListaTitulos;
 
     public AdapterPagerEses(FragmentManager fm) {
@@ -35,7 +33,7 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        for(Integer i=0;i<5;i++){
+        for(Integer i=1;i<6;i++){
             listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
         }
 

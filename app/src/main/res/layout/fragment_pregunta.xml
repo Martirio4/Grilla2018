@@ -2,126 +2,171 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blancoNomad"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nomad.audit5s.fragments.FragmentSubitem">
-<LinearLayout
-    android:background="@color/blancoNomad"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-    android:gravity="center"
-    android:textSize="20sp"
-    android:layout_margin="@dimen/margenChico"
-    android:text="@string/enunciado"
-    android:textColor="@color/primary_text"
-    android:id="@+id/textoEnunciado"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
-    <RadioGroup
-        android:orientation="horizontal"
-        android:animateLayoutChanges="true"
-        android:layout_margin="@dimen/margenChico"
-        android:visibility="visible"
-        android:id="@+id/rg1"
-        android:gravity="center"
+    tools:context="com.auditoria.grilla5s.View.Activities.ActivityAuditoria">
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatRadioButton
-            android:textColorHighlight="@color/colorAccent"
-            app:buttonTint="@color/tile4"
-            android:layout_margin="@dimen/margenChico"
-            android:textColor="@color/primary_text"
-            android:id="@+id/item0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.AppCompatRadioButton
-            android:textColorHighlight="@color/colorAccent"
-            app:buttonTint="@color/tile4"
-            android:layout_margin="@dimen/margenChico"
-            android:textColor="@color/primary_text"
-            android:id="@+id/item1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:background="@color/blancoNomad"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_margin="@dimen/margenChico"
+                android:text="@string/enunciado"
+                android:textColor="@color/primary_text"
+                android:id="@+id/textoEnunciado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <RadioGroup
+                android:orientation="horizontal"
+                android:animateLayoutChanges="true"
+                android:layout_margin="@dimen/margenChico"
+                android:visibility="visible"
+                android:id="@+id/rg1"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatRadioButton
-            android:textColorHighlight="@color/colorAccent"
-            app:buttonTint="@color/tile4"
-            android:id="@+id/item2"
-            android:textColor="@color/primary_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margenChico"
-           />
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:layout_margin="@dimen/margenChico"
+                    android:textColor="@color/primary_text"
+                    android:id="@+id/item0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.AppCompatRadioButton
-            android:textColorHighlight="@color/colorAccent"
-            app:buttonTint="@color/tile4"
-            android:layout_margin="@dimen/margenChico"
-            android:textColor="@color/primary_text"
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:layout_margin="@dimen/margenChico"
+                    android:textColor="@color/primary_text"
+                    android:id="@+id/item1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            android:id="@+id/item3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <android.support.v7.widget.AppCompatRadioButton
-            android:textColorHighlight="@color/colorAccent"
-            app:buttonTint="@color/tile4"
-            android:layout_margin="@dimen/margenChico"
-            android:textColor="@color/primary_text"
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:id="@+id/item2"
+                    android:textColor="@color/primary_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margenChico"
+                   />
 
-            android:id="@+id/item4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <android.support.v7.widget.AppCompatRadioButton
-            android:textColorHighlight="@color/colorAccent"
-            app:buttonTint="@color/tile4"
-            android:layout_margin="@dimen/margenChico"
-            android:textColor="@color/primary_text"
-            android:id="@+id/item5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RadioGroup>
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:layout_margin="@dimen/margenChico"
+                    android:textColor="@color/primary_text"
 
-    <Button
-        android:id="@+id/btn_criterios"
-        android:textColor="@color/marfil"
-        android:background="@drawable/boton_criterio"
-        android:text="@string/verCriterios"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+                    android:id="@+id/item3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:layout_margin="@dimen/margenChico"
+                    android:textColor="@color/primary_text"
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="@dimen/margenChico"
-        android:id="@+id/recyclerFotos"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/altoImageViewCargarArea">
+                    android:id="@+id/item4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:layout_margin="@dimen/margenChico"
+                    android:textColor="@color/primary_text"
+                    android:id="@+id/item5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RadioGroup>
 
-    </android.support.v7.widget.RecyclerView>
+            <Button
+                android:id="@+id/btn_criterios"
+                android:textColor="@color/marfil"
+                android:background="@drawable/boton_criterio"
+                android:text="@string/verCriterios"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="@dimen/margenChico"
+                android:layout_marginBottom="@dimen/margenChico"
+                android:id="@+id/recyclerFotos"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/altoRecyclerFotosActuales">
+            </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:visibility="gone"
+                android:text="@string/tagCommentNuevo"
+                android:textSize="12sp"
+                android:textColor="@color/tile5"
+                android:id="@+id/tv_tagCommentNuevo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:id="@+id/tv_comment_nuevo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="@dimen/margenChico"
+                android:layout_marginBottom="@dimen/margenChico"
+                android:id="@+id/recyclerFotosViejas"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/altoRecyclerFotosActuales">
+            </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:visibility="gone"
+                android:text="@string/tagCommentViejo"
+                android:textSize="12sp"
+                android:textColor="@color/tile5"
+                android:id="@+id/tv_tagCommentViejo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_comment_viejo"
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:layout_marginBottom="@dimen/margenGrande"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="@dimen/margenTextoViejo"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 
-
-</LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab_menu"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/margenChico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
 
-<LinearLayout
-    android:layout_marginStart="60dp"
-    android:layout_marginBottom="60dp"
-    android:layout_gravity="bottom|start"
-    android:id="@+id/vistaCentral"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="60dp"
+        android:layout_gravity="bottom|start"
+        android:id="@+id/vistaCentral"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+    </LinearLayout>
 </FrameLayout>

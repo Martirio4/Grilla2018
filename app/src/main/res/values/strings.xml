@@ -194,6 +194,7 @@
     <string name="audit5s">5S Audit</string>
     <string name="agregarComentario">Add a comment</string>
     <string name="favorAgregueComentario">Please, add a comment for this photo</string>
+    <string name="favorAgregueComentarioGeneral">Please, add a general comment for this question</string>
     <string name="comment">comment</string>
     <string name="advertencia">Warning!</string>
     <string name="auditoriaSinTerminar">The audit is not finished.</string>
@@ -329,7 +330,12 @@
     <string name="addNewArea">Add new Area</string>
     <string name="generarPDF">Send PDF report</string>
     <string name="errorPruebeNuevamente">Operation Failed, please try again.</string>
-
+    <string name="preguntasCompletadas">Item completed</string>
+    <string name="faltanPreguntas">Still to complete:</string>
+    <string name="pregunta">questions</string>
+    <string name="tituloFragmentPreAudit">Choose \"S\" and item to audit</string>
+    <string name="tagCommentNuevo">General comments</string>
+    <string name="tagCommentViejo">Comments from last audit</string>
 
 
 </resources>

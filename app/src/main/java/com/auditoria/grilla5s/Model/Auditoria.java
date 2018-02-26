@@ -12,7 +12,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class Auditoria extends RealmObject {
     @PrimaryKey
-    private String IdAuditoria;
+    private String idAuditoria;
     private String fechaAuditoria;
     private Usuario auditor;
     private Area areaAuditada;
@@ -40,11 +40,11 @@ public class Auditoria extends RealmObject {
     }
 
     public String getIdAuditoria() {
-        return IdAuditoria;
+        return idAuditoria;
     }
 
     public void setIdAuditoria(String idAuditoria) {
-        IdAuditoria = idAuditoria;
+        this.idAuditoria = idAuditoria;
     }
 
     public String getFechaAuditoria() {

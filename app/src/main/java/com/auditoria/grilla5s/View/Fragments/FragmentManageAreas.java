@@ -96,10 +96,10 @@ public class FragmentManageAreas extends Fragment {
     }
 
     public void updateAdapter() {
-        String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        //String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Realm realm= Realm.getDefaultInstance();
         RealmResults<Area> result3 = realm.where(Area.class)
-                .equalTo("usuario",usuario)
+             //las areas son de todos los usuarios//   .equalTo("usuario",usuario)
                 .findAll();
         listaAreas=new RealmList<>();
         listaAreas.addAll(result3);
@@ -120,11 +120,11 @@ public class FragmentManageAreas extends Fragment {
 
         linearSnackbar =view.findViewById(R.id.linearParaCoordinar);
 
-        String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+       // String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Area> result2 = realm.where(Area.class)
-                .equalTo("usuario",usuario)
+               //las areas son para todos los usuarios// .equalTo("usuario",usuario)
                 .findAll();
         listaAreas=new RealmList<>();
         listaAreas.addAll(result2);

@@ -26,17 +26,17 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
     private RealmList<Pregunta> listaPregunta = new RealmList<>();
     private List<String> unaListaTitulos;
 
-    public AdapterPagerPreguntas(FragmentManager fm) {
+    public AdapterPagerPreguntas(FragmentManager fm,RealmList<Pregunta>listaPregunta) {
         super(fm);
 
         //INICIALIZO LA LISTA DE FRAGMENT
         listaFragments = new ArrayList<>();
-
+        this.listaPregunta=listaPregunta;
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
         for (Pregunta unaPreg:listaPregunta
              ) {
-            FragmentPregunta.CrearfragmentPregunta(unaPreg);
+           listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg));
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.

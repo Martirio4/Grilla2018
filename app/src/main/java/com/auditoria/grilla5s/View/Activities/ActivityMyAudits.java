@@ -45,6 +45,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentMyAud
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition(), true);
+                adapterPager.updateAdapters();
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -62,6 +63,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentMyAud
             }
             @Override
             public void onPageSelected(int position) {
+
             }
             @Override
             public void onPageScrollStateChanged(int state) {

@@ -52,15 +52,9 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     public static String idAuditoria;
     public static String idItem;
-
-
-
-    private ActionBarDrawerToggle actionBarDrawerToggle;
     private ViewPager pager;
     private AdapterPagerPreguntas adapterPager;
-
     private String resultadoInputFoto;
-    private ControllerDatos controllerDatos;
     private FloatingActionMenu fabMenu;
     private Toolbar toolbar;
 
@@ -78,15 +72,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
 
 
-        pager=(ViewPager)findViewById(R.id.viewPagerAuditoria);
+
 
 //        SETEAR EL VIEWPAGER
-        controllerDatos=new ControllerDatos(this);
-        adapterPager=new AdapterPagerPreguntas(getSupportFragmentManager());
+
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta>resultPregunta=realm.where(Pregunta.class)
-                .equalTo("idAuditoria",idAuditoria)
+                .equalTo("idAudit",idAuditoria)
                 .beginsWith("idPregunta",idItem)
                 .findAll();
 
@@ -99,12 +92,12 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             Integer aux=i+1;
             laListaDeTitulos.add(aux.toString()+"°");
         }
-
+        pager=findViewById(R.id.viewPagerAuditoria);
+        adapterPager=new AdapterPagerPreguntas(getSupportFragmentManager(),listaPreguntasOriginales);
         pager.setAdapter(adapterPager);
-        adapterPager.setListaPregunta(listaPreguntasOriginales);
         adapterPager.setUnaListaTitulos(laListaDeTitulos);
-
         adapterPager.notifyDataSetChanged();
+
 
 
 
@@ -125,7 +118,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         }
 
-        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(ContextCompat.getColor(this, R.color.marfil));
 
 //        SETEAR EL TABLAYOUT
 
@@ -189,7 +181,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        actionBarDrawerToggle.syncState();
+
     }
 
 
@@ -266,10 +258,9 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
                              }
                          });
 
-
-                        ActivityAuditoria.this.finish();
+*/
                         ActivityAuditoria.super.onBackPressed();
-                        */
+
                     }
                 })
                 .negativeText(getResources().getString(R.string.cancel))
@@ -306,6 +297,8 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 }

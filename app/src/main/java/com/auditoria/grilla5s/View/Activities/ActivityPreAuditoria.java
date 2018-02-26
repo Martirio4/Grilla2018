@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auditoria.grilla5s.DAO.ControllerDatos;
@@ -28,6 +31,8 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     private String idArea;
     public static final String IDAREA="IDAREA";
     private ViewPager pager;
+    private Toolbar toolbar;
+
 
 
     @Override
@@ -64,6 +69,16 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                }
            }
        });
+
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
+
+        }
 
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
@@ -113,6 +128,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         });
     }
 
+
     public static String pedirIdAudit(){
         return idAudit;
     }
@@ -123,6 +139,14 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Bundle bundle=new Bundle();
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
         bundle.putString(ActivityAuditoria.IDITEM, unItem.getIdItem());
+        intent.putExtras(bundle);
+        startActivity(intent);
 
+    }
+
+    @Override
+    public void titularToolbar() {
+        TextView texto = toolbar.findViewById(R.id.textoToolbar);
+        texto.setText(getResources().getString(R.string.tituloFragmentPreAudit));
     }
 }
