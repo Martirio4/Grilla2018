@@ -41,11 +41,11 @@ public class FragmentMyAudits extends Fragment {
 
     public void updateAdapter() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
+        RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
                 .findAll();
         listaAuditorias=new RealmList<>();
         adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
-        listaAuditorias.addAll(result2);
+        listaAuditorias.addAll(resulta2);
         adapterAudits.setListaAuditsOriginales(listaAuditorias);
         adapterAudits.notifyDataSetChanged();
 
@@ -63,10 +63,10 @@ public class FragmentMyAudits extends Fragment {
         View view= inflater.inflate(R.layout.fragment_my_audits, container, false);
         String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
+        RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
                 .findAll();
         listaAuditorias=new RealmList<>();
-        listaAuditorias.addAll(result2);
+        listaAuditorias.addAll(resulta2);
         recyclerAreas= (RecyclerView)view.findViewById(R.id.recyclerArea);
         adapterAudits= new AdapterAuditorias();
         adapterAudits.setContext(getContext());

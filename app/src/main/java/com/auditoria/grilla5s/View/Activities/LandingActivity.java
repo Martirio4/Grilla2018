@@ -63,6 +63,9 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         Intent intent = new Intent(this, ActivityPreAuditoria.class);
         Bundle bundle = new Bundle();
         bundle.putString(ActivityPreAuditoria.IDAREA, unArea.getIdArea());
+        bundle.putString(ActivityPreAuditoria.ORIGEN, "NUEVA_AUDITORIA");
+        bundle.putString(ActivityPreAuditoria.IDAUDIT, "NULL");
+
         intent.putExtras(bundle);
         startActivity(intent);
         FragmentManager fragmentManager = (FragmentManager) this.getSupportFragmentManager();

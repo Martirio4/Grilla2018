@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,10 +143,12 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
                 }
             }
             if (faltante==0){
+                textViewFaltantes.setTextColor(ContextCompat.getColor(textViewFaltantes.getContext(),R.color.tile5));
                 textViewFaltantes.setText(textViewFaltantes.getContext().getResources().getString(R.string.preguntasCompletadas));
             }
             else{
                 String texto=textViewFaltantes.getContext().getResources().getString(R.string.faltanPreguntas)+" " + faltante + " " + textViewFaltantes.getContext().getResources().getString(R.string.pregunta);
+                textViewFaltantes.setTextColor(ContextCompat.getColor(textViewFaltantes.getContext(),R.color.textoRojo));
                 textViewFaltantes.setText(texto);
             }
 

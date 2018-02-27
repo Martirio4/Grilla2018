@@ -36,6 +36,7 @@ public class FragmentRanking extends Fragment {
     public void updateAdapter() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
+                .sort("puntajeFinal",Sort.DESCENDING)
                 .findAll();
         listaAuditorias=new RealmList<>();
         adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
@@ -60,15 +61,12 @@ public class FragmentRanking extends Fragment {
         View view= inflater.inflate(R.layout.fragment_my_audits, container, false);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> result2=realm.where(Auditoria.class)
+                .sort("puntajeFinal",Sort.DESCENDING)
                 .findAll();
-         result2=result2.sort("puntajeFinal", Sort.DESCENDING);
-
-
-
 
         listaAuditorias=new RealmList<>();
         listaAuditorias.addAll(result2);
-        recyclerAreas= (RecyclerView)view.findViewById(R.id.recyclerArea);
+        recyclerAreas= view.findViewById(R.id.recyclerArea);
         adapterAudits= new AdapterAuditorias();
         adapterAudits.setContext(getContext());
         layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);

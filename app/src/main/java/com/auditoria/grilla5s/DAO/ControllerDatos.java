@@ -54,7 +54,7 @@ public class ControllerDatos {
 
 //                        PRIMER ITEM
                 Item item11 = realm.createObject(Item.class);
-                item11.setCriterio(context.getResources().getString(R.string.criterio1_1S));
+                item11.setCriterio(context.getResources().getString(R.string.criterio11));
                 item11.setTextoItem(context.getResources().getString(R.string.textoItem1_1S));
                 item11.setIdItem("11");
                 item11.setPuntajeItem(0.0);

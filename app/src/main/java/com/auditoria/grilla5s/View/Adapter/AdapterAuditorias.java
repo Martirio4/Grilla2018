@@ -223,11 +223,11 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
 
                     Locale locale = new Locale("en","US");
                     NumberFormat format = NumberFormat.getPercentInstance(locale);
-                    String percentage1 = format.format(unAuditoria.getListaEses().get(0).getPuntajeEse());
-                    String percentage2 = format.format(unAuditoria.getListaEses().get(1).getPuntajeEse());
-                    String percentage3 = format.format(unAuditoria.getListaEses().get(2).getPuntajeEse());
-                    String percentage4 = format.format(unAuditoria.getListaEses().get(3).getPuntajeEse());
-                    String percentage5 = format.format(unAuditoria.getListaEses().get(4).getPuntajeEse());
+                    String percentage1 = format.format(unAuditoria.getListaEses().get(0).getPuntajeEse()/5);
+                    String percentage2 = format.format(unAuditoria.getListaEses().get(1).getPuntajeEse()/5);
+                    String percentage3 = format.format(unAuditoria.getListaEses().get(2).getPuntajeEse()/5);
+                    String percentage4 = format.format(unAuditoria.getListaEses().get(3).getPuntajeEse()/5);
+                    String percentage5 = format.format(unAuditoria.getListaEses().get(4).getPuntajeEse()/5);
                     String percentage6 = format.format(promedio5s);
 
                     text1s.setText(percentage1);

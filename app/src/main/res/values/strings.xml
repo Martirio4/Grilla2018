@@ -6,14 +6,18 @@
     <string name="firstTime">First time? Click here</string>
     <string name="myAudits">MY AUDITS</string>
     <string name="settings">SETTINGS</string>
-    <string name="criterio1_1S"></string>
+
+
+
+
+
+
     <string name="textoItem1_1S"></string>
     <string name="textoPregunta111"></string>
     <string name="textoPregunta112"></string>
     <string name="textoPregunta113"></string>
     <string name="textoPregunta114"></string>
     <string name="textoPregunta115"></string>
-    <string name="criterio12"></string>
     <string name="texto12"></string>
     <string name="textoPregunta121"></string>
     <string name="textoPregunta122"></string>
@@ -21,9 +25,7 @@
     <string name="textoPregunta124"></string>
     <string name="textoPregunta131"></string>
     <string name="textoPregunta132"></string>
-    <string name="criterio13"></string>
     <string name="texto13"></string>
-    <string name="criterio14"></string>
     <string name="texto14"></string>
     <string name="textoPregunta141"></string>
     <string name="textoPregunta142"></string>
@@ -56,14 +58,9 @@
     <string name="textoPregunta235"></string>
     <string name="textoPregunta236"></string>
     <string name="texto24"></string>
-    <string name="criterio24"></string>
-    <string name="criterio23"></string>
     <string name="texto23"></string>
-    <string name="criterio22"></string>
     <string name="texto22"></string>
-    <string name="criterio21"></string>
     <string name="textoItem21"></string>
-    <string name="criterio25"></string>
     <string name="texto25"></string>
     <string name="textoPregunta251"></string>
     <string name="textoPregunta252"></string>
@@ -77,11 +74,8 @@
     <string name="textoPregunta323"></string>
     <string name="textoPregunta324"></string>
     <string name="textoPregunta325"></string>
-    <string name="criterio31"></string>
     <string name="textoitem31"></string>
-    <string name="criterio32"></string>
     <string name="texto32"></string>
-    <string name="criterio33"></string>
     <string name="texto33"></string>
     <string name="textoPregunta331"></string>
     <string name="textoPregunta332"></string>
@@ -92,15 +86,12 @@
     <string name="textoPregunta342"></string>
     <string name="textoPregunta343"></string>
     <string name="textoPregunta344"></string>
-    <string name="criterio35"></string>
     <string name="texto35"></string>
     <string name="textoPregunta351"></string>
     <string name="textoPregunta352"></string>
     <string name="textoPregunta353"></string>
     <string name="textoPregunta354"></string>
-    <string name="criterio34"></string>
     <string name="texto34"></string>
-    <string name="criterio41"></string>
     <string name="textoitem41"></string>
     <string name="textoPregunta411"></string>
     <string name="textoPregunta412"></string>
@@ -108,7 +99,6 @@
     <string name="textoPregunta414"></string>
     <string name="textoPregunta415"></string>
     <string name="textoPregunta416"></string>
-    <string name="criterio42"></string>
     <string name="textoitem42"></string>
     <string name="textoPregunta421"></string>
     <string name="textoPregunta422"></string>
@@ -116,7 +106,6 @@
     <string name="textoPregunta424"></string>
     <string name="textoPregunta425"></string>
     <string name="textoPregunta426"></string>
-    <string name="criterio43"></string>
     <string name="textoitem43"></string>
     <string name="textoPregunta431"></string>
     <string name="textoPregunta432"></string>
@@ -124,7 +113,6 @@
     <string name="textoPregunta434"></string>
     <string name="textoPregunta435"></string>
     <string name="textoPregunta436"></string>
-    <string name="criterio44"></string>
     <string name="textoitem44"></string>
     <string name="textoPregunta441"></string>
     <string name="textoPregunta442"></string>
@@ -132,7 +120,6 @@
     <string name="textoPregunta444"></string>
     <string name="textoPregunta445"></string>
     <string name="textoPregunta446"></string>
-    <string name="criterio45"></string>
     <string name="textoitem45"></string>
     <string name="textoPregunta451"></string>
     <string name="textoPregunta452"></string>
@@ -140,11 +127,9 @@
     <string name="textoPregunta454"></string>
     <string name="textoPregunta455"></string>
     <string name="textoPregunta456"></string>
-    <string name="criterio46"></string>
     <string name="textoitem46"></string>
     <string name="textoPregunta461"></string>
     <string name="textoPregunta462"></string>
-    <string name="criterio51"></string>
     <string name="textoitem51"></string>
     <string name="textoPregunta511"></string>
     <string name="textoPregunta512"></string>
@@ -153,22 +138,18 @@
     <string name="textoPregunta515"></string>
     <string name="textoPregunta516"></string>
     <string name="textoPregunta517"></string>
-    <string name="criterio52"></string>
     <string name="textoitem52"></string>
     <string name="textoPregunta521"></string>
     <string name="textoPregunta522"></string>
-    <string name="criterio53"></string>
     <string name="textoitem53"></string>
     <string name="textoPregunta531"></string>
     <string name="textoPregunta532"></string>
-    <string name="criterio54"></string>
     <string name="textoitem54"></string>
     <string name="textoPregunta541"></string>
     <string name="textoPregunta542"></string>
     <string name="textoPregunta543"></string>
     <string name="textoPregunta544"></string>
     <string name="textoPregunta545"></string>
-    <string name="criterio55"></string>
     <string name="textoitem55"></string>
     <string name="textoPregunta551"></string>
     <string name="textoPregunta552"></string>
@@ -336,6 +317,40 @@
     <string name="tituloFragmentPreAudit">Choose \"S\" and item to audit</string>
     <string name="tagCommentNuevo">General comments</string>
     <string name="tagCommentViejo">Comments from last audit</string>
+    <string name="saveAudit">Save audit</string>
+    <string name="editarAuditoria">Edit audit</string>
+
+
+    <string name="criterio11">Materiales innecesarios</string>
+    <string name="criterio12">    Herramientas innecesarias</string>
+    <string name="criterio13">    Máquinas o equipos innecesarios</string>
+    <string name="criterio14">    Documentos innecesarios(archivos, planos, placas, carteles, etc)</string>
+    <string name="criterio15">    Etiquetaje</string>
+    <string name="criterio21">    IDENTIFICACIÓN de las estaciones de trabajo, tuberías, máquinas, condiciones de funcionamiento y flujo</string>
+    <string name="criterio22">    ORGANIZACIÓN de herramientas, instrumentos, materiales de soporte y acesorios para máquinas. Lugar para EPP y material de seguridad</string>
+    <string name="criterio23">    DEMARCACIÓN de los pisos, corredores, áreas de almacenaje para materiales y productos terminados</string>
+    <string name="criterio24">    Kanban - Gestión visual de stock y cantidades. Ubicación y provisión de materiales en estanterías/otros lugares de almacenamiento (consumibles, envases, rollos, cintas, etc.)"</string>
+    <string name="criterio25">    Presencia de los documentos necesarios en la unidad de producción y en la estación de trabajo (documentos EHS*, formularios, instrucciones de trabajo, etc.)</string>
+    <string name="criterio31">    Herramientas de Limpieza, materiales y Equipos</string>
+    <string name="criterio32">    Limpieza de estaciones de trabajo, máquinas, equipos, accesorios y tuberías</string>
+    <string name="criterio33">    Eliminación de fuentes de suciedad y contaminación</string>
+    <string name="criterio34">    Limpieza de pisos y áreas de residuos</string>
+    <string name="criterio35">    Comportamientos y reglas de Limpieza</string>
+    <string name="criterio41">    Estándares visuales de demarcación, placas  de señalización y gerenciamento de herramientas</string>
+    <string name="criterio42">    Estándares de Organización y Limpieza</string>
+    <string name="criterio43">    Procedimientos operativos de producción, Estándares de seguridad y calidad</string>
+    <string name="criterio44">    Materiales de Consumo, Productos y gerenciamento de Materias primas</string>
+    <string name="criterio45">    Gestión de 5S</string>
+    <string name="criterio46">    Estándares de 5S</string>
+    <string name="criterio51">    Programa 5S con compromiso de gestión y un Comité Directivo </string>
+    <string name="criterio52">    Entrenamientos de 5S y actividades de los equipos. Auditorías y seguimiento</string>
+    <string name="criterio53">    Ideas para mejora de 5S y accione sy proyectos</string>
+    <string name="criterio54">    Indicadores de performance</string>
+    <string name="criterio55">    Estándares de 5S</string>
+
+
+
+
 
 
 </resources>

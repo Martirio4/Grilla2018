@@ -4,7 +4,9 @@ package com.auditoria.grilla5s.View.Fragments;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,14 +17,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
+import com.github.clans.fab.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +50,9 @@ public class FragmentPreAudit extends Fragment {
     public interface Auditable{
         void auditarItem(Item unItem);
         void titularToolbar();
+        public void cerrarAuditoria();
     }
+
 
 
     public final static String LAESE="LAESE";
@@ -57,6 +70,18 @@ public class FragmentPreAudit extends Fragment {
         else {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
         }
+
+        FloatingActionButton fabGuardar = view.findViewById(R.id.fabGuardarAudit);
+        fabGuardar.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
+        fabGuardar.setImageResource(R.drawable.ic_save_black_24dp);
+        fabGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                completoTodosLosPuntos();
+            }
+        });
+
+
 
         final RecyclerView recyclerPreAudit = view.findViewById(R.id.recyclerPreAudit);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
@@ -117,5 +142,48 @@ public class FragmentPreAudit extends Fragment {
     public void onResume() {
         adapterItems.notifyDataSetChanged();
         super.onResume();
+    }
+
+    private void completoTodosLosPuntos() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
+                .equalTo("idAudit", idAudit)
+                .findAll();
+        List<String> unaLista=new ArrayList<>();
+
+        for (Pregunta unaPreg :result2
+                ) {
+            if (unaPreg.getPuntaje()==null|| unaPreg.getPuntaje()==0){
+                unaLista.add(unaPreg.getIdPregunta());
+            }
+        }
+
+        if (unaLista.size()>0){
+            new MaterialDialog.Builder(getContext())
+                    .title("Warning!")
+                    .title(getResources().getString(R.string.advertencia))
+                    .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                    .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                    .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                    .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
+                    .positiveText(getResources().getString(R.string.si))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            auditable.cerrarAuditoria();
+                        }
+                    })
+                    .negativeText(getResources().getString(R.string.cancel))
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        }
+                    })
+                    .show();
+        }
+        else{
+
+            auditable.cerrarAuditoria();
+        }
     }
 }

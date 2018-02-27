@@ -37,7 +37,7 @@ public class FragmentBarrasApiladas extends Fragment {
     private TextView tvX, tvY;
 
 
-    public static final String  PROMEDIO3S="PROMEDIO3S";
+    public static final String PUNTAJE_AUDITORIA ="PUNTAJE_AUDITORIA";
 
     private Double punt1;
     private Double punt2;
@@ -58,12 +58,9 @@ public class FragmentBarrasApiladas extends Fragment {
         View view = inflater.inflate(R.layout.fragment_barras_apiladas, container, false);
         Bundle bundle = getArguments();
 
-        puntpro=bundle.getDouble(PROMEDIO3S);
+        puntpro=bundle.getDouble(PUNTAJE_AUDITORIA);
 
-
-
-
-        mChart = (BarChart) view.findViewById(R.id.chart1);
+        mChart =  view.findViewById(R.id.chart1);
         mChart.getDescription().setEnabled(false);
 
 

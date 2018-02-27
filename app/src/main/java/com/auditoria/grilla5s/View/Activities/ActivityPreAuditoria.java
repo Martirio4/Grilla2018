@@ -1,6 +1,7 @@
 package com.auditoria.grilla5s.View.Activities;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,9 +11,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
@@ -20,6 +24,7 @@ import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -30,8 +35,13 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public static String idAudit;
     private String idArea;
     public static final String IDAREA="IDAREA";
+    public static final String ORIGEN="ORIGEN";
+    //SOLO RECIBO ESTA KEY CUANDO QUIERO EDITAR UNA AUDITORIA
+    public static final String IDAUDIT="IDAUDIT";
+
     private ViewPager pager;
     private Toolbar toolbar;
+    private String origen;
 
 
 
@@ -42,42 +52,46 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
-        if (bundle!=null) {
+
+        if (bundle!=null){
+            origen=bundle.getString(ORIGEN);
             idArea=bundle.getString(IDAREA);
-        }
-        else {
-            Toast.makeText(this, getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
-            return;
+            idAudit=bundle.getString(IDAUDIT);
         }
 
-//      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
-       controllerDatos= new ControllerDatos(this);
-       idAudit=controllerDatos.instanciarAuditoria();
-       Realm realm = Realm.getDefaultInstance();
-       realm.executeTransaction(new Realm.Transaction() {
-           @Override
-           public void execute(Realm realm) {
-               Auditoria auditActual= realm.where(Auditoria.class)
-                       .equalTo("idAuditoria",idAudit)
-                       .findFirst();
-               Area areaAIncluir = realm.where(Area.class)
-                       .equalTo("idArea",idArea)
-                       .findFirst();
+        //SI EL ORIGEN ES NUEVA AUDITORIA SIGO NORMAL, INSTANCIO UNA NUVA AUDITORIA
+        if (origen!=null && origen.equals("NUEVA_AUDITORIA")) {
 
-               if (auditActual!=null && areaAIncluir!=null){
-                   auditActual.setAreaAuditada(areaAIncluir);
-               }
-           }
-       });
+            idArea=bundle.getString(IDAREA);
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+            //      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
+            controllerDatos= new ControllerDatos(this);
+            idAudit=controllerDatos.instanciarAuditoria();
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+            Auditoria auditActual= realm.where(Auditoria.class)
+                    .equalTo("idAuditoria",idAudit)
+                    .findFirst();
+            Area areaAIncluir = realm.where(Area.class)
+                    .equalTo("idArea",idArea)
+                    .findFirst();
+
+            if (auditActual!=null && areaAIncluir!=null){
+                auditActual.setAreaAuditada(areaAIncluir);
+            }
+            }
+            });
+        }
+
+        toolbar =  findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
             toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
-
         }
 
 //       CARGO EL VIEWPAGER
@@ -90,7 +104,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
         //        SETEAR EL TABLAYOUT
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayoutPreAudit);
+        TabLayout tabLayout =  findViewById(R.id.tabLayoutPreAudit);
         tabLayout.setupWithViewPager(pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -148,5 +162,56 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public void titularToolbar() {
         TextView texto = toolbar.findViewById(R.id.textoToolbar);
         texto.setText(getResources().getString(R.string.tituloFragmentPreAudit));
+    }
+
+    @Override
+    public void cerrarAuditoria() {
+
+        Intent intent=new Intent(this, GraficosActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putString(GraficosActivity.AUDIT, idAudit);
+        bundle.putString(GraficosActivity.ORIGEN, "auditoria");
+        intent.putExtras(bundle);
+        startActivity(intent);
+        this.finish();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        new MaterialDialog.Builder(this)
+                .title("Warning!")
+                .title(getResources().getString(R.string.advertencia))
+                .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
+                .positiveText(getResources().getString(R.string.si))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+
+                        ActivityPreAuditoria.super.onBackPressed();
+
+                    }
+                })
+                .negativeText(getResources().getString(R.string.cancel))
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();    //Call the back button's method
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

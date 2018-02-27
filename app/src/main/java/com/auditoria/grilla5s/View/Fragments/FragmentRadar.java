@@ -176,11 +176,11 @@ public class FragmentRadar extends Fragment {
 
 
 
-        entries1.add(new RadarEntry(punto1*100));
-        entries1.add(new RadarEntry(punto2*100));
-        entries1.add(new RadarEntry(punto3*100));
-        entries1.add(new RadarEntry(punto4*100));
-        entries1.add(new RadarEntry(punto5*100));
+        entries1.add(new RadarEntry(punto1*20));
+        entries1.add(new RadarEntry(punto2*20));
+        entries1.add(new RadarEntry(punto3*20));
+        entries1.add(new RadarEntry(punto4*20));
+        entries1.add(new RadarEntry(punto5*20));
 
 
 

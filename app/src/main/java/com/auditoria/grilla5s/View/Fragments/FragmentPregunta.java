@@ -30,6 +30,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -198,6 +199,7 @@ public class FragmentPregunta extends Fragment {
                                 .equalTo("idPregunta",idPregunta)
                                 .findFirst();
                         preg.setPuntaje(puntuacion);
+
                     }
                 });
             }
@@ -590,13 +592,11 @@ public class FragmentPregunta extends Fragment {
 
 
     private void completoTodosLosPuntos() {
-        Integer cantFotos=0;
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
                 .equalTo("idAudit", idAudit)
                 .equalTo("idItem",idItem)
                 .findAll();
-
         List<String> unaLista=new ArrayList<>();
 
         for (Pregunta unaPreg :result2
@@ -844,6 +844,10 @@ public class FragmentPregunta extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void calcularPuntjes(){
+
     }
 
 }

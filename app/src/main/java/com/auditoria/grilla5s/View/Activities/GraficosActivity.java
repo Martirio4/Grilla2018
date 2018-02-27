@@ -1,6 +1,5 @@
 package com.auditoria.grilla5s.View.Activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -28,8 +27,11 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Ese;
 import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -76,6 +78,8 @@ public class GraficosActivity extends AppCompatActivity {
     private FloatingActionButton fabQuit;
     private FloatingActionButton fabVerAuditoria;
     private FloatingActionButton fabBorrarAuditoria;
+    private FloatingActionButton fabEditarAuditoria;
+
 
     private ProgressBar progressBar;
     private Double promedioSeiketsu;
@@ -94,6 +98,17 @@ public class GraficosActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     private SharedPreferences config;
+
+    private Integer sumatoriaPreguntas;
+    private Integer divisorPreguntas;
+
+    private Double sumatoriaItems;
+    private Integer divisorItems;
+
+    private Double sumatoriaEse;
+    private Integer divisorEse;
+
+
 
 
     @Override
@@ -137,17 +152,47 @@ public class GraficosActivity extends AppCompatActivity {
 
         fabMenuGraficos.setMenuButtonColorNormal(ContextCompat.getColor(this, R.color.colorAccent));
 
+
+        fabEditarAuditoria=new FloatingActionButton(this);
+        fabEditarAuditoria.setColorNormal(ContextCompat.getColor(this, R.color.tutorial1));
+        fabEditarAuditoria.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fabEditarAuditoria.setLabelText(getResources().getString(R.string.editarAuditoria));
+        fabEditarAuditoria.setImageResource(R.drawable.ic_edit_black_24dp);
+        fabMenuGraficos.addMenuButton(fabEditarAuditoria);
+
+        fabEditarAuditoria.setLabelColors(ContextCompat.getColor(this, R.color.primary_text),
+                ContextCompat.getColor(this, R.color.light_grey),
+                ContextCompat.getColor(this, R.color.white_transparent));
+        fabEditarAuditoria.setLabelTextColor(ContextCompat.getColor(this, R.color.tutorial1));
+
+        fabEditarAuditoria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenuGraficos.close(true);
+                editarAuditoria(idAudit);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
         fabVerAuditoria = new FloatingActionButton(this);
-        fabVerAuditoria.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
+        fabVerAuditoria.setColorNormal(ContextCompat.getColor(this, R.color.tutorial1));
         fabVerAuditoria.setButtonSize(FloatingActionButton.SIZE_MINI);
         fabVerAuditoria.setLabelText(getResources().getString(R.string.verAuditoria));
         fabVerAuditoria.setImageResource(R.drawable.ic_find_in_page_black_24dp);
         fabMenuGraficos.addMenuButton(fabVerAuditoria);
 
-        fabVerAuditoria.setLabelColors(ContextCompat.getColor(this, R.color.tile3),
+        fabVerAuditoria.setLabelColors(ContextCompat.getColor(this, R.color.primary_text),
                 ContextCompat.getColor(this, R.color.light_grey),
                 ContextCompat.getColor(this, R.color.white_transparent));
-        fabVerAuditoria.setLabelTextColor(ContextCompat.getColor(this, R.color.black));
+        fabVerAuditoria.setLabelTextColor(ContextCompat.getColor(this, R.color.tutorial1));
 
         fabVerAuditoria.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,16 +208,16 @@ public class GraficosActivity extends AppCompatActivity {
         });
 
         fabGenerarPDF = new FloatingActionButton(this);
-        fabGenerarPDF.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
+        fabGenerarPDF.setColorNormal(ContextCompat.getColor(this, R.color.tutorial1));
         fabGenerarPDF.setButtonSize(FloatingActionButton.SIZE_MINI);
         fabGenerarPDF.setLabelText(getString(R.string.generarPDF));
         fabGenerarPDF.setImageResource(R.drawable.ic_insert_drive_file_black_24dp);
         fabMenuGraficos.addMenuButton(fabGenerarPDF);
 
-        fabGenerarPDF.setLabelColors(ContextCompat.getColor(this, R.color.tile3),
+        fabGenerarPDF.setLabelColors(ContextCompat.getColor(this, R.color.primary_text),
                 ContextCompat.getColor(this, R.color.light_grey),
                 ContextCompat.getColor(this, R.color.white_transparent));
-        fabGenerarPDF.setLabelTextColor(ContextCompat.getColor(this, R.color.black));
+        fabGenerarPDF.setLabelTextColor(ContextCompat.getColor(this, R.color.tutorial1));
 
         fabGenerarPDF.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,10 +246,10 @@ public class GraficosActivity extends AppCompatActivity {
         fabBorrarAuditoria.setImageResource(R.drawable.ic_delete_forever_black_24dp);
         fabMenuGraficos.addMenuButton(fabBorrarAuditoria);
 
-        fabBorrarAuditoria.setLabelColors(ContextCompat.getColor(this, R.color.semaRojo),
+        fabBorrarAuditoria.setLabelColors(ContextCompat.getColor(this, R.color.primary_text),
                 ContextCompat.getColor(this, R.color.light_grey),
                 ContextCompat.getColor(this, R.color.white_transparent));
-        fabBorrarAuditoria.setLabelTextColor(ContextCompat.getColor(this, R.color.black));
+        fabBorrarAuditoria.setLabelTextColor(ContextCompat.getColor(this, R.color.semaRojo));
 
         fabBorrarAuditoria.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,16 +289,16 @@ public class GraficosActivity extends AppCompatActivity {
         });
 
         fabQuit = new FloatingActionButton(this);
-        fabQuit.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
+        fabQuit.setColorNormal(ContextCompat.getColor(this, R.color.tutorial1));
         fabQuit.setButtonSize(FloatingActionButton.SIZE_MINI);
         fabQuit.setLabelText(getString(R.string.quit));
         fabQuit.setImageResource(R.drawable.ic_exit_to_app_black_24dp);
         fabMenuGraficos.addMenuButton(fabQuit);
 
-        fabQuit.setLabelColors(ContextCompat.getColor(this, R.color.tile3),
+        fabQuit.setLabelColors(ContextCompat.getColor(this, R.color.primary_text),
                 ContextCompat.getColor(this, R.color.light_grey),
                 ContextCompat.getColor(this, R.color.white_transparent));
-        fabQuit.setLabelTextColor(ContextCompat.getColor(this, R.color.black));
+        fabQuit.setLabelTextColor(ContextCompat.getColor(this, R.color.tutorial1));
 
         fabQuit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,6 +326,22 @@ public class GraficosActivity extends AppCompatActivity {
                 seguirConTutorial();
             }
         }
+
+    }
+
+    public void editarAuditoria(String idAudit) {
+
+        Intent intent = new Intent(this, ActivityPreAuditoria.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(ActivityPreAuditoria.IDAREA, "NULL");
+        bundle.putString(ActivityPreAuditoria.ORIGEN, "EDITAR_AUDITORIA");
+        bundle.putString(ActivityPreAuditoria.IDAUDIT, idAudit);
+
+        intent.putExtras(bundle);
+        GraficosActivity.this.finish();
+        startActivity(intent);
+        FragmentManager fragmentManager =  this.getSupportFragmentManager();
+        fragmentManager.popBackStack();
 
     }
 
@@ -340,6 +401,8 @@ public class GraficosActivity extends AppCompatActivity {
 
     public void cargarGraficoRadar() {
 
+        calcularPuntajesAuditoria();
+
         Realm realm = Realm.getDefaultInstance();
         Auditoria laAudit=realm.where(Auditoria.class)
                 .equalTo("idAuditoria",idAudit)
@@ -347,10 +410,10 @@ public class GraficosActivity extends AppCompatActivity {
 
         if (laAudit!=null){
             promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
-            promedioSeiton = laAudit.getListaEses().get(0).getPuntajeEse();
-            promedioSeiso = laAudit.getListaEses().get(0).getPuntajeEse();
-            promedioSeiketsu = laAudit.getListaEses().get(0).getPuntajeEse();
-            promedioShitsuke = laAudit.getListaEses().get(0).getPuntajeEse();
+            promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse();
+            promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse();
+            promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse();
+            promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse();
         }
 
         FragmentRadar graficoFragment = new FragmentRadar();
@@ -370,6 +433,55 @@ public class GraficosActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void calcularPuntajesAuditoria() {
+        Realm realm =Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Auditoria mAudit= realm.where(Auditoria.class)
+                        .equalTo("idAuditoria",idAudit)
+                        .findFirst();
+
+                if (mAudit!=null) {
+                    sumatoriaEse=0.0;
+                    divisorEse=0;
+                    for (Ese unaEse:mAudit.getListaEses())
+                    {
+                        sumatoriaItems=0.0;
+                        divisorItems=0;
+                        for (Item unItem:unaEse.getListaItem())
+                        {
+                            sumatoriaPreguntas =0;
+                            divisorPreguntas =0;
+                            for (Pregunta unaPregunta:unItem.getListaPreguntas())
+                            {
+                                if (unaPregunta.getPuntaje()!=null) {
+                                    sumatoriaPreguntas = sumatoriaPreguntas +unaPregunta.getPuntaje();
+                                }
+                                divisorPreguntas++;
+                            }
+                            if (divisorPreguntas==0) {
+                                unItem.setPuntajeItem(0.0);
+                            }
+                            else {
+                                unItem.setPuntajeItem((sumatoriaPreguntas / divisorPreguntas)*1.0);
+                            }
+                            sumatoriaItems=sumatoriaItems+unItem.getPuntajeItem();
+                            divisorItems++;
+                        }
+                        unaEse.setPuntajeEse((sumatoriaItems/divisorItems));
+                        sumatoriaEse=sumatoriaEse+unaEse.getPuntajeEse();
+                        divisorEse++;
+                    }
+                    //DIVIDO POR 25 QUE ES EL 100%
+                    mAudit.setPuntajeFinal(sumatoriaEse/25);
+                }
+            }
+        });
+
+
+    }
+
     public void cargarGraficoBarras() {
         FragmentBarrasApiladas fragmentBarrasApiladas = new FragmentBarrasApiladas();
 
@@ -382,7 +494,7 @@ public class GraficosActivity extends AppCompatActivity {
 
         if (laAudit != null) {
 
-            bundle.putDouble(FragmentBarrasApiladas.PROMEDIO3S, laAudit.getPuntajeFinal());
+            bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal());
         }
 
         fragmentBarrasApiladas.setArguments(bundle);
@@ -1092,6 +1204,8 @@ public class GraficosActivity extends AppCompatActivity {
         }
         GraficosActivity.this.finish();
     }
+
+
 
 
 }

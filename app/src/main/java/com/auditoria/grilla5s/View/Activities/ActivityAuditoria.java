@@ -211,66 +211,8 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
 
 
-    //----REESCRIBIR ESTE METODO----//
-    @Override
-    public void onBackPressed() {
-        new MaterialDialog.Builder(this)
-                .title("Warning!")
-                .title(getResources().getString(R.string.advertencia))
-                .contentColor(ContextCompat.getColor(this, R.color.primary_text))
-                .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
-                .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
-                .positiveText(getResources().getString(R.string.si))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        /*
-                        Realm realm = Realm.getDefaultInstance();
 
-                        realm.executeTransaction(new Realm.Transaction() {
-                             @Override
-                             public void execute(Realm realm) {
-
-                                 String usuario = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
-                                 RealmResults<SubItem> Subitems = realm.where(SubItem.class)
-                                         .equalTo("auditoria", idAuditoria)
-                                         .findAll();
-                                 Subitems.deleteAllFromRealm();
-
-                                 RealmResults<Foto> fotos = realm.where(Foto.class)
-                                         .equalTo("auditoria", idAuditoria)
-                                         .findAll();
-                                 for (Foto foti : fotos
-                                         ) {
-                                     File file = new File(foti.getRutaFoto());
-                                     boolean deleted = file.delete();
-                                 }
-                                 fotos.deleteAllFromRealm();
-
-                                 Auditoria result2 = realm.where(Auditoria.class)
-                                         .equalTo("idAuditoria", idAuditoria)
-                                         .findFirst();
-
-                                 result2.deleteFromRealm();
-                             }
-                         });
-
-*/
-                        ActivityAuditoria.super.onBackPressed();
-
-                    }
-                })
-                .negativeText(getResources().getString(R.string.cancel))
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
-                })
-                .show();
-    }
 
     @Override
     public void mostrarToolbar() {
