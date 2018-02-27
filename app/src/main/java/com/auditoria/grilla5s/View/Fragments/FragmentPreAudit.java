@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
@@ -181,9 +182,41 @@ public class FragmentPreAudit extends Fragment {
                     })
                     .show();
         }
+        //SI TODOS LOS PUNTOS ESTA COMPLERTOS
         else{
-
+            //ME FIJO SI LA AUDITORIA ESTABA CERRADA
+            Auditoria mAudit=realm.where(Auditoria.class)
+                    .equalTo("idAuditoria",idAudit)
+                    .findFirst();
+            //SI NO ESTA CERRADA, LA CIERRO
+            if (!mAudit.getAuditEstaCerrada()){
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        //BUSCO LA AUDITORIA ACTUAL
+                        Auditoria estaAudit = realm.where(Auditoria.class)
+                                .equalTo("idAuditoria", idAudit)
+                                .findFirst();
+                        //BUSCO TODAS LAS AUDITS QUE SON ULTIMAS
+                        RealmResults<Auditoria> todasAudits =realm.where(Auditoria.class)
+                                .equalTo("esUltimaAuditoria",true)
+                                .findAll();
+                        //ENTRE TODAS LAS ULTIMAS AUDITORIAS BUSCO LA QUE TIENE LA MISMA AREA QUE LA ACTUAL
+                        for (Auditoria unAudit :
+                                todasAudits) {
+                            if (unAudit.getAreaAuditada().getIdArea().equals(estaAudit.getAreaAuditada().getIdArea())){
+                                unAudit.setEsUltimaAuditoria(false);
+                            }
+                        }
+                        //SETEO LA AUDITORIA ACTUAL COMO CERRADA Y ULTIMA AUDITORIA
+                        estaAudit.setEsUltimaAuditoria(true);
+                        estaAudit.setAuditEstaCerrada(true);
+                    }
+                });
+            }
+            //CIERRO LA AUDITORIA ACTUAL
             auditable.cerrarAuditoria();
         }
     }
+
 }

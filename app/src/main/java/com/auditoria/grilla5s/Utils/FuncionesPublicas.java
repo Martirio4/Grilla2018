@@ -65,7 +65,7 @@ public class FuncionesPublicas {
                 RealmResults<Ese> eses = realm.where(Ese.class)
                         .equalTo("idAudit",idAudit)
                         .findAll();
-                preguntas.deleteAllFromRealm();
+                eses.deleteAllFromRealm();
 
                 Auditoria result2 = realm.where(Auditoria.class)
                         .equalTo("idAuditoria", idAudit)

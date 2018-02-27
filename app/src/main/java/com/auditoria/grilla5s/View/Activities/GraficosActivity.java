@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -79,6 +80,7 @@ public class GraficosActivity extends AppCompatActivity {
     private FloatingActionButton fabVerAuditoria;
     private FloatingActionButton fabBorrarAuditoria;
     private FloatingActionButton fabEditarAuditoria;
+    Boolean auditEstaCompleta;
 
 
     private ProgressBar progressBar;
@@ -168,8 +170,25 @@ public class GraficosActivity extends AppCompatActivity {
         fabEditarAuditoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabMenuGraficos.close(true);
-                editarAuditoria(idAudit);
+                Realm realm = Realm.getDefaultInstance();
+                Auditoria mAudit=realm.where(Auditoria.class)
+                        .equalTo("idAuditoria",idAudit)
+                        .findFirst();
+                if (mAudit==null || !mAudit.getAuditEstaCerrada()) {
+                    fabMenuGraficos.close(true);
+                    editarAuditoria(idAudit);
+                }
+                else{
+                    Snackbar.make(fabEditarAuditoria,getResources().getString(R.string.auditCerradaNoPuedeEditar),Snackbar.LENGTH_SHORT)
+                            .setAction("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .show();
+                }
+
             }
         });
 
@@ -458,6 +477,9 @@ public class GraficosActivity extends AppCompatActivity {
                                 if (unaPregunta.getPuntaje()!=null) {
                                     sumatoriaPreguntas = sumatoriaPreguntas +unaPregunta.getPuntaje();
                                 }
+                                else{
+                                    auditEstaCompleta=false;
+                                }
                                 divisorPreguntas++;
                             }
                             if (divisorPreguntas==0) {
@@ -476,6 +498,7 @@ public class GraficosActivity extends AppCompatActivity {
                     //DIVIDO POR 25 QUE ES EL 100%
                     mAudit.setPuntajeFinal(sumatoriaEse/25);
                 }
+
             }
         });
 
@@ -522,7 +545,7 @@ public class GraficosActivity extends AppCompatActivity {
         ControllerDatos controllerDatos=new ControllerDatos(this);
         Realm realm= Realm.getDefaultInstance();
         Auditoria mAudit= realm.where(Auditoria.class)
-                .equalTo("idAuditoria",idAudit)
+                .equalTo("idAudit",idAudit)
                 .findFirst();
 
         
@@ -793,27 +816,27 @@ public class GraficosActivity extends AppCompatActivity {
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta> preguntasSeiri =realm.where(Pregunta.class)
-                .equalTo("idAuidit",idAudit)
+                .equalTo("idAudit",idAudit)
                 .beginsWith("idPregunta","1")
                 .findAll();
         RealmResults<Pregunta> preguntasSeiton =realm.where(Pregunta.class)
-                .equalTo("idAuidit",idAudit)
+                .equalTo("idAudit",idAudit)
                 .beginsWith("idPregunta","1")
                 .findAll();
         RealmResults<Pregunta> preguntasSeiso =realm.where(Pregunta.class)
-                .equalTo("idAuidit",idAudit)
+                .equalTo("idAudit",idAudit)
                 .beginsWith("idPregunta","1")
                 .findAll();
         RealmResults<Pregunta> preguntasSeiketsu =realm.where(Pregunta.class)
-                .equalTo("idAuidit",idAudit)
+                .equalTo("idAudit",idAudit)
                 .beginsWith("idPregunta","1")
                 .findAll();
         RealmResults<Pregunta> preguntasShitsuke =realm.where(Pregunta.class)
-                .equalTo("idAuidit",idAudit)
+                .equalTo("idAudit",idAudit)
                 .beginsWith("idPregunta","1")
                 .findAll();
         Auditoria mAudit=realm.where(Auditoria.class)
-                .equalTo("idAuditoria",idAudit)
+                .equalTo("idAudit",idAudit)
                 .findFirst();
 
 

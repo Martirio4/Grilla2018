@@ -8,10 +8,6 @@
     <string name="settings">SETTINGS</string>
 
 
-
-
-
-
     <string name="textoItem1_1S"></string>
     <string name="textoPregunta111"></string>
     <string name="textoPregunta112"></string>
@@ -347,10 +343,8 @@
     <string name="criterio53">    Ideas para mejora de 5S y accione sy proyectos</string>
     <string name="criterio54">    Indicadores de performance</string>
     <string name="criterio55">    Estándares de 5S</string>
-
-
-
-
+    <string name="auditCerradaNoPuedeEditar">Finished audits cannot be edited.</string>
+    <string name="fotosViejas">Last audit findigs</string>
 
 
 </resources>

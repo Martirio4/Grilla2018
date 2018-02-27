@@ -19,6 +19,15 @@ public class Auditoria extends RealmObject {
     private Boolean esUltimaAuditoria;
     private RealmList<Ese> listaEses;
     private Double puntajeFinal;
+    private Boolean auditEstaCerrada;
+
+    public Boolean getAuditEstaCerrada() {
+        return auditEstaCerrada;
+    }
+
+    public void setAuditEstaCerrada(Boolean auditEstaCerrada) {
+        this.auditEstaCerrada = auditEstaCerrada;
+    }
 
     public Auditoria() {
     }

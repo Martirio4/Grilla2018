@@ -43,6 +43,7 @@ public class ControllerDatos {
                 idAuditInstanciada=nuevaAuditoria.getIdAuditoria();
                 nuevaAuditoria.setFechaAuditoria(determinarFecha());
                 nuevaAuditoria.setEsUltimaAuditoria(false);
+                nuevaAuditoria.setAuditEstaCerrada(false);
                 nuevaAuditoria.setPuntajeFinal(0.0);
                     
 //                    PRIMER ESE

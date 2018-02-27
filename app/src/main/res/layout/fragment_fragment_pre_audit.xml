@@ -39,6 +39,10 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@color/colorAccent"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="@dimen/margenMini"
         android:layout_alignParentTop="true"
         android:layout_above="@id/linearAudit"
         android:id="@+id/recyclerPreAudit"

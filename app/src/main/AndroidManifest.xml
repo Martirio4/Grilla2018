@@ -16,33 +16,34 @@
         <activity android:name=".View.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.Activities.ActivityMyAudits"
-            android:parentActivityName=".View.Activities.LandingActivity"
-            />
-        <activity android:name=".View.Activities.LoginActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".View.Activities.SettingsActivity"
-            android:parentActivityName=".View.Activities.LandingActivity"
-            />
-        <activity android:name=".View.Activities.ActivityVerAuditorias"
-            android:parentActivityName=".View.Activities.GraficosActivity"
-            />
-        <activity android:name=".View.Activities.GraficosActivity"
-            android:parentActivityName=".View.Activities.LandingActivity"
-            />
-        <activity android:name=".View.Activities.ActivityPreAuditoria"
+        <activity
+            android:name=".View.Activities.ActivityMyAudits"
+            android:parentActivityName=".View.Activities.LandingActivity" />
+        <activity
+            android:name=".View.Activities.LoginActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".View.Activities.SettingsActivity"
+            android:parentActivityName=".View.Activities.LandingActivity" />
+        <activity
+            android:name=".View.Activities.ActivityVerAuditorias"
+            android:parentActivityName=".View.Activities.GraficosActivity" />
+        <activity
+            android:name=".View.Activities.GraficosActivity"
+            android:parentActivityName=".View.Activities.LandingActivity" />
+        <activity
+            android:name=".View.Activities.ActivityPreAuditoria"
             android:launchMode="singleTop"
-            android:parentActivityName=".View.Activities.LandingActivity"
-            />
-        <activity android:name=".View.Activities.LandingActivity"
-
-            />
-        <activity android:name=".View.Activities.ActivityAuditoria"
-            android:parentActivityName=".View.Activities.ActivityPreAuditoria"
-            />
+            android:parentActivityName=".View.Activities.LandingActivity" />
+        <activity android:name=".View.Activities.LandingActivity" />
+        <activity
+            android:name=".View.Activities.ActivityAuditoria"
+            android:parentActivityName=".View.Activities.ActivityPreAuditoria" />
+        <activity android:name=".View.Activities.ActivityZoom"></activity>
     </application>
 
 </manifest>

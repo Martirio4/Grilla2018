@@ -30,7 +30,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
-import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -40,14 +39,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.File;
@@ -105,6 +97,7 @@ public class FragmentPregunta extends Fragment {
     private TextView textViewCommentNuevo;
     private TextView textViewCommentViejo;
     private RadioGroup rg1;
+    private TextView tvFotosViejas;
 
     private AppCompatRadioButton rb0;
     private AppCompatRadioButton rb1;
@@ -134,6 +127,7 @@ public class FragmentPregunta extends Fragment {
         public void cerrarAuditoria();
         public void salirDeAca();
         public void mostrarToolbar();
+        public void zoomearImagen(Foto unaFoto);
     }
 
 
@@ -170,6 +164,7 @@ public class FragmentPregunta extends Fragment {
         textViewCommentViejo = view.findViewById(R.id.tv_comment_viejo);
         tagCommentNuevo=view.findViewById(R.id.tv_tagCommentNuevo);
         tagCommentViejo=view.findViewById(R.id.tv_tagCommentViejo);
+        tvFotosViejas=view.findViewById(R.id.tv_fotos_viejas);
 
         linear=view.findViewById(R.id.vistaCentral);
 
@@ -250,18 +245,17 @@ public class FragmentPregunta extends Fragment {
         adapterFotos.setListaFotosOriginales(listaFotos);
         recyclerFotos.setAdapter(adapterFotos);
 
-        View.OnClickListener listenerComentario=new View.OnClickListener() {
+        View.OnClickListener listenerFotoNueva =new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Integer posicion=recyclerFotos.getChildAdapterPosition(v);
                 RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
                 Foto unaFoto=unaLista.get(posicion);
-                crearDialogoParaModificarComentario(unaFoto);
-                adapterFotos.notifyDataSetChanged();
+                avisable.zoomearImagen(unaFoto);
 
             }
         };
-        adapterFotos.setListener(listenerComentario);
+        adapterFotos.setListener(listenerFotoNueva);
         adapterFotos.notifyDataSetChanged();
 
 //      RECYCLERVIEW FOTOS AUDITORIA PREVIA Y COMMENT AUDITORIA VIEJA
@@ -274,8 +268,18 @@ public class FragmentPregunta extends Fragment {
 
 //      ESTE METODO LE CARGA LAS FOTOS VIEJAS Y EL COMENTARIO GRAL
         cargarFotosViejas();
-//
         recyclerFotosViejas.setAdapter(adapterFotosViejas);
+        View.OnClickListener listenerZoomViejo=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer posicion=recyclerFotosViejas.getChildAdapterPosition(v);
+                RealmList<Foto> unaLista=adapterFotosViejas.getListaFotosOriginales();
+                Foto unaFoto=unaLista.get(posicion);
+                avisable.zoomearImagen(unaFoto);
+
+            }
+        };
+        adapterFotosViejas.setListener(listenerZoomViejo);
         adapterFotosViejas.notifyDataSetChanged();
 
 
@@ -447,7 +451,7 @@ public class FragmentPregunta extends Fragment {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                FuncionesPublicas.borrarAuditoriaSeleccionada(ActivityAuditoria.idAuditoria);
+                                FuncionesPublicas.borrarAuditoriaSeleccionada(ActivityAuditoria.idAudit);
                                 //aca lo que pasa si voy para atras
                                 fabMenu.close(true);
                                 avisable.salirDeAca();
@@ -487,7 +491,9 @@ public class FragmentPregunta extends Fragment {
                 .findFirst();
         idArea=auditActual.getAreaAuditada().getIdArea();
 
+        //TRAIGO TODAS LAS AUDITS QUE NO SEAN LA ACTUAL
         RealmResults<Auditoria>allAudits=realm.where(Auditoria.class)
+                .notEqualTo("idAuditoria",idAudit)
                 .findAll();
 
         for (Auditoria unAudit:allAudits
@@ -497,10 +503,14 @@ public class FragmentPregunta extends Fragment {
                         .equalTo("idAudit",unAudit.getIdAuditoria())
                         .equalTo("idPregunta",idPregunta)
                         .findFirst();
+                 //SI LA PREGUNTA VIEJA TIENE FOTOS
                  if (laPreguntaVieja!=null&&laPreguntaVieja.getListaFotos().size()>0){
                      listaFotosViejas.addAll(laPreguntaVieja.getListaFotos());
                      adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
+                     tvFotosViejas.setVisibility(View.VISIBLE);
                      adapterFotosViejas.notifyDataSetChanged();
+
+                     //SI LA PREGUNTA VIEJA TIENE COMENTARIOS
                      if (laPreguntaVieja.getComentario()!=null) {
                          tagCommentViejo.setVisibility(View.VISIBLE);
                          textViewCommentViejo.setText(laPreguntaVieja.getComentario());
@@ -509,6 +519,9 @@ public class FragmentPregunta extends Fragment {
                          tagCommentViejo.setVisibility(View.GONE);
                      }
                      break;
+                 }
+                 else {
+                     tvFotosViejas.setVisibility(View.GONE);
                  }
             }
         }
@@ -595,7 +608,6 @@ public class FragmentPregunta extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
                 .equalTo("idAudit", idAudit)
-                .equalTo("idItem",idItem)
                 .findAll();
         List<String> unaLista=new ArrayList<>();
 
@@ -629,8 +641,39 @@ public class FragmentPregunta extends Fragment {
                     })
                     .show();
         }
+        //SI TODOS LOS PUNTOS ESTA COMPLERTOS
         else{
-
+            //ME FIJO SI LA AUDITORIA ESTABA CERRADA
+            Auditoria mAudit=realm.where(Auditoria.class)
+                    .equalTo("idAuditoria",idAudit)
+                    .findFirst();
+            //SI NO ESTA CERRADA, LA CIERRO
+            if (!mAudit.getAuditEstaCerrada()){
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        //BUSCO LA AUDITORIA ACTUAL
+                        Auditoria estaAudit = realm.where(Auditoria.class)
+                                .equalTo("idAuditoria", idAudit)
+                                .findFirst();
+                        //BUSCO TODAS LAS AUDITS QUE SON ULTIMAS
+                        RealmResults<Auditoria> todasAudits =realm.where(Auditoria.class)
+                                .equalTo("esUltimaAuditoria",true)
+                                .findAll();
+                        //ENTRE TODAS LAS ULTIMAS AUDITORIAS BUSCO LA QUE TIENE LA MISMA AREA QUE LA ACTUAL
+                        for (Auditoria unAudit :
+                                todasAudits) {
+                                if (unAudit.getAreaAuditada().getIdArea().equals(estaAudit.getAreaAuditada().getIdArea())){
+                                    unAudit.setEsUltimaAuditoria(false);
+                                }
+                        }
+                        //SETEO LA AUDITORIA ACTUAL COMO CERRADA Y ULTIMA AUDITORIA
+                        estaAudit.setEsUltimaAuditoria(true);
+                        estaAudit.setAuditEstaCerrada(true);
+                    }
+                });
+            }
+            //CIERRO LA AUDITORIA ACTUAL
             avisable.cerrarAuditoria();
         }
     }

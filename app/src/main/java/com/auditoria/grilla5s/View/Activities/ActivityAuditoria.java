@@ -3,42 +3,31 @@ package com.auditoria.grilla5s.View.Activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.auditoria.grilla5s.DAO.ControllerDatos;
-
+import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
-import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
 import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentZoom;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.firebase.auth.FirebaseAuth;
 
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -50,13 +39,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     public static final String IDAUDITORIA ="IDAUDITORIA";
     public static final String IDITEM="IDITEM";
 
-    public static String idAuditoria;
+    public static String idAudit;
     public static String idItem;
     private ViewPager pager;
     private AdapterPagerPreguntas adapterPager;
     private String resultadoInputFoto;
     private FloatingActionMenu fabMenu;
     private Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +57,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         Intent intent= getIntent();
         Bundle bundle= intent.getExtras();
 
-        idAuditoria=bundle.getString(IDAUDITORIA);
+        idAudit =bundle.getString(IDAUDITORIA);
         idItem=bundle.getString(IDITEM);
 
 
@@ -79,7 +69,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta>resultPregunta=realm.where(Pregunta.class)
-                .equalTo("idAudit",idAuditoria)
+                .equalTo("idAudit", idAudit)
                 .beginsWith("idPregunta",idItem)
                 .findAll();
 
@@ -193,7 +183,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         Intent intent=new Intent(this, GraficosActivity.class);
         Bundle bundle=new Bundle();
-        bundle.putString(GraficosActivity.AUDIT, idAuditoria);
+        bundle.putString(GraficosActivity.AUDIT, idAudit);
         bundle.putString(GraficosActivity.ORIGEN, "auditoria");
         intent.putExtras(bundle);
         startActivity(intent);
@@ -242,5 +232,33 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+
+        FragmentManager fragmentManager =  getSupportFragmentManager();
+        FragmentZoom fragmentZoom = (FragmentZoom) fragmentManager.findFragmentByTag("zoom");
+
+
+        if (fragmentZoom != null && fragmentZoom.isVisible()) {
+           fragmentManager.popBackStack();
+        }
+        else {
+                super.onBackPressed();
+        }
+
+
+    }
+
+    @Override
+    public void zoomearImagen(Foto unaFoto) {
+        Intent intent = new Intent(this,ActivityZoom.class);
+        Bundle mBundle= new Bundle();
+        mBundle.putString(ActivityZoom.IDFOTO,unaFoto.getIdFoto());
+        intent.putExtras(mBundle);
+        startActivity(intent);
     }
 }

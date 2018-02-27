@@ -81,6 +81,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
             if (auditActual!=null && areaAIncluir!=null){
                 auditActual.setAreaAuditada(areaAIncluir);
+                auditActual.setEsUltimaAuditoria(true);
             }
             }
             });

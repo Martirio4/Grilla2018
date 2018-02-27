@@ -2,7 +2,5 @@
 <resources>
 
 
-
-
-
+    <string name="auditCerradaNoPuedeEditar">Finished audits cannot be edited.</string>
 </resources>

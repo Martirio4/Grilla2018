@@ -122,6 +122,18 @@
                 android:id="@+id/tv_comment_nuevo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:visibility="gone"
+                android:textColor="@color/tile5"
+                android:text="@string/fotosViejas"
+                android:textSize="16sp"
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:id="@+id/tv_fotos_viejas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <android.support.v7.widget.RecyclerView
                 android:layout_marginTop="@dimen/margenChico"
                 android:layout_marginBottom="@dimen/margenChico"
