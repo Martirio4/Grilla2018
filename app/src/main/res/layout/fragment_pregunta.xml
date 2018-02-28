@@ -19,10 +19,22 @@
             <TextView
                 android:gravity="center"
                 android:textSize="20sp"
-                android:layout_margin="@dimen/margenChico"
+               android:layout_marginTop="@dimen/margenChico"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
                 android:text="@string/enunciado"
                 android:textColor="@color/primary_text"
                 android:id="@+id/textoEnunciado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:gravity="center"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+               android:layout_marginTop="@dimen/margenMini"
+                android:text="@string/enunciado"
+                android:textColor="@color/primary_text"
+                android:id="@+id/descripcionCriterio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <RadioGroup
@@ -99,31 +111,8 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <android.support.v7.widget.RecyclerView
+            <TextView
                 android:layout_marginTop="@dimen/margenChico"
-                android:layout_marginBottom="@dimen/margenChico"
-                android:id="@+id/recyclerFotos"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/altoRecyclerFotosActuales">
-            </android.support.v7.widget.RecyclerView>
-            <TextView
-                android:paddingStart="@dimen/margenChico"
-                android:paddingEnd="@dimen/margenChico"
-                android:visibility="gone"
-                android:text="@string/tagCommentNuevo"
-                android:textSize="12sp"
-                android:textColor="@color/tile5"
-                android:id="@+id/tv_tagCommentNuevo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:paddingStart="@dimen/margenChico"
-                android:paddingEnd="@dimen/margenChico"
-                android:id="@+id/tv_comment_nuevo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
                 android:visibility="gone"
                 android:textColor="@color/tile5"
                 android:text="@string/fotosViejas"
@@ -133,13 +122,22 @@
                 android:id="@+id/tv_fotos_viejas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/SeparadorSuperior"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:layout_marginTop="@dimen/margenMini"
+                android:background="@drawable/separador_invertido"
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
 
             <android.support.v7.widget.RecyclerView
-                android:layout_marginTop="@dimen/margenChico"
-                android:layout_marginBottom="@dimen/margenChico"
+                android:layout_marginTop="@dimen/margenMicro"
+                android:layout_marginBottom="@dimen/margenMicro"
                 android:id="@+id/recyclerFotosViejas"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/altoRecyclerFotosActuales">
+                android:layout_height="wrap_content">
             </android.support.v7.widget.RecyclerView>
             <TextView
                 android:paddingStart="@dimen/margenChico"
@@ -152,14 +150,73 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_comment_viejo"
                 android:paddingStart="@dimen/margenChico"
                 android:paddingEnd="@dimen/margenChico"
-                android:layout_marginBottom="@dimen/margenGrande"
+                android:layout_marginBottom="@dimen/margenMini"
                 android:layout_width="wrap_content"
                 android:layout_marginEnd="@dimen/margenTextoViejo"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/SeparadorInferior"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:background="@drawable/separador"
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
+            <TextView
+                android:layout_marginTop="@dimen/margenChico"
+                android:visibility="gone"
+                android:textColor="@color/tile5"
+                android:text="@string/findingsNuevo"
+                android:textSize="16sp"
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:id="@+id/tv_fotos_nuevas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:visibility="gone"
+                android:text="@string/tagCommentNuevo"
+                android:textSize="16sp"
+                android:textColor="@color/tile5"
+                android:id="@+id/tv_tagCommentNuevo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:id="@+id/tv_comment_nuevo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="@dimen/margenChico"
+                android:layout_marginBottom="@dimen/margenChico"
+                android:id="@+id/recyclerFotos"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/altoRecyclerFotosActuales">
+            </android.support.v7.widget.RecyclerView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+            </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
 
 

@@ -44,7 +44,13 @@ public class FragmentZoom extends Fragment {
 
         PhotoView laFoto=(PhotoView) view.findViewById(R.id.imagenZoomeada);
         TextView elTexto=(TextView) view.findViewById(R.id.textoImagenZoomeada);
-        elTexto.setText(comentarioFoto);
+        if (comentarioFoto!=null && !comentarioFoto.isEmpty()) {
+            elTexto.setVisibility(View.VISIBLE);
+            elTexto.setText(comentarioFoto);
+        }
+        else {
+           elTexto.setVisibility(View.GONE);
+        }
         File f = new File(rutaFoto);
         Picasso.with(getContext())
                 .load(f)

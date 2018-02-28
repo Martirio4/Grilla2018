@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -97,7 +98,7 @@ public class FragmentPregunta extends Fragment {
     private TextView textViewCommentNuevo;
     private TextView textViewCommentViejo;
     private RadioGroup rg1;
-    private TextView tvFotosViejas;
+    private TextView tituloAuditVieja;
 
     private AppCompatRadioButton rb0;
     private AppCompatRadioButton rb1;
@@ -105,7 +106,7 @@ public class FragmentPregunta extends Fragment {
     private AppCompatRadioButton rb3;
     private AppCompatRadioButton rb4;
     private AppCompatRadioButton rb5;
-
+    private TextView evidenciaNueva;
 
     private Button verCriterio;
 
@@ -114,6 +115,10 @@ public class FragmentPregunta extends Fragment {
     private FloatingActionButton fabComment;
     private FloatingActionButton fabGuardar;
     private FloatingActionButton fabSalir;
+
+    private ImageView separador;
+    private ImageView separadorInvertido;
+
 
     private Foto unaFoto;
     private RecyclerView recyclerFotosViejas;
@@ -164,7 +169,10 @@ public class FragmentPregunta extends Fragment {
         textViewCommentViejo = view.findViewById(R.id.tv_comment_viejo);
         tagCommentNuevo=view.findViewById(R.id.tv_tagCommentNuevo);
         tagCommentViejo=view.findViewById(R.id.tv_tagCommentViejo);
-        tvFotosViejas=view.findViewById(R.id.tv_fotos_viejas);
+        tituloAuditVieja =view.findViewById(R.id.tv_fotos_viejas);
+        evidenciaNueva = view.findViewById(R.id.tv_fotos_nuevas);
+        separador=view.findViewById(R.id.SeparadorSuperior);
+        separadorInvertido=view.findViewById(R.id.SeparadorInferior);
 
         linear=view.findViewById(R.id.vistaCentral);
 
@@ -213,7 +221,10 @@ public class FragmentPregunta extends Fragment {
         }
         if (pregunta!=null&&pregunta.getComentario()!=null){
             tagCommentNuevo.setVisibility(View.VISIBLE);
+            textViewCommentNuevo.setVisibility(View.VISIBLE);
             textViewCommentNuevo.setText(pregunta.getComentario());
+            evidenciaNueva.setVisibility(View.VISIBLE);
+
         }
 
 
@@ -494,6 +505,7 @@ public class FragmentPregunta extends Fragment {
         //TRAIGO TODAS LAS AUDITS QUE NO SEAN LA ACTUAL
         RealmResults<Auditoria>allAudits=realm.where(Auditoria.class)
                 .notEqualTo("idAuditoria",idAudit)
+                .equalTo("esUltimaAuditoria",true)
                 .findAll();
 
         for (Auditoria unAudit:allAudits
@@ -504,25 +516,39 @@ public class FragmentPregunta extends Fragment {
                         .equalTo("idPregunta",idPregunta)
                         .findFirst();
                  //SI LA PREGUNTA VIEJA TIENE FOTOS
-                 if (laPreguntaVieja!=null&&laPreguntaVieja.getListaFotos().size()>0){
-                     listaFotosViejas.addAll(laPreguntaVieja.getListaFotos());
-                     adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
-                     tvFotosViejas.setVisibility(View.VISIBLE);
-                     adapterFotosViejas.notifyDataSetChanged();
 
-                     //SI LA PREGUNTA VIEJA TIENE COMENTARIOS
-                     if (laPreguntaVieja.getComentario()!=null) {
-                         tagCommentViejo.setVisibility(View.VISIBLE);
-                         textViewCommentViejo.setText(laPreguntaVieja.getComentario());
-                     }
-                     else {
-                         tagCommentViejo.setVisibility(View.GONE);
-                     }
-                     break;
-                 }
-                 else {
-                     tvFotosViejas.setVisibility(View.GONE);
-                 }
+                    if (laPreguntaVieja!=null&&laPreguntaVieja.getListaFotos().size()>0){
+                        tituloAuditVieja.setVisibility(View.VISIBLE);
+                        separadorInvertido.setVisibility(View.VISIBLE);
+                        separador.setVisibility(View.VISIBLE);
+                        listaFotosViejas.addAll(laPreguntaVieja.getListaFotos());
+                        adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
+                        adapterFotosViejas.notifyDataSetChanged();
+
+                        if (laPreguntaVieja.getComentario()!=null && !laPreguntaVieja.getComentario().isEmpty()){
+                            tagCommentViejo.setVisibility(View.VISIBLE);
+                            textViewCommentViejo.setVisibility(View.VISIBLE);
+                            textViewCommentViejo.setText(laPreguntaVieja.getComentario());
+                        }
+                    }
+                    else {
+                        if (laPreguntaVieja!=null && laPreguntaVieja.getComentario()!=null && !laPreguntaVieja.getComentario().isEmpty()){
+                            separadorInvertido.setVisibility(View.VISIBLE);
+                            separador.setVisibility(View.VISIBLE);
+                            tagCommentViejo.setVisibility(View.VISIBLE);
+                            textViewCommentViejo.setVisibility(View.VISIBLE);
+                            textViewCommentViejo.setText(laPreguntaVieja.getComentario());
+                        }
+                        else{
+                            separadorInvertido.setVisibility(View.GONE);
+                            separador.setVisibility(View.GONE);
+                            tituloAuditVieja.setVisibility(View.GONE);
+                            tagCommentViejo.setVisibility(View.GONE);
+                            textViewCommentViejo.setVisibility(View.GONE);
+                        }
+                    }
+
+
             }
         }
         adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
@@ -728,7 +754,6 @@ public class FragmentPregunta extends Fragment {
                         unaFoto.setIdAudit(idAudit);
                         unaFoto.setIdPregunta(idPregunta);
 
-
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -750,6 +775,7 @@ public class FragmentPregunta extends Fragment {
                         });
                         crearDialogoParaModificarComentario(unaFoto);
                         listaFotos.add(unaFoto);
+                        evidenciaNueva.setVisibility(View.VISIBLE);
                         adapterFotos.notifyDataSetChanged();
 
                         Boolean seBorro = imageFile.delete();
@@ -799,6 +825,7 @@ public class FragmentPregunta extends Fragment {
         }
         else{
             unaLista.addAll(preg.getListaFotos());
+            evidenciaNueva.setVisibility(View.VISIBLE);
             return unaLista;
         }
 
@@ -857,10 +884,14 @@ public class FragmentPregunta extends Fragment {
                     public void onInput(MaterialDialog dialog, final CharSequence input) {
                         String inputString=input.toString();
                         if (!inputString.isEmpty()){
+                            evidenciaNueva.setVisibility(View.VISIBLE);
                             tagCommentNuevo.setVisibility(View.VISIBLE);
+                            textViewCommentNuevo.setVisibility(View.VISIBLE);
+                            textViewCommentNuevo.setText(input.toString());
                         }
                         else{
                             tagCommentNuevo.setVisibility(View.GONE);
+                            textViewCommentNuevo.setVisibility(View.GONE);
                         }
 
                         Realm realm= Realm.getDefaultInstance();
@@ -877,7 +908,7 @@ public class FragmentPregunta extends Fragment {
                                 }
                             }
                         });
-                        textViewCommentNuevo.setText(input.toString());
+
                     }
                 }).show();
     }

@@ -32,6 +32,7 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
     private Favoritable favoritable;
+    private Boolean esRecyclerThumbNail;
 
     public void setLongListener(View.OnLongClickListener unLongListener) {
         this.listenerLong = unLongListener;
@@ -64,8 +65,14 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewCelda;
         FragmentActivity unaActivity = (FragmentActivity) context;
-        FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        viewCelda = layoutInflater.inflate(R.layout.detalle_celda_recycler_fotos, parent, false);
+        FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
+        if (esRecyclerThumbNail){
+            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_recycler_fotos_viejas, parent, false);
+        }
+        else{
+            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_recycler_fotos, parent, false);
+        }
+
         viewCelda.setOnClickListener(this);
 
         return new FotoViewHolder(viewCelda);
@@ -106,14 +113,17 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
 
         public FotoViewHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.imagenCamara);
-            textView =(TextView) itemView.findViewById(R.id.nombreNuevaArea);
-            editText=(EditText)itemView.findViewById(R.id.editFoto);
+            imageView = itemView.findViewById(R.id.imagenCamara);
+            if (!esRecyclerThumbNail){
+                textView = itemView.findViewById(R.id.nombreNuevaArea);
+                editText= itemView.findViewById(R.id.editFoto);
+            }
+
         }
 
         public void cargarFoto(Foto unFoto) {
 
-                if (unFoto.getComentarioFoto()!=null && !unFoto.getComentarioFoto().isEmpty()){
+                if (!esRecyclerThumbNail && unFoto.getComentarioFoto()!=null && !unFoto.getComentarioFoto().isEmpty()){
                     textView.setText(unFoto.getComentarioFoto());
                 }
 
@@ -130,7 +140,15 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
     }
 
     public interface Favoritable {
-        public void recibirFotoFavorito(Foto unFoto);
+        void recibirFotoFavorito(Foto unFoto);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+
+        esRecyclerThumbNail = recyclerView.getId() == R.id.recyclerFotosViejas;
+
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     // Decodes image and scales it to reduce memory consumption

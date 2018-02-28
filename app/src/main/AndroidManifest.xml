@@ -24,7 +24,9 @@
             android:name=".View.Activities.ActivityMyAudits"
             android:parentActivityName=".View.Activities.LandingActivity" />
         <activity
+
             android:name=".View.Activities.LoginActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleInstance" />
         <activity
             android:name=".View.Activities.SettingsActivity"
@@ -42,6 +44,7 @@
         <activity android:name=".View.Activities.LandingActivity" />
         <activity
             android:name=".View.Activities.ActivityAuditoria"
+            android:screenOrientation="portrait"
             android:parentActivityName=".View.Activities.ActivityPreAuditoria" />
         <activity android:name=".View.Activities.ActivityZoom"></activity>
     </application>

@@ -5,10 +5,13 @@
 
     <dimen name="altoTarjeta2">195dp</dimen>
     <dimen name="anchoTarjeta2">200dp</dimen>
+    <dimen name="altoTarjetaVieja">80dp</dimen>
+    <dimen name="anchoTarjetaVieja">100dp</dimen>
 
     <dimen name="altoTarjeta21">150dp</dimen>
     <dimen name="anchoTarjeta21">200dp</dimen>
     <dimen name="altoRecyclerFotosActuales">200dp</dimen>
+    <dimen name="altoRecyclerFotosViejas">100dp</dimen>
     <dimen name="altoTextoComentarioActuales">30dp</dimen>
     <dimen name="margenGrande">16dp</dimen>
     <dimen name="margenTextoViejo">72dp</dimen>

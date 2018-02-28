@@ -16,8 +16,10 @@
         android:layout_height="match_parent" />
 
     <TextView
-        android:background="@color/tile3"
-        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="@dimen/margenChico"
+        android:background="@color/blancoNomad"
+        android:textSize="18sp"
         android:maxLines="3"
         android:id="@+id/textoImagenZoomeada"
         android:layout_gravity="bottom"

@@ -345,6 +345,7 @@
     <string name="criterio55">    Estándares de 5S</string>
     <string name="auditCerradaNoPuedeEditar">Finished audits cannot be edited.</string>
     <string name="fotosViejas">Last audit findigs</string>
+    <string name="findingsNuevo">Findings</string>
 
 
 </resources>
