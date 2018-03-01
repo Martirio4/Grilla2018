@@ -26,7 +26,8 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
     private RealmList<Pregunta> listaPregunta = new RealmList<>();
     private List<String> unaListaTitulos;
 
-    public AdapterPagerPreguntas(FragmentManager fm,RealmList<Pregunta>listaPregunta) {
+
+    public AdapterPagerPreguntas(FragmentManager fm,RealmList<Pregunta>listaPregunta,Boolean esRevision) {
         super(fm);
 
         //INICIALIZO LA LISTA DE FRAGMENT
@@ -36,7 +37,7 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
 
         for (Pregunta unaPreg:listaPregunta
              ) {
-           listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg));
+           listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg,esRevision));
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
@@ -74,6 +75,5 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
         this.listaPregunta = listaPregunta;
         notifyDataSetChanged();
     }
-
 
 }

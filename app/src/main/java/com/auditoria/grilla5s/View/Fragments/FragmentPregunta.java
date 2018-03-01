@@ -69,6 +69,7 @@ public class FragmentPregunta extends Fragment {
     public static final String IDPREGUNTA="IDPREGUNTA";
     public static final String IDITEM="IDITEM";
     public static final String IDAUDITORIA="IDAUDITORIA";
+    public static final String ESREVISION ="ESREVISION";
 
     private File fotoOriginal;
     private File fotoComprimida;
@@ -122,6 +123,7 @@ public class FragmentPregunta extends Fragment {
 
     private Foto unaFoto;
     private RecyclerView recyclerFotosViejas;
+    private boolean esRevision;
 
 
     public FragmentPregunta() {
@@ -154,6 +156,7 @@ public class FragmentPregunta extends Fragment {
             idItem=bundle.getString(IDITEM);
             idPregunta=bundle.getString(IDPREGUNTA);
             enunciado=bundle.getString(ENUNCIADOPREGUNTA);
+            esRevision=bundle.getBoolean(ESREVISION);
         }
 
         rg1=(RadioGroup) view.findViewById(R.id.rg1);
@@ -309,10 +312,10 @@ public class FragmentPregunta extends Fragment {
         fabCamara.setImageResource(R.drawable.ic_camera_alt_black_24dp);
         fabMenu.addMenuButton(fabCamara);
 
-            fabCamara.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
+            fabCamara.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
-            fabCamara.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+            fabCamara.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
         fabCamara.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -389,10 +392,10 @@ public class FragmentPregunta extends Fragment {
         fabComment.setImageResource(R.drawable.ic_comment_black_24dp);
         fabMenu.addMenuButton(fabComment);
 
-        fabComment.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
+        fabComment.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                 ContextCompat.getColor(getActivity(), R.color.light_grey),
                 ContextCompat.getColor(getActivity(), R.color.white_transparent));
-        fabComment.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+        fabComment.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
         fabComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -412,10 +415,10 @@ public class FragmentPregunta extends Fragment {
         fabGuardar.setImageResource(R.drawable.ic_save_black_24dp);
         fabMenu.addMenuButton(fabGuardar);
 
-            fabGuardar.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
+            fabGuardar.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
-            fabGuardar.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+            fabGuardar.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
         fabGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -435,10 +438,10 @@ public class FragmentPregunta extends Fragment {
         fabSalir.setImageResource(R.drawable.ic_exit_to_app_black_24dp);
         fabMenu.addMenuButton(fabSalir);
 
-            fabSalir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
+            fabSalir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
-            fabSalir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+            fabSalir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
         fabSalir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -488,6 +491,25 @@ public class FragmentPregunta extends Fragment {
             }
         }
 
+//        SI ES SOLO REVISION BLOQUEO TODAS LAS EDICIONES
+        if (esRevision){
+            rb0.setEnabled(false);
+            rb1.setEnabled(false);
+            rb3.setEnabled(false);
+            rb4.setEnabled(false);
+            rb5.setEnabled(false);
+            rb2.setEnabled(false);
+           fabMenu.setVisibility(View.GONE);
+        }
+        else{
+            rb0.setEnabled(true);
+            rb1.setEnabled(true);
+            rb3.setEnabled(true);
+            rb4.setEnabled(true);
+            rb5.setEnabled(true);
+            rb2.setEnabled(true);
+            fabMenu.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
@@ -707,7 +729,7 @@ public class FragmentPregunta extends Fragment {
 
 
 
-    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta) {
+    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta,Boolean soloRevision) {
         FragmentPregunta detalleFragment = new FragmentPregunta();
         Bundle unBundle = new Bundle();
 
@@ -715,6 +737,7 @@ public class FragmentPregunta extends Fragment {
             unBundle.putString(IDITEM, laPregunta.getIdItem());
             unBundle.putString(IDPREGUNTA, laPregunta.getIdPregunta());
             unBundle.putString(IDAUDITORIA, laPregunta.getIdAudit());
+            unBundle.putBoolean(ESREVISION, soloRevision);
 
         detalleFragment.setArguments(unBundle);
         return detalleFragment;
@@ -908,7 +931,6 @@ public class FragmentPregunta extends Fragment {
                                 }
                             }
                         });
-
                     }
                 }).show();
     }

@@ -41,7 +41,6 @@ import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudi
  */
 public class FragmentPreAudit extends Fragment {
 
-
     public FragmentPreAudit() {
         // Required empty public constructor
     }
@@ -54,8 +53,6 @@ public class FragmentPreAudit extends Fragment {
         public void cerrarAuditoria();
     }
 
-
-
     public final static String LAESE="LAESE";
     private String laEse;
 
@@ -67,6 +64,7 @@ public class FragmentPreAudit extends Fragment {
         Bundle bundle = getArguments();
         if (bundle!=null) {
             laEse=bundle.getString(LAESE);
+
         }
         else {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
@@ -82,13 +80,11 @@ public class FragmentPreAudit extends Fragment {
             }
         });
 
-
-
         final RecyclerView recyclerPreAudit = view.findViewById(R.id.recyclerPreAudit);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerPreAudit.setLayoutManager(linearLayoutManager);
 
-//        LE PIDO A LA REALM TODOS LOS ITEM QUE TIENEN AUDITORIA Y QUE COMIENZAN CON LA MISMA ESE
+//      LE PIDO A LA REALM TODOS LOS ITEM QUE TIENEN AUDITORIA Y QUE COMIENZAN CON LA MISMA ESE
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Item> listaItems=realm.where(Item.class)
                         .equalTo("idAudit",ActivityPreAuditoria.pedirIdAudit())
@@ -114,27 +110,21 @@ public class FragmentPreAudit extends Fragment {
             }
         };
         adapterItems.setListener(listenerItem);
-
         auditable.titularToolbar();
-
         return view;
     }
 
     public static FragmentPreAudit CrearfragmentPreAudit(String laEse) {
         FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
         Bundle unBundle = new Bundle();
-
         unBundle.putString(LAESE, laEse);
         fragmentPreAudit.setArguments(unBundle);
-
-
 
         return fragmentPreAudit;
     }
 
     @Override
     public void onAttach(Context context) {
-
         auditable= (Auditable) context;
         super.onAttach(context);
     }
@@ -158,7 +148,6 @@ public class FragmentPreAudit extends Fragment {
                 unaLista.add(unaPreg.getIdPregunta());
             }
         }
-
         if (unaLista.size()>0){
             new MaterialDialog.Builder(getContext())
                     .title("Warning!")
@@ -218,5 +207,4 @@ public class FragmentPreAudit extends Fragment {
             auditable.cerrarAuditoria();
         }
     }
-
 }

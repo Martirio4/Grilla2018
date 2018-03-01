@@ -23,6 +23,8 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
 
+
+
     private List<String> unaListaTitulos;
 
     public AdapterPagerEses(FragmentManager fm) {
@@ -33,8 +35,9 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
+
         for(Integer i=1;i<6;i++){
-            listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
+                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
@@ -63,4 +66,5 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
         this.unaListaTitulos = unaListaTitulos;
         notifyDataSetChanged();
     }
+
 }

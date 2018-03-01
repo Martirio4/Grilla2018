@@ -100,6 +100,8 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         AdapterPagerEses adapterPager=new AdapterPagerEses(getSupportFragmentManager());
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
+
+
         adapterPager.notifyDataSetChanged();
 
         //        SETEAR EL TABLAYOUT
@@ -153,6 +155,12 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Bundle bundle=new Bundle();
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
         bundle.putString(ActivityAuditoria.IDITEM, unItem.getIdItem());
+        if(origen.equals("REVISAR")){
+            bundle.putBoolean(ActivityAuditoria.ESREVISION, true);
+        }
+        else{
+            bundle.putBoolean(ActivityAuditoria.ESREVISION, false);
+        }
         intent.putExtras(bundle);
         startActivity(intent);
 
@@ -179,30 +187,33 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
     @Override
     public void onBackPressed() {
-        new MaterialDialog.Builder(this)
-                .title("Warning!")
-                .title(getResources().getString(R.string.advertencia))
-                .contentColor(ContextCompat.getColor(this, R.color.primary_text))
-                .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
-                .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
-                .positiveText(getResources().getString(R.string.si))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-
-                        ActivityPreAuditoria.super.onBackPressed();
-
-                    }
-                })
-                .negativeText(getResources().getString(R.string.cancel))
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
-                })
-                .show();
+        if (origen.equals("REVISAR")) {
+            ActivityPreAuditoria.super.onBackPressed();
+        }
+        else {
+            new MaterialDialog.Builder(this)
+                    .title("Warning!")
+                    .title(getResources().getString(R.string.advertencia))
+                    .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                    .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                    .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                    .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
+                    .positiveText(getResources().getString(R.string.si))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            ActivityPreAuditoria.super.onBackPressed();
+                        }
+                    })
+                    .negativeText(getResources().getString(R.string.cancel))
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        }
+                    })
+                    .show();
+        }
     }
 
     @Override

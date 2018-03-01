@@ -10,7 +10,7 @@
         android:gradientRadius="30dp"
         android:angle="0"
         android:startColor="@color/tile5"
-        android:endColor="@color/colorAccent"
+        android:endColor="@color/tile2"
         />
 
 

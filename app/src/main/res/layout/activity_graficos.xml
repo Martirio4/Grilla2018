@@ -3,7 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.auditoria.grilla5s.View.Activities.GraficosActivity">
+    <LinearLayout
+        android:visibility="gone"
+        android:orientation="vertical"
+       android:id="@+id/alphaLayer"
+        android:background="@color/blancoNomad"
+        android:alpha="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -25,9 +36,9 @@
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menuSalida"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/margenGrande"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        app:menu_backgroundColor="@color/blancoNomadTR"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     </com.github.clans.fab.FloatingActionMenu>
 

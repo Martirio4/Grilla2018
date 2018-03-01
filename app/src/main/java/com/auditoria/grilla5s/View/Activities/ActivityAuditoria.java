@@ -38,14 +38,15 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     public static final String IDAUDITORIA ="IDAUDITORIA";
     public static final String IDITEM="IDITEM";
+    public static final String ESREVISION="ESREVISION";
 
     public static String idAudit;
     public static String idItem;
     private ViewPager pager;
-    private AdapterPagerPreguntas adapterPager;
     private String resultadoInputFoto;
     private FloatingActionMenu fabMenu;
     private Toolbar toolbar;
+    private Boolean esRevision;
 
 
     @Override
@@ -57,11 +58,11 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         Intent intent= getIntent();
         Bundle bundle= intent.getExtras();
 
-        idAudit =bundle.getString(IDAUDITORIA);
-        idItem=bundle.getString(IDITEM);
-
-
-
+        if (bundle!=null) {
+            idAudit =bundle.getString(IDAUDITORIA);
+            idItem=bundle.getString(IDITEM);
+            esRevision=bundle.getBoolean(ESREVISION);
+        }
 
 
 //        SETEAR EL VIEWPAGER
@@ -83,12 +84,10 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             laListaDeTitulos.add(aux.toString()+"°");
         }
         pager=findViewById(R.id.viewPagerAuditoria);
-        adapterPager=new AdapterPagerPreguntas(getSupportFragmentManager(),listaPreguntasOriginales);
+        AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,esRevision);
         pager.setAdapter(adapterPager);
         adapterPager.setUnaListaTitulos(laListaDeTitulos);
         adapterPager.notifyDataSetChanged();
-
-
 
 
         // Get a support ActionBar corresponding to this toolbar
