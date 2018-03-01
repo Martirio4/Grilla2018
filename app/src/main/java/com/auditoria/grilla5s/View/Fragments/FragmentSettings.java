@@ -318,7 +318,7 @@ public class FragmentSettings extends Fragment {
                                 .tintTarget(false)
                                 .targetRadius(80)
                                 .id(4),
-                        TapTarget.forView(lin5, getResources().getString(R.string.tutorial_tit_delete), getResources().getString(R.string.tutorial_desc_delete))
+                        TapTarget.forView(lin4, getResources().getString(R.string.tutorial_tit_delete), getResources().getString(R.string.tutorial_desc_delete))
                                 .transparentTarget(false)
                                 .outerCircleColor(R.color.tutorial1)
                                 .textColor(R.color.primary_text)

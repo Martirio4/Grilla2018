@@ -199,35 +199,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     }
 
 
-
-
-
-
-    @Override
-    public void mostrarToolbar() {
-        Typeface roboto=Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
-        TapTargetView.showFor(this,                 // `this` is an Activity
-                TapTarget.forToolbarNavigationIcon(toolbar, getResources().getString(R.string.tutorial_tit_navegar), getResources().getString(R.string.tutorial_desc_navegar
-                ))
-                        // All options below are optional
-                        .outerCircleColor(R.color.tutorial1)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.85f)
-                        .textColor(R.color.primary_text)// Specify the alpha amount for the outer circle
-                        .textTypeface(roboto)  // Specify a typeface for the text
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(false)                   // Whether to tint the target view's color
-                        .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
-
-                    new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-                    }
-                });
-
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);

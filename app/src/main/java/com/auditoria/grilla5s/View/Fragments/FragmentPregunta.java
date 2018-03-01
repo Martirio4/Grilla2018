@@ -133,7 +133,7 @@ public class FragmentPregunta extends Fragment {
     public interface Avisable{
         public void cerrarAuditoria();
         public void salirDeAca();
-        public void mostrarToolbar();
+
         public void zoomearImagen(Foto unaFoto);
     }
 
@@ -631,7 +631,6 @@ public class FragmentPregunta extends Fragment {
                     public void onSequenceFinish() {
                         // Yay
                         fabMenu.close(true);
-                        avisable.mostrarToolbar();
                     }
 
                     @Override

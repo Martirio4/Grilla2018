@@ -56,7 +56,7 @@ public class ControllerDatos {
 //                        PRIMER ITEM
                 Item item11 = realm.createObject(Item.class);
                 item11.setCriterio(context.getResources().getString(R.string.criterio11));
-                item11.setTextoItem(context.getResources().getString(R.string.textoItem1_1S));
+                item11.setTextoItem(context.getResources().getString(R.string.texto11));
                 item11.setIdItem("11");
                 item11.setPuntajeItem(0.0);
                 item11.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -238,7 +238,7 @@ public class ControllerDatos {
 //                        PRIMER ITEM
                 Item item21 = realm.createObject(Item.class);
                     item21.setCriterio(context.getResources().getString(R.string.criterio21));
-                    item21.setTextoItem(context.getResources().getString(R.string.textoItem21));
+                    item21.setTextoItem(context.getResources().getString(R.string.texto21));
                     item21.setIdItem("21");
                     item21.setPuntajeItem(0.0);
                     item21.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -497,7 +497,7 @@ public class ControllerDatos {
 //                        PRIMER ITEM
                 Item item31 = realm.createObject(Item.class);
                     item31.setCriterio(context.getResources().getString(R.string.criterio31));
-                    item31.setTextoItem(context.getResources().getString(R.string.textoitem31));
+                    item31.setTextoItem(context.getResources().getString(R.string.texto31));
                     item31.setIdItem("31");
                     item31.setPuntajeItem(0.0);
                     item31.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -707,7 +707,7 @@ public class ControllerDatos {
 //                        PRIMER ITEM
                 Item item41 = realm.createObject(Item.class);
                     item41.setCriterio(context.getResources().getString(R.string.criterio41));
-                    item41.setTextoItem(context.getResources().getString(R.string.textoitem41));
+                    item41.setTextoItem(context.getResources().getString(R.string.texto41));
                     item41.setIdItem("41");
                     item41.setPuntajeItem(0.0);
                     item41.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -754,7 +754,7 @@ public class ControllerDatos {
 //                      SEGUNDO ITEM
                 Item item42 = realm.createObject(Item.class);
                     item42.setCriterio(context.getResources().getString(R.string.criterio42));
-                    item42.setTextoItem(context.getResources().getString(R.string.textoitem42));
+                    item42.setTextoItem(context.getResources().getString(R.string.texto42));
                     item42.setIdItem("42");
                     item42.setPuntajeItem(0.0);
                     item42.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -780,7 +780,7 @@ public class ControllerDatos {
 
                 Item item43 = realm.createObject(Item.class);
                     item43.setCriterio(context.getResources().getString(R.string.criterio43));
-                    item43.setTextoItem(context.getResources().getString(R.string.textoitem43));
+                    item43.setTextoItem(context.getResources().getString(R.string.texto43));
                     item43.setIdItem("43");
                     item43.setPuntajeItem(0.0);
                     item43.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -815,7 +815,7 @@ public class ControllerDatos {
 //                      CUARTO ITEM
                 Item item44 = realm.createObject(Item.class);
                     item44.setCriterio(context.getResources().getString(R.string.criterio44));
-                    item44.setTextoItem(context.getResources().getString(R.string.textoitem44));
+                    item44.setTextoItem(context.getResources().getString(R.string.texto44));
                     item44.setIdItem("44");
                     item44.setPuntajeItem(0.0);
                     item44.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -842,7 +842,7 @@ public class ControllerDatos {
 //                      QUINTO ITEM
                 Item item45 = realm.createObject(Item.class);
                     item45.setCriterio(context.getResources().getString(R.string.criterio45));
-                    item45.setTextoItem(context.getResources().getString(R.string.textoitem45));
+                    item45.setTextoItem(context.getResources().getString(R.string.texto45));
                     item45.setIdItem("45");
                     item45.setPuntajeItem(0.0);
                     item45.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -887,7 +887,7 @@ public class ControllerDatos {
 //                      SEXTO ITEM
                 Item item46 = realm.createObject(Item.class);
                     item46.setCriterio(context.getResources().getString(R.string.criterio46));
-                    item46.setTextoItem(context.getResources().getString(R.string.textoitem46));
+                    item46.setTextoItem(context.getResources().getString(R.string.texto46));
                     item46.setIdItem("46");
                     item46.setPuntajeItem(0.0);
                     item46.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -921,7 +921,7 @@ public class ControllerDatos {
 //                        PRIMER ITEM
                 Item item51 = realm.createObject(Item.class);
                     item51.setCriterio(context.getResources().getString(R.string.criterio51));
-                    item51.setTextoItem(context.getResources().getString(R.string.textoitem51));
+                    item51.setTextoItem(context.getResources().getString(R.string.texto51));
                     item51.setIdItem("51");
                     item51.setPuntajeItem(0.0);
                     item51.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -981,7 +981,7 @@ public class ControllerDatos {
 //                      SEGUNDO ITEM
                 Item item52 = realm.createObject(Item.class);
                     item52.setCriterio(context.getResources().getString(R.string.criterio52));
-                    item52.setTextoItem(context.getResources().getString(R.string.textoitem52));
+                    item52.setTextoItem(context.getResources().getString(R.string.texto52));
                     item52.setIdItem("52");
                     item52.setPuntajeItem(0.0);
                     item52.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -1007,7 +1007,7 @@ public class ControllerDatos {
 
                 Item item53 = realm.createObject(Item.class);
                     item53.setCriterio(context.getResources().getString(R.string.criterio53));
-                    item53.setTextoItem(context.getResources().getString(R.string.textoitem53));
+                    item53.setTextoItem(context.getResources().getString(R.string.texto53));
                     item53.setIdItem("53");
                     item53.setPuntajeItem(0.0);
                     item53.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -1032,7 +1032,7 @@ public class ControllerDatos {
 //                      CUARTO ITEM
                 Item item54 = realm.createObject(Item.class);
                     item54.setCriterio(context.getResources().getString(R.string.criterio54));
-                    item54.setTextoItem(context.getResources().getString(R.string.textoitem54));
+                    item54.setTextoItem(context.getResources().getString(R.string.texto54));
                     item54.setIdItem("54");
                     item54.setPuntajeItem(0.0);
                     item54.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -1078,7 +1078,7 @@ public class ControllerDatos {
 //                      QUINTO ITEM
                 Item item55 = realm.createObject(Item.class);
                     item55.setCriterio(context.getResources().getString(R.string.criterio55));
-                    item55.setTextoItem(context.getResources().getString(R.string.textoitem55));
+                    item55.setTextoItem(context.getResources().getString(R.string.texto55));
                     item55.setIdItem("55");
                     item55.setPuntajeItem(0.0);
                     item55.setIdAudit(nuevaAuditoria.getIdAuditoria());

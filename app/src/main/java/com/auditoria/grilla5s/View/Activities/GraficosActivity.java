@@ -834,22 +834,22 @@ public class GraficosActivity extends AppCompatActivity {
                 .findAll();
         RealmResults<Pregunta> preguntasSeiton =realm.where(Pregunta.class)
                 .equalTo("idAudit",idAudit)
-                .beginsWith("idPregunta","1")
+                .beginsWith("idPregunta","2")
                 .findAll();
         RealmResults<Pregunta> preguntasSeiso =realm.where(Pregunta.class)
                 .equalTo("idAudit",idAudit)
-                .beginsWith("idPregunta","1")
+                .beginsWith("idPregunta","3")
                 .findAll();
         RealmResults<Pregunta> preguntasSeiketsu =realm.where(Pregunta.class)
                 .equalTo("idAudit",idAudit)
-                .beginsWith("idPregunta","1")
+                .beginsWith("idPregunta","4")
                 .findAll();
         RealmResults<Pregunta> preguntasShitsuke =realm.where(Pregunta.class)
                 .equalTo("idAudit",idAudit)
-                .beginsWith("idPregunta","1")
+                .beginsWith("idPregunta","5")
                 .findAll();
         Auditoria mAudit=realm.where(Auditoria.class)
-                .equalTo("idAudit",idAudit)
+                .equalTo("idAuditoria",idAudit)
                 .findFirst();
 
 
@@ -909,6 +909,7 @@ public class GraficosActivity extends AppCompatActivity {
         writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.fecha) + mAudit.getFechaAuditoria());
         cursorY = cursorY - SALTO_LINEA;
         writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
+        //ESCRIBO LA S
         writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getIdPregunta().substring(0,1));
 
         //linea separacion
@@ -940,6 +941,7 @@ public class GraficosActivity extends AppCompatActivity {
                 //fuente fecha escribir fecga
                 writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.fecha) + fecha);
                 cursorY = cursorY - SALTO_LINEA;
+                //ESCRIBIR ESE
                 writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
                 writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, 12, laLista.get(0).getIdPregunta().substring(0,1));
 
@@ -951,10 +953,18 @@ public class GraficosActivity extends AppCompatActivity {
 
             }
 
-            writer.addText(cursorX, cursorY - SALTO_LINEA, 12, sub.getTextoPregunta());
-            cursorY = cursorY - SALTO_LINEA;
-            writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.score) + sub.getPuntaje().toString());
-            cursorY = cursorY - 2 * SALTO_LINEA;
+            if (sub.getPuntaje()!=null ) {
+                writer.addText(cursorX, cursorY - SALTO_LINEA, 12, sub.getTextoPregunta());
+                cursorY = cursorY - SALTO_LINEA;
+                writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.score) + sub.getPuntaje().toString());
+                cursorY = cursorY - 2 * SALTO_LINEA;
+            }
+            else{
+                writer.addText(cursorX, cursorY - SALTO_LINEA, 12, sub.getTextoPregunta());
+                cursorY = cursorY - SALTO_LINEA;
+                writer.addText(cursorX, cursorY - SALTO_LINEA, 12, getResources().getString(R.string.score) + " 0");
+                cursorY = cursorY - 2 * SALTO_LINEA;
+            }
 
             //renglonesFoto=Math.round(sub.getListaFotos().size()/3);
             for (Foto foto : sub.getListaFotos()
