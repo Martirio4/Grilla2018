@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
     <string name="auditCerradaNoPuedeEditar">Finished audits cannot be edited.</string>
+    <string name="criterio">Criterio:</string>
+    <string name="item">Descripcion:</string>
 </resources>

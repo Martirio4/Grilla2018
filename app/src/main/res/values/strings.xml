@@ -7,6 +7,32 @@
     <string name="myAudits">MY AUDITS</string>
     <string name="settings">SETTINGS</string>
 
+    <string name="criterio11">Materiales innecesarios</string>
+    <string name="criterio12">Herramientas innecesarias</string>
+    <string name="criterio13">    Máquinas o equipos innecesarios</string>
+    <string name="criterio14">    Documentos innecesarios(archivos, planos, placas, carteles, etc)</string>
+    <string name="criterio15">    Etiquetaje</string>
+    <string name="criterio21">    IDENTIFICACIÓN de las estaciones de trabajo, tuberías, máquinas, condiciones de funcionamiento y flujo</string>
+    <string name="criterio22">    ORGANIZACIÓN de herramientas, instrumentos, materiales de soporte y acesorios para máquinas. Lugar para EPP y material de seguridad</string>
+    <string name="criterio23">    DEMARCACIÓN de los pisos, corredores, áreas de almacenaje para materiales y productos terminados</string>
+    <string name="criterio24">    Kanban - Gestión visual de stock y cantidades. Ubicación y provisión de materiales en estanterías/otros lugares de almacenamiento (consumibles, envases, rollos, cintas, etc.)"</string>
+    <string name="criterio25">    Presencia de los documentos necesarios en la unidad de producción y en la estación de trabajo (documentos EHS*, formularios, instrucciones de trabajo, etc.)</string>
+    <string name="criterio31">    Herramientas de Limpieza, materiales y Equipos</string>
+    <string name="criterio32">    Limpieza de estaciones de trabajo, máquinas, equipos, accesorios y tuberías</string>
+    <string name="criterio33">    Eliminación de fuentes de suciedad y contaminación</string>
+    <string name="criterio34">    Limpieza de pisos y áreas de residuos</string>
+    <string name="criterio35">    Comportamientos y reglas de Limpieza</string>
+    <string name="criterio41">    Estándares visuales de demarcación, placas  de señalización y gerenciamento de herramientas</string>
+    <string name="criterio42">    Estándares de Organización y Limpieza</string>
+    <string name="criterio43">    Procedimientos operativos de producción, Estándares de seguridad y calidad</string>
+    <string name="criterio44">    Materiales de Consumo, Productos y gerenciamento de Materias primas</string>
+    <string name="criterio45">    Gestión de 5S</string>
+    <string name="criterio46">    Estándares de 5S</string>
+    <string name="criterio51">    Programa 5S con compromiso de gestión y un Comité Directivo </string>
+    <string name="criterio52">    Entrenamientos de 5S y actividades de los equipos. Auditorías y seguimiento</string>
+    <string name="criterio53">    Ideas para mejora de 5S y accione sy proyectos</string>
+    <string name="criterio54">    Indicadores de performance</string>
+    <string name="criterio55">    Estándares de 5S</string>
 
     <string name="texto11">El área de trabajo está llena de alguno/s de los siguientes materiales innecesarios u obsoltetos?</string>
     <string name="texto12">Hay elementos innecesarios en el área de trabajo? Es posible distinguir entre los elementos necesarios y los innecesarios? </string>
@@ -41,8 +67,7 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
 </string>
     <string name="texto52">Todos los operadores fueron entrenados en 5S y hay una actividad continua del equipo 5S en toda la planta, con un plan de auditoría regular claramente definido </string>
     <string name="texto53">Las sugerencias de mejora, proyectos y planes de acción fueron estructurados y están dispuestos de manera visual a todos?</string>
-    <string name="texto54">
-Todos están informados de los logros, pasados y presentes, del Lugar de trabajo? </string>
+    <string name="texto54">Todos están informados de los logros, pasados y presentes, del Lugar de trabajo? </string>
     <string name="texto55">Los Estándares 5S son aplicados y están actualizados?</string>
     <string name="textoPregunta111">Material de uso diario/Pallets</string>
     <string name="textoPregunta112">Materias primas</string>
@@ -314,35 +339,12 @@ Todos están informados de los logros, pasados y presentes, del Lugar de trabajo
     <string name="editarAuditoria">Edit audit</string>
 
 
-    <string name="criterio11">Materiales innecesarios</string>
-    <string name="criterio12">    Herramientas innecesarias</string>
-    <string name="criterio13">    Máquinas o equipos innecesarios</string>
-    <string name="criterio14">    Documentos innecesarios(archivos, planos, placas, carteles, etc)</string>
-    <string name="criterio15">    Etiquetaje</string>
-    <string name="criterio21">    IDENTIFICACIÓN de las estaciones de trabajo, tuberías, máquinas, condiciones de funcionamiento y flujo</string>
-    <string name="criterio22">    ORGANIZACIÓN de herramientas, instrumentos, materiales de soporte y acesorios para máquinas. Lugar para EPP y material de seguridad</string>
-    <string name="criterio23">    DEMARCACIÓN de los pisos, corredores, áreas de almacenaje para materiales y productos terminados</string>
-    <string name="criterio24">    Kanban - Gestión visual de stock y cantidades. Ubicación y provisión de materiales en estanterías/otros lugares de almacenamiento (consumibles, envases, rollos, cintas, etc.)"</string>
-    <string name="criterio25">    Presencia de los documentos necesarios en la unidad de producción y en la estación de trabajo (documentos EHS*, formularios, instrucciones de trabajo, etc.)</string>
-    <string name="criterio31">    Herramientas de Limpieza, materiales y Equipos</string>
-    <string name="criterio32">    Limpieza de estaciones de trabajo, máquinas, equipos, accesorios y tuberías</string>
-    <string name="criterio33">    Eliminación de fuentes de suciedad y contaminación</string>
-    <string name="criterio34">    Limpieza de pisos y áreas de residuos</string>
-    <string name="criterio35">    Comportamientos y reglas de Limpieza</string>
-    <string name="criterio41">    Estándares visuales de demarcación, placas  de señalización y gerenciamento de herramientas</string>
-    <string name="criterio42">    Estándares de Organización y Limpieza</string>
-    <string name="criterio43">    Procedimientos operativos de producción, Estándares de seguridad y calidad</string>
-    <string name="criterio44">    Materiales de Consumo, Productos y gerenciamento de Materias primas</string>
-    <string name="criterio45">    Gestión de 5S</string>
-    <string name="criterio46">    Estándares de 5S</string>
-    <string name="criterio51">    Programa 5S con compromiso de gestión y un Comité Directivo </string>
-    <string name="criterio52">    Entrenamientos de 5S y actividades de los equipos. Auditorías y seguimiento</string>
-    <string name="criterio53">    Ideas para mejora de 5S y accione sy proyectos</string>
-    <string name="criterio54">    Indicadores de performance</string>
-    <string name="criterio55">    Estándares de 5S</string>
+
     <string name="auditCerradaNoPuedeEditar">Finished audits cannot be edited.</string>
     <string name="fotosViejas">Last audit findigs</string>
     <string name="findingsNuevo">Findings</string>
+    <string name="criterio">Criterio:</string>
+    <string name="item">Descripcion:</string>
 
 
 </resources>

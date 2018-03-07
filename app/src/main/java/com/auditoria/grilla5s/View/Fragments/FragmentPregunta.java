@@ -31,6 +31,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
+import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -95,7 +96,9 @@ public class FragmentPregunta extends Fragment {
     private String idAudit;
     private String idItem;
 
-    private TextView textViewEnunciado;
+    private TextView textoPregunta;
+    private TextView criterioDescripcion;
+    private TextView criterioTitulo;
     private TextView textViewCommentNuevo;
     private TextView textViewCommentViejo;
     private RadioGroup rg1;
@@ -159,6 +162,12 @@ public class FragmentPregunta extends Fragment {
             esRevision=bundle.getBoolean(ESREVISION);
         }
 
+        Realm realm = Realm.getDefaultInstance();
+        Item elItem= realm.where(Item.class)
+                .equalTo("idAudit",idAudit)
+                .equalTo("idItem",idItem)
+                .findFirst();
+
         rg1=(RadioGroup) view.findViewById(R.id.rg1);
         verCriterio=(Button)view.findViewById(R.id.btn_criterios);
         rb0 = view.findViewById(R.id.item0);
@@ -167,7 +176,7 @@ public class FragmentPregunta extends Fragment {
         rb3 = view.findViewById(R.id.item3);
         rb4 = view.findViewById(R.id.item4);
         rb5 = view.findViewById(R.id.item5);
-        textViewEnunciado= view.findViewById(R.id.textoEnunciado);
+        textoPregunta = view.findViewById(R.id.textoPregunta);
         textViewCommentNuevo = view.findViewById(R.id.tv_comment_nuevo);
         textViewCommentViejo = view.findViewById(R.id.tv_comment_viejo);
         tagCommentNuevo=view.findViewById(R.id.tv_tagCommentNuevo);
@@ -176,6 +185,8 @@ public class FragmentPregunta extends Fragment {
         evidenciaNueva = view.findViewById(R.id.tv_fotos_nuevas);
         separador=view.findViewById(R.id.SeparadorSuperior);
         separadorInvertido=view.findViewById(R.id.SeparadorInferior);
+        criterioTitulo =view.findViewById(R.id.tituloCriterio);
+        criterioDescripcion =view.findViewById(R.id.descripcionCriterio);
 
         linear=view.findViewById(R.id.vistaCentral);
 
@@ -185,7 +196,9 @@ public class FragmentPregunta extends Fragment {
         rb3.setText("3");
         rb4.setText("4");
         rb5.setText("5");
-        textViewEnunciado.setText(enunciado);
+        textoPregunta.setText(enunciado);
+        criterioTitulo.setText(elItem.getCriterio());
+        criterioDescripcion.setText(elItem.getTextoItem());
 
 
 //        HANDLE RADIOGROUP
@@ -212,7 +225,7 @@ public class FragmentPregunta extends Fragment {
         });
 
         //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
-        Realm realm = Realm.getDefaultInstance();
+        Realm mrealm = Realm.getDefaultInstance();
         Pregunta pregunta = realm.where(Pregunta.class)
                 .equalTo("idAudit",idAudit)
                 .equalTo("idPregunta",idPregunta)
