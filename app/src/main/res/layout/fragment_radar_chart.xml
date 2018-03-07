@@ -33,6 +33,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 </LinearLayout>
+    <TextView
+        android:id="@+id/textoIncompleto"
+        android:gravity="center"
+        android:text="@string/auditoriaIncompleta"
+        android:textColor="@color/semaRojo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 

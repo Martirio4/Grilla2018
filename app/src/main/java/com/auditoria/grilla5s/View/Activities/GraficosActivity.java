@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -118,6 +119,7 @@ public class GraficosActivity extends AppCompatActivity {
 
     private Auditoria auditActual;
     private LinearLayout alphaLayer;
+    private TextView textViewIncompleto;
 
 
 
@@ -131,6 +133,7 @@ public class GraficosActivity extends AppCompatActivity {
         config = getSharedPreferences("prefs", 0);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        textViewIncompleto=findViewById(R.id.textoIncompleto);
         alphaLayer = findViewById(R.id.alphaLayer);
 
         promedioSeiso = 0.0;
@@ -156,6 +159,18 @@ public class GraficosActivity extends AppCompatActivity {
         if (fragmentRadar != null && fragmentRadar.isVisible()) {
         }
         else {
+
+            Realm realm = Realm.getDefaultInstance();
+            Auditoria unAudito=realm.where(Auditoria.class)
+                    .equalTo("idAuditoria",idAudit)
+                    .findFirst();
+            if (!unAudito.getAuditEstaCerrada()){
+                textViewIncompleto.setVisibility(View.VISIBLE);
+            }
+            else{
+                textViewIncompleto.setVisibility(View.GONE);
+            }
+
             cargarGraficoRadar();
             cargarGraficoBarras();
         }

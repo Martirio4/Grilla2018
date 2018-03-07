@@ -345,6 +345,7 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="findingsNuevo">Findings</string>
     <string name="criterio">Criterio:</string>
     <string name="item">Descripcion:</string>
+    <string name="auditoriaIncompleta">This audit is not finished.</string>
 
 
 </resources>
