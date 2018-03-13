@@ -778,7 +778,7 @@ public class FragmentPregunta extends Fragment {
                                     .setQuality(75)
                                     .setCompressFormat(Bitmap.CompressFormat.JPEG)
                                     .setDestinationDirectoryPath(getContext().getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s"+ File.separator  + FirebaseAuth.getInstance().getCurrentUser().getEmail() + File.separator + "images" + File.separator + "evidencias")
-                                    .compressToFile(fotoOriginal);
+                                    .compressToFile(fotoOriginal,fotoOriginal.getName().replace(".jpg",".png"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

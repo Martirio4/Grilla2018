@@ -346,6 +346,21 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="criterio">Criterio:</string>
     <string name="item">Descripcion:</string>
     <string name="auditoriaIncompleta">This audit is not finished.</string>
+    <string name="resultados">Resultados</string>
+    <string name="titCriterio">Criterio</string>
+    <string name="titItem">Item a verificar</string>
+    <string name="titNumPregunta"># Pregunta</string>
+    <string name="titPregunta">Pregunta</string>
+    <string name="titCommentUltima">Comentario Ultima Auditoria</string>
+    <string name="titPuntaje">Puntaje</string>
+    <string name="titPorcentaje">%</string>
+    <string name="titComentario">Comentarios</string>
+    <string name="titFotos">Foto</string>
+    <string name="totalSubitem">Total Criterio</string>
+    <string name="totalEse">Total</string>
+    <string name="totalAudit">Total Auditoria:</string>
+    <string name="generarXLS">Enviar reporte Excel</string>
+    <string name="tabImagenes">Evidencias</string>
 
 
 </resources>

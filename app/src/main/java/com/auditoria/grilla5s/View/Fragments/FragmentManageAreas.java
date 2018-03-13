@@ -345,6 +345,7 @@ public class FragmentManageAreas extends Fragment {
                     }
 
                     Foto unaFoto = new Foto();
+                    unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
                     unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
                     if (source == EasyImage.ImageSource.CAMERA) {
                         Boolean seBorro = imageFile.delete();

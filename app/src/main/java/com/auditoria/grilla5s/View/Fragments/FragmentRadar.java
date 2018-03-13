@@ -41,6 +41,7 @@ public class FragmentRadar extends Fragment {
     public static final String  PUNJTAJE3="PUNTAJE3";
     public static final String  PUNJTAJE4="PUNTAJE4";
     public static final String  PUNJTAJE5="PUNTAJE5";
+    public static final String  COMPLETO="COMPLETO";
 
 
     public static final String  AREA="AREA";
@@ -50,11 +51,13 @@ public class FragmentRadar extends Fragment {
     private Double punt3;
     private Double punt4;
     private Double punt5;
+    private Boolean completo;
 
     private Double puntpro;
     private String areaAuditada;
 
-    private FloatingActionMenu fab_menu;
+
+    private TextView textViewIncompleto;
 
 
 
@@ -80,13 +83,24 @@ public class FragmentRadar extends Fragment {
         punt4=unBundle.getDouble(PUNJTAJE4);
         punt5=unBundle.getDouble(PUNJTAJE5);
         areaAuditada=unBundle.getString(AREA);
+        completo=unBundle.getBoolean(COMPLETO);
 
 
         Typeface robotoR = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
-        TextView textoTitulo= (TextView)view.findViewById(R.id.textoAreaResultado);
-        TextView tagTitulo=(TextView)view.findViewById(R.id.tagRadarChart);
+        TextView textoTitulo= view.findViewById(R.id.textoAreaResultado);
+        TextView tagTitulo=view.findViewById(R.id.tagRadarChart);
+        textViewIncompleto=view.findViewById(R.id.textoIncompleto);
+
+        if (completo){
+            textViewIncompleto.setVisibility(View.GONE);
+        }
+        else{
+            textViewIncompleto.setVisibility(View.VISIBLE);
+        }
+
         textoTitulo.setTypeface(robotoR);
         tagTitulo.setTypeface(robotoR);
+        textViewIncompleto.setTypeface(robotoR);
 
         textoTitulo.setText(areaAuditada);
         /*TextView tv = (TextView) findViewById(R.id.textView);
