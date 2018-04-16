@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.auditoria.grilla5s.View.Fragments.FragmentMyAudits;
 import com.auditoria.grilla5s.View.Fragments.FragmentRanking;
+import com.auditoria.grilla5s.View.Fragments.FragmentRankingAreas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,9 @@ public class AdapterPagerAudits extends FragmentStatePagerAdapter {
             }
             if (unString.equals("ranking")){
                 listaFragments.add(FragmentRanking.crearFragmentRanking());
+            }
+            if (unString.equals("areas")){
+                listaFragments.add(FragmentRankingAreas.crearFragmentRankingAreas());
             }
         }
 

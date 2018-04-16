@@ -60,10 +60,6 @@ public class FragmentRadar extends Fragment {
     private TextView textViewIncompleto;
 
 
-
-
-
-
     public FragmentRadar() {
         // Required empty public constructor
     }

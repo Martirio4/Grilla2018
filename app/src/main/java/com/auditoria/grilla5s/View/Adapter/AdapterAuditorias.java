@@ -236,7 +236,7 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
                     text4s.setText(percentage4);
                     text5s.setText(percentage5);
                     textFinal.setText(percentage6);
-                    textFecha.setText(unAuditoria.getFechaAuditoria());
+                    textFecha.setText(FuncionesPublicas.dameFechaString(unAuditoria.getFechaAuditoria(),"largo"));
                     textFoto.setText(unAuditoria.getAreaAuditada().getNombreArea());
 
                     File f =new File(unAuditoria.getAreaAuditada().getFotoArea().getRutaFoto());

@@ -29,12 +29,12 @@
         <activity android:name=".View.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".View.Activities.ActivityMyAudits"
+            android:screenOrientation="portrait"
             android:parentActivityName=".View.Activities.LandingActivity" />
         <activity
 
@@ -49,6 +49,7 @@
             android:parentActivityName=".View.Activities.GraficosActivity" />
         <activity
             android:name=".View.Activities.GraficosActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".View.Activities.LandingActivity" />
         <activity
             android:name=".View.Activities.ActivityPreAuditoria"

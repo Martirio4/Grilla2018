@@ -98,7 +98,7 @@ public class FragmentSeleccionArea extends Fragment {
         Typeface robotoR = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
         TextView unText=toolbar.findViewById(R.id.textoToolbar);
         unText.setTypeface(robotoR);
-        unText.setTextColor(getResources().getColor(R.color.tile5));
+        unText.setTextColor(getResources().getColor(R.color.blancoNomad));
         unText.setText(getResources().getString(R.string.selectArea));
 
         if (((AppCompatActivity)getActivity()).getSupportActionBar() != null) {

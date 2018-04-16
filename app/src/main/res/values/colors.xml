@@ -31,6 +31,13 @@
     <color name="tile4.5">#0f6ac3</color>
     <color name="tile5">#0d47a1</color>
 
+    <color name="escala5">#20B14A</color>
+    <color name="escala4">#A7CD39</color>
+    <color name="escala3">#FED403</color>
+    <color name="escala2">#FFB812</color>
+    <color name="escala1">#F36F24</color>
+    <color name="escala0">#EE1B3B</color>
+
 
 
     <color name="tutorial1">#ff9800</color>

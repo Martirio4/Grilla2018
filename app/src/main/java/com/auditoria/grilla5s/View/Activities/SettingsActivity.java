@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
         Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
         TextView unText=toolbar.findViewById(R.id.textoToolbar);
         unText.setTypeface(robotoR);
-        unText.setTextColor(getResources().getColor(R.color.tile5));
+        unText.setTextColor(getResources().getColor(R.color.blancoNomad));
 
         unText.setText(getResources().getText(R.string.settings));
 
@@ -93,34 +93,45 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
 
         Realm realm = Realm.getDefaultInstance();
 
+        RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
+                //SE ELIMINA ESTA LINEA, DEJO BORRAR LAS AREAS.
+                //PENSAR SI LAS AREAS SOLO LAS PUEDE DAR DE ALTA EL USUARIO LIDER
+                //.equalTo("usuario", usuario)
+                .findAll();
+
+        for (Auditoria audit:result2
+                ) {
+            if (audit.getAreaAuditada().getIdArea().equals(unArea.getIdArea())){
+
+                FuncionesPublicas.borrarAuditoriaSeleccionada(audit.getIdAuditoria());
+
+            }
+
+        }
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
                 String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-                RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
-                        .equalTo("usuario", usuario)
-                        .findAll();
-
-                for (Auditoria audit:result2
-                        ) {
-                    if (audit.getAreaAuditada().getIdArea().equals(unArea.getIdArea())){
-
-                        FuncionesPublicas.borrarAuditoriaSeleccionada(audit.getIdAuditoria());
-
-                    }
-
-                }
-
-
                 RealmResults<Area> lasAreas=realm.where(Area.class)
                         .equalTo("idArea",unArea.getIdArea())
                         .findAll();
                     for (Area elArea:lasAreas
                          ) {
+
+                        //BORRO LAS FOTOS DE REALM
+                        Foto laFoto= realm.where(Foto.class)
+                                .equalTo("idFoto", elArea.getFotoArea().getIdFoto())
+                                .findFirst();
+
                         File file = new File(elArea.getFotoArea().getRutaFoto());
                         boolean deleted = file.delete();
+
+                        laFoto.deleteFromRealm();
+
+
                     }
                 lasAreas.deleteAllFromRealm();
             }
@@ -178,6 +189,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
         super.onBackPressed();
         this.finish();
     }
+
 
 
 }

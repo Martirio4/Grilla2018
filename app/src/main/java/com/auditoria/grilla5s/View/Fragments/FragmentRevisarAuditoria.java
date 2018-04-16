@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityVerAuditorias;
 import com.auditoria.grilla5s.View.Adapter.AdapterVerAudit;
 
@@ -137,7 +138,7 @@ public class FragmentRevisarAuditoria extends Fragment {
                 .findFirst();
 
         subTit.setText(mAudit.getAreaAuditada().getNombreArea());
-        fecha.setText(mAudit.getFechaAuditoria());
+        fecha.setText(FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(),"largo"));
 
         Double puntajeAuditoria=mAudit.getPuntajeFinal();
         Locale locale = new Locale("en","US");

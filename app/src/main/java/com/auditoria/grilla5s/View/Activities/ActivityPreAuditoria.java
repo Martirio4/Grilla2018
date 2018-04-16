@@ -22,6 +22,7 @@ import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 import com.github.mikephil.charting.formatter.IFillFormatter;
@@ -88,7 +89,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
         toolbar =  findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.blancoNomad));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
@@ -179,6 +180,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Bundle bundle=new Bundle();
         bundle.putString(GraficosActivity.AUDIT, idAudit);
         bundle.putString(GraficosActivity.ORIGEN, "auditoria");
+        bundle.putString(GraficosActivity.AREA,idArea);
         intent.putExtras(bundle);
         startActivity(intent);
         this.finish();
@@ -224,5 +226,15 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void cargarAuditoriaEnFirebase(String idAudit) {
+        FuncionesPublicas.subirAFireBase(idAudit);
+    }
+
+    @Override
+    public void actualizarPuntaje(String idAudit) {
+        FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
     }
 }

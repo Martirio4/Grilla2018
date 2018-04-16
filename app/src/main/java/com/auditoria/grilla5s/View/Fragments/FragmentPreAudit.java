@@ -2,19 +2,15 @@ package com.auditoria.grilla5s.View.Fragments;
 
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -23,6 +19,7 @@ import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.github.clans.fab.FloatingActionButton;
@@ -50,7 +47,9 @@ public class FragmentPreAudit extends Fragment {
     public interface Auditable{
         void auditarItem(Item unItem);
         void titularToolbar();
-        public void cerrarAuditoria();
+        void cerrarAuditoria();
+        void cargarAuditoriaEnFirebase(String idAudit);
+        void actualizarPuntaje(String idAudit);
     }
 
     public final static String LAESE="LAESE";
@@ -76,7 +75,7 @@ public class FragmentPreAudit extends Fragment {
         fabGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                completoTodosLosPuntos();
+                corroborarFinalizacionAuditoria(idAudit);
             }
         });
 
@@ -135,20 +134,15 @@ public class FragmentPreAudit extends Fragment {
         super.onResume();
     }
 
-    private void completoTodosLosPuntos() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
-                .equalTo("idAudit", idAudit)
-                .findAll();
-        List<String> unaLista=new ArrayList<>();
+    private void corroborarFinalizacionAuditoria(final String idAudit) {
 
-        for (Pregunta unaPreg :result2
-                ) {
-            if (unaPreg.getPuntaje()==null|| unaPreg.getPuntaje()==0){
-                unaLista.add(unaPreg.getIdPregunta());
-            }
+        if (FuncionesPublicas.completoTodosLosPuntos(idAudit)){
+            auditable.cerrarAuditoria();
+            auditable.actualizarPuntaje(idAudit);
+            auditable.cargarAuditoriaEnFirebase(idAudit);
         }
-        if (unaLista.size()>0){
+        else {
+
             new MaterialDialog.Builder(getContext())
                     .title("Warning!")
                     .title(getResources().getString(R.string.advertencia))
@@ -170,41 +164,8 @@ public class FragmentPreAudit extends Fragment {
                         }
                     })
                     .show();
+
         }
-        //SI TODOS LOS PUNTOS ESTA COMPLERTOS
-        else{
-            //ME FIJO SI LA AUDITORIA ESTABA CERRADA
-            Auditoria mAudit=realm.where(Auditoria.class)
-                    .equalTo("idAuditoria",idAudit)
-                    .findFirst();
-            //SI NO ESTA CERRADA, LA CIERRO
-            if (!mAudit.getAuditEstaCerrada()){
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        //BUSCO LA AUDITORIA ACTUAL
-                        Auditoria estaAudit = realm.where(Auditoria.class)
-                                .equalTo("idAuditoria", idAudit)
-                                .findFirst();
-                        //BUSCO TODAS LAS AUDITS QUE SON ULTIMAS
-                        RealmResults<Auditoria> todasAudits =realm.where(Auditoria.class)
-                                .equalTo("esUltimaAuditoria",true)
-                                .findAll();
-                        //ENTRE TODAS LAS ULTIMAS AUDITORIAS BUSCO LA QUE TIENE LA MISMA AREA QUE LA ACTUAL
-                        for (Auditoria unAudit :
-                                todasAudits) {
-                            if (unAudit.getAreaAuditada().getIdArea().equals(estaAudit.getAreaAuditada().getIdArea())){
-                                unAudit.setEsUltimaAuditoria(false);
-                            }
-                        }
-                        //SETEO LA AUDITORIA ACTUAL COMO CERRADA Y ULTIMA AUDITORIA
-                        estaAudit.setEsUltimaAuditoria(true);
-                        estaAudit.setAuditEstaCerrada(true);
-                    }
-                });
-            }
-            //CIERRO LA AUDITORIA ACTUAL
-            auditable.cerrarAuditoria();
-        }
+
     }
 }

@@ -1,0 +1,154 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/blancoNomad"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.auditoria.grilla5s.View.Activities.ActivityMyAudits">
+
+   <LinearLayout
+       android:layout_marginTop="@dimen/margenChico"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+         <TextView
+             android:textSize="20sp"
+             android:gravity="center"
+             android:textStyle="bold"
+             android:textColor="@color/escala0"
+             android:id="@+id/numero0"
+             android:text="0"
+          android:layout_weight="20"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+         <TextView
+
+             android:gravity="center|start"
+             android:lines="2"
+          android:id="@+id/textoOpcion1"
+          android:layout_weight="80"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+   </LinearLayout>
+
+   <LinearLayout
+       android:layout_marginTop="@dimen/margenChico"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+      <TextView
+          android:textSize="20sp"
+          android:gravity="center"
+          android:textStyle="bold"
+          android:textColor="@color/escala1"
+          android:id="@+id/numero1"
+          android:text="1"
+          android:layout_weight="20"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+      <TextView
+          android:gravity="center|start"
+          android:lines="2"
+          android:id="@+id/textoOpcion2"
+          android:layout_weight="80"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+   </LinearLayout>
+
+   <LinearLayout
+       android:layout_marginTop="@dimen/margenChico"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+      <TextView
+          android:textSize="20sp"
+          android:gravity="center"
+          android:textStyle="bold"
+          android:textColor="@color/escala2"
+          android:id="@+id/numero2"
+          android:text="2"
+          android:layout_weight="20"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+      <TextView
+          android:gravity="center|start"
+          android:lines="2"
+          android:id="@+id/textoOpcion3"
+          android:layout_weight="80"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+   </LinearLayout>
+
+   <LinearLayout
+       android:layout_marginTop="@dimen/margenChico"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+      <TextView
+          android:textSize="20sp"
+          android:gravity="center"
+          android:textStyle="bold"
+          android:textColor="@color/escala3"
+          android:id="@+id/numero3"
+          android:text="3"
+          android:layout_weight="20"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+      <TextView
+          android:gravity="center|start"
+          android:lines="2"
+          android:id="@+id/textoOpcion4"
+          android:layout_weight="80"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+   </LinearLayout>
+
+   <LinearLayout
+       android:layout_marginTop="@dimen/margenChico"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+      <TextView
+          android:textSize="20sp"
+          android:gravity="center"
+          android:textStyle="bold"
+          android:textColor="@color/escala4"
+          android:id="@+id/numero4"
+          android:text="4"
+          android:layout_weight="20"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+      <TextView
+          android:gravity="center|start"
+          android:lines="2"
+          android:id="@+id/textoOpcion5"
+          android:layout_weight="80"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+   </LinearLayout>
+
+   <LinearLayout
+       android:layout_marginTop="@dimen/margenChico"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+      <TextView
+          android:textSize="20sp"
+          android:gravity="center"
+          android:textStyle="bold"
+          android:textColor="@color/escala5"
+          android:id="@+id/numero5"
+          android:text="5"
+          android:layout_weight="20"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+      <TextView
+          android:gravity="center|start"
+          android:lines="2"
+          android:id="@+id/textoOpcion6"
+          android:layout_weight="80"
+          android:layout_width="0dp"
+          android:layout_height="match_parent" />
+   </LinearLayout>
+
+</LinearLayout>

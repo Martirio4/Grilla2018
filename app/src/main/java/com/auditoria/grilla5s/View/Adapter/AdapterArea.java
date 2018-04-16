@@ -13,17 +13,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
 import com.auditoria.grilla5s.Model.Area;
+import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
+import com.auditoria.grilla5s.View.Fragments.FragmentRankingAreas;
+import com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
+import org.w3c.dom.Text;
 
+import java.io.File;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by elmar on 18/5/2017.
@@ -144,11 +155,19 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         private ImageView imageView;
         private TextView textView;
         private ImageButton fabEliminar;
+        private TextView textUltima;
+        private LinearLayout linearUltima;
+        private TextView tagultima;
 
         public AreaViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imagenCamara);
             textView= (TextView) itemView.findViewById(R.id.nombreArea);
+            linearUltima=itemView.findViewById(R.id.linearUltimoPuntaje);
+            textUltima=itemView.findViewById(R.id.ultimoPuntaje);
+            tagultima=itemView.findViewById(R.id.tagUltimoPuntaje);
+
+
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textView.setTypeface(robotoL);
             fabEliminar = (ImageButton) itemView.findViewById(R.id.botonEliminar);
@@ -157,10 +176,17 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             FragmentActivity unaActivity = (FragmentActivity) itemView.getContext();
             FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
             FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag("fragmentManageAreas");
+            FragmentSeleccionArea fragmentSeleccionArea = (FragmentSeleccionArea) fragmentManager.findFragmentByTag("seleccion");
 
             if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
                 fabEliminar.setVisibility(View.VISIBLE);
             }
+            if (fragmentManageAreas==null&&fragmentSeleccionArea==null){
+                linearUltima.setVisibility(View.VISIBLE);
+                textUltima.setVisibility(View.VISIBLE);
+                tagultima.setVisibility(View.VISIBLE);
+            }
+
         }
 
         public void cargarArea(Area unArea) {
@@ -170,8 +196,24 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             Picasso.with(imageView.getContext())
                     .load(f)
                     .into(imageView);
+            }
 
             textView.setText(unArea.getNombreArea());
+
+            Realm realm = Realm.getDefaultInstance();
+            Auditoria unAudit=realm.where(Auditoria.class)
+                    .equalTo("areaAuditada.idArea",unArea.getIdArea())
+                    .sort("fechaAuditoria", Sort.DESCENDING)
+                    .findFirst();
+
+            if (unAudit!=null){
+                Locale locale = new Locale("en","US");
+                NumberFormat format = NumberFormat.getPercentInstance(locale);
+                String unString= format.format(unAudit.getPuntajeFinal());
+                textUltima.setText(unString);
+            }
+            else{
+                textUltima.setText("n/a");
             }
         }
 

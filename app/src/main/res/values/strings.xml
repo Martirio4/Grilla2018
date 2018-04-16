@@ -34,7 +34,7 @@
     <string name="criterio54">    Indicadores de performance</string>
     <string name="criterio55">    Estándares de 5S</string>
 
-    <string name="texto11">El área de trabajo está llena de alguno/s de los siguientes materiales innecesarios u obsoltetos?</string>
+    <string name="texto11">El área de trabajo está llena de alguno/s  de los siguientes elementos innecesarios u obsoltetos?</string>
     <string name="texto12">Hay elementos innecesarios en el área de trabajo? Es posible distinguir entre los elementos necesarios y los innecesarios? </string>
     <string name="texto13">Hay máquinas o equipos innecesarios en el área de trabajo? (Ver mesadas, estanterías, máquinas de empaque, etc)</string>
     <string name="texto14">Hay instrucciones de trabajo, procedimientos, especificaciones, banners, carpetas; en armarios del área de trabajo y/o paredes que sean innecesarios u obsoleto ?</string>
@@ -228,7 +228,7 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="bad">Bad</string>
     <string name="average">Average</string>
     <string name="good">Good</string>
-    <string name="auditResultFor">Audit Result for:</string>
+    <string name="auditResultFor">Resultado final para:</string>
     <string name="titulo">Title:</string>
     <string name="manageAuditAreas">Manage Audit Areas</string>
     <string name="databaseAuditDelete">delete data</string>
@@ -321,7 +321,7 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="contraseniasNoCoinciden">Passwords do not match.</string>
     <string name="signOut">Log out</string>
     <string name="verCriterios">Criteria</string>
-    <string name="criteriaTitulo">Criteria</string>
+    <string name="criteriaTitulo">Criterios</string>
     <string name="sacarFoto">Add photo</string>
     <string name="guardarAuditoria">Save Audit</string>
     <string name="salir">Quit</string>
@@ -361,6 +361,42 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="totalAudit">Total Auditoria:</string>
     <string name="generarXLS">Enviar reporte Excel</string>
     <string name="tabImagenes">Evidencias</string>
+    <string name="ultimoPuntaje">Ultima Audit.</string>
+    <string name="evolucionDelArea">Historico</string>
+    <string name="textoOpcion1_seiri">En todos los lugares</string>
+    <string name="textoOpcion2_seiri" >En varios lugares</string>
+    <string name="textoOpcion3_seiri" >En pocos lugares</string>
+    <string name="textoOpcion4_seiri" >Ninguno</string>
+    <string name="textoOpcion5_seiri" >Algunos con clara ubicación e identificación</string>
+    <string name="textoOpcion6_seiri" >Todos con clara ubicación e identificación</string>
+    <string name="textoOpcion1_seiton">Ninguno</string>
+    <string name="textoOpcion2_seiton">Pocos</string>
+    <string name="textoOpcion3_seiton">Varios</string>
+    <string name="textoOpcion4_seiton">Todos</string>
+    <string name="textoOpcion5_seiton">Algunos Procedimientos visuales</string>
+    <string name="textoOpcion6_seiton">Procedimiento visual en todos los puestos</string>
+    <string name="textoOpcion1_seiso" >Ninguno</string>
+    <string name="textoOpcion2_seiso" >Pocos</string>
+    <string name="textoOpcion3_seiso" >Varios</string>
+    <string name="textoOpcion4_seiso" >Completo</string>
+    <string name="textoOpcion5_seiso" >Clara localización e identificación</string>
+    <string name="textoOpcion6_seiso" >Hay gestion visual de la limpieza</string>
+    <string name="textoOpcion1_seiketsu">Sin estándar</string>
+    <string name="textoOpcion2_seiketsu">Algún estándar</string>
+    <string name="textoOpcion3_seiketsu">Varios estándar</string>
+    <string name="textoOpcion4_seiketsu">Estámdar en todos las áreas</string>
+    <string name="textoOpcion5_seiketsu">Estándar visual</string>
+    <string name="textoOpcion6_seiketsu">Estándar visual en todas las áreas</string>
+    <string name="textoOpcion1_shitsuke">Sin actividades de equipo</string>
+    <string name="textoOpcion2_shitsuke">Actividades de equipo comenzando</string>
+    <string name="textoOpcion3_shitsuke">Actividad regular de los equipos</string>
+    <string name="textoOpcion4_shitsuke">Actividad regular de los equipos y reportes</string>
+    <string name="textoOpcion5_shitsuke">Auditoria por los equipos</string>
+    <string name="textoOpcion6_shitsuke">Auditoria y plan de acción</string>
+    <string name="fotoBorrada">La foto fue borrada con éxito</string>
+    <string name="deseaBorrarFoto">Desea borrar la foto seleccionada?</string>
+    <string name="borraFoto">Borrar foto</string>
+    <string name="noHayAuditorias">El area seleccionada no posee auditorías.</string>
 
 
 </resources>

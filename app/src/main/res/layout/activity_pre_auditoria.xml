@@ -20,6 +20,7 @@
 
 
         <TextView
+            android:textColor="@color/blancoNomad"
             android:textSize="20sp"
             android:id="@+id/textoToolbar"
             android:gravity="start"

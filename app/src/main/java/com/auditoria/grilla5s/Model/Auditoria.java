@@ -1,5 +1,6 @@
 package com.auditoria.grilla5s.Model;
 
+import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -13,13 +14,14 @@ import io.realm.annotations.PrimaryKey;
 public class Auditoria extends RealmObject {
     @PrimaryKey
     private String idAuditoria;
-    private String fechaAuditoria;
+    private Date fechaAuditoria;
     private Usuario auditor;
     private Area areaAuditada;
     private Boolean esUltimaAuditoria;
     private RealmList<Ese> listaEses;
     private Double puntajeFinal;
     private Boolean auditEstaCerrada;
+
 
     public Boolean getAuditEstaCerrada() {
         return auditEstaCerrada;
@@ -31,6 +33,7 @@ public class Auditoria extends RealmObject {
 
     public Auditoria() {
     }
+
 
     public Double getPuntajeFinal() {
         return puntajeFinal;
@@ -56,11 +59,11 @@ public class Auditoria extends RealmObject {
         this.idAuditoria = idAuditoria;
     }
 
-    public String getFechaAuditoria() {
+    public Date getFechaAuditoria() {
         return fechaAuditoria;
     }
 
-    public void setFechaAuditoria(String fechaAuditoria) {
+    public void setFechaAuditoria(Date fechaAuditoria) {
         this.fechaAuditoria = fechaAuditoria;
     }
 

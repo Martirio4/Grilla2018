@@ -53,6 +53,30 @@
                     android:textSize="18sp" />
 
             </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/linearUltimoPuntaje"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tagUltimoPuntaje"
+                    android:text="@string/ultimoPuntaje"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="20"
+                    android:layout_height="0dp" />
+                <TextView
+                    android:id="@+id/ultimoPuntaje"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_weight="80"
+                    android:text="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp" />
+            </LinearLayout>
 
             <ImageButton
                 android:background="@android:color/transparent"

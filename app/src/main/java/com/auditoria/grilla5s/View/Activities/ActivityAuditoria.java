@@ -13,11 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
 import com.auditoria.grilla5s.View.Fragments.FragmentZoom;
@@ -26,6 +29,7 @@ import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.clans.fab.FloatingActionMenu;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,14 +183,19 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public void cerrarAuditoria() {
+        Realm realm = Realm.getDefaultInstance();
+        Auditoria maAudit=realm.where(Auditoria.class)
+                .equalTo("idAuditoria",idAudit)
+                .findFirst();
 
         Intent intent=new Intent(this, GraficosActivity.class);
         Bundle bundle=new Bundle();
         bundle.putString(GraficosActivity.AUDIT, idAudit);
         bundle.putString(GraficosActivity.ORIGEN, "auditoria");
+        bundle.putString(GraficosActivity.AREA, maAudit.getAreaAuditada().getIdArea());
         intent.putExtras(bundle);
         startActivity(intent);
-        this.finish();
+        ActivityAuditoria.this.finish();
 
     }
 
@@ -230,5 +239,44 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         mBundle.putString(ActivityZoom.IDFOTO,unaFoto.getIdFoto());
         intent.putExtras(mBundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void borrarFoto(final Foto unaFoto) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+              Pregunta unaPreg= realm.where(Pregunta.class)
+                      .equalTo("idPregunta", unaFoto.getIdPregunta())
+                      .equalTo("idAudit", unaFoto.getIdAudit())
+                      .findFirst();
+
+              if (unaPreg!=null){
+                  if (unaPreg.getListaFotos().contains(unaFoto)){
+                      unaPreg.getListaFotos().remove(unaPreg.getListaFotos().indexOf(unaFoto));
+                  }
+              }
+                File file = new File(unaFoto.getRutaFoto());
+                boolean deleted = file.delete();
+                Foto laFoto = realm.where(Foto.class)
+                        .equalTo("idFoto", unaFoto.getIdFoto())
+                        .findFirst();
+                laFoto.deleteFromRealm();
+
+                Toast.makeText(ActivityAuditoria.this, getResources().getString(R.string.fotoBorrada), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void cargarAuditoriaEnFirebase(String idAudit) {
+        FuncionesPublicas.subirAFireBase(idAudit);
+    }
+
+    @Override
+    public void actualizarPuntaje(String idAudit) {
+        FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
     }
 }

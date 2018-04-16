@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +43,10 @@ public class FragmentMyAudits extends Fragment {
     public void updateAdapter() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
-                .findAll();
+                .sort("fechaAuditoria",Sort.DESCENDING)
+              .findAll();
+
+
         listaAuditorias=new RealmList<>();
         adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
         listaAuditorias.addAll(resulta2);
@@ -64,6 +68,7 @@ public class FragmentMyAudits extends Fragment {
         String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
+                .sort("fechaAuditoria",Sort.DESCENDING)
                 .findAll();
         listaAuditorias=new RealmList<>();
         listaAuditorias.addAll(resulta2);

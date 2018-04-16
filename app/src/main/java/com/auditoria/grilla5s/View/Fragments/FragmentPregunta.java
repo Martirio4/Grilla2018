@@ -59,6 +59,8 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
 
+import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudit;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -134,10 +136,12 @@ public class FragmentPregunta extends Fragment {
     }
 
     public interface Avisable{
-        public void cerrarAuditoria();
-        public void salirDeAca();
-
-        public void zoomearImagen(Foto unaFoto);
+        void cerrarAuditoria();
+        void salirDeAca();
+        void borrarFoto(Foto unaFoto);
+        void zoomearImagen(Foto unaFoto);
+        void cargarAuditoriaEnFirebase(String idAudit);
+        void actualizarPuntaje(String idAudit);
     }
 
 
@@ -248,14 +252,62 @@ public class FragmentPregunta extends Fragment {
         verCriterio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(v.getContext())
+                boolean wrapInScrollView = true;
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                         .title(R.string.criteriaTitulo)
-                        .contentColor(ContextCompat.getColor(v.getContext(), R.color.primary_text))
-                        .titleColor(ContextCompat.getColor(v.getContext(), R.color.tile4))
-                        .backgroundColor(ContextCompat.getColor(v.getContext(), R.color.tile1))
-                        .content("MOSTRAR CRITERIOS")
-                        .positiveText(getResources().getString(R.string.dismiss))
+                        .backgroundColor(getContext().getResources().getColor(R.color.blancoNomad))
+                        .customView(R.layout.custom_view, wrapInScrollView)
+                        .positiveText(R.string.ok)
                         .show();
+
+                View laVista = dialog.getCustomView();
+                TextView opcion1=laVista.findViewById(R.id.textoOpcion1);
+                TextView opcion2=laVista.findViewById(R.id.textoOpcion2);
+                TextView opcion3=laVista.findViewById(R.id.textoOpcion3);
+                TextView opcion4=laVista.findViewById(R.id.textoOpcion4);
+                TextView opcion5=laVista.findViewById(R.id.textoOpcion5);
+                TextView opcion6=laVista.findViewById(R.id.textoOpcion6);
+
+
+                if (idItem.startsWith("1")) {
+
+                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiri));
+                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiri));
+                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiri));
+                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiri));
+                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiri));
+                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiri));
+                    
+                } else if (idItem.startsWith("2")) {
+                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiton));
+                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiton));
+                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiton));
+                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiton));
+                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiton));
+                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiton));
+                } else if (idItem.startsWith("3")) {
+                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiso));
+                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiso));
+                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiso));
+                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiso));
+                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiso));
+                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiso));
+                } else if (idItem.startsWith("4")) {
+                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiketsu));
+                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiketsu));
+                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiketsu));
+                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiketsu));
+                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiketsu));
+                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiketsu));
+                } else {
+                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_shitsuke));
+                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_shitsuke));
+                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_shitsuke));
+                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_shitsuke));
+                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_shitsuke));
+                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_shitsuke));
+                }
+
             }
         });
 
@@ -282,8 +334,58 @@ public class FragmentPregunta extends Fragment {
 
             }
         };
+        View.OnLongClickListener listenerBorrarFoto = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Integer posicion = recyclerFotos.getChildAdapterPosition(view);
+                RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
+                final Foto unaFoto=unaLista.get(posicion);
+
+                Realm realm=Realm.getDefaultInstance();
+                Auditoria mAudit=realm.where(Auditoria.class)
+                        .equalTo("idAuditoria",unaFoto.getIdAudit())
+                        .findFirst();
+
+                if (!mAudit.getAuditEstaCerrada()) {
+                    new MaterialDialog.Builder(getContext())
+                            .title(getResources().getString(R.string.borraFoto))
+                            .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                            .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                            .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                            .content(getResources().getString(R.string.deseaBorrarFoto))
+                            .negativeText(getResources().getString(R.string.no))
+                            .positiveText(getResources().getString(R.string.si))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    avisable.borrarFoto(unaFoto);
+                                    adapterFotos.borrarFoto(unaFoto);
+                                    adapterFotos.notifyDataSetChanged();
+
+                                }
+                            })
+                            .show();
+
+                }
+                return false;
+            }
+        };
+
         adapterFotos.setListener(listenerFotoNueva);
-        adapterFotos.notifyDataSetChanged();
+        //si estoy en modo revision no le permito que haga longclick
+        if (esRevision) {
+           adapterFotos.setLongListener(new View.OnLongClickListener() {
+               @Override
+               public boolean onLongClick(View view) {
+                   return false;
+               }
+           });
+        }
+        else{
+            adapterFotos.setLongListener(listenerBorrarFoto);
+            adapterFotos.notifyDataSetChanged();
+        }
 
 //      RECYCLERVIEW FOTOS AUDITORIA PREVIA Y COMMENT AUDITORIA VIEJA
 
@@ -303,6 +405,7 @@ public class FragmentPregunta extends Fragment {
                 RealmList<Foto> unaLista=adapterFotosViejas.getListaFotosOriginales();
                 Foto unaFoto=unaLista.get(posicion);
                 avisable.zoomearImagen(unaFoto);
+
 
             }
         };
@@ -439,7 +542,7 @@ public class FragmentPregunta extends Fragment {
                 //--guardar auditoria en firebase--//
 
                 fabMenu.close(true);
-               completoTodosLosPuntos();
+               corroborarFinalizacionAuditoria(idAudit);
 
             }
         });
@@ -664,21 +767,15 @@ public class FragmentPregunta extends Fragment {
     }
 
 
-    private void completoTodosLosPuntos() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
-                .equalTo("idAudit", idAudit)
-                .findAll();
-        List<String> unaLista=new ArrayList<>();
+    private void corroborarFinalizacionAuditoria(String idAudit) {
 
-        for (Pregunta unaPreg :result2
-             ) {
-            if (unaPreg.getPuntaje()==null|| unaPreg.getPuntaje()==0){
-                unaLista.add(unaPreg.getIdPregunta());
-            }
+        if (FuncionesPublicas.completoTodosLosPuntos(idAudit)){
+            avisable.cerrarAuditoria();
+            avisable.actualizarPuntaje(idAudit);
+            avisable.cargarAuditoriaEnFirebase(idAudit);
         }
+        else {
 
-        if (unaLista.size()>0){
             new MaterialDialog.Builder(getContext())
                     .title("Warning!")
                     .title(getResources().getString(R.string.advertencia))
@@ -700,41 +797,7 @@ public class FragmentPregunta extends Fragment {
                         }
                     })
                     .show();
-        }
-        //SI TODOS LOS PUNTOS ESTA COMPLERTOS
-        else{
-            //ME FIJO SI LA AUDITORIA ESTABA CERRADA
-            Auditoria mAudit=realm.where(Auditoria.class)
-                    .equalTo("idAuditoria",idAudit)
-                    .findFirst();
-            //SI NO ESTA CERRADA, LA CIERRO
-            if (!mAudit.getAuditEstaCerrada()){
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        //BUSCO LA AUDITORIA ACTUAL
-                        Auditoria estaAudit = realm.where(Auditoria.class)
-                                .equalTo("idAuditoria", idAudit)
-                                .findFirst();
-                        //BUSCO TODAS LAS AUDITS QUE SON ULTIMAS
-                        RealmResults<Auditoria> todasAudits =realm.where(Auditoria.class)
-                                .equalTo("esUltimaAuditoria",true)
-                                .findAll();
-                        //ENTRE TODAS LAS ULTIMAS AUDITORIAS BUSCO LA QUE TIENE LA MISMA AREA QUE LA ACTUAL
-                        for (Auditoria unAudit :
-                                todasAudits) {
-                                if (unAudit.getAreaAuditada().getIdArea().equals(estaAudit.getAreaAuditada().getIdArea())){
-                                    unAudit.setEsUltimaAuditoria(false);
-                                }
-                        }
-                        //SETEO LA AUDITORIA ACTUAL COMO CERRADA Y ULTIMA AUDITORIA
-                        estaAudit.setEsUltimaAuditoria(true);
-                        estaAudit.setAuditEstaCerrada(true);
-                    }
-                });
-            }
-            //CIERRO LA AUDITORIA ACTUAL
-            avisable.cerrarAuditoria();
+
         }
     }
 

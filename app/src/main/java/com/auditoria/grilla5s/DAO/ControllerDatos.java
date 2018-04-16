@@ -8,6 +8,9 @@ import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -204,8 +207,8 @@ public class ControllerDatos {
 
 //                      QUINTO ITEM
                 Item item15 = realm.createObject(Item.class);
-                item15.setCriterio(context.getResources().getString(R.string.criterio12));
-                item15.setTextoItem(context.getResources().getString(R.string.texto12));
+                item15.setCriterio(context.getResources().getString(R.string.criterio15));
+                item15.setTextoItem(context.getResources().getString(R.string.texto15));
                 item15.setIdItem("15");
                 item15.setPuntajeItem(0.0);
                 item15.setIdAudit(nuevaAuditoria.getIdAuditoria());
@@ -1107,10 +1110,9 @@ public class ControllerDatos {
         return idAuditInstanciada;
 
     }
-    private String determinarFecha(){
+    private java.util.Date determinarFecha(){
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        return sdf.format(cal.getTime());
+        return (cal.getTime());
     }
 
     public List<String> traerEses(){
@@ -1127,6 +1129,7 @@ public class ControllerDatos {
         List<String>unaLista=new ArrayList<>();
         unaLista.add("auditoria");
         unaLista.add("ranking");
+        unaLista.add("areas");
         return unaLista;
     }
     public List<String> traerListaVerAudit() {

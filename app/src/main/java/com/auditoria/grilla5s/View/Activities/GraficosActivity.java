@@ -36,26 +36,27 @@ import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentBarrasApiladas;
+import com.auditoria.grilla5s.View.Fragments.FragmentBarrasApiladasPorArea;
 import com.auditoria.grilla5s.View.Fragments.FragmentRadar;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+import java.util.Random;
 import crl.android.pdfwriter.PDFWriter;
 import crl.android.pdfwriter.PaperSize;
 import crl.android.pdfwriter.StandardFonts;
+import id.zelory.compressor.Compressor;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import jxl.Workbook;
@@ -80,7 +81,19 @@ public class GraficosActivity extends AppCompatActivity {
     public static final String AUDIT = "AUDIT";
     public static final String AREA = "AREA";
     public static final String ORIGEN = "ORIGEN";
+    public static final int MARGEN_IZQUIERDO = 25;
+    public static final int SALTO_LINEA = 14;
+    public static final int SEPARACIONFOTOS = 7;
+    private static final int letraTitulo = 20;
+    private static final int letraPreguntas = 10;
+    private static final int anchoFoto = 5;
+    private static final int altoFoto = 10;
 
+    private Integer netWidth=270;
+    private Boolean auditEstaCompleta;
+    //para pdf
+    private Integer cursorX;
+    private Integer cursorY;
     private String origenIntent;
     private String idAudit;
     private String areaAuditada;
@@ -88,68 +101,78 @@ public class GraficosActivity extends AppCompatActivity {
     private Double promedioSeiton;
     private Double promedioSeiso;
     private Double promedio5s;
-
     private FloatingActionMenu fabMenuGraficos;
     private FloatingActionButton fabGenerarPDF;
-    private FloatingActionButton fabQuit;
     private FloatingActionButton fabVerAuditoria;
-    private FloatingActionButton fabBorrarAuditoria;
     private FloatingActionButton fabEditarAuditoria;
-    private FloatingActionButton fabGenerarXLS;
-    Boolean auditEstaCompleta;
-
     private ProgressBar progressBar;
     private Double promedioSeiketsu;
     private Double promedioShitsuke;
-
     private PDFWriter writer;
-
     private File fotoComprimida;
-    private Bitmap fotoOriginal;
-
-   private WritableSheet laHojaFotos;
-
-    public static final int MARGEN_IZQUIERDO = 25;
-    public static final int SALTO_LINEA = 14;
-    public static final int SEPARACIONFOTOS = 7;
-    private static final int letraTitulo=20;
-    private static final int letraPreguntas=10;
-    private static final int anchoFoto=5;
-    private static final int altoFoto=10;
-
-
-    //para pdf
-    Integer cursorX;
-    Integer cursorY;
-    //para excel
-    Integer fila;
-    Integer columna;
-
-    private DatabaseReference mDatabase;
-
+    private WritableSheet laHojaFotos;
     private SharedPreferences config;
-
     private Integer sumatoriaPreguntas;
     private Integer divisorPreguntas;
-
     private Double sumatoriaItems;
     private Integer divisorItems;
-
     private Double sumatoriaEse;
     private Integer divisorEse;
-
     private Auditoria auditActual;
     private DecimalFormat df;
 
-    private Integer cantItem;
-    private Integer cantPreguntasTotales;
+    public static Bitmap scaleBitmap(Bitmap elBit, int newWidth) {
+        Bitmap bitmap;
+        Matrix rotMatrix = new Matrix();
+        rotMatrix.postRotate(90);
+
+        if (elBit.getWidth() > elBit.getHeight()) {
+            bitmap = elBit;
+        } else {
+            bitmap = Bitmap.createBitmap(elBit, 0, 0, elBit.getWidth(), elBit.getHeight(), rotMatrix, true);
+        }
+        Double proporcion = (bitmap.getWidth() * 1.00 / bitmap.getHeight() * 1.00);
+
+        int newHeight = (int) Math.round(newWidth / proporcion);
+        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+
+        float scaleX = newWidth / (float) bitmap.getWidth();
+        float scaleY = newHeight / (float) bitmap.getHeight();
+        float pivotX = 0;
+        float pivotY = 0;
+
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
+        if (bitmap.getHeight() > bitmap.getWidth()) {
+            scaleMatrix.postRotate(90);
+        }
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.setMatrix(scaleMatrix);
+        canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
+        return scaledBitmap;
+    }
+
+    public static Bitmap scaleSinRotar(Bitmap bitmap, int newWidth) {
 
 
+        Double proporcion = (bitmap.getWidth() * 1.00 / bitmap.getHeight() * 1.00);
 
+        int newHeight = (int) Math.round(newWidth / proporcion);
+        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
 
+        float scaleX = newWidth / (float) bitmap.getWidth();
+        float scaleY = newHeight / (float) bitmap.getHeight();
+        float pivotX = 0;
+        float pivotY = 0;
 
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
 
-
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.setMatrix(scaleMatrix);
+        canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
+        return scaledBitmap;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,14 +188,13 @@ public class GraficosActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        if (bundle!=null) {
+        if (bundle != null) {
             idAudit = bundle.getString(AUDIT);
             origenIntent = bundle.getString(ORIGEN);
+            areaAuditada = bundle.getString(AREA);
         }
 
         df = new DecimalFormat("#.##");
-
-        //--guardar auditoria en firebase--//
 
 
         FragmentActivity unaActivity = this;
@@ -180,11 +202,13 @@ public class GraficosActivity extends AppCompatActivity {
         FragmentRadar fragmentRadar = (FragmentRadar) fragmentManager.findFragmentByTag("radar");
 
         if (fragmentRadar != null && fragmentRadar.isVisible()) {
-        }
-        else {
+            //
+            Toast.makeText(unaActivity, "", Toast.LENGTH_SHORT).show();
+        } else {
 
             cargarGraficoRadar();
             cargarGraficoBarras();
+            cargarGraficoHistorico();
         }
 
 
@@ -192,7 +216,7 @@ public class GraficosActivity extends AppCompatActivity {
 
         fabMenuGraficos.setMenuButtonColorNormal(ContextCompat.getColor(this, R.color.colorAccent));
 
-        fabEditarAuditoria=new FloatingActionButton(this);
+        fabEditarAuditoria = new FloatingActionButton(this);
         fabEditarAuditoria.setColorNormal(ContextCompat.getColor(this, R.color.tutorial1));
         fabEditarAuditoria.setButtonSize(FloatingActionButton.SIZE_MINI);
         fabEditarAuditoria.setLabelText(getResources().getString(R.string.editarAuditoria));
@@ -208,32 +232,23 @@ public class GraficosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Realm realm = Realm.getDefaultInstance();
-                Auditoria mAudit=realm.where(Auditoria.class)
-                        .equalTo("idAuditoria",idAudit)
+                Auditoria mAudit = realm.where(Auditoria.class)
+                        .equalTo("idAuditoria", idAudit)
                         .findFirst();
-                if (mAudit==null || !mAudit.getAuditEstaCerrada()) {
+                if (mAudit != null && !mAudit.getAuditEstaCerrada()) {
                     fabMenuGraficos.close(true);
-                    editarAuditoria(idAudit);
-                }
-                else{
-                    Snackbar.make(fabEditarAuditoria,getResources().getString(R.string.auditCerradaNoPuedeEditar),Snackbar.LENGTH_SHORT)
+                    editarAuditoria(idAudit, mAudit.getAreaAuditada().getIdArea());
+                } else {
+                    Snackbar.make(fabEditarAuditoria, getResources().getString(R.string.auditCerradaNoPuedeEditar), Snackbar.LENGTH_SHORT)
                             .setAction("Ok", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                 }
                             })
-                    .show();
+                            .show();
                 }
             }
         });
-
-
-
-
-
-
-
-
 
 
         fabVerAuditoria = new FloatingActionButton(this);
@@ -264,6 +279,19 @@ public class GraficosActivity extends AppCompatActivity {
             }
         });
 
+        //SI LA AUDITORIA ESTA CERRADA HABILITO BOTON REVISAR SI LA AUDIT ESTA INCOMPLETA HBILITO BOTON EDITAR
+
+        Realm realm = Realm.getDefaultInstance();
+        Auditoria mAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
+                .findFirst();
+        if (mAudit == null || !mAudit.getAuditEstaCerrada()) {
+            fabMenuGraficos.removeMenuButton(fabVerAuditoria);
+        } else {
+            fabMenuGraficos.removeMenuButton(fabEditarAuditoria);
+        }
+//SE INHABILITA ESTA FUNCION TEMPORALMENTE
+        /*
         fabGenerarPDF = new FloatingActionButton(this);
         fabGenerarPDF.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
         fabGenerarPDF.setButtonSize(FloatingActionButton.SIZE_MINI);
@@ -295,9 +323,9 @@ public class GraficosActivity extends AppCompatActivity {
             }
         });
 
+*/
 
-
-        fabGenerarXLS = new FloatingActionButton(this);
+        FloatingActionButton fabGenerarXLS = new FloatingActionButton(this);
         fabGenerarXLS.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
         fabGenerarXLS.setButtonSize(FloatingActionButton.SIZE_MINI);
         fabGenerarXLS.setLabelText(getString(R.string.generarXLS));
@@ -314,7 +342,7 @@ public class GraficosActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (FuncionesPublicas.isExternalStorageWritable()) {
                     fabMenuGraficos.close(true);
-                   new EnviarXLS().execute();
+                    new EnviarXLS().execute();
                 } else {
                     new MaterialDialog.Builder(v.getContext())
                             .title(getResources().getString(R.string.titNoMemoria))
@@ -329,7 +357,7 @@ public class GraficosActivity extends AppCompatActivity {
         });
 
 
-        fabBorrarAuditoria = new FloatingActionButton(this);
+        FloatingActionButton fabBorrarAuditoria = new FloatingActionButton(this);
         fabBorrarAuditoria.setColorNormal(ContextCompat.getColor(this, R.color.semaRojo));
         fabBorrarAuditoria.setButtonSize(FloatingActionButton.SIZE_MINI);
         fabBorrarAuditoria.setLabelText(getString(R.string.deleteAudit));
@@ -377,27 +405,54 @@ public class GraficosActivity extends AppCompatActivity {
 
             }
         });
+            String user = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        fabQuit = new FloatingActionButton(this);
-        fabQuit.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
-        fabQuit.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabQuit.setLabelText(getString(R.string.quit));
-        fabQuit.setImageResource(R.drawable.ic_exit_to_app_black_24dp);
-        fabMenuGraficos.addMenuButton(fabQuit);
 
-        fabQuit.setLabelColors(ContextCompat.getColor(this, R.color.tile2),
-                ContextCompat.getColor(this, R.color.light_grey),
-                ContextCompat.getColor(this, R.color.white_transparent));
-        fabQuit.setLabelTextColor(ContextCompat.getColor(this, R.color.primary_text));
+        //si somos superUser
+        if (user!=null && (user.equals("martin@gol.com") || user.equals("h.fontanet@hotmail.com") || user.equals("hrfontanet@gmail.com") || user.startsWith("doloresnollores"))) {
+            FloatingActionButton fabCompletarAudit = new FloatingActionButton(this);
+            fabCompletarAudit.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
+            fabCompletarAudit.setButtonSize(FloatingActionButton.SIZE_MINI);
+            fabCompletarAudit.setLabelText("completar Audit");
+            fabCompletarAudit.setImageResource(R.drawable.ic_check_black_24dp);
+            fabMenuGraficos.addMenuButton(fabCompletarAudit);
 
-        fabQuit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fabMenuGraficos.close(true);
-                //metodo rating
-                metodoRating();
-            }
-        });
+            fabCompletarAudit.setLabelColors(ContextCompat.getColor(this, R.color.tile2),
+                    ContextCompat.getColor(this, R.color.light_grey),
+                    ContextCompat.getColor(this, R.color.white_transparent));
+            fabCompletarAudit.setLabelTextColor(ContextCompat.getColor(this, R.color.primary_text));
+
+            fabCompletarAudit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(@NonNull Realm realm) {
+
+                            RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
+                                    .equalTo("idAudit", idAudit)
+                                    .findAll();
+
+                            for (Pregunta unaPreg : lasPreguntas
+                                    ) {
+
+                                if (unaPreg.getIdPregunta().equals("111") || unaPreg.getIdPregunta().equals("112")) {
+                                    //nada
+                                } else {
+                                    Random r = new Random();
+                                    int i1 = r.nextInt(5 + 1);
+                                    unaPreg.setPuntaje(i1);
+                                }
+                            }
+                            Toast.makeText(GraficosActivity.this, "cheat enabled", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                }
+            });
+        }
 
 
         boolean quiereVerTuto = config.getBoolean("quiereVerTuto", false);
@@ -418,21 +473,34 @@ public class GraficosActivity extends AppCompatActivity {
         }
 
 
-
     }
 
-    public void editarAuditoria(String idAudit) {
+    private void cargarGraficoHistorico() {
+
+        FragmentBarrasApiladasPorArea fragmentBarrasApiladasPorArea = new FragmentBarrasApiladasPorArea();
+        Bundle bundle = new Bundle();
+        bundle.putString(FragmentBarrasApiladasPorArea.IDAREA, areaAuditada);
+        bundle.putString(FragmentBarrasApiladasPorArea.ORIGEN, "graficos");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentBarrasApiladasPorArea.setArguments(bundle);
+        fragmentTransaction.add(R.id.contenedorGraficos, fragmentBarrasApiladasPorArea, "fragmentGraficoArea");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void editarAuditoria(String idAudit, String idArea) {
 
         Intent intent = new Intent(this, ActivityPreAuditoria.class);
         Bundle bundle = new Bundle();
-        bundle.putString(ActivityPreAuditoria.IDAREA, "NULL");
+        bundle.putString(ActivityPreAuditoria.IDAREA, idArea);
         bundle.putString(ActivityPreAuditoria.ORIGEN, "EDITAR_AUDITORIA");
         bundle.putString(ActivityPreAuditoria.IDAUDIT, idAudit);
 
         intent.putExtras(bundle);
         GraficosActivity.this.finish();
         startActivity(intent);
-        FragmentManager fragmentManager =  this.getSupportFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.popBackStack();
 
     }
@@ -490,24 +558,22 @@ public class GraficosActivity extends AppCompatActivity {
                 .start();
     }
 
-
     public void cargarGraficoRadar() {
 
-        calcularPuntajesAuditoria();
+        FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
 
         Realm realm = Realm.getDefaultInstance();
-        Auditoria laAudit=realm.where(Auditoria.class)
-                .equalTo("idAuditoria",idAudit)
+        Auditoria laAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
                 .findFirst();
-        auditActual=laAudit;
+        auditActual = laAudit;
 
-        if (laAudit!=null){
+        if (laAudit != null) {
             promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
             promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse();
             promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse();
             promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse();
             promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse();
-        }
 
         FragmentRadar graficoFragment = new FragmentRadar();
         Bundle bundle = new Bundle();
@@ -517,7 +583,7 @@ public class GraficosActivity extends AppCompatActivity {
         bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu);
         bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke);
         bundle.putString(FragmentRadar.AREA, laAudit.getAreaAuditada().getNombreArea());
-        bundle.putBoolean(FragmentRadar.COMPLETO,laAudit.getAuditEstaCerrada());
+        bundle.putBoolean(FragmentRadar.COMPLETO, laAudit.getAuditEstaCerrada());
 
         graficoFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -525,62 +591,10 @@ public class GraficosActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.contenedorGraficos, graficoFragment, "radar");
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        }
     }
 
-    private void calcularPuntajesAuditoria() {
-        Realm realm =Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Auditoria mAudit= realm.where(Auditoria.class)
-                        .equalTo("idAuditoria",idAudit)
-                        .findFirst();
 
-                if (mAudit!=null) {
-                    sumatoriaEse=0.0;
-                    divisorEse=0;
-                    for (Ese unaEse:mAudit.getListaEses())
-                    {
-                        sumatoriaItems=0.0;
-                        divisorItems=0;
-                        for (Item unItem:unaEse.getListaItem())
-                        {
-                            sumatoriaPreguntas =0;
-                            divisorPreguntas =0;
-                            for (Pregunta unaPregunta:unItem.getListaPreguntas())
-                            {
-                                if (unaPregunta.getPuntaje()!=null) {
-                                    sumatoriaPreguntas = sumatoriaPreguntas +unaPregunta.getPuntaje();
-                                }
-                                else{
-                                    auditEstaCompleta=false;
-                                }
-                                divisorPreguntas++;
-                            }
-                            if (divisorPreguntas==0) {
-                                unItem.setPuntajeItem(0.0);
-                            }
-                            else {
-                                Double auxPuntaje = sumatoriaPreguntas*1.00;
-                                Double auxDivisor=divisorPreguntas*1.00;
-                                unItem.setPuntajeItem(auxPuntaje/auxDivisor);
-                            }
-                            sumatoriaItems=sumatoriaItems+unItem.getPuntajeItem();
-                            divisorItems++;
-                        }
-                        unaEse.setPuntajeEse((sumatoriaItems/divisorItems));
-                        sumatoriaEse=sumatoriaEse+unaEse.getPuntajeEse();
-                        divisorEse++;
-                    }
-                    //DIVIDO POR 25 QUE ES EL 100%
-                    mAudit.setPuntajeFinal(sumatoriaEse/25);
-                }
-
-            }
-        });
-
-
-    }
 
     public void cargarGraficoBarras() {
         FragmentBarrasApiladas fragmentBarrasApiladas = new FragmentBarrasApiladas();
@@ -605,60 +619,11 @@ public class GraficosActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-
-
-    public void irALanding(){
+    public void irALanding() {
         Intent intent = new Intent(this, LandingActivity.class);
         startActivity(intent);
         GraficosActivity.this.finish();
     }
-
-
-    private class EnviarPDF extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... args) {
-            enviarPDF();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            progressBar.setVisibility(View.INVISIBLE);
-            super.onPostExecute(result);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-
-        }
-    }
-    private class EnviarXLS extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... args) {
-            crearExcel();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            progressBar.setVisibility(View.INVISIBLE);
-            super.onPostExecute(result);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-
-        }
-    }
-
-
-
 
     public void outputToFile(String fileName, String pdfContent, String encoding) {
         if (existeDirectorio()) {
@@ -732,9 +697,8 @@ public class GraficosActivity extends AppCompatActivity {
             if (!dir.exists() || !dir.isDirectory()) {
                 sePudo = dir.mkdirs();
             }
-        }
-        else{
-            sePudo= false;
+        } else {
+            sePudo = false;
         }
         return sePudo;
     }
@@ -784,7 +748,8 @@ public class GraficosActivity extends AppCompatActivity {
         View v = rootView.findViewById(R.id.contenedorGraficos);
 
         Bitmap unBitmap = screenShot(v);
-        Bitmap scaledBitmap = scaleSinRotar(unBitmap, 250);
+        Integer ancho250 = 250;
+        Bitmap scaledBitmap = scaleSinRotar(unBitmap, ancho250);
         // Bitmap SunBitmap=Bitmap.createScaledBitmap(unBitmap, 300,510,false);
         writer.addImage(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - 85 - SALTO_LINEA - scaledBitmap.getHeight() - SEPARACIONFOTOS, scaledBitmap);
 
@@ -794,28 +759,28 @@ public class GraficosActivity extends AppCompatActivity {
     public void enviarPDF() {
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Item> itemsSeiri =realm.where(Item.class)
-                .equalTo("idAudit",idAudit)
-                .beginsWith("idItem","1")
+        RealmResults<Item> itemsSeiri = realm.where(Item.class)
+                .equalTo("idAudit", idAudit)
+                .beginsWith("idItem", "1")
                 .findAll();
-        RealmResults<Item> ItemsSeiton =realm.where(Item.class)
-                .equalTo("idAudit",idAudit)
-                .beginsWith("idItem","2")
+        RealmResults<Item> ItemsSeiton = realm.where(Item.class)
+                .equalTo("idAudit", idAudit)
+                .beginsWith("idItem", "2")
                 .findAll();
-        RealmResults<Item> ItemsSeiso =realm.where(Item.class)
-                .equalTo("idAudit",idAudit)
-                .beginsWith("idItem","3")
+        RealmResults<Item> ItemsSeiso = realm.where(Item.class)
+                .equalTo("idAudit", idAudit)
+                .beginsWith("idItem", "3")
                 .findAll();
-        RealmResults<Item> ItemsSeiketsu =realm.where(Item.class)
-                .equalTo("idAudit",idAudit)
-                .beginsWith("idItem","4")
+        RealmResults<Item> ItemsSeiketsu = realm.where(Item.class)
+                .equalTo("idAudit", idAudit)
+                .beginsWith("idItem", "4")
                 .findAll();
-        RealmResults<Item> ItemsShitsuke =realm.where(Item.class)
-                .equalTo("idAudit",idAudit)
-                .beginsWith("idItem","5")
+        RealmResults<Item> ItemsShitsuke = realm.where(Item.class)
+                .equalTo("idAudit", idAudit)
+                .beginsWith("idItem", "5")
                 .findAll();
-        Auditoria mAudit=realm.where(Auditoria.class)
-                .equalTo("idAuditoria",idAudit)
+        Auditoria mAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
                 .findFirst();
 
 
@@ -876,7 +841,7 @@ public class GraficosActivity extends AppCompatActivity {
         cursorY = cursorY - SALTO_LINEA;
         writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
         //ESCRIBO LA S
-        writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, letraTitulo, laLista.get(0).getIdItem().substring(0,1)+"S");
+        writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, letraTitulo, laLista.get(0).getIdItem().substring(0, 1) + "S");
 
         //linea separacion
         writer.addLine(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65), PaperSize.LETTER_WIDTH - MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65));
@@ -884,10 +849,10 @@ public class GraficosActivity extends AppCompatActivity {
         cursorY = cursorY - SALTO_LINEA;
         cursorX = MARGEN_IZQUIERDO;
 //        EMPIEZO A RECORRER LOS SUBITEMS
-        recorrerSubitemLista(laLista, cursorX, cursorY, mAudit.getFechaAuditoria());
+        recorrerSubitemLista(laLista, cursorX, cursorY, FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(), "largo"));
     }
 
-    private void determinaSiEntranDatosVerticalmente(String ese){
+    private void determinaSiEntranDatosVerticalmente(String ese) {
         if (cursorY < 2 * MARGEN_IZQUIERDO) {
             crearNuevaPagina(ese);
         }
@@ -896,19 +861,19 @@ public class GraficosActivity extends AppCompatActivity {
     private void recorrerSubitemLista(List<Item> laLista, int x, int y, String fecha) {
         cursorX = x;
         cursorY = y;
-        Realm realm  = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
-        determinaSiEntranDatosVerticalmente(laLista.get(0).getIdItem().substring(0,1));
-        
+        determinaSiEntranDatosVerticalmente(laLista.get(0).getIdItem().substring(0, 1));
+
         for (Item sub : laLista) {
-            determinaSiEntranDatosVerticalmente(laLista.get(0).getIdItem().substring(0,1));
-            String criterio=sub.getCriterio();
-            String textoItem=sub.getTextoItem();
-            writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.criterio)+" "+sub.getCriterio());
+            determinaSiEntranDatosVerticalmente(laLista.get(0).getIdItem().substring(0, 1));
+            String criterio = sub.getCriterio();
+            String textoItem = sub.getTextoItem();
+            writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.criterio) + " " + sub.getCriterio());
             cursorY = cursorY - SALTO_LINEA;
-            writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.item) + " "+ sub.getTextoItem());
+            writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.item) + " " + sub.getTextoItem());
             Double saltoLinea = 1.5 * SALTO_LINEA;
-            Integer saltoLineaInt= saltoLinea.intValue();
+            Integer saltoLineaInt = saltoLinea.intValue();
             cursorY = cursorY - saltoLineaInt;
 
 
@@ -917,30 +882,29 @@ public class GraficosActivity extends AppCompatActivity {
 
             for (Pregunta unaPreg :
                     sub.getListaPreguntas()) {
-                    determinaSiEntranDatosVerticalmente(laLista.get(0).getIdItem().substring(0,1));
+                determinaSiEntranDatosVerticalmente(laLista.get(0).getIdItem().substring(0, 1));
 
-                    cursorX=MARGEN_IZQUIERDO+(MARGEN_IZQUIERDO/2);
+                cursorX = MARGEN_IZQUIERDO + (MARGEN_IZQUIERDO / 2);
 
-                if (unaPreg.getPuntaje()!=null ) {
+                if (unaPreg.getPuntaje() != null) {
                     writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, unaPreg.getTextoPregunta());
                     cursorY = cursorY - SALTO_LINEA;
                     writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.score) + unaPreg.getPuntaje().toString());
                     Double saltoLineaD = 1.5 * SALTO_LINEA;
-                    Integer saltoLineaIntD= saltoLinea.intValue();
+                    Integer saltoLineaIntD = saltoLinea.intValue();
                     cursorY = cursorY - saltoLineaInt;
-                }
-                else{
+                } else {
                     writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, unaPreg.getTextoPregunta());
                     cursorY = cursorY - SALTO_LINEA;
                     writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.score) + " 0");
                     Double saltoLineaA = 1.5 * SALTO_LINEA;
-                    Integer saltoLineaIntB= saltoLinea.intValue();
+                    Integer saltoLineaIntB = saltoLinea.intValue();
                     cursorY = cursorY - saltoLineaInt;
 
                 }
 
                 //renglonesFoto=Math.round(sub.getListaFotos().size()/3);
-                cursorX=MARGEN_IZQUIERDO;
+                cursorX = MARGEN_IZQUIERDO;
                 for (Foto foto : unaPreg.getListaFotos()
                         ) {
                     Foto unaFoto = foto;
@@ -948,13 +912,14 @@ public class GraficosActivity extends AppCompatActivity {
                     BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                     bmOptions.inScaled = false;
                     Bitmap rawBitmap = BitmapFactory.decodeFile(unFile.getAbsolutePath(), bmOptions);
-                    Bitmap bitmapScaled = scaleBitmap(rawBitmap, 270);
+                    Integer ancho270 = 270;
+                    Bitmap bitmapScaled = scaleBitmap(rawBitmap, ancho270);
 
 //              SI LA FOTO NO ENTRA EN LO QUE QUEDA DE PAGINA
                     if (cursorY - bitmapScaled.getHeight() < SALTO_LINEA) {
                         //si la imagen no entra armo una pagina nueva
                         //vuelvo a poner los titulos y demas
-                        crearNuevaPagina(laLista.get(0).getIdItem().substring(0,1));
+                        crearNuevaPagina(laLista.get(0).getIdItem().substring(0, 1));
 
                         //FINALMENTE AGREGO LA FOTO
                         writer.addImage(cursorX, cursorY - bitmapScaled.getHeight(), bitmapScaled);
@@ -962,123 +927,71 @@ public class GraficosActivity extends AppCompatActivity {
                         //CURSOR X = MARGEN MAS ANCHO FOTO
                         cursorX = cursorX + bitmapScaled.getWidth();
                         //CURSOR Y = POSICION ACTUAL MENOS ALTO FOTO
-                    }
-                    else {
+                    } else {
 //                      HAY LUGAR HACIA ABAJO, CHEQUEO QUE ENTRE HORIZONTALMENTE
                         if (cursorX + bitmapScaled.getWidth() > 612 - MARGEN_IZQUIERDO) {
 //                            NO ENTRA
 //                            LA PONGO ABAJO
                             cursorX = MARGEN_IZQUIERDO;
                             //POSICIONE EL CURSOR INMEDIATAMENTE DEBAJO DE LA FOTO DE ARRIBA Y LE AGREGUE UN SALTO DE LINEA PARA QUE NO QUEDEN PEGADAS LAS FOTOS
-                            cursorY = cursorY - bitmapScaled.getHeight()-SALTO_LINEA;
-                            writer.addImage(cursorX, cursorY-bitmapScaled.getHeight(), bitmapScaled);
+                            cursorY = cursorY - bitmapScaled.getHeight() - SALTO_LINEA;
+                            writer.addImage(cursorX, cursorY - bitmapScaled.getHeight(), bitmapScaled);
 //                            AGREGO SALTO DE LINEA AL ALTO DE LA IMAGEN PARA QUE QUEDE UNA SEPARACION
-                            writer.addText(cursorX, cursorY-bitmapScaled.getHeight()-SEPARACIONFOTOS , letraPreguntas, unaFoto.getComentarioFoto());
+                            writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, letraPreguntas, unaFoto.getComentarioFoto());
                             cursorX = cursorX + bitmapScaled.getWidth();
 
 
                         } else {
-                                if (cursorX == MARGEN_IZQUIERDO) {
-                                    writer.addImage(cursorX, cursorY - bitmapScaled.getHeight(), bitmapScaled);
-                                    writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, letraPreguntas, unaFoto.getComentarioFoto());
-                                    cursorX = cursorX + bitmapScaled.getWidth();
+                            if (cursorX == MARGEN_IZQUIERDO) {
+                                writer.addImage(cursorX, cursorY - bitmapScaled.getHeight(), bitmapScaled);
+                                writer.addText(cursorX, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, letraPreguntas, unaFoto.getComentarioFoto());
+                                cursorX = cursorX + bitmapScaled.getWidth();
 
-                                } else {
-    //                              ENTRA EN LA MISMA LINEA
-                                    writer.addImage(cursorX + SEPARACIONFOTOS, cursorY-bitmapScaled.getHeight(), bitmapScaled);
-                                    writer.addText(cursorX + SEPARACIONFOTOS, cursorY -bitmapScaled.getHeight()- SEPARACIONFOTOS, letraPreguntas, unaFoto.getComentarioFoto());
-                                    cursorX = cursorX + SEPARACIONFOTOS + bitmapScaled.getWidth();
-                                }
+                            } else {
+                                //                              ENTRA EN LA MISMA LINEA
+                                writer.addImage(cursorX + SEPARACIONFOTOS, cursorY - bitmapScaled.getHeight(), bitmapScaled);
+                                writer.addText(cursorX + SEPARACIONFOTOS, cursorY - bitmapScaled.getHeight() - SEPARACIONFOTOS, letraPreguntas, unaFoto.getComentarioFoto());
+                                cursorX = cursorX + SEPARACIONFOTOS + bitmapScaled.getWidth();
+                            }
                         }
                     }
                 }
 
 //                DEJO EL CURSOR Y LISTO PARA SEGUIR AGREGANDO COSAS
-                if (unaPreg.getListaFotos().size()>0) {
-                    cursorY =cursorY-152-SALTO_LINEA;
-                    cursorX=MARGEN_IZQUIERDO;
+                if (unaPreg.getListaFotos().size() > 0) {
+                    cursorY = cursorY - 152 - SALTO_LINEA;
+                    cursorX = MARGEN_IZQUIERDO;
                 }
             }
         }
     }
-public void crearNuevaPagina(String ese){
+
+    public void crearNuevaPagina(String ese) {
         Realm realm = Realm.getDefaultInstance();
-        Auditoria nAudit= realm.where(Auditoria.class)
-                .equalTo("idAuditoria",idAudit)
+        Auditoria nAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
                 .findFirst();
-    writer.newPage();
-    cursorX = 0;
-    cursorY = 792;
-    //fuente titulo
-    writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
-    //escribir titulo
-    writer.addText(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - MARGEN_IZQUIERDO, letraTitulo, getResources().getString(R.string.tituloPdf));
-    cursorY = cursorY - MARGEN_IZQUIERDO;
-    cursorX = cursorX + MARGEN_IZQUIERDO;
-    //fuente fecha escribir fecga
-    writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.fecha) + nAudit.getFechaAuditoria());
-    cursorY = cursorY - SALTO_LINEA;
-    writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
-    //ESCRIBO LA S
-    writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, letraTitulo, ese+"S");
+        writer.newPage();
+        cursorX = 0;
+        cursorY = 792;
+        //fuente titulo
+        writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
+        //escribir titulo
+        writer.addText(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - MARGEN_IZQUIERDO, letraTitulo, getResources().getString(R.string.tituloPdf));
+        cursorY = cursorY - MARGEN_IZQUIERDO;
+        cursorX = cursorX + MARGEN_IZQUIERDO;
+        //fuente fecha escribir fecga
+        writer.addText(cursorX, cursorY - SALTO_LINEA, letraPreguntas, getResources().getString(R.string.fecha) + FuncionesPublicas.dameFechaString(nAudit.getFechaAuditoria(), "largo"));
+        cursorY = cursorY - SALTO_LINEA;
+        writer.setFont(StandardFonts.SUBTYPE, StandardFonts.HELVETICA, StandardFonts.WIN_ANSI_ENCODING);
+        //ESCRIBO LA S
+        writer.addText(PaperSize.LETTER_WIDTH - 4 * MARGEN_IZQUIERDO, cursorY, letraTitulo, ese + "S");
 
-    //linea separacion
-    writer.addLine(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65), PaperSize.LETTER_WIDTH - MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65));
-    cursorY = PaperSize.LETTER_HEIGHT - 65;
-    cursorY = cursorY - SALTO_LINEA;
-    cursorX = MARGEN_IZQUIERDO;
-}
-    public static Bitmap scaleBitmap(Bitmap elBit, int newWidth) {
-        Bitmap bitmap;
-        Matrix rotMatrix = new Matrix();
-        rotMatrix.postRotate(90);
-
-        if (elBit.getWidth() > elBit.getHeight()) {
-            bitmap = elBit;
-        } else {
-            bitmap = Bitmap.createBitmap(elBit, 0, 0, elBit.getWidth(), elBit.getHeight(), rotMatrix, true);
-        }
-        Double proporcion = (bitmap.getWidth() * 1.00 / bitmap.getHeight() * 1.00);
-
-        int newHeight = (int) Math.round(newWidth / proporcion);
-        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
-
-        float scaleX = newWidth / (float) bitmap.getWidth();
-        float scaleY = newHeight / (float) bitmap.getHeight();
-        float pivotX = 0;
-        float pivotY = 0;
-
-        Matrix scaleMatrix = new Matrix();
-        scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
-        if (bitmap.getHeight() > bitmap.getWidth()) {
-            scaleMatrix.postRotate(90);
-        }
-        Canvas canvas = new Canvas(scaledBitmap);
-        canvas.setMatrix(scaleMatrix);
-        canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
-        return scaledBitmap;
-    }
-
-    public static Bitmap scaleSinRotar(Bitmap bitmap, int newWidth) {
-
-
-        Double proporcion = (bitmap.getWidth() * 1.00 / bitmap.getHeight() * 1.00);
-
-        int newHeight = (int) Math.round(newWidth / proporcion);
-        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
-
-        float scaleX = newWidth / (float) bitmap.getWidth();
-        float scaleY = newHeight / (float) bitmap.getHeight();
-        float pivotX = 0;
-        float pivotY = 0;
-
-        Matrix scaleMatrix = new Matrix();
-        scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
-
-        Canvas canvas = new Canvas(scaledBitmap);
-        canvas.setMatrix(scaleMatrix);
-        canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
-        return scaledBitmap;
+        //linea separacion
+        writer.addLine(MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65), PaperSize.LETTER_WIDTH - MARGEN_IZQUIERDO, PaperSize.LETTER_HEIGHT - (65));
+        cursorY = PaperSize.LETTER_HEIGHT - 65;
+        cursorY = cursorY - SALTO_LINEA;
+        cursorX = MARGEN_IZQUIERDO;
     }
 
     public void metodoRating() {
@@ -1124,7 +1037,7 @@ public void crearNuevaPagina(String ese){
                             }
                         })
                         .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                        .content(getResources().getString(R.string.rateUsl1)+"\n"+getResources().getString(R.string.rateUsl2))
+                        .content(getResources().getString(R.string.rateUsl1) + "\n" + getResources().getString(R.string.rateUsl2))
                         .show();
 
             } else {
@@ -1134,15 +1047,11 @@ public void crearNuevaPagina(String ese){
                 irALanding();
             }
 
-        }
-        else{
+        } else {
             irALanding();
         }
 
     }
-
-
-
 
     public void metodoRatingOnBack() {
         boolean quiereVerRating = config.getBoolean("quiereVerRating", true);
@@ -1188,7 +1097,7 @@ public void crearNuevaPagina(String ese){
                             }
                         })
                         .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                        .content(getResources().getString(R.string.rateUsl1)+"\n"+getResources().getString(R.string.rateUsl2))
+                        .content(getResources().getString(R.string.rateUsl1) + "\n" + getResources().getString(R.string.rateUsl2))
                         .show();
 
             } else {
@@ -1199,92 +1108,85 @@ public void crearNuevaPagina(String ese){
 
             }
 
-        }
-        else{
+        } else {
             definirDondeIrOnBack();
         }
 
     }
 
-
-
-
-    private Intent rateIntentForUrl(String url)
-    {
+    private Intent rateIntentForUrl(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, getPackageName())));
         int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-        if (Build.VERSION.SDK_INT >= 21)
-        {
+        if (Build.VERSION.SDK_INT >= 21) {
             flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
-        }
-        else
-        {
+        } else {
             //noinspection deprecation
             flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
         }
         intent.addFlags(flags);
         return intent;
     }
+
     @Override
     public void onBackPressed() {
         metodoRatingOnBack();
 
     }
 
-    public void definirDondeIrOnBack(){
+    public void definirDondeIrOnBack() {
         if (origenIntent.equals("myAudits")) {
             Intent unIntent = new Intent(GraficosActivity.this, ActivityMyAudits.class);
             startActivity(unIntent);
         } else {
-            GraficosActivity.super.onBackPressed();
+            Intent unIntent = new Intent(GraficosActivity.this, LandingActivity.class);
+            startActivity(unIntent);
 
         }
         GraficosActivity.this.finish();
     }
 
-     public WritableWorkbook crearLibroExcel(String fileName){
-         //exports must use a temp file while writing to avoid memory hogging
-         WorkbookSettings wbSettings = new WorkbookSettings();
-         wbSettings.setUseTemporaryFileDuringWrite(true);
+    public WritableWorkbook crearLibroExcel(String fileName) {
+        //exports must use a temp file while writing to avoid memory hogging
+        WorkbookSettings wbSettings = new WorkbookSettings();
+        wbSettings.setUseTemporaryFileDuringWrite(true);
 
-         //add on the your app's path
-         File dir = new File(getExternalFilesDir(null) + File.separator + "nomad" + File.separator + "audit5s" + File.separator + FirebaseAuth.getInstance().getCurrentUser().getEmail() + File.separator + "audits");
-         //make them in case they're not there
-         if (FuncionesPublicas.hayPermisoParaEscribir(this,fabMenuGraficos)) {
-             if (!dir.exists()) {
-                 dir.mkdirs();
-             }
-         }
-         else{
-             Toast.makeText(this, getResources().getString(R.string.errorRevisarPermisos), Toast.LENGTH_SHORT).show();
-         }
-         //create a standard java.io.File object for the Workbook to use
-         File wbfile = new File(dir,fileName);
+        //add on the your app's path
+        File dir = new File(getExternalFilesDir(null) + File.separator + "nomad" + File.separator + "audit5s" + File.separator + FirebaseAuth.getInstance().getCurrentUser().getEmail() + File.separator + "audits");
+        //make them in case they're not there
+        if (FuncionesPublicas.hayPermisoParaEscribir(this, fabMenuGraficos)) {
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.errorRevisarPermisos), Toast.LENGTH_SHORT).show();
+        }
+        //create a standard java.io.File object for the Workbook to use
+        File wbfile = new File(dir, fileName);
 
-         WritableWorkbook wb = null;
+        WritableWorkbook wb = null;
 
-         try{
-             //create a new WritableWorkbook using the java.io.File and
-             //WorkbookSettings from above
-             wb = Workbook.createWorkbook(wbfile,wbSettings);
-         }catch(IOException ex){
+        try {
+            //create a new WritableWorkbook using the java.io.File and
+            //WorkbookSettings from above
+            wb = Workbook.createWorkbook(wbfile, wbSettings);
+        } catch (IOException ex) {
 
-         }
-         return wb;
-     }
+        }
+        return wb;
+    }
 
     public WritableSheet crearHoja(WritableWorkbook wb,
-                                     String sheetName, int sheetIndex){
+                                   String sheetName, int sheetIndex) {
         //create a new WritableSheet and return it
         return wb.createSheet(sheetName, sheetIndex);
     }
 
     public void escribirCelda(int columnPosition, int rowPosition, String contents, String headerCell,
-                          WritableSheet sheet) throws RowsExceededException, WriteException {
+                              WritableSheet sheet) throws RowsExceededException, WriteException {
         //create a new cell with contents at position
-        Label newCell = new Label(columnPosition,rowPosition,contents);
+        Label newCell = new Label(columnPosition, rowPosition, contents);
 
-        if (headerCell.equals("titulo")){
+        if (headerCell.equals("titulo")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
             headerFont.setColour(Colour.WHITE);
@@ -1295,7 +1197,7 @@ public void crearNuevaPagina(String ese){
             headerFormat.setBorder(Border.ALL, BorderLineStyle.THICK);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("subTotal")){
+        if (headerCell.equals("subTotal")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1306,7 +1208,7 @@ public void crearNuevaPagina(String ese){
             newCell.setCellFormat(headerFormat);
         }
 
-        if (headerCell.equals("subTotalEse")){
+        if (headerCell.equals("subTotalEse")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 14);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1318,7 +1220,7 @@ public void crearNuevaPagina(String ese){
             newCell.setCellFormat(headerFormat);
         }
 
-        if (headerCell.equals("totalAudit")){
+        if (headerCell.equals("totalAudit")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 14);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1329,7 +1231,7 @@ public void crearNuevaPagina(String ese){
             headerFormat.setBackground(Colour.PALE_BLUE);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("textoNormal")){
+        if (headerCell.equals("textoNormal")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1339,7 +1241,7 @@ public void crearNuevaPagina(String ese){
             headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("textoNormal2")){
+        if (headerCell.equals("textoNormal2")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 16);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1350,7 +1252,7 @@ public void crearNuevaPagina(String ese){
             headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("textoNormalCentrado")){
+        if (headerCell.equals("textoNormalCentrado")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 12);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1361,7 +1263,7 @@ public void crearNuevaPagina(String ese){
             headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("textoNormalCentradoSinBorde")){
+        if (headerCell.equals("textoNormalCentradoSinBorde")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
@@ -1371,44 +1273,44 @@ public void crearNuevaPagina(String ese){
             headerFormat.setWrap(true);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("bordeInferior")){
+        if (headerCell.equals("bordeInferior")) {
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
 
-            headerFormat.setBorder(Border.BOTTOM,BorderLineStyle.THIN);
+            headerFormat.setBorder(Border.BOTTOM, BorderLineStyle.THIN);
             headerFormat.setWrap(true);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("bordeLateral")){
+        if (headerCell.equals("bordeLateral")) {
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
 
-            headerFormat.setBorder(Border.RIGHT,BorderLineStyle.THIN);
+            headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
             headerFormat.setWrap(true);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("ultimaCelda")){
+        if (headerCell.equals("ultimaCelda")) {
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            headerFormat.setBorder(Border.RIGHT,BorderLineStyle.THIN);
-            headerFormat.setBorder(Border.BOTTOM,BorderLineStyle.THIN);
+            headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
+            headerFormat.setBorder(Border.BOTTOM, BorderLineStyle.THIN);
             headerFormat.setWrap(true);
             newCell.setCellFormat(headerFormat);
         }
-        if (headerCell.equals("bordeSuperior")){
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-
-            headerFormat.setBorder(Border.TOP,BorderLineStyle.THIN);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("bordeSuperiorUltimaCelda")){
+        if (headerCell.equals("bordeSuperior")) {
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
 
-            headerFormat.setBorder(Border.TOP,BorderLineStyle.THIN);
-            headerFormat.setBorder(Border.RIGHT,BorderLineStyle.THIN);
+            headerFormat.setBorder(Border.TOP, BorderLineStyle.THIN);
+            headerFormat.setWrap(true);
+            newCell.setCellFormat(headerFormat);
+        }
+        if (headerCell.equals("bordeSuperiorUltimaCelda")) {
+            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
+            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
+
+            headerFormat.setBorder(Border.TOP, BorderLineStyle.THIN);
+            headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
             headerFormat.setWrap(true);
             newCell.setCellFormat(headerFormat);
         }
@@ -1416,25 +1318,25 @@ public void crearNuevaPagina(String ese){
         sheet.addCell(newCell);
     }
 
-    public void dibujarBordesFoto(Integer numColumna, Integer numFila){
+    public void dibujarBordesFoto(Integer numColumna, Integer numFila) {
         try {
 //            dibujarBordesFoto
-            for(Integer i=0;i<7;i++){
-                escribirCelda(numColumna+i, numFila+altoFoto+2,"","bordeInferior",laHojaFotos);
+            for (Integer i = 0; i < 7; i++) {
+                escribirCelda(numColumna + i, numFila + altoFoto + 2, "", "bordeInferior", laHojaFotos);
             }
-            for(Integer i=0;i<7;i++){
-                if (i==6) {
-                    escribirCelda(numColumna+i, numFila,"","bordeSuperiorUltimaCelda",laHojaFotos);
+            for (Integer i = 0; i < 7; i++) {
+                if (i == 6) {
+                    escribirCelda(numColumna + i, numFila, "", "bordeSuperiorUltimaCelda", laHojaFotos);
                 } else {
-                    escribirCelda(numColumna+i, numFila,"","bordeSuperior",laHojaFotos);
+                    escribirCelda(numColumna + i, numFila, "", "bordeSuperior", laHojaFotos);
                 }
             }
 //            linea lateral
-            for(Integer i=0;i<13;i++){
-                if (i==12) {
-                    escribirCelda(numColumna+anchoFoto+1, numFila+i,"","ultimaCelda",laHojaFotos);
+            for (Integer i = 0; i < 13; i++) {
+                if (i == 12) {
+                    escribirCelda(numColumna + anchoFoto + 1, numFila + i, "", "ultimaCelda", laHojaFotos);
                 } else {
-                    escribirCelda(numColumna+anchoFoto+1, numFila+i,"","bordeLateral",laHojaFotos);
+                    escribirCelda(numColumna + anchoFoto + 1, numFila + i, "", "bordeLateral", laHojaFotos);
                 }
             }
         } catch (WriteException e) {
@@ -1442,26 +1344,64 @@ public void crearNuevaPagina(String ese){
         }
     }
 
-    public void crearExcel(){
-        fila=0;
-        columna=0;
+    public void crearExcel() {
+        Integer fila = 0;
+        Integer columna = 0;
         Realm realm = Realm.getDefaultInstance();
-        Auditoria mAudit=realm.where(Auditoria.class)
-                .equalTo("idAuditoria",idAudit)
+        Auditoria mAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
                 .findFirst();
 
 //        CREO EL LIBRO CON EL NOMBRE AREA+FECHA
 
-        WritableWorkbook elLibro=crearLibroExcel("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + mAudit.getFechaAuditoria() + ".xls");
-        WritableSheet laHoja=crearHoja(elLibro,getResources().getString(R.string.resultados),0);
-        laHojaFotos=crearHoja(elLibro,getResources().getString(R.string.tabImagenes),1);
-        
+        WritableWorkbook elLibro = crearLibroExcel("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(), "corta") + ".xls");
+        WritableSheet laHoja = crearHoja(elLibro, getResources().getString(R.string.resultados), 0);
+        laHojaFotos = crearHoja(elLibro, getResources().getString(R.string.tabImagenes), 1);
+        WritableSheet laHojaResumen = crearHoja(elLibro, "Resumen", 2);
 
-        laHoja.setColumnView(1,32);
-        laHoja.setColumnView(2,32);
-        laHoja.setColumnView(4,32);
-        laHoja.setColumnView(7,32);
-        laHoja.setColumnView(3,11);
+        //saco el screen y lo convierto en un FILE
+        View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
+        View v = rootView.findViewById(R.id.contenedorGraficos);
+
+        Bitmap unBitmap = screenShot(v);
+        Bitmap scaledBitmap = scaleSinRotar(unBitmap, 250);
+
+        File filesDir = getApplicationContext().getFilesDir();
+        File imageFile = new File(filesDir, "temp" + ".jpg");
+
+        OutputStream os;
+        try {
+            os = new FileOutputStream(imageFile);
+            unBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
+
+//        lo comprimo
+        // Bitmap SunBitmap=Bitmap.createScaledBitmap(unBitmap, 300,510,false);
+        try {
+            fotoComprimida = new Compressor(this)
+                    .setMaxWidth(640)
+                    .setMaxHeight(480)
+                    .setQuality(75)
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                    .compressToFile(imageFile, imageFile.getName().replace(".jpg", ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        WritableImage image = new WritableImage(
+                1, 1, 4, 44, fotoComprimida); //Supports only 'png' images
+        laHojaResumen.addImage(image);
+
+
+        laHoja.setColumnView(1, 32);
+        laHoja.setColumnView(2, 32);
+        laHoja.setColumnView(4, 32);
+        laHoja.setColumnView(7, 32);
+        laHoja.setColumnView(3, 11);
 
 //        laHoja.setColumnView(23,520);
 //        laHoja.setColumnView(57,520);
@@ -1471,111 +1411,118 @@ public void crearNuevaPagina(String ese){
 //        laHoja.setColumnView(135,520);
 
 
-
         //SETEO LOS TITULOS DE LA HOJA
         try {
-            escribirCelda(columna,fila,"S","titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titCriterio),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titItem),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titNumPregunta),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titPregunta),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titPuntaje),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titPorcentaje),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titComentario),"titulo",laHoja);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titFotos),"titulo",laHoja);
-            columna=0;
-            fila=1;
+            escribirCelda(columna, fila, "S", "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titCriterio), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titItem), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titComentario), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titFotos), "titulo", laHoja);
+            columna = 0;
+            fila = 1;
 
 
-        for (Ese unaEse:
-                mAudit.getListaEses()) {
+            for (Ese unaEse :
+                    mAudit.getListaEses()) {
 //            escribo el numero de ese
 
-            escribirCelda(columna,fila,unaEse.getIdEse() + "S","textoNormal2",laHoja);
-            columna=columna+1;
+                escribirCelda(columna, fila, unaEse.getIdEse() + "S", "textoNormal2", laHoja);
+                columna = columna + 1;
 
-            //recorro los item de la ese
+                //recorro los item de la ese
 
-            cantItem=unaEse.getListaItem().size();
-            cantPreguntasTotales=0;
+                Integer cantItem = unaEse.getListaItem().size();
+                Integer cantPreguntasTotales = 0;
 
-            for (Item unItem :
-                    unaEse.getListaItem()) {
-                Integer cantPreguntas=unItem.getListaPreguntas().size();
+                for (Item unItem :
+                        unaEse.getListaItem()) {
+                    Integer cantPreguntas = unItem.getListaPreguntas().size();
 //
 //                merge columna criterio
-                laHoja.mergeCells(columna,fila,columna,fila+cantPreguntas-1);
-                escribirCelda(columna,fila,unItem.getCriterio(),"textoNormal",laHoja);
-                columna++;
+                    laHoja.mergeCells(columna, fila, columna, fila + cantPreguntas - 1);
+                    escribirCelda(columna, fila, unItem.getCriterio(), "textoNormal", laHoja);
+                    columna++;
 //                merge columna item
-               laHoja.mergeCells(columna,fila,columna,fila+cantPreguntas-1);
-                escribirCelda(columna,fila,unItem.getTextoItem(),"textoNormal",laHoja);
-                columna++;
+                    laHoja.mergeCells(columna, fila, columna, fila + cantPreguntas - 1);
+                    escribirCelda(columna, fila, unItem.getTextoItem(), "textoNormal", laHoja);
+                    columna++;
 
-                //recorro las preguntas del item
-                for (Pregunta unaPreg:
-                    unItem.getListaPreguntas() ) {
+                    //recorro las preguntas del item
+                    for (Pregunta unaPreg :
+                            unItem.getListaPreguntas()) {
 
-                    escribirCelda(columna,fila,unaPreg.getIdPregunta(),"textoNormalCentrado",laHoja);
-                    columna++;
-                    escribirCelda(columna,fila,unaPreg.getTextoPregunta(),"textoNormal",laHoja);
-                    columna++;
-                    escribirCelda(columna,fila,unaPreg.getPuntaje().toString(),"textoNormalCentrado",laHoja);
-                    columna++;
-                    Double unPuntaje =((unaPreg.getPuntaje()/5.00)*100);
-                    String elPuntaje = df.format(unPuntaje);
-                    escribirCelda(columna,fila,elPuntaje+"%","textoNormalCentrado",laHoja);
-                    columna++;
-                    escribirCelda(columna,fila,unaPreg.getComentario(),"textoNormal",laHoja);
-                    columna++;
-                    escribirCelda(columna,fila,"","textoNormal",laHoja);
-                    columna=3;
+                        escribirCelda(columna, fila, unaPreg.getIdPregunta(), "textoNormalCentrado", laHoja);
+                        columna++;
+                        escribirCelda(columna, fila, unaPreg.getTextoPregunta(), "textoNormal", laHoja);
+                        columna++;
+                        Double unPuntaje;
+                        //si el puntaje es cero o null pone cero
+                        if (unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()!=0) {
+                            escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), "textoNormalCentrado", laHoja);
+                            columna++;
+                            unPuntaje = ((unaPreg.getPuntaje() / 5.00) * 100);
+                        } else {
+                            escribirCelda(columna, fila, "0", "textoNormalCentrado", laHoja);
+                            columna++;
+                            unPuntaje = (0.0);
+                        }
+                        String elPuntaje = df.format(unPuntaje);
+                        escribirCelda(columna, fila, elPuntaje + "%", "textoNormalCentrado", laHoja);
+                        columna++;
+                        escribirCelda(columna, fila, unaPreg.getComentario(), "textoNormal", laHoja);
+                        columna++;
+                        escribirCelda(columna, fila, "", "textoNormal", laHoja);
+                        columna = 3;
+                        fila++;
+                        cantPreguntasTotales++;
+                    }
+                    columna = 0;
+                    escribirCelda(1, fila, getResources().getString(R.string.totalSubitem) + unItem.getIdItem(), "subTotal", laHoja);
+                    laHoja.mergeCells(1, fila, 4, fila);
+                    Double punItemDouble = (unItem.getPuntajeItem() / 5) * 100;
+                    String puntItemStr = df.format(punItemDouble);
+                    escribirCelda(5, fila, puntItemStr + "%", "subTotal", laHoja);
+                    laHoja.mergeCells(5, fila, 8, fila);
+                    columna = 1;
                     fila++;
-                    cantPreguntasTotales++;
                 }
-                columna=0;
-                escribirCelda(1,fila,getResources().getString(R.string.totalSubitem )+ unItem.getIdItem(),"subTotal",laHoja);
-               laHoja.mergeCells(1,fila,4,fila);
-               Double punItemDouble=(unItem.getPuntajeItem()/5)*100;
-               String puntItemStr=df.format(punItemDouble);
-                escribirCelda(5,fila,puntItemStr+"%","subTotal",laHoja);
-                laHoja.mergeCells(5,fila,8,fila);
-                columna=1;
+
+                laHoja.mergeCells(0, fila - cantPreguntasTotales - cantItem, 0, fila - 1);
+                columna = 0;
+
+                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + unaEse.getIdEse() + "S", "subTotalEse", laHoja);
+                laHoja.mergeCells(0, fila, 4, fila);
+
+                Double puntEseDouble = (unaEse.getPuntajeEse() / 5) * 100;
+
+                String puntEseStr = df.format(puntEseDouble);
+                escribirCelda(5, fila, puntEseStr + "%", "subTotalEse", laHoja);
+                laHoja.mergeCells(5, fila, 8, fila);
+                columna = 0;
                 fila++;
             }
 
-            laHoja.mergeCells(0,fila-cantPreguntasTotales-cantItem,0,fila-1);
-            columna=0;
+            Double puntFinalDouble = mAudit.getPuntajeFinal() * 100.00;
+            String puntFinal = df.format(puntFinalDouble);
+            escribirCelda(0, fila, getResources().getString(R.string.totalAudit), "totalAudit", laHoja);
+            laHoja.mergeCells(0, fila, 4, fila);
 
-            escribirCelda(0,fila,getResources().getString(R.string.totalEse )+" "+unaEse.getIdEse()+"S","subTotalEse",laHoja);
-            laHoja.mergeCells(0,fila,4,fila);
-
-            Double puntEseDouble=(unaEse.getPuntajeEse()/5)*100;
-
-            String puntEseStr=df.format(puntEseDouble);
-            escribirCelda(5,fila,puntEseStr+"%","subTotalEse",laHoja);
-            laHoja.mergeCells(5,fila,8,fila);
-            columna=0;
-            fila++;
-        }
-            
-            Double puntFinalDouble=mAudit.getPuntajeFinal()*100.00;
-            String puntFinal= df.format(puntFinalDouble);
-            escribirCelda(0,fila,getResources().getString(R.string.totalAudit ),"totalAudit",laHoja);
-            laHoja.mergeCells(0,fila,4,fila);
-
-            escribirCelda(5,fila,puntFinal+"%","totalAudit",laHoja);
-            laHoja.mergeCells(5,fila,8,fila);
-            columna=0;
-            fila=0;
+            escribirCelda(5, fila, puntFinal + "%", "totalAudit", laHoja);
+            laHoja.mergeCells(5, fila, 8, fila);
+            columna = 0;
+            fila = 0;
 
             //mando el mail
 
@@ -1585,33 +1532,33 @@ public void crearNuevaPagina(String ese){
         }
 
         //popular imagenes
-        columna=0;
-        fila=0;
+        columna = 0;
+        fila = 0;
 
         try {
-            escribirCelda(columna,fila,"S","titulo",laHojaFotos);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titItem),"titulo",laHojaFotos);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titPregunta),"titulo",laHojaFotos);
-            columna=columna+1;
-            escribirCelda(columna,fila,getResources().getString(R.string.titPuntaje),"titulo",laHojaFotos);
+            escribirCelda(columna, fila, "S", "titulo", laHojaFotos);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titItem), "titulo", laHojaFotos);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHojaFotos);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHojaFotos);
             columna++;
 
-            columna=0;
-            fila=1;
-            laHojaFotos.setColumnView(1,32);
-            laHojaFotos.setColumnView(2,32);
+            columna = 0;
+            fila = 1;
+            laHojaFotos.setColumnView(1, 32);
+            laHojaFotos.setColumnView(2, 32);
 
-            for (Ese unaEse: mAudit.getListaEses()
-                 ) {
+            for (Ese unaEse : mAudit.getListaEses()
+                    ) {
                 //pongo la S en la primera columna
 
                 for (Item unItem : unaEse.getListaItem()
                         ) {
                     for (Pregunta unaPregunta : unItem.getListaPreguntas()
                             ) {
-                        if (unaPregunta.getListaFotos()!=null && unaPregunta.getListaFotos().size()>0) {
+                        if (unaPregunta.getListaFotos() != null && unaPregunta.getListaFotos().size() > 0) {
                             //ESCRIBO LA ESE
                             escribirCelda(columna, fila, unaEse.getIdEse() + "S", "textoNormal2", laHojaFotos);
                             columna = columna + 1;
@@ -1619,45 +1566,45 @@ public void crearNuevaPagina(String ese){
                             escribirCelda(columna, fila, unItem.getTextoItem(), "textoNormal", laHojaFotos);
                             columna++;
                             //ESCRIBO LA PREGUNTA
-                            escribirCelda(columna,fila,unaPregunta.getTextoPregunta(),"textoNormal",laHojaFotos);
+                            escribirCelda(columna, fila, unaPregunta.getTextoPregunta(), "textoNormal", laHojaFotos);
                             columna++;
-                            escribirCelda(columna,fila,unaPregunta.getPuntaje().toString(),"textoNormalCentrado",laHojaFotos);
+                            escribirCelda(columna, fila, unaPregunta.getPuntaje().toString(), "textoNormalCentrado", laHojaFotos);
                             columna++;
 
-                            laHojaFotos.mergeCells(0,fila,0,fila+altoFoto+2);
-                            laHojaFotos.mergeCells(1,fila,1,fila+altoFoto+2);
-                            laHojaFotos.mergeCells(2,fila,2,fila+altoFoto+2);
-                            laHojaFotos.mergeCells(3,fila,3,fila+altoFoto+2);
+                            laHojaFotos.mergeCells(0, fila, 0, fila + altoFoto + 2);
+                            laHojaFotos.mergeCells(1, fila, 1, fila + altoFoto + 2);
+                            laHojaFotos.mergeCells(2, fila, 2, fila + altoFoto + 2);
+                            laHojaFotos.mergeCells(3, fila, 3, fila + altoFoto + 2);
                             //PEGO LAS FOTOS5
-                            Integer contador=1;
-                            for (Foto unaFoto:unaPregunta.getListaFotos()
-                                 ) {
+                            Integer contador = 1;
+                            for (Foto unaFoto : unaPregunta.getListaFotos()
+                                    ) {
 //                                separacion entre fotos
-                                laHojaFotos.setColumnView(columna,4);
-                                laHojaFotos.setColumnView(columna+anchoFoto+1,4);
+                                laHojaFotos.setColumnView(columna, 4);
+                                laHojaFotos.setColumnView(columna + anchoFoto + 1, 4);
                                 //ESCRIBO EL TITULO
 
-                                    columna = columna+1;
+                                columna = columna + 1;
 
-                                WritableImage image = new WritableImage(
-                                        columna, fila+1,anchoFoto, altoFoto,new File(unaFoto.getRutaFoto())); //Supports only 'png' images
-                                laHojaFotos.addImage(image);
+                                WritableImage imagen = new WritableImage(
+                                        columna, fila + 1, anchoFoto, altoFoto, new File(unaFoto.getRutaFoto())); //Supports only 'png' images
+                                laHojaFotos.addImage(imagen);
 
 
-                                escribirCelda(columna-1,0,getResources().getString(R.string.titFotos)+" "+contador.toString(),"titulo",laHojaFotos);
-                                laHojaFotos.mergeCells(columna-1,0,columna+5,0);
+                                escribirCelda(columna - 1, 0, getResources().getString(R.string.titFotos) + " " + contador.toString(), "titulo", laHojaFotos);
+                                laHojaFotos.mergeCells(columna - 1, 0, columna + 5, 0);
 
 
 //                                escribo el comentario de la foto y mergeo las celdas esas
-                                escribirCelda(columna,fila+altoFoto+1,unaFoto.getComentarioFoto(),"textoNormalCentradoSinBorde",laHojaFotos);
-                                laHojaFotos.mergeCells(columna,fila+altoFoto+1,columna+anchoFoto-1,fila+altoFoto+1);
-                                dibujarBordesFoto(columna-1,fila);
-                                columna = columna+anchoFoto+1;
+                                escribirCelda(columna, fila + altoFoto + 1, unaFoto.getComentarioFoto(), "textoNormalCentradoSinBorde", laHojaFotos);
+                                laHojaFotos.mergeCells(columna, fila + altoFoto + 1, columna + anchoFoto - 1, fila + altoFoto + 1);
+                                dibujarBordesFoto(columna - 1, fila);
+                                columna = columna + anchoFoto + 1;
 
                                 contador++;
                             }
-                            fila= fila+altoFoto+3;
-                            columna=0;
+                            fila = fila + altoFoto + 3;
+                            columna = 0;
 
                         }
 
@@ -1673,11 +1620,55 @@ public void crearNuevaPagina(String ese){
             e.printStackTrace();
         }
 
-        mandarExcelPorMail("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + mAudit.getFechaAuditoria() + ".xls");
+        mandarExcelPorMail("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(), "corta") + ".xls");
 
     }
 
- }
+    private class EnviarPDF extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            enviarPDF();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressBar.setVisibility(View.INVISIBLE);
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+
+        }
+    }
+
+    private class EnviarXLS extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            crearExcel();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressBar.setVisibility(View.INVISIBLE);
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+
+        }
+    }
+
+}
 
 
 

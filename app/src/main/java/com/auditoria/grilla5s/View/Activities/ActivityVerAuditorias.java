@@ -32,7 +32,7 @@ public class ActivityVerAuditorias extends AppCompatActivity {
         // Get a support ActionBar corresponding to this toolbar
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.blancoNomad));
 
         Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
         TextView unText=toolbar.findViewById(R.id.textoToolbar);

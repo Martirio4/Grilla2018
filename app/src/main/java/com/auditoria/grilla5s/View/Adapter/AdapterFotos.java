@@ -67,13 +67,18 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
         FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
         if (esRecyclerThumbNail){
+
+            //SI LA FOTO ES EVIDENCIA DE AUDITORIAS ANTERIORES
             viewCelda = layoutInflater.inflate(R.layout.detalle_celda_recycler_fotos_viejas, parent, false);
         }
         else{
+            //SI LA FOTO ES EVIDENCIA ACTUAL ACTIVA EL LONG CLICK
             viewCelda = layoutInflater.inflate(R.layout.detalle_celda_recycler_fotos, parent, false);
+            viewCelda.setOnLongClickListener(this);
         }
 
         viewCelda.setOnClickListener(this);
+
 
         return new FotoViewHolder(viewCelda);
     }
@@ -101,6 +106,10 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
         return true;
     }
 
+    public void borrarFoto(Foto unaFoto) {
+        listaFotosOriginales.remove(listaFotosOriginales.indexOf(unaFoto));
+    }
+
     //creo el viewholder que mantiene las referencias
     //de los elementos de la celda
 
@@ -113,6 +122,7 @@ public class AdapterFotos extends RecyclerView.Adapter implements View.OnClickLi
 
         public FotoViewHolder(View itemView) {
             super(itemView);
+
             imageView = itemView.findViewById(R.id.imagenCamara);
             if (!esRecyclerThumbNail){
                 textView = itemView.findViewById(R.id.nombreNuevaArea);
