@@ -139,7 +139,7 @@ public class FragmentPreAudit extends Fragment {
         if (FuncionesPublicas.completoTodosLosPuntos(idAudit)){
             auditable.cerrarAuditoria();
             auditable.actualizarPuntaje(idAudit);
-            auditable.cargarAuditoriaEnFirebase(idAudit);
+            //auditable.cargarAuditoriaEnFirebase(idAudit);
         }
         else {
 

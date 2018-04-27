@@ -169,7 +169,7 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="textoPregunta552">Check-lists de 5S están completos</string>
     <string name="quieroReportar">Quiero contactar al desarrollador</string>
 
-    <string name="favorAgregueComentarioGeneral">Please, add a general comment for this question</string>
+    <string name="favorAgregueComentarioGeneral">Agregue un comentario general para la pregunta</string>
 
 
     <string name="no">No</string>
@@ -225,10 +225,10 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="faltanPreguntas">Still to complete:</string>
     <string name="pregunta">questions</string>
     <string name="tituloFragmentPreAudit">Choose \"S\" and item to audit</string>
-    <string name="tagCommentNuevo">General comments</string>
+    <string name="tagCommentNuevo">Comentario general</string>
     <string name="tagCommentViejo">Comentarios última auditoría</string>
     <string name="saveAudit">Guardar auditoría</string>
-    <string name="editarAuditoria">Edit audit</string>
+    <string name="editarAuditoria">Editar auditoría</string>
 
 
 
@@ -276,7 +276,7 @@ Existe um plan de acción para las no conformidades encontradas luego de la audi
     <string name="textoOpcion1_seiketsu">Sin estándar</string>
     <string name="textoOpcion2_seiketsu">Algún estándar</string>
     <string name="textoOpcion3_seiketsu">Varios estándar</string>
-    <string name="textoOpcion4_seiketsu">Estámdar en todos las áreas</string>
+    <string name="textoOpcion4_seiketsu">Estándar en todas las áreas</string>
     <string name="textoOpcion5_seiketsu">Estándar visual</string>
     <string name="textoOpcion6_seiketsu">Estándar visual en todas las áreas</string>
     <string name="textoOpcion1_shitsuke">Sin actividades de equipo</string>

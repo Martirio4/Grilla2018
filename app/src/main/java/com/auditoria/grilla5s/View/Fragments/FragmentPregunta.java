@@ -772,7 +772,7 @@ public class FragmentPregunta extends Fragment {
         if (FuncionesPublicas.completoTodosLosPuntos(idAudit)){
             avisable.cerrarAuditoria();
             avisable.actualizarPuntaje(idAudit);
-            avisable.cargarAuditoriaEnFirebase(idAudit);
+            //avisable.cargarAuditoriaEnFirebase(idAudit);
         }
         else {
 

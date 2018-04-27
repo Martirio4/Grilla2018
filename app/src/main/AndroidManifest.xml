@@ -43,6 +43,7 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".View.Activities.SettingsActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".View.Activities.LandingActivity" />
         <activity
             android:name=".View.Activities.ActivityVerAuditorias"
@@ -55,7 +56,9 @@
             android:name=".View.Activities.ActivityPreAuditoria"
             android:launchMode="singleTop"
             android:parentActivityName=".View.Activities.LandingActivity" />
-        <activity android:name=".View.Activities.LandingActivity" />
+        <activity android:name=".View.Activities.LandingActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".View.Activities.ActivityAuditoria"
             android:screenOrientation="portrait"
