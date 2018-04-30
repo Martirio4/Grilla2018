@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -41,6 +42,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
@@ -385,6 +389,7 @@ public class FragmentManageAreas extends Fragment {
 
     public void crearDialogoNombreArea(final Foto unaFoto){
 
+
         new MaterialDialog.Builder(getContext())
                 .title(getResources().getString(R.string.addNewArea))
                 .inputRange(1,40)
@@ -402,6 +407,7 @@ public class FragmentManageAreas extends Fragment {
                         unArea.setFotoArea(unaFoto);
                         unArea.setIdArea("area" + UUID.randomUUID());
 
+
                         //guardo nueva area en Realm
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -411,14 +417,56 @@ public class FragmentManageAreas extends Fragment {
                             }
                         });
 
-                        registrarCantidadAreasFirebase();
-                        updateAdapter();
 
-                        Toast.makeText(getContext(), unArea.getNombreArea()+" "+getResources().getString(R.string.creadoExitosamente), Toast.LENGTH_SHORT).show();
+
+                        List<String> unaLista=new ArrayList<>();
+                        unaLista.add(getContext().getResources().getString(R.string.areaIndustrial));
+                        unaLista.add(getContext().getResources().getString(R.string.areaOficina));
+                        unaLista.add(getContext().getResources().getString(R.string.areaExterna));
+
+                        new MaterialDialog.Builder(getContext())
+                                .title(R.string.tipoArea)
+                                .items(unaLista)
+                                .widgetColor(getContext().getResources().getColor(R.color.tile3))
+                                .cancelable(false)
+                                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                                    @Override
+                                    public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
+                                        Realm realm =Realm.getDefaultInstance();
+                                        realm.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(@NonNull Realm realm) {
+                                                Area realmArea1= realm.where(Area.class)
+                                                        .equalTo("idArea", unArea.getIdArea())
+                                                        .findFirst();
+                                                if (realmArea1!=null) {
+                                                    List<String>lista=new ArrayList<>();
+                                                    lista.addAll(Arrays.asList("A","B","C"));
+                                                    realmArea1.setTipoArea(lista.get(which));
+                                                }
+                                                else{
+                                                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                        registrarCantidadAreasFirebase();
+                                        updateAdapter();
+                                        Toast.makeText(getContext(), unArea.getNombreArea()+" "+getResources().getString(R.string.creadoExitosamente), Toast.LENGTH_SHORT).show();
+                                        return true;
+                                    }
+                                })
+                                .positiveText(R.string.ok)
+                                .show();
+
+
 
 
                     }
                 }).show();
+
+
+
+
 
     }
 

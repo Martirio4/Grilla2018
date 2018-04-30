@@ -67,9 +67,21 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
             //      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
             controllerDatos= new ControllerDatos(this);
-            idAudit=controllerDatos.instanciarAuditoria();
+
 
             Realm realm = Realm.getDefaultInstance();
+            Area elArea=realm.where(Area.class)
+                    .equalTo("idArea",idArea)
+                    .findFirst();
+
+            if (elArea!=null && elArea.getTipoArea()!=null){
+                idAudit=controllerDatos.instanciarAuditoria(elArea.getTipoArea());
+            }
+            else if(elArea!=null && elArea.getTipoArea()==null){
+                //si no tiene tipo la instacio como zona industrial
+                idAudit=controllerDatos.instanciarAuditoria("A");
+            }
+
             realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

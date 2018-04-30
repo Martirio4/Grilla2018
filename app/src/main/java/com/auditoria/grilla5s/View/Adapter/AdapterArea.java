@@ -158,6 +158,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         private TextView textUltima;
         private LinearLayout linearUltima;
         private TextView tagultima;
+        private TextView textViewTipo;
 
         public AreaViewHolder(View itemView) {
             super(itemView);
@@ -166,10 +167,12 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             linearUltima=itemView.findViewById(R.id.linearUltimoPuntaje);
             textUltima=itemView.findViewById(R.id.ultimoPuntaje);
             tagultima=itemView.findViewById(R.id.tagUltimoPuntaje);
+            textViewTipo= itemView.findViewById(R.id.tipoArea);
 
 
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textView.setTypeface(robotoL);
+            textViewTipo.setTypeface(robotoL);
             fabEliminar = (ImageButton) itemView.findViewById(R.id.botonEliminar);
             fabEliminar.setVisibility(View.GONE);
 
@@ -199,6 +202,23 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             }
 
             textView.setText(unArea.getNombreArea());
+            if (unArea.getTipoArea()!=null) {
+                switch (unArea.getTipoArea()){
+                    case "A":
+                        textViewTipo.setText(R.string.areaIndustrial);
+                        break;
+                    case "B":
+                        textViewTipo.setText(R.string.areaOficina);
+                        break;
+                    case "C":
+                        textViewTipo.setText(R.string.areaExterna);
+                        break;
+                    default:
+                        textViewTipo.setText(R.string.areaIndustrial);
+                        break;
+
+                }
+            }
 
             Realm realm = Realm.getDefaultInstance();
             Auditoria unAudit=realm.where(Auditoria.class)

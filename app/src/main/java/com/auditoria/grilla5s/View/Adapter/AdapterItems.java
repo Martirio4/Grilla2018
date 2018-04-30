@@ -116,12 +116,15 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
         private TextView textViewFaltantes;
 
 
+
         public ItemViewHolder(View itemView) {
             super(itemView);
 
             textViewNumero=  itemView.findViewById(R.id.tv_numero_item);
             textViewDescripcion=  itemView.findViewById(R.id.tv_descripcion_item);
             textViewFaltantes=itemView.findViewById(R.id.tv_preguntasFaltantes);
+
+
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             Typeface robotoR = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Regular.ttf");
             textViewNumero.setTypeface(robotoR);

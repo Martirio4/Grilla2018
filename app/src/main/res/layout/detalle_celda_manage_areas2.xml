@@ -38,21 +38,30 @@
 
 
             <LinearLayout
+                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="70"
                 android:orientation="vertical">
 
                     <TextView
                     android:id="@+id/nombreArea"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margenChico"
                     android:gravity="center_vertical|start"
                     android:textColor="@color/tile5"
                     android:textSize="18sp" />
-
+                <TextView
+                    android:id="@+id/tipoArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margenChico"
+                    android:gravity="center_vertical|start"
+                    android:textColor="@color/tile5"
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/linearUltimoPuntaje"

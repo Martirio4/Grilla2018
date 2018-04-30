@@ -64,6 +64,7 @@
                     android:layout_margin="@dimen/margenMini"
                     android:textColor="@color/primary_text"
                     android:id="@+id/item0"
+                    android:text="5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -112,16 +113,49 @@
                     android:id="@+id/item5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
             </RadioGroup>
 
-            <Button
-                android:id="@+id/btn_criterios"
-                android:textColor="@color/marfil"
-                android:background="@drawable/boton_criterio"
-                android:text="@string/verCriterios"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                </LinearLayout>
+                <Button
+                    android:id="@+id/btn_criterios"
+                    android:textColor="@color/marfil"
+                    android:background="@drawable/boton_criterio"
+                    android:text="@string/verCriterios"
+                    android:layout_gravity="center"
+                    android:layout_weight="60"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <RadioGroup
+                    android:id="@+id/rg2"
+                    android:layout_margin="@dimen/margenChico"
+                    android:gravity="center"
+                    android:layout_weight="50"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:textColorHighlight="@color/tile3"
+                        app:buttonTint="@color/colorAccent"
+                        android:layout_margin="@dimen/margenMini"
+                        android:textColor="@color/primary_text"
+                        android:id="@+id/itemNA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
             <TextView
                 android:layout_marginTop="@dimen/margenChico"
                 android:visibility="gone"

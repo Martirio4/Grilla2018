@@ -46,8 +46,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
@@ -58,8 +56,6 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
 import pl.tajchert.nammu.PermissionCallback;
-
-import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -114,6 +110,9 @@ public class FragmentPregunta extends Fragment {
     private AppCompatRadioButton rb5;
     private TextView evidenciaNueva;
 
+    private RadioGroup rg2;
+    private AppCompatRadioButton rb6;
+
     private Button verCriterio;
 
     private FloatingActionMenu fabMenu;
@@ -121,6 +120,9 @@ public class FragmentPregunta extends Fragment {
     private FloatingActionButton fabComment;
     private FloatingActionButton fabGuardar;
     private FloatingActionButton fabSalir;
+
+    private RadioGroup.OnCheckedChangeListener listener1;
+    private RadioGroup.OnCheckedChangeListener listener2;
 
     private ImageView separador;
     private ImageView separadorInvertido;
@@ -172,14 +174,17 @@ public class FragmentPregunta extends Fragment {
                 .equalTo("idItem",idItem)
                 .findFirst();
 
-        rg1=(RadioGroup) view.findViewById(R.id.rg1);
-        verCriterio=(Button)view.findViewById(R.id.btn_criterios);
+        rg1= view.findViewById(R.id.rg1);
+        rg2= view.findViewById(R.id.rg2);
+        verCriterio=view.findViewById(R.id.btn_criterios);
         rb0 = view.findViewById(R.id.item0);
         rb1 = view.findViewById(R.id.item1);
         rb2 = view.findViewById(R.id.item2);
         rb3 = view.findViewById(R.id.item3);
         rb4 = view.findViewById(R.id.item4);
         rb5 = view.findViewById(R.id.item5);
+        rb6=view.findViewById(R.id.itemNA);
+
         textoPregunta = view.findViewById(R.id.textoPregunta);
         textViewCommentNuevo = view.findViewById(R.id.tv_comment_nuevo);
         textViewCommentViejo = view.findViewById(R.id.tv_comment_viejo);
@@ -200,6 +205,7 @@ public class FragmentPregunta extends Fragment {
         rb3.setText("3");
         rb4.setText("4");
         rb5.setText("5");
+        rb6.setText("n/a");
         textoPregunta.setText(enunciado);
         criterioTitulo.setText(elItem.getCriterio());
         criterioDescripcion.setText(elItem.getTextoItem());
@@ -207,26 +213,65 @@ public class FragmentPregunta extends Fragment {
 
 //        HANDLE RADIOGROUP
         //LISTENER PARA EL RADIOGROUP
-        rg1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        listener1= new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()));
 
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                if (checkedId!=-1) {
+                        puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()));
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
 
-                        Pregunta preg = realm.where(Pregunta.class)
-                                .equalTo("idAudit",idAudit)
-                                .equalTo("idPregunta",idPregunta)
-                                .findFirst();
-                        preg.setPuntaje(puntuacion);
+                            Pregunta preg = realm.where(Pregunta.class)
+                                    .equalTo("idAudit",idAudit)
+                                    .equalTo("idPregunta",idPregunta)
+                                    .findFirst();
+                            if (preg!=null) {
+                                preg.setPuntaje(puntuacion);
+                            }
 
-                    }
-                });
+                        }
+                    });
+
+                    limpiarRadioGroups(1,checkedId);
+
+                }
             }
-        });
+        };
+
+        listener2 =new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                if (checkedId !=-1) {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+
+                            Pregunta preg = realm.where(Pregunta.class)
+                                    .equalTo("idAudit",idAudit)
+                                    .equalTo("idPregunta",idPregunta)
+                                    .findFirst();
+                            if (preg!=null) {
+                                preg.setPuntaje(9);
+                            }
+
+                        }
+                    });
+                    limpiarRadioGroups(2,checkedId);
+
+                }
+            }
+        };
+
+        rg1.setOnCheckedChangeListener(listener1);
+        rg2.setOnCheckedChangeListener(listener2);
+
+
+
 
         //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
         Realm mrealm = Realm.getDefaultInstance();
@@ -235,9 +280,15 @@ public class FragmentPregunta extends Fragment {
                 .equalTo("idPregunta",idPregunta)
                 .findFirst();
         if (pregunta!=null && pregunta.getPuntaje()!=null){
-            Integer puntaje=pregunta.getPuntaje();
-            RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje));
-            unRadioButton.setChecked(true);
+            if (pregunta.getPuntaje()!=9) {
+                Integer puntaje=pregunta.getPuntaje();
+                RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje));
+                unRadioButton.setChecked(true);
+            }
+            else{
+                RadioButton unRadioButton=(RadioButton) (rg2.getChildAt(0));
+                unRadioButton.setChecked(true);
+            }
         }
         if (pregunta!=null&&pregunta.getComentario()!=null){
             tagCommentNuevo.setVisibility(View.VISIBLE);
@@ -615,6 +666,7 @@ public class FragmentPregunta extends Fragment {
             rb4.setEnabled(false);
             rb5.setEnabled(false);
             rb2.setEnabled(false);
+            rb6.setEnabled(false);
            fabMenu.setVisibility(View.GONE);
         }
         else{
@@ -624,6 +676,7 @@ public class FragmentPregunta extends Fragment {
             rb4.setEnabled(true);
             rb5.setEnabled(true);
             rb2.setEnabled(true);
+            rb6.setEnabled(true);
             fabMenu.setVisibility(View.VISIBLE);
         }
         return view;
@@ -691,6 +744,21 @@ public class FragmentPregunta extends Fragment {
         }
         adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
        adapterFotosViejas.notifyDataSetChanged();
+    }
+
+    public void limpiarRadioGroups(Integer cualToque, Integer puntaje){
+        switch (cualToque){
+            case 1:
+                rg2.setOnCheckedChangeListener(null);
+                rg2.clearCheck();
+                rg2.setOnCheckedChangeListener(listener2);
+                break;
+            case 2:
+                rg1.setOnCheckedChangeListener(null);
+                rg1.clearCheck();
+                rg1.setOnCheckedChangeListener(listener1);
+                break;
+        }
     }
 
     private void seguirConTutorial() {
@@ -1017,9 +1085,6 @@ public class FragmentPregunta extends Fragment {
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    public void calcularPuntjes(){
-
-    }
 
 }
 

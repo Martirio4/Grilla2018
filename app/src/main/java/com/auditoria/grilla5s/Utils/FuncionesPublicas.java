@@ -297,12 +297,19 @@ public class FuncionesPublicas {
                             Integer sumatoriaPreguntas = 0;
                             Integer divisorPreguntas = 0;
                             for (Pregunta unaPregunta : unItem.getListaPreguntas()) {
-                                if (unaPregunta.getPuntaje() != null) {
-                                    sumatoriaPreguntas = sumatoriaPreguntas + unaPregunta.getPuntaje();
-                                } else {
-                                   Boolean auditEstaCompleta = false;
+
+
+                                if (unaPregunta.getPuntaje()!=null){
+                                    if (unaPregunta.getPuntaje()!=9){
+                                        sumatoriaPreguntas = sumatoriaPreguntas + unaPregunta.getPuntaje();
+                                        divisorPreguntas++;
+                                    }
                                 }
-                                divisorPreguntas++;
+                                else{
+                                    Boolean auditEstaCompleta = false;
+                                    divisorPreguntas++;
+                                }
+
                             }
                             if (divisorPreguntas == 0) {
                                 unItem.setPuntajeItem(0.0);
