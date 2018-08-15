@@ -665,6 +665,7 @@
     <string name="textoOpcion3_seiri">Em alguns lugares</string>
     <string name="textoOpcion2_seiri">Em vários lugares</string>
     <string name="textoOpcion1_seiri">Em todos os lugares</string>
+    <string name="version">v1.0.10</string>
 
 
 </resources>
