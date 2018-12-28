@@ -3055,7 +3055,7 @@ public class ControllerDatos {
 
 
 
-    public void crearCuestionarios(){
+    public void crearCuestionariosDefault(){
 
         Realm realm=Realm.getDefaultInstance();
 
@@ -3063,7 +3063,7 @@ public class ControllerDatos {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Auditoria nuevaAuditoria = realm.createObject(Auditoria.class,"Audit_modeloA");
+                Auditoria nuevaAuditoria = realm.createObject(Auditoria.class,"1");
                 nuevaAuditoria.setEsUltimaAuditoria(false);
                 nuevaAuditoria.setAuditEstaCerrada(true);
                 nuevaAuditoria.setPuntajeFinal(0.0);
@@ -4128,7 +4128,7 @@ public class ControllerDatos {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Auditoria nuevaAuditoria = realm.createObject(Auditoria.class,"Audit_modeloB");
+                Auditoria nuevaAuditoria = realm.createObject(Auditoria.class,"2");
                 nuevaAuditoria.setEsUltimaAuditoria(false);
                 nuevaAuditoria.setAuditEstaCerrada(true);
                 nuevaAuditoria.setPuntajeFinal(0.0);
@@ -5048,7 +5048,7 @@ public class ControllerDatos {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Auditoria nuevaAuditoria = realm.createObject(Auditoria.class,"Audit_modeloC");
+                Auditoria nuevaAuditoria = realm.createObject(Auditoria.class,"3");
                 nuevaAuditoria.setEsUltimaAuditoria(false);
                 nuevaAuditoria.setAuditEstaCerrada(true);
                 nuevaAuditoria.setPuntajeFinal(0.0);
@@ -5976,7 +5976,7 @@ public class ControllerDatos {
 
         });
         //endregion
-
-
     }
+
+
 }

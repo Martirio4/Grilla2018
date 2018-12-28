@@ -2,6 +2,7 @@ package com.auditoria.audit5S_Full.View.Fragments;
 
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -56,7 +57,7 @@ public class FragmentSettings extends Fragment {
     private Button areas;
     private Button borrar;
     private Button tuto;
-    private Button rate;
+    private Button editCuestionarios;
 
 
     private ImageView lin1;
@@ -64,6 +65,7 @@ public class FragmentSettings extends Fragment {
     private ImageView lin3;
     private ImageView lin4;
     private ImageView lin5;
+    private Notificable notificable;
 
     private DatabaseReference mDatabase;
 
@@ -73,6 +75,12 @@ public class FragmentSettings extends Fragment {
     }
 
     private SharedPreferences config;
+
+    public interface Notificable{
+        public void abrirEditorDeCuestionarios();
+
+        void abrirFragmentGestionAreas();
+    }
 
 
     @Override
@@ -91,11 +99,11 @@ public class FragmentSettings extends Fragment {
         Button logout=view.findViewById(R.id.botonLogOut);
         borrar=view.findViewById(R.id.botonBorrarTodo);
         tuto=view.findViewById(R.id.botonTuto);
-        rate = view.findViewById(R.id.botonRateApp);
+        editCuestionarios = view.findViewById(R.id.botonRateApp);
         Button salir=view.findViewById(R.id.botonVolver);
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
 
-        rate.setTypeface(roboto);
+        editCuestionarios.setTypeface(roboto);
         areas.setTypeface(roboto);
         logout.setTypeface(roboto);
         borrar.setTypeface(roboto);
@@ -114,11 +122,7 @@ public class FragmentSettings extends Fragment {
             @Override
             public void onClick(View v) {
 
-                FragmentManageAreas fragmentManageAreas = new FragmentManageAreas();
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,"fragmentManageAreas");
-                fragmentTransaction.commit();
+                notificable.abrirFragmentGestionAreas();
 
             }
         });
@@ -230,15 +234,11 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        rate.setOnClickListener(new View.OnClickListener() {
+        editCuestionarios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                SharedPreferences.Editor editor = config.edit();
-                editor.putBoolean("quiereVerRating", false);
-                editor.commit();
-                registrarEnvioDeRating();
-                rateApp();
+                //LE DIGO A SETTING ACTIVITY QUE ABRA EL EDITOR DE CUESTIONARIOS
+               notificable.abrirEditorDeCuestionarios();
             }
         });
 
@@ -479,5 +479,11 @@ public class FragmentSettings extends Fragment {
         }
         intent.addFlags(flags);
         return intent;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.notificable=(Notificable)context;
     }
 }

@@ -31,7 +31,7 @@ import java.io.File;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class SettingsActivity extends AppCompatActivity implements AdapterArea.Eliminable, FragmentManageAreas.Avisable{
+public class SettingsActivity extends AppCompatActivity implements FragmentSettings.Notificable, AdapterArea.Eliminable, FragmentManageAreas.Avisable{
 
     private LinearLayout layout;
 
@@ -190,6 +190,17 @@ public class SettingsActivity extends AppCompatActivity implements AdapterArea.E
         this.finish();
     }
 
+    @Override
+    public void abrirEditorDeCuestionarios() {
 
+    }
 
+    @Override
+    public void abrirFragmentGestionAreas() {
+        FragmentManageAreas fragmentManageAreas = new FragmentManageAreas();
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,"fragmentManageAreas");
+        fragmentTransaction.commit();
+    }
 }

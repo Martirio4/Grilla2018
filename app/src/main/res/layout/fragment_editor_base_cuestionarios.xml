@@ -1,0 +1,50 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/marfil"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.auditoria.audit5S_Full.View.Activities.SettingsActivity">
+    <LinearLayout
+        android:id="@+id/linearParaCoordinar"
+        android:background="@color/blancoNomad"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/textoTituloManage"
+            android:textColor="@color/primary_text"
+            android:textSize="20sp"
+            android:layout_marginTop="@dimen/margenChico"
+            android:gravity="center"
+            android:text="@string/managaCuestionarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerCuestionarios"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/margenChico"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        app:layout_anchor="@id/linearParaCoordinar"
+        android:id="@+id/agregarArea"
+        android:layout_margin="@dimen/margenGrande"
+        android:layout_gravity="bottom|end"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+</FrameLayout>

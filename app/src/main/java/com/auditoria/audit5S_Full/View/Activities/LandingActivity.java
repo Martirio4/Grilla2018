@@ -48,16 +48,19 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
                 }
             }
         }
-        generarAuditoriasModelo();
+        evaluarGeneracionAuditoriasModelo();
         lanzarLandingFragment();
     }
 
-    private void generarAuditoriasModelo() {
+    private void evaluarGeneracionAuditoriasModelo() {
         SharedPreferences config =config = this.getSharedPreferences("prefs", 0);
-        boolean firstRun = config.getBoolean("firstRun", false);
-        if (!firstRun){
+        boolean firstRun = config.getBoolean("firstRun", true);
+        if (firstRun){
             ControllerDatos controllerDatos=new ControllerDatos(this);
-            controllerDatos.crearCuestionarios();
+            controllerDatos.crearCuestionariosDefault();
+            SharedPreferences.Editor editor = config.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
         }
     }
 

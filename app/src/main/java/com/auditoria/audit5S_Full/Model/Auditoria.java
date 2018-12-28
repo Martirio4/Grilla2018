@@ -12,6 +12,7 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Auditoria extends RealmObject {
+
     @PrimaryKey
     private String idAuditoria;
     private Date fechaAuditoria;
