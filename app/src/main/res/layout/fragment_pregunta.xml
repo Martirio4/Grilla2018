@@ -4,7 +4,7 @@
     android:background="@color/blancoNomad"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.auditoria.grilla5s.View.Activities.ActivityAuditoria">
+    tools:context="com.auditoria.audit5S_Full.View.Activities.ActivityAuditoria">
 
     <ScrollView
         android:layout_width="match_parent"

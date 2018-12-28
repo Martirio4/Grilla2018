@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.auditoria.grilla5s">
+    package="com.auditoria.audit5S_Full">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
 
 
         <provider
-            android:name=".GenericFileProvider"
+            android:name="com.auditoria.audit5S_Full.GenericFileProvider"
             android:authorities="${applicationId}.my.package.name.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -26,44 +26,44 @@
         </provider>
 
 
-        <activity android:name=".View.Activities.SplashActivity">
+        <activity android:name="com.auditoria.audit5S_Full.View.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.Activities.ActivityMyAudits"
+            android:name="com.auditoria.audit5S_Full.View.Activities.ActivityMyAudits"
             android:screenOrientation="portrait"
-            android:parentActivityName=".View.Activities.LandingActivity" />
+            android:parentActivityName="com.auditoria.audit5S_Full.View.Activities.LandingActivity" />
         <activity
 
-            android:name=".View.Activities.LoginActivity"
+            android:name="com.auditoria.audit5S_Full.View.Activities.LoginActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".View.Activities.SettingsActivity"
+            android:name="com.auditoria.audit5S_Full.View.Activities.SettingsActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".View.Activities.LandingActivity" />
+            android:parentActivityName="com.auditoria.audit5S_Full.View.Activities.LandingActivity" />
         <activity
-            android:name=".View.Activities.ActivityVerAuditorias"
-            android:parentActivityName=".View.Activities.GraficosActivity" />
+            android:name="com.auditoria.audit5S_Full.View.Activities.ActivityVerAuditorias"
+            android:parentActivityName="com.auditoria.audit5S_Full.View.Activities.GraficosActivity" />
         <activity
-            android:name=".View.Activities.GraficosActivity"
+            android:name="com.auditoria.audit5S_Full.View.Activities.GraficosActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".View.Activities.LandingActivity" />
+            android:parentActivityName="com.auditoria.audit5S_Full.View.Activities.LandingActivity" />
         <activity
-            android:name=".View.Activities.ActivityPreAuditoria"
+            android:name="com.auditoria.audit5S_Full.View.Activities.ActivityPreAuditoria"
             android:launchMode="singleTop"
-            android:parentActivityName=".View.Activities.LandingActivity" />
-        <activity android:name=".View.Activities.LandingActivity"
+            android:parentActivityName="com.auditoria.audit5S_Full.View.Activities.LandingActivity" />
+        <activity android:name="com.auditoria.audit5S_Full.View.Activities.LandingActivity"
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".View.Activities.ActivityAuditoria"
+            android:name="com.auditoria.audit5S_Full.View.Activities.ActivityAuditoria"
             android:screenOrientation="portrait"
-            android:parentActivityName=".View.Activities.ActivityPreAuditoria" />
-        <activity android:name=".View.Activities.ActivityZoom"></activity>
+            android:parentActivityName="com.auditoria.audit5S_Full.View.Activities.ActivityPreAuditoria" />
+        <activity android:name="com.auditoria.audit5S_Full.View.Activities.ActivityZoom"></activity>
     </application>
 
 </manifest>

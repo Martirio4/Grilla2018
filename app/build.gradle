@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.2"
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.auditoria.grilla5s"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "2.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -43,9 +43,9 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
     compile 'com.github.tajchert:nammu:1.2.0'
-    compile 'com.google.firebase:firebase-core:11.8.0'
-    compile 'com.google.firebase:firebase-auth:11.8.0'
-    compile 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.google.firebase:firebase-core:16.0.4'
+    compile 'com.google.firebase:firebase-auth:16.0.4'
+    compile 'com.google.firebase:firebase-database:16.0.3'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     implementation files('libs/exceLib.jar')
 }

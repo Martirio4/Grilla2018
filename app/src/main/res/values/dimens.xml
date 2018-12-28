@@ -3,7 +3,7 @@
     <dimen name="margenChico">8dp</dimen>
     <dimen name="altoTarjeta">140dp</dimen>
 
-    <dimen name="altoTarjeta2">195dp</dimen>
+    <dimen name="altoTarjeta2">205dp</dimen>
     <dimen name="anchoTarjeta2">200dp</dimen>
     <dimen name="altoTarjetaVieja">80dp</dimen>
     <dimen name="anchoTarjetaVieja">100dp</dimen>

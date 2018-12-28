@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="com.auditoria.grilla5s.View.Activities.ActivityMyAudits">
+    tools:context="com.auditoria.audit5S_Full.View.Activities.ActivityMyAudits">
 
    <LinearLayout
        android:layout_marginTop="@dimen/margenChico"

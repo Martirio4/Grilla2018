@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Grilla5S</string>
+    <string name="app_name">Auditoria 5S</string>
     <string name="verAuditoria">Detalle de auditoría</string>
     <string name="start">AUDITAR</string>
     <string name="contact">CONTACTO</string>
@@ -163,7 +163,7 @@
 <string name="textoPregunta552">Check-lists de 5S están completos</string>
 <string name="quieroReportar">Quiero contactar con el equipo de e-5S</string>
 <string name="enviarMail">Enviar mail.</string>
-<string name="sinAreas">No hay áreas creadas. ve al menu: \"Configuración\" y luego a: \"Gestionar áreas\"</string>
+    <string name="sinAreas">Aun no hay areas creadas. Cree un área nueva."</string>
 <string name="autenticacionFallida">Autenticacion fallida. Por favor, regístrate.</string>
 <string name="sinConexionIntenteMasTarde">No hay conexión a internet, intenta mas tarde</string>
 <string name="reporteAuditoria">Reporte de auditoría.</string>
@@ -179,7 +179,7 @@
 <string name="audit5s">Auditoría 5S</string>
 <string name="agregarComentario">Agregar comentario</string>
 <string name="favorAgregueComentario">Por favor, ingresa un comentario para la foto.</string>
-<string name="favorAgregueComentarioGeneral">Quiero contactar al desarrollador</string>
+<string name="favorAgregueComentarioGeneral">Ingrese un comentario</string>
 <string name="comment">comentario</string>
 <string name="advertencia">Atención!</string>
 <string name="auditoriaSinTerminar">La auditoría no esta finalizada.</string>
@@ -238,8 +238,8 @@
 <string name="tutorial_tit_manage">Agrega un área de auditoría</string>
 <string name="tutorial_tit_graficos_ver">Revisa la auditoría</string>
 <string name="tutorial_desc_graficos_ver">Click aquí para ver puntajes y fotos.</string>
-<string name="tutorial_tit_graficos_pdf">Enviar reporte PDF</string>
-<string name="tutorial_desc_graficos_pdf">Click aquí para enviar un reporte PDF con puntajes, fotos y comentarios.</string>
+<string name="tutorial_tit_graficos_pdf">Enviar reporte Excel</string>
+<string name="tutorial_desc_graficos_pdf">Click aquí para enviar un reporte Excel con puntajes, fotos y comentarios.</string>
 <string name="tutorial_tit_subitem_general">Empecemos</string>
 <string name="tutorial_desc_subitem_general">Estás listo para auditar. Selecciona un área.</string>
 <string name="tutorial_tit_subitem_criteria">Revisar Criterios</string>
@@ -342,7 +342,7 @@
 <string name="totalAudit">Total Auditoria:</string>
 <string name="generarXLS">Enviar reporte Excel</string>
 <string name="tabImagenes">Evidencias</string>
-<string name="ultimoPuntaje">Ultima Audit.</string>
+<string name="ultimoPuntaje">Auditorías</string>
 <string name="evolucionDelArea">Historico</string>
 <string name="textoOpcion1_seiri">En todos los lugares</string>
 <string name="textoOpcion2_seiri" >En varios lugares</string>
@@ -647,5 +647,6 @@
 <string name="areaIndustrial">zona industrial</string>
 <string name="areaOficina">área de oficina</string>
 <string name="areaExterna">área externa</string>
+    <string name="definirAreaNueva">Nueva área</string>
 
 </resources>

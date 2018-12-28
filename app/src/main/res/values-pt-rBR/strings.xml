@@ -427,7 +427,7 @@
     <string name="areaOficina">área de escritório</string>;
     <string name="areaExterna">área externa</string>;
 
-    <string name="app_name">Auditoria5S</string>
+    <string name="app_name">Auditoria 5S</string>
 
     <string name="quieroReportar">Quero entrar em contato com o desenvolvedor</string>
 
@@ -515,7 +515,7 @@
     <string name="totalAudit">Total Auditoria:</string>
     <string name="generarXLS">Enviar relatório do Excel</string>
     <string name="tabImagenes">Evidências</string>
-    <string name="ultimoPuntaje">Ultima Audit.</string>
+    <string name="ultimoPuntaje">Auditorías</string>
     <string name="evolucionDelArea">Histórico</string>
 
     <string name="noHayInternet">A Internet é necessária para registrar novos usuários.</string>
@@ -550,7 +550,7 @@
     <string name="titRating">Apoie este aplicativo.</string>
     <string name="rateOurApp">Avalie o aplicativo</string>
 
-    <string name="sinAreas">Não há áreas criadas. vá para o menu: \"opções\" e depois para: \"Gerenciar áreas\"\"</string>
+    <string name="sinAreas">Não há áreas criadas. crie uma nova área."</string>
     <string name="verAuditoria">Detalhe de auditoria</string>
     <string name="start">AUDITAR</string>
     <string name="contact">CONTATO</string>
@@ -666,6 +666,7 @@
     <string name="textoOpcion2_seiri">Em vários lugares</string>
     <string name="textoOpcion1_seiri">Em todos os lugares</string>
     <string name="version">v1.0.10</string>
+    <string name="definirAreaNueva">Área nova</string>
 
 
 </resources>
