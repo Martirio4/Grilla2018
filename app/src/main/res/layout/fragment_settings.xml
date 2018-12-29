@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.auditoria.audit5S_Full.View.Activities.SettingsActivity">
+    tools:context="com.auditoria.grilla5s.View.Activities.SettingsActivity">
 
         <LinearLayout
                 android:paddingStart="@dimen/margenChico"
@@ -187,7 +187,7 @@
                             android:drawableStart="@drawable/azul5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="@string/rateOurApp"
+                            android:text="@string/editarCuestionarios"
                             android:textColor="@color/tile2" />
                 </FrameLayout>
 

@@ -92,8 +92,8 @@
                 android:id="@+id/botonEliminar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/exitmedium"
+                android:layout_gravity="top"
+                android:src="@drawable/ic_close_black_24dp"
                 />
 
         </LinearLayout>

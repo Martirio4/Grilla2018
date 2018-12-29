@@ -290,12 +290,13 @@
     <string name="rateUsl2">¿Te gustaría ayudarnos clasificando la App en la tienda de aplicaciones?</string>
     <string name="titRating">Apoya esta app.</string>
     <string name="rateOurApp">Califica la App</string>
+    <string name="bienVenida">Bienvenido</string>
     <string name="bienvenido">Gracias por descargar nuestra app.\nQuieres ver el tutorial?</string>
     <string name="quit">Salir</string>
-    <string name="delteAreaOk">El área fue creada con éxito</string>
+    <string name="delteAreaOk">El área fue eliminada.</string>
     <string name="deleteTituloDialog">Eliminar área seleccionada</string>
     <string name="elArea">El área:</string>
-    <string name="deletePermanente">and related audits will be permanently deleted.</string>
+    <string name="deletePermanente">y auditorias relacionadas, seran eliminadas.</string>
     <string name="deseaContinuar">Desea continuaR?</string>
     <string name="delete">Borrar</string>
     <string name="cancel">Cancelar</string>
@@ -649,5 +650,11 @@
     <string name="areaExterna">área externa</string>
     <string name="definirAreaNueva">Nueva área</string>
     <string name="managaCuestionarios">Gestionar cuestionarios</string>
+    <string name="editarCuestionarios">Gestionar Cuestionarios</string>
+    <string name="addCuestionario">Nuevo Cuestionario</string>
+    <string name="nombreCuestionario">Ingrese un nombre del nuevo cuestionario</string>
+    <string name="cambioRealizado">Cambios realizados</string>
+    <string name="cuestionarioEliminado">El cuestionario fue eliminado</string>
+    <string name="cuestionarioNoEliminado">El cuestionario no fue eliminado.</string>
 
 </resources>

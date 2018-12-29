@@ -5,6 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.auditoria.audit5S_Full.View.Activities.ActivityZoom">
+    tools:context="com.auditoria.grilla5s.View.Activities.ActivityZoom">
 
 </RelativeLayout>
