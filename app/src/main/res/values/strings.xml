@@ -656,5 +656,10 @@
     <string name="cambioRealizado">Cambios realizados</string>
     <string name="cuestionarioEliminado">El cuestionario fue eliminado</string>
     <string name="cuestionarioNoEliminado">El cuestionario no fue eliminado.</string>
+    <string name="itemSeEliminara">El item seleccionado y todas las preguntas relacionadas serán eliminados.</string>
+    <string name="EditarItem">Editar Item</string>
+    <string name="favorEditeItem">Edite el texto.</string>
+    <string name="nuevoItem">Nuevo Item</string>
+    <string name="agregueTituloItem">Escriba el titulo para el item.</string>
 
 </resources>

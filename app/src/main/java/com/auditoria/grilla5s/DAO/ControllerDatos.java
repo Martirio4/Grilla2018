@@ -10,6 +10,7 @@ import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
@@ -173,8 +174,9 @@ public class ControllerDatos {
                 Item item11 = realm.createObject(Item.class);
                 item11.setCriterio(context.getResources().getString(R.string.criterio11));
                 item11.setTextoItem(context.getResources().getString(R.string.texto11));
-                item11.setIdItem(11);
+                item11.setIdItem(1);
                 item11.setPuntajeItem(0.0);
+
 
                 Pregunta pregunta111 = realm.createObject(Pregunta.class);
                 pregunta111.setIdPregunta(111);
@@ -213,7 +215,7 @@ public class ControllerDatos {
                 Item item12 = realm.createObject(Item.class);
                 item12.setCriterio(context.getResources().getString(R.string.criterio12));
                 item12.setTextoItem(context.getResources().getString(R.string.texto12));
-                item12.setIdItem(12);
+                item12.setIdItem(2);
                 item12.setPuntajeItem(0.0);
 
                 Pregunta pregunta121 = realm.createObject(Pregunta.class);
@@ -247,7 +249,7 @@ public class ControllerDatos {
                 Item item13 = realm.createObject(Item.class);
                 item13.setCriterio(context.getResources().getString(R.string.criterio13));
                 item13.setTextoItem(context.getResources().getString(R.string.texto13));
-                item13.setIdItem(13);
+                item13.setIdItem(3);
                 item13.setPuntajeItem(0.0);
 
                 Pregunta pregunta131 = realm.createObject(Pregunta.class);
@@ -269,7 +271,7 @@ public class ControllerDatos {
                 Item item14 = realm.createObject(Item.class);
                 item14.setCriterio(context.getResources().getString(R.string.criterio14));
                 item14.setTextoItem(context.getResources().getString(R.string.texto14));
-                item14.setIdItem(14);
+                item14.setIdItem(4);
                 item14.setPuntajeItem(0.0);
 
                 Pregunta pregunta141 = realm.createObject(Pregunta.class);
@@ -303,12 +305,12 @@ public class ControllerDatos {
                 Item item15 = realm.createObject(Item.class);
                 item15.setCriterio(context.getResources().getString(R.string.criterio15));
                 item15.setTextoItem(context.getResources().getString(R.string.texto15));
-                item15.setIdItem(15);
+                item15.setIdItem(5);
                 item15.setPuntajeItem(0.0);
-               
+
 
                 Pregunta pregunta151 = realm.createObject(Pregunta.class);
-               
+
                 pregunta151.setIdPregunta(151);
                 pregunta151.setPuntaje(null);
                 pregunta151.setTextoPregunta(context.getResources().getString(R.string.textoPregunta151));
@@ -334,7 +336,7 @@ public class ControllerDatos {
                 Item item21 = realm.createObject(Item.class);
                 item21.setCriterio(context.getResources().getString(R.string.criterio21));
                 item21.setTextoItem(context.getResources().getString(R.string.texto21));
-                item21.setIdItem(21);
+                item21.setIdItem(1);
                 item21.setPuntajeItem(0.0);
 
                 Pregunta pregunta211 = realm.createObject(Pregunta.class);
@@ -392,7 +394,7 @@ public class ControllerDatos {
                 Item item22 = realm.createObject(Item.class);
                 item22.setCriterio(context.getResources().getString(R.string.criterio22));
                 item22.setTextoItem(context.getResources().getString(R.string.texto22));
-                item22.setIdItem(22);
+                item22.setIdItem(2);
                 item22.setPuntajeItem(0.0);
 
                 Pregunta pregunta221 = realm.createObject(Pregunta.class);
@@ -426,7 +428,7 @@ public class ControllerDatos {
                 Item item23 = realm.createObject(Item.class);
                 item23.setCriterio(context.getResources().getString(R.string.criterio23));
                 item23.setTextoItem(context.getResources().getString(R.string.texto23));
-                item23.setIdItem(23);
+                item23.setIdItem(3);
                 item23.setPuntajeItem(0.0);
 
                 Pregunta pregunta231 = realm.createObject(Pregunta.class);
@@ -472,7 +474,7 @@ public class ControllerDatos {
                 Item item24 = realm.createObject(Item.class);
                 item24.setCriterio(context.getResources().getString(R.string.criterio24));
                 item24.setTextoItem(context.getResources().getString(R.string.texto24));
-                item24.setIdItem(24);
+                item24.setIdItem(4);
                 item24.setPuntajeItem(0.0);
 
                 Pregunta pregunta241 = realm.createObject(Pregunta.class);
@@ -518,7 +520,7 @@ public class ControllerDatos {
                 Item item25 = realm.createObject(Item.class);
                 item25.setCriterio(context.getResources().getString(R.string.criterio25));
                 item25.setTextoItem(context.getResources().getString(R.string.texto25));
-                item25.setIdItem(25);
+                item25.setIdItem(5);
                 item25.setPuntajeItem(0.0);
 
                 Pregunta pregunta251 = realm.createObject(Pregunta.class);
@@ -559,7 +561,7 @@ public class ControllerDatos {
                 Item item31 = realm.createObject(Item.class);
                 item31.setCriterio(context.getResources().getString(R.string.criterio31));
                 item31.setTextoItem(context.getResources().getString(R.string.texto31));
-                item31.setIdItem(31);
+                item31.setIdItem(1);
                 item31.setPuntajeItem(0.0);
 
                 Pregunta pregunta311 = realm.createObject(Pregunta.class);
@@ -587,7 +589,7 @@ public class ControllerDatos {
                 Item item32 = realm.createObject(Item.class);
                 item32.setCriterio(context.getResources().getString(R.string.criterio32));
                 item32.setTextoItem(context.getResources().getString(R.string.texto32));
-                item32.setIdItem(32);
+                item32.setIdItem(2);
                 item32.setPuntajeItem(0.0);
 
                 Pregunta pregunta321 = realm.createObject(Pregunta.class);
@@ -627,7 +629,7 @@ public class ControllerDatos {
                 Item item33 = realm.createObject(Item.class);
                 item33.setCriterio(context.getResources().getString(R.string.criterio33));
                 item33.setTextoItem(context.getResources().getString(R.string.texto33));
-                item33.setIdItem(33);
+                item33.setIdItem(3);
                 item33.setPuntajeItem(0.0);
 
                 Pregunta pregunta331 = realm.createObject(Pregunta.class);
@@ -667,9 +669,9 @@ public class ControllerDatos {
                 Item item34 = realm.createObject(Item.class);
                 item34.setCriterio(context.getResources().getString(R.string.criterio34));
                 item34.setTextoItem(context.getResources().getString(R.string.texto34));
-                item34.setIdItem(34);
+                item34.setIdItem(4);
                 item34.setPuntajeItem(0.0);
-                
+
 
                 Pregunta pregunta341 = realm.createObject(Pregunta.class);
                 pregunta341.setIdPregunta(341);
@@ -702,7 +704,7 @@ public class ControllerDatos {
                 Item item35 = realm.createObject(Item.class);
                 item35.setCriterio(context.getResources().getString(R.string.criterio35));
                 item35.setTextoItem(context.getResources().getString(R.string.texto35));
-                item35.setIdItem(35);
+                item35.setIdItem(5);
                 item35.setPuntajeItem(0.0);
 
                 Pregunta pregunta351 = realm.createObject(Pregunta.class);
@@ -743,7 +745,7 @@ public class ControllerDatos {
                 Item item41 = realm.createObject(Item.class);
                 item41.setCriterio(context.getResources().getString(R.string.criterio41));
                 item41.setTextoItem(context.getResources().getString(R.string.texto41));
-                item41.setIdItem(41);
+                item41.setIdItem(1);
                 item41.setPuntajeItem(0.0);
 
                 Pregunta pregunta411 = realm.createObject(Pregunta.class);
@@ -784,7 +786,7 @@ public class ControllerDatos {
                 Item item42 = realm.createObject(Item.class);
                 item42.setCriterio(context.getResources().getString(R.string.criterio42));
                 item42.setTextoItem(context.getResources().getString(R.string.texto42));
-                item42.setIdItem(42);
+                item42.setIdItem(2);
                 item42.setPuntajeItem(0.0);
 
                 Pregunta pregunta421 = realm.createObject(Pregunta.class);
@@ -807,7 +809,7 @@ public class ControllerDatos {
                 Item item43 = realm.createObject(Item.class);
                 item43.setCriterio(context.getResources().getString(R.string.criterio43));
                 item43.setTextoItem(context.getResources().getString(R.string.texto43));
-                item43.setIdItem(43);
+                item43.setIdItem(3);
                 item43.setPuntajeItem(0.0);
 
                 Pregunta pregunta431 = realm.createObject(Pregunta.class);
@@ -838,7 +840,7 @@ public class ControllerDatos {
                 Item item44 = realm.createObject(Item.class);
                 item44.setCriterio(context.getResources().getString(R.string.criterio44));
                 item44.setTextoItem(context.getResources().getString(R.string.texto44));
-                item44.setIdItem(44);
+                item44.setIdItem(4);
                 item44.setPuntajeItem(0.0);
 
                 Pregunta pregunta441 = realm.createObject(Pregunta.class);
@@ -862,7 +864,7 @@ public class ControllerDatos {
                 Item item45 = realm.createObject(Item.class);
                 item45.setCriterio(context.getResources().getString(R.string.criterio45));
                 item45.setTextoItem(context.getResources().getString(R.string.texto45));
-                item45.setIdItem(45);
+                item45.setIdItem(5);
                 item45.setPuntajeItem(0.0);
 
                 Pregunta pregunta451 = realm.createObject(Pregunta.class);
@@ -900,7 +902,7 @@ public class ControllerDatos {
                 Item item46 = realm.createObject(Item.class);
                 item46.setCriterio(context.getResources().getString(R.string.criterio46));
                 item46.setTextoItem(context.getResources().getString(R.string.texto46));
-                item46.setIdItem(46);
+                item46.setIdItem(6);
                 item46.setPuntajeItem(0.0);
 
                 Pregunta pregunta461 = realm.createObject(Pregunta.class);
@@ -929,7 +931,7 @@ public class ControllerDatos {
                 Item item51 = realm.createObject(Item.class);
                 item51.setCriterio(context.getResources().getString(R.string.criterio51));
                 item51.setTextoItem(context.getResources().getString(R.string.texto51));
-                item51.setIdItem(51);
+                item51.setIdItem(1);
                 item51.setPuntajeItem(0.0);
 
                 Pregunta pregunta511 = realm.createObject(Pregunta.class);
@@ -981,7 +983,7 @@ public class ControllerDatos {
                 Item item52 = realm.createObject(Item.class);
                 item52.setCriterio(context.getResources().getString(R.string.criterio52));
                 item52.setTextoItem(context.getResources().getString(R.string.texto52));
-                item52.setIdItem(52);
+                item52.setIdItem(2);
                 item52.setPuntajeItem(0.0);
 
                 Pregunta pregunta521 = realm.createObject(Pregunta.class);
@@ -1004,7 +1006,7 @@ public class ControllerDatos {
                 Item item53 = realm.createObject(Item.class);
                 item53.setCriterio(context.getResources().getString(R.string.criterio53));
                 item53.setTextoItem(context.getResources().getString(R.string.texto53));
-                item53.setIdItem(53);
+                item53.setIdItem(3);
                 item53.setPuntajeItem(0.0);
 
                 Pregunta pregunta531 = realm.createObject(Pregunta.class);
@@ -1026,7 +1028,7 @@ public class ControllerDatos {
                 Item item54 = realm.createObject(Item.class);
                 item54.setCriterio(context.getResources().getString(R.string.criterio54));
                 item54.setTextoItem(context.getResources().getString(R.string.texto54));
-                item54.setIdItem(54);
+                item54.setIdItem(4);
                 item54.setPuntajeItem(0.0);
 
                 Pregunta pregunta541 = realm.createObject(Pregunta.class);
@@ -1066,7 +1068,7 @@ public class ControllerDatos {
                 Item item55 = realm.createObject(Item.class);
                 item55.setCriterio(context.getResources().getString(R.string.criterio55));
                 item55.setTextoItem(context.getResources().getString(R.string.texto55));
-                item55.setIdItem(55);
+                item55.setIdItem(5);
                 item55.setPuntajeItem(0.0);
 
                 Pregunta pregunta551 = realm.createObject(Pregunta.class);
@@ -1091,9 +1093,12 @@ public class ControllerDatos {
                     for (Item unItem :
                             unaEses.getListaItem()) {
                         unItem.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                        unItem.setIdEse(unaEses.getIdEse());
                         for (Pregunta unaPregunta :
                                 unItem.getListaPreguntas()) {
                             unaPregunta.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                            unaPregunta.setIdItem(unItem.getIdItem());
+                            unaPregunta.setIdEse(unaEses.getIdEse());
                         }
                     }
                 }
@@ -1108,9 +1113,9 @@ public class ControllerDatos {
             @Override
             public void execute(Realm realm) {
                 Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class,"2");
-                
+
                 nuevoCuestionario.setNombreCuestionario(context.getString(R.string.areaOficina));
-                
+
 
                 Ese ese1= realm.createObject(Ese.class);
                 ese1.setIdEse(1);
@@ -1120,7 +1125,7 @@ public class ControllerDatos {
                 Item item11 = realm.createObject(Item.class);
                 item11.setCriterio(context.getResources().getString(R.string.criterio11B));
                 item11.setTextoItem(context.getResources().getString(R.string.texto11B));
-                item11.setIdItem(11);
+                item11.setIdItem(1);
                 item11.setPuntajeItem(0.0);
 
                 Pregunta pregunta111 = realm.createObject(Pregunta.class);
@@ -1154,7 +1159,7 @@ public class ControllerDatos {
                 Item item12 = realm.createObject(Item.class);
                 item12.setCriterio(context.getResources().getString(R.string.criterio12B));
                 item12.setTextoItem(context.getResources().getString(R.string.texto12B));
-                item12.setIdItem(12);
+                item12.setIdItem(2);
                 item12.setPuntajeItem(0.0);
 
                 Pregunta pregunta121 = realm.createObject(Pregunta.class);
@@ -1188,7 +1193,7 @@ public class ControllerDatos {
                 Item item13 = realm.createObject(Item.class);
                 item13.setCriterio(context.getResources().getString(R.string.criterio13B));
                 item13.setTextoItem(context.getResources().getString(R.string.texto13B));
-                item13.setIdItem(13);
+                item13.setIdItem(3);
                 item13.setPuntajeItem(0.0);
 
                 Pregunta pregunta131 = realm.createObject(Pregunta.class);
@@ -1210,7 +1215,7 @@ public class ControllerDatos {
                 Item item14 = realm.createObject(Item.class);
                 item14.setCriterio(context.getResources().getString(R.string.criterio14B));
                 item14.setTextoItem(context.getResources().getString(R.string.texto14B));
-                item14.setIdItem(14);
+                item14.setIdItem(4);
                 item14.setPuntajeItem(0.0);
 
                 Pregunta pregunta141 = realm.createObject(Pregunta.class);
@@ -1244,7 +1249,7 @@ public class ControllerDatos {
                 Item item15 = realm.createObject(Item.class);
                 item15.setCriterio(context.getResources().getString(R.string.criterio15B));
                 item15.setTextoItem(context.getResources().getString(R.string.texto15B));
-                item15.setIdItem(15);
+                item15.setIdItem(5);
                 item15.setPuntajeItem(0.0);
 
                 Pregunta pregunta151 = realm.createObject(Pregunta.class);
@@ -1273,7 +1278,7 @@ public class ControllerDatos {
                 Item item21 = realm.createObject(Item.class);
                 item21.setCriterio(context.getResources().getString(R.string.criterio21B));
                 item21.setTextoItem(context.getResources().getString(R.string.texto21B));
-                item21.setIdItem(21);
+                item21.setIdItem(1);
                 item21.setPuntajeItem(0.0);
 
                 Pregunta pregunta211 = realm.createObject(Pregunta.class);
@@ -1303,7 +1308,7 @@ public class ControllerDatos {
                 Item item22 = realm.createObject(Item.class);
                 item22.setCriterio(context.getResources().getString(R.string.criterio22B));
                 item22.setTextoItem(context.getResources().getString(R.string.texto22B));
-                item22.setIdItem(22);
+                item22.setIdItem(2);
                 item22.setPuntajeItem(0.0);
 
                 Pregunta pregunta221 = realm.createObject(Pregunta.class);
@@ -1333,7 +1338,7 @@ public class ControllerDatos {
                 Item item23 = realm.createObject(Item.class);
                 item23.setCriterio(context.getResources().getString(R.string.criterio23B));
                 item23.setTextoItem(context.getResources().getString(R.string.texto23B));
-                item23.setIdItem(23);
+                item23.setIdItem(3);
                 item23.setPuntajeItem(0.0);
 
                 Pregunta pregunta231 = realm.createObject(Pregunta.class);
@@ -1362,7 +1367,7 @@ public class ControllerDatos {
                 Item item24 = realm.createObject(Item.class);
                 item24.setCriterio(context.getResources().getString(R.string.criterio24B));
                 item24.setTextoItem(context.getResources().getString(R.string.texto24B));
-                item24.setIdItem(24);
+                item24.setIdItem(4);
                 item24.setPuntajeItem(0.0);
                 Pregunta pregunta241 = realm.createObject(Pregunta.class);
                 pregunta241.setIdPregunta(241);
@@ -1391,7 +1396,7 @@ public class ControllerDatos {
                 Item item25 = realm.createObject(Item.class);
                 item25.setCriterio(context.getResources().getString(R.string.criterio25B));
                 item25.setTextoItem(context.getResources().getString(R.string.texto25B));
-                item25.setIdItem(25);
+                item25.setIdItem(5);
                 item25.setPuntajeItem(0.0);
 
                 Pregunta pregunta251 = realm.createObject(Pregunta.class);
@@ -1428,7 +1433,7 @@ public class ControllerDatos {
                 Item item31 = realm.createObject(Item.class);
                 item31.setCriterio(context.getResources().getString(R.string.criterio31B));
                 item31.setTextoItem(context.getResources().getString(R.string.texto31B));
-                item31.setIdItem(31);
+                item31.setIdItem(1);
                 item31.setPuntajeItem(0.0);
 
                 Pregunta pregunta311 = realm.createObject(Pregunta.class);
@@ -1456,7 +1461,7 @@ public class ControllerDatos {
                 Item item32 = realm.createObject(Item.class);
                 item32.setCriterio(context.getResources().getString(R.string.criterio32B));
                 item32.setTextoItem(context.getResources().getString(R.string.texto32B));
-                item32.setIdItem(32);
+                item32.setIdItem(2);
                 item32.setPuntajeItem(0.0);
 
                 Pregunta pregunta321 = realm.createObject(Pregunta.class);
@@ -1486,7 +1491,7 @@ public class ControllerDatos {
                 Item item33 = realm.createObject(Item.class);
                 item33.setCriterio(context.getResources().getString(R.string.criterio33B));
                 item33.setTextoItem(context.getResources().getString(R.string.texto33B));
-                item33.setIdItem(33);
+                item33.setIdItem(3);
                 item33.setPuntajeItem(0.0);
 
                 Pregunta pregunta331 = realm.createObject(Pregunta.class);
@@ -1516,7 +1521,7 @@ public class ControllerDatos {
                 Item item34 = realm.createObject(Item.class);
                 item34.setCriterio(context.getResources().getString(R.string.criterio34B));
                 item34.setTextoItem(context.getResources().getString(R.string.texto34B));
-                item34.setIdItem(34);
+                item34.setIdItem(4);
                 item34.setPuntajeItem(0.0);
 
                 Pregunta pregunta341 = realm.createObject(Pregunta.class);
@@ -1550,7 +1555,7 @@ public class ControllerDatos {
                 Item item35 = realm.createObject(Item.class);
                 item35.setCriterio(context.getResources().getString(R.string.criterio35B));
                 item35.setTextoItem(context.getResources().getString(R.string.texto35B));
-                item35.setIdItem(35);
+                item35.setIdItem(5);
                 item35.setPuntajeItem(0.0);
 
                 Pregunta pregunta351 = realm.createObject(Pregunta.class);
@@ -1574,7 +1579,7 @@ public class ControllerDatos {
                 Item item41 = realm.createObject(Item.class);
                 item41.setCriterio(context.getResources().getString(R.string.criterio41B));
                 item41.setTextoItem(context.getResources().getString(R.string.texto41B));
-                item41.setIdItem(41);
+                item41.setIdItem(1);
                 item41.setPuntajeItem(0.0);
 
                 Pregunta pregunta411 = realm.createObject(Pregunta.class);
@@ -1611,7 +1616,7 @@ public class ControllerDatos {
                 Item item42 = realm.createObject(Item.class);
                 item42.setCriterio(context.getResources().getString(R.string.criterio42B));
                 item42.setTextoItem(context.getResources().getString(R.string.texto42B));
-                item42.setIdItem(42);
+                item42.setIdItem(2);
                 item42.setPuntajeItem(0.0);
 
                 Pregunta pregunta421 = realm.createObject(Pregunta.class);
@@ -1634,7 +1639,7 @@ public class ControllerDatos {
                 Item item43 = realm.createObject(Item.class);
                 item43.setCriterio(context.getResources().getString(R.string.criterio43B));
                 item43.setTextoItem(context.getResources().getString(R.string.texto43B));
-                item43.setIdItem(43);
+                item43.setIdItem(3);
                 item43.setPuntajeItem(0.0);
 
                 Pregunta pregunta431 = realm.createObject(Pregunta.class);
@@ -1665,7 +1670,7 @@ public class ControllerDatos {
                 Item item44 = realm.createObject(Item.class);
                 item44.setCriterio(context.getResources().getString(R.string.criterio44B));
                 item44.setTextoItem(context.getResources().getString(R.string.texto44B));
-                item44.setIdItem(44);
+                item44.setIdItem(4);
                 item44.setPuntajeItem(0.0);
 
                 Pregunta pregunta441 = realm.createObject(Pregunta.class);
@@ -1689,7 +1694,7 @@ public class ControllerDatos {
                 Item item45 = realm.createObject(Item.class);
                 item45.setCriterio(context.getResources().getString(R.string.criterio45B));
                 item45.setTextoItem(context.getResources().getString(R.string.texto45B));
-                item45.setIdItem(45);
+                item45.setIdItem(5);
                 item45.setPuntajeItem(0.0);
 
                 Pregunta pregunta451 = realm.createObject(Pregunta.class);
@@ -1723,7 +1728,7 @@ public class ControllerDatos {
                 Item item46 = realm.createObject(Item.class);
                 item46.setCriterio(context.getResources().getString(R.string.criterio46B));
                 item46.setTextoItem(context.getResources().getString(R.string.texto46B));
-                item46.setIdItem(46);
+                item46.setIdItem(6);
                 item46.setPuntajeItem(0.0);
 
                 Pregunta pregunta461 = realm.createObject(Pregunta.class);
@@ -1752,7 +1757,7 @@ public class ControllerDatos {
                 Item item51 = realm.createObject(Item.class);
                 item51.setCriterio(context.getResources().getString(R.string.criterio51B));
                 item51.setTextoItem(context.getResources().getString(R.string.texto51B));
-                item51.setIdItem(51);
+                item51.setIdItem(1);
                 item51.setPuntajeItem(0.0);
 
                 Pregunta pregunta511 = realm.createObject(Pregunta.class);
@@ -1804,7 +1809,7 @@ public class ControllerDatos {
                 Item item52 = realm.createObject(Item.class);
                 item52.setCriterio(context.getResources().getString(R.string.criterio52B));
                 item52.setTextoItem(context.getResources().getString(R.string.texto52B));
-                item52.setIdItem(52);
+                item52.setIdItem(2);
                 item52.setPuntajeItem(0.0);
 
                 Pregunta pregunta521 = realm.createObject(Pregunta.class);
@@ -1827,7 +1832,7 @@ public class ControllerDatos {
                 Item item53 = realm.createObject(Item.class);
                 item53.setCriterio(context.getResources().getString(R.string.criterio53B));
                 item53.setTextoItem(context.getResources().getString(R.string.texto53B));
-                item53.setIdItem(53);
+                item53.setIdItem(3);
                 item53.setPuntajeItem(0.0);
 
                 Pregunta pregunta531 = realm.createObject(Pregunta.class);
@@ -1849,7 +1854,7 @@ public class ControllerDatos {
                 Item item54 = realm.createObject(Item.class);
                 item54.setCriterio(context.getResources().getString(R.string.criterio54B));
                 item54.setTextoItem(context.getResources().getString(R.string.texto54B));
-                item54.setIdItem(54);
+                item54.setIdItem(4);
                 item54.setPuntajeItem(0.0);
 
                 Pregunta pregunta541 = realm.createObject(Pregunta.class);
@@ -1889,7 +1894,7 @@ public class ControllerDatos {
                 Item item55 = realm.createObject(Item.class);
                 item55.setCriterio(context.getResources().getString(R.string.criterio55B));
                 item55.setTextoItem(context.getResources().getString(R.string.texto55B));
-                item55.setIdItem(55);
+                item55.setIdItem(5);
                 item55.setPuntajeItem(0.0);
 
                 Pregunta pregunta551 = realm.createObject(Pregunta.class);
@@ -1912,11 +1917,15 @@ public class ControllerDatos {
                         nuevoCuestionario.getListaEses()) {
                     unaEses.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                     for (Item unItem :
+
                             unaEses.getListaItem()) {
+                        unItem.setIdEse(unaEses.getIdEse());
                         unItem.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                         for (Pregunta unaPregunta :
                                 unItem.getListaPreguntas()) {
+                            unaPregunta.setIdItem(unItem.getIdItem());
                             unaPregunta.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                            unaPregunta.setIdEse(unaEses.getIdEse());
                         }
                     }
                 }
@@ -1929,9 +1938,9 @@ public class ControllerDatos {
             @Override
             public void execute(Realm realm) {
                 Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class,"3");
-                
+
                 nuevoCuestionario.setNombreCuestionario(context.getString(R.string.areaExterna));
-                
+
 
                 Ese ese1= realm.createObject(Ese.class);
                 ese1.setIdEse(1);
@@ -1941,7 +1950,7 @@ public class ControllerDatos {
                 Item item11 = realm.createObject(Item.class);
                 item11.setCriterio(context.getResources().getString(R.string.criterio11C));
                 item11.setTextoItem(context.getResources().getString(R.string.texto11C));
-                item11.setIdItem(11);
+                item11.setIdItem(1);
                 item11.setPuntajeItem(0.0);
 
                 Pregunta pregunta111 = realm.createObject(Pregunta.class);
@@ -1982,7 +1991,7 @@ public class ControllerDatos {
                 Item item12 = realm.createObject(Item.class);
                 item12.setCriterio(context.getResources().getString(R.string.criterio12C));
                 item12.setTextoItem(context.getResources().getString(R.string.texto12C));
-                item12.setIdItem(12);
+                item12.setIdItem(2);
                 item12.setPuntajeItem(0.0);
 
                 Pregunta pregunta121 = realm.createObject(Pregunta.class);
@@ -2016,7 +2025,7 @@ public class ControllerDatos {
                 Item item13 = realm.createObject(Item.class);
                 item13.setCriterio(context.getResources().getString(R.string.criterio13C));
                 item13.setTextoItem(context.getResources().getString(R.string.texto13C));
-                item13.setIdItem(13);
+                item13.setIdItem(3);
                 item13.setPuntajeItem(0.0);
 
                 Pregunta pregunta131 = realm.createObject(Pregunta.class);
@@ -2044,7 +2053,7 @@ public class ControllerDatos {
                 Item item14 = realm.createObject(Item.class);
                 item14.setCriterio(context.getResources().getString(R.string.criterio14C));
                 item14.setTextoItem(context.getResources().getString(R.string.texto14C));
-                item14.setIdItem(14);
+                item14.setIdItem(4);
                 item14.setPuntajeItem(0.0);
 
                 Pregunta pregunta141 = realm.createObject(Pregunta.class);
@@ -2075,7 +2084,7 @@ public class ControllerDatos {
                 Item item21 = realm.createObject(Item.class);
                 item21.setCriterio(context.getResources().getString(R.string.criterio21C));
                 item21.setTextoItem(context.getResources().getString(R.string.texto21C));
-                item21.setIdItem(21);
+                item21.setIdItem(1);
                 item21.setPuntajeItem(0.0);
 
                 Pregunta pregunta211 = realm.createObject(Pregunta.class);
@@ -2105,7 +2114,7 @@ public class ControllerDatos {
                 Item item22 = realm.createObject(Item.class);
                 item22.setCriterio(context.getResources().getString(R.string.criterio22C));
                 item22.setTextoItem(context.getResources().getString(R.string.texto22C));
-                item22.setIdItem(22);
+                item22.setIdItem(2);
                 item22.setPuntajeItem(0.0);
 
                 Pregunta pregunta221 = realm.createObject(Pregunta.class);
@@ -2123,7 +2132,7 @@ public class ControllerDatos {
                 Item item23 = realm.createObject(Item.class);
                 item23.setCriterio(context.getResources().getString(R.string.criterio23C));
                 item23.setTextoItem(context.getResources().getString(R.string.texto23C));
-                item23.setIdItem(23);
+                item23.setIdItem(3);
                 item23.setPuntajeItem(0.0);
 
                 Pregunta pregunta231 = realm.createObject(Pregunta.class);
@@ -2153,7 +2162,7 @@ public class ControllerDatos {
                 Item item24 = realm.createObject(Item.class);
                 item24.setCriterio(context.getResources().getString(R.string.criterio24C));
                 item24.setTextoItem(context.getResources().getString(R.string.texto24C));
-                item24.setIdItem(24);
+                item24.setIdItem(4);
                 item24.setPuntajeItem(0.0);
 
                 Pregunta pregunta241 = realm.createObject(Pregunta.class);
@@ -2183,7 +2192,7 @@ public class ControllerDatos {
                 Item item25 = realm.createObject(Item.class);
                 item25.setCriterio(context.getResources().getString(R.string.criterio25C));
                 item25.setTextoItem(context.getResources().getString(R.string.texto25C));
-                item25.setIdItem(25);
+                item25.setIdItem(5);
                 item25.setPuntajeItem(0.0);
 
                 Pregunta pregunta251 = realm.createObject(Pregunta.class);
@@ -2236,7 +2245,7 @@ public class ControllerDatos {
                 Item item31 = realm.createObject(Item.class);
                 item31.setCriterio(context.getResources().getString(R.string.criterio31C));
                 item31.setTextoItem(context.getResources().getString(R.string.texto31C));
-                item31.setIdItem(31);
+                item31.setIdItem(1);
                 item31.setPuntajeItem(0.0);
 
                 Pregunta pregunta311 = realm.createObject(Pregunta.class);
@@ -2264,7 +2273,7 @@ public class ControllerDatos {
                 Item item32 = realm.createObject(Item.class);
                 item32.setCriterio(context.getResources().getString(R.string.criterio32C));
                 item32.setTextoItem(context.getResources().getString(R.string.texto32C));
-                item32.setIdItem(32);
+                item32.setIdItem(2);
                 item32.setPuntajeItem(0.0);
 
                 Pregunta pregunta321 = realm.createObject(Pregunta.class);
@@ -2294,7 +2303,7 @@ public class ControllerDatos {
                 Item item33 = realm.createObject(Item.class);
                 item33.setCriterio(context.getResources().getString(R.string.criterio33C));
                 item33.setTextoItem(context.getResources().getString(R.string.texto33C));
-                item33.setIdItem(33);
+                item33.setIdItem(3);
                 item33.setPuntajeItem(0.0);
 
                 Pregunta pregunta331 = realm.createObject(Pregunta.class);
@@ -2330,7 +2339,7 @@ public class ControllerDatos {
                 Item item34 = realm.createObject(Item.class);
                 item34.setCriterio(context.getResources().getString(R.string.criterio34C));
                 item34.setTextoItem(context.getResources().getString(R.string.texto34C));
-                item34.setIdItem(34);
+                item34.setIdItem(4);
                 item34.setPuntajeItem(0.0);
 
                 Pregunta pregunta341 = realm.createObject(Pregunta.class);
@@ -2360,7 +2369,7 @@ public class ControllerDatos {
                 Item item35 = realm.createObject(Item.class);
                 item35.setCriterio(context.getResources().getString(R.string.criterio35C));
                 item35.setTextoItem(context.getResources().getString(R.string.texto35C));
-                item35.setIdItem(35);
+                item35.setIdItem(5);
                 item35.setPuntajeItem(0.0);
 
                 Pregunta pregunta351 = realm.createObject(Pregunta.class);
@@ -2401,7 +2410,7 @@ public class ControllerDatos {
                 Item item41 = realm.createObject(Item.class);
                 item41.setCriterio(context.getResources().getString(R.string.criterio41C));
                 item41.setTextoItem(context.getResources().getString(R.string.texto41C));
-                item41.setIdItem(41);
+                item41.setIdItem(1);
                 item41.setPuntajeItem(0.0);
 
                 Pregunta pregunta411 = realm.createObject(Pregunta.class);
@@ -2438,7 +2447,7 @@ public class ControllerDatos {
                 Item item42 = realm.createObject(Item.class);
                 item42.setCriterio(context.getResources().getString(R.string.criterio42C));
                 item42.setTextoItem(context.getResources().getString(R.string.texto42C));
-                item42.setIdItem(42);
+                item42.setIdItem(2);
                 item42.setPuntajeItem(0.0);
 
                 Pregunta pregunta421 = realm.createObject(Pregunta.class);
@@ -2461,7 +2470,7 @@ public class ControllerDatos {
                 Item item43 = realm.createObject(Item.class);
                 item43.setCriterio(context.getResources().getString(R.string.criterio43C));
                 item43.setTextoItem(context.getResources().getString(R.string.texto43C));
-                item43.setIdItem(43);
+                item43.setIdItem(3);
                 item43.setPuntajeItem(0.0);
 
                 Pregunta pregunta431 = realm.createObject(Pregunta.class);
@@ -2492,7 +2501,7 @@ public class ControllerDatos {
                 Item item44 = realm.createObject(Item.class);
                 item44.setCriterio(context.getResources().getString(R.string.criterio44C));
                 item44.setTextoItem(context.getResources().getString(R.string.texto44C));
-                item44.setIdItem(44);
+                item44.setIdItem(4);
                 item44.setPuntajeItem(0.0);
 
                 Pregunta pregunta441 = realm.createObject(Pregunta.class);
@@ -2516,7 +2525,7 @@ public class ControllerDatos {
                 Item item45 = realm.createObject(Item.class);
                 item45.setCriterio(context.getResources().getString(R.string.criterio45C));
                 item45.setTextoItem(context.getResources().getString(R.string.texto45C));
-                item45.setIdItem(45);
+                item45.setIdItem(5);
                 item45.setPuntajeItem(0.0);
 
                 Pregunta pregunta451 = realm.createObject(Pregunta.class);
@@ -2555,7 +2564,7 @@ public class ControllerDatos {
                 Item item46 = realm.createObject(Item.class);
                 item46.setCriterio(context.getResources().getString(R.string.criterio46C));
                 item46.setTextoItem(context.getResources().getString(R.string.texto46C));
-                item46.setIdItem(46);
+                item46.setIdItem(6);
                 item46.setPuntajeItem(0.0);
 
                 Pregunta pregunta461 = realm.createObject(Pregunta.class);
@@ -2584,7 +2593,7 @@ public class ControllerDatos {
                 Item item51 = realm.createObject(Item.class);
                 item51.setCriterio(context.getResources().getString(R.string.criterio51C));
                 item51.setTextoItem(context.getResources().getString(R.string.texto51C));
-                item51.setIdItem(51);
+                item51.setIdItem(1);
                 item51.setPuntajeItem(0.0);
 
                 Pregunta pregunta511 = realm.createObject(Pregunta.class);
@@ -2636,7 +2645,7 @@ public class ControllerDatos {
                 Item item52 = realm.createObject(Item.class);
                 item52.setCriterio(context.getResources().getString(R.string.criterio52C));
                 item52.setTextoItem(context.getResources().getString(R.string.texto52C));
-                item52.setIdItem(52);
+                item52.setIdItem(2);
                 item52.setPuntajeItem(0.0);
 
                 Pregunta pregunta521 = realm.createObject(Pregunta.class);
@@ -2659,7 +2668,7 @@ public class ControllerDatos {
                 Item item53 = realm.createObject(Item.class);
                 item53.setCriterio(context.getResources().getString(R.string.criterio53C));
                 item53.setTextoItem(context.getResources().getString(R.string.texto53C));
-                item53.setIdItem(53);
+                item53.setIdItem(3);
                 item53.setPuntajeItem(0.0);
 
                 Pregunta pregunta531 = realm.createObject(Pregunta.class);
@@ -2681,7 +2690,7 @@ public class ControllerDatos {
                 Item item54 = realm.createObject(Item.class);
                 item54.setCriterio(context.getResources().getString(R.string.criterio54C));
                 item54.setTextoItem(context.getResources().getString(R.string.texto54C));
-                item54.setIdItem(54);
+                item54.setIdItem(4);
                 item54.setPuntajeItem(0.0);
 
                 Pregunta pregunta541 = realm.createObject(Pregunta.class);
@@ -2721,7 +2730,7 @@ public class ControllerDatos {
                 Item item55 = realm.createObject(Item.class);
                 item55.setCriterio(context.getResources().getString(R.string.criterio55C));
                 item55.setTextoItem(context.getResources().getString(R.string.texto55C));
-                item55.setIdItem(55);
+                item55.setIdItem(5);
                 item55.setPuntajeItem(0.0);
 
                 Pregunta pregunta551 = realm.createObject(Pregunta.class);
@@ -2745,10 +2754,13 @@ public class ControllerDatos {
                     unaEses.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                     for (Item unItem :
                             unaEses.getListaItem()) {
+                        unItem.setIdEse(unaEses.getIdEse());
                         unItem.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                         for (Pregunta unaPregunta :
                                 unItem.getListaPreguntas()) {
+                            unaPregunta.setIdItem(unItem.getIdItem());
                             unaPregunta.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                            unaPregunta.setIdEse(unaEses.getIdEse());
                         }
                     }
                 }
@@ -2783,44 +2795,8 @@ public class ControllerDatos {
 
     public void eliminarCuestionario(final String idCuestionario){
 
-        Realm realm = Realm.getDefaultInstance();
+        FuncionesPublicas.eliminarCuestionario(idCuestionario,context);
 
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm bgRealm) {
-               RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
-                       .equalTo("idCuestionario", idCuestionario)
-                       .findAll();
-               lasPreguntas.deleteAllFromRealm();
-
-               RealmResults<Item> losItem = bgRealm.where(Item.class)
-                       .equalTo("idCuestionario", idCuestionario)
-                       .findAll();
-               losItem.deleteAllFromRealm();
-
-               RealmResults<Ese>lasEses=bgRealm.where(Ese.class)
-                       .equalTo("idCuestionario", idCuestionario)
-                       .findAll();
-               lasEses.deleteAllFromRealm();
-
-               Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
-                       .equalTo("idCuestionario", idCuestionario)
-                       .findFirst();
-               if (elCuestionario!=null){
-                   elCuestionario.deleteFromRealm();
-               }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(context, context.getString(R.string.cuestionarioEliminado), Toast.LENGTH_SHORT).show();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 

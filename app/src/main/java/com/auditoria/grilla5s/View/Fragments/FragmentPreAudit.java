@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Ese;
+import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
@@ -33,6 +37,15 @@ import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudi
  */
 public class FragmentPreAudit extends Fragment {
 
+    public final static String LAESE="LAESE";
+    private String laEse;
+
+    public static final String TIPOCUESTIONARIO ="TIPOCUESTIONARIO" ;
+    private String tipoCuestionario;
+
+    public static final String ORIGEN ="ORIGEN" ;
+    private String origen;
+
     public FragmentPreAudit() {
         // Required empty public constructor
     }
@@ -43,12 +56,10 @@ public class FragmentPreAudit extends Fragment {
         void auditarItem(Item unItem);
         void titularToolbar();
         void cerrarAuditoria();
-        void cargarAuditoriaEnFirebase(String idAudit);
         void actualizarPuntaje(String idAudit);
     }
 
-    public final static String LAESE="LAESE";
-    private String laEse;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,21 +69,66 @@ public class FragmentPreAudit extends Fragment {
         Bundle bundle = getArguments();
         if (bundle!=null) {
             laEse=bundle.getString(LAESE);
-
+            origen=bundle.getString(ORIGEN);
+            tipoCuestionario=bundle.getString(TIPOCUESTIONARIO);
         }
         else {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
         }
 
-        FloatingActionButton fabGuardar = view.findViewById(R.id.fabGuardarAudit);
-        fabGuardar.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
-        fabGuardar.setImageResource(R.drawable.ic_save_black_24dp);
-        fabGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                corroborarFinalizacionAuditoria(idAudit);
-            }
-        });
+        if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
+            FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
+            fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
+            fabPreAudit.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
+            fabPreAudit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new MaterialDialog.Builder(getContext())
+                            .title(getResources().getString(R.string.nuevoItem))
+                            .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                            .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                            .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                            .content(getResources().getString(R.string.agregueTituloItem))
+                            .inputType(InputType.TYPE_CLASS_TEXT)
+                            .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog dialog, final CharSequence input) {
+                                    Item nuevoItem= new Item();
+                                    nuevoItem.setCriterio(input.toString());
+                                    nuevoItem.setIdCuestionario(tipoCuestionario);
+                                    nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
+
+                                    Realm realm = Realm.getDefaultInstance();
+                                    Ese unaEse = realm.where(Ese.class)
+                                            .equalTo("idCuestionario", tipoCuestionario)
+                                            .equalTo("idEse", Integer.parseInt(laEse))
+                                            .findFirst();
+                                    if (unaEse!=null){
+                                        Integer numeroOrdenItem = unaEse.getListaItem().size()+1;
+                                        String idItemNuevo= laEse + String.valueOf(numeroOrdenItem);
+                                        nuevoItem.setIdItem(Integer.parseInt(idItemNuevo));
+                                    }
+
+                                    FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem);
+
+                                }
+                            }).show();
+
+                }
+            });
+        }
+        else {
+            FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
+            fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
+            fabPreAudit.setImageResource(R.drawable.ic_save_black_24dp);
+            fabPreAudit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    corroborarFinalizacionAuditoria(idAudit);
+                }
+            });
+        }
 
         final RecyclerView recyclerPreAudit = view.findViewById(R.id.recyclerPreAudit);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
@@ -80,22 +136,37 @@ public class FragmentPreAudit extends Fragment {
 
 //      LE PIDO A LA REALM TODOS LOS ITEM QUE TIENEN AUDITORIA Y QUE COMIENZAN CON LA MISMA ESE
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Item> listaItems=realm.where(Item.class)
-                        .equalTo("idAudit",ActivityPreAuditoria.pedirIdAudit())
-                        .findAll();
+        RealmList<Item>listaItemsOriginales;
 
-        //si el item pertenece a la ese, loo agrego a la lista
-        RealmList<Item>listaItemsOriginales = new RealmList<>();
-        for (Item elItem:listaItems) {
-            String elItemStr = String.valueOf(elItem.getIdItem());
-            if (elItemStr.startsWith(laEse)){
-                listaItemsOriginales.add(elItem);
-            }
+        if (origen.equals("EDITARCUESTIONARIO")) {
+
+            RealmResults<Item> listaItems=realm.where(Item.class)
+                    .equalTo("idCuestionario",tipoCuestionario)
+                    .equalTo("idEse", Integer.parseInt(laEse))
+                    .findAll();
+
+            //si el item pertenece a la ese, loo agrego a la lista
+            listaItemsOriginales = new RealmList<>();
+            listaItemsOriginales.addAll(listaItems);
+
+
+        } else {
+
+            RealmResults<Item> listaItems=realm.where(Item.class)
+                    .equalTo("idAudit",ActivityPreAuditoria.pedirIdAudit())
+                    .equalTo("idEse", Integer.parseInt(laEse))
+                    .findAll();
+
+            //si el item pertenece a la ese, loo agrego a la lista
+            listaItemsOriginales = new RealmList<>();
+            listaItemsOriginales.addAll(listaItems);
+
         }
 
         adapterItems=new AdapterItems();
         adapterItems.setContext(getContext());
         adapterItems.setListaItemsOriginales(listaItemsOriginales);
+        adapterItems.setOrigen(origen);
         recyclerPreAudit.setAdapter(adapterItems);
         adapterItems.notifyDataSetChanged();
 
@@ -117,6 +188,16 @@ public class FragmentPreAudit extends Fragment {
         FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
         Bundle unBundle = new Bundle();
         unBundle.putString(LAESE, laEse);
+        fragmentPreAudit.setArguments(unBundle);
+
+        return fragmentPreAudit;
+    }
+    public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen,String idCuestionario) {
+        FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
+        Bundle unBundle = new Bundle();
+        unBundle.putString(LAESE, laEse);
+        unBundle.putString(ORIGEN, origen);
+        unBundle.putString(TIPOCUESTIONARIO, idCuestionario);
         fragmentPreAudit.setArguments(unBundle);
 
         return fragmentPreAudit;

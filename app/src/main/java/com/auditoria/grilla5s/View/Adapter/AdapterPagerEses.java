@@ -16,11 +16,38 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
-
-
-
+    private String origen;
+    private String idCuestionario;
     private List<String> unaListaTitulos;
 
+    //CONSTRUNCTOR PARA EDITOR DE CUESTIONARIOS
+    public AdapterPagerEses(FragmentManager fm, String origen, String idCuestionario) {
+        super(fm);
+        this.listaFragments = listaFragments;
+        this.origen = origen;
+        this.idCuestionario = idCuestionario;
+
+        //INICIALIZO LA LISTA DE FRAGMENT
+        listaFragments = new ArrayList<>();
+
+        //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
+
+
+        for(Integer i=1;i<6;i++){
+            if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
+                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString(),origen,idCuestionario));
+            } else {
+                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
+            }
+        }
+
+        //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
+        notifyDataSetChanged();
+    }
+
+
+
+    //CONSTRUCTOR GENERAL
     public AdapterPagerEses(FragmentManager fm) {
         super(fm);
 
@@ -31,12 +58,18 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
 
         for(Integer i=1;i<6;i++){
+            if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
+                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString(),origen,idCuestionario));
+            } else {
                 listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
+            }
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
         notifyDataSetChanged();
     }
+
+
 
 
     @Override
@@ -61,4 +94,15 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+
+    public void setIdCuestionario(String idCuestionario) {
+        this.idCuestionario = idCuestionario;
+    }
 }

@@ -1,5 +1,6 @@
 package com.auditoria.grilla5s.View.Activities;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +11,9 @@ import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
 import com.auditoria.grilla5s.View.Fragments.FragmentEditorCuestionarios;
+import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
-public class EditarCuestionarioActivity extends AppCompatActivity  {
+public class EditarCuestionarioActivity extends AppCompatActivity implements FragmentEditorCuestionarios.Notificable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +52,16 @@ public class EditarCuestionarioActivity extends AppCompatActivity  {
         this.finish();
     }
 
+    @Override
+    public void abrirCuestionario(Cuestionario cuestionario) {
+        //USO EL FRAGMENT PRE AUDIT PARA VER LOS ITEMS Y MODIFICAR
+        Bundle bundle = new Bundle();
+        bundle.putString(EditorAvanzadoCuestionarioActivity.TIPOCUESTIONARIO , cuestionario.getIdCuestionario());
+        bundle.putString(EditorAvanzadoCuestionarioActivity.ORIGEN, "EDITARCUESTIONARIO");
 
+        Intent intent = new Intent(EditarCuestionarioActivity.this, EditorAvanzadoCuestionarioActivity.class);
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+    }
 }

@@ -1,9 +1,9 @@
 package com.auditoria.grilla5s.View.Fragments;
 
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,21 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
-import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -45,7 +39,7 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
     private AdapterCuestionario adapterCuestionario;
     private LinearLayoutManager layoutManager;
 
-    private FragmentManageAreas.Notificable notificable;
+
     private FloatingActionMenu fabMenuManage;
     private FloatingActionButton fabNuevoCuestionario;
     private FloatingActionButton fabSalir;
@@ -59,10 +53,15 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
     private DatabaseReference mDatabase;
 
     private LinearLayout linearSnackbar;
+    private Notificable notificable;
 
 
     public FragmentEditorCuestionarios() {
         // Required empty public constructor
+    }
+
+    public interface Notificable{
+        void abrirCuestionario(Cuestionario cuestionario);
     }
 
 
@@ -93,13 +92,16 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
         textView.setTypeface(roboto);
 
 
-        View.OnClickListener listenerArea = new View.OnClickListener() {
+        View.OnClickListener listenerCuestionario = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Integer posicion = recyclerCuestionarios.getChildAdapterPosition(v);
+                RealmList<Cuestionario> listaCuestionarios = adapterCuestionario.getListaCuestionariosOriginales();
+                Cuestionario cuestionarioClickeado = listaCuestionarios.get(posicion);
+                notificable.abrirCuestionario(cuestionarioClickeado);
             }
         };
-        adapterCuestionario.setListener(listenerArea);
+        adapterCuestionario.setListener(listenerCuestionario);
 
 
         fabMenuManage = view.findViewById(R.id.agregarArea);
@@ -166,5 +168,11 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
         adapterCuestionario.getListaCuestionariosOriginales().remove(unCuestionario);
         adapterCuestionario.notifyDataSetChanged();
         controllerDatos.eliminarCuestionario(unCuestionario.getIdCuestionario());
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        notificable = (Notificable)context;
     }
 }

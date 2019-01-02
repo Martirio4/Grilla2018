@@ -3,7 +3,6 @@ package com.auditoria.grilla5s.Utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -23,6 +22,7 @@ import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea;
 import com.google.firebase.auth.FirebaseAuth;
@@ -224,6 +224,148 @@ public class FuncionesPublicas {
     public static void subirAFireBase(String idAudit){
         new Subidor().execute(idAudit);
     }
+
+    public static void agregarItem(final String idCuestionario, final Item unItem){
+        Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Item mItem = realm.copyToRealm(unItem);
+                    Integer idEse=Integer.parseInt((String.valueOf(unItem.getIdItem()).substring(0,1)));
+
+                    final Ese laEse = realm.where(Ese.class)
+                            .equalTo("idCuestionario", idCuestionario)
+                            .equalTo("idEse",idEse)
+                            .findFirst();
+                    if (laEse!=null){
+                        laEse.addItem(mItem);
+                    }
+                }
+            });
+    }
+
+
+    public static void cambiarTextoItem(final Item unItem, final String s) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Item elItem = realm.where(Item.class)
+                        .equalTo("idItem", unItem.getIdItem())
+                        .equalTo("idCuestionario", unItem.getIdCuestionario())
+                        .findFirst();
+                if (elItem!=null&& !s.isEmpty()){
+                    elItem.setCriterio(s);
+                }
+            }
+        });
+    }
+
+    public static Integer dameEseParaIdItem(Integer idItem){
+        return Integer.parseInt(String.valueOf(idItem).substring(0,1));
+    }
+
+    public static void eliminarCuestionario(final String idCuestionario, final Context context) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findAll();
+                lasPreguntas.deleteAllFromRealm();
+
+                RealmResults<Item> losItem = bgRealm.where(Item.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findAll();
+                losItem.deleteAllFromRealm();
+
+                RealmResults<Ese>lasEses=bgRealm.where(Ese.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findAll();
+                lasEses.deleteAllFromRealm();
+
+                Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findFirst();
+                if (elCuestionario!=null){
+                    elCuestionario.deleteFromRealm();
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, context.getString(R.string.cuestionarioEliminado), Toast.LENGTH_SHORT).show();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public static void borrarItem(final Integer idItem, final String idCuestionario, final Integer idEse, final AdapterItems adapterItems) {
+
+        Realm bgrealm = Realm.getDefaultInstance();
+
+        bgrealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Integer laEse= Integer.parseInt(String.valueOf(idItem).substring(0,1));
+
+                //BORRO LAS PREGUNTAS DE ESE ITEM
+                RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idItem", idItem)
+                        .equalTo("idEse", idEse)
+                        .findAll();
+                lasPreguntas.deleteAllFromRealm();
+
+                //BORRO EL ITEM
+                Item elItem = realm.where(Item.class)
+                        .equalTo("idItem", idItem)
+                        .equalTo("idEse", idEse)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findFirst();
+                if (elItem!=null) {
+                    elItem.deleteFromRealm();
+                }
+
+                //REACOMODO LOS NUMEROS DE ITEM
+                RealmResults<Item> losItems = realm.where(Item.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idEse",idEse)
+                        .sort("idItem",Sort.ASCENDING)
+                        .findAll();
+                Integer inicio=0;
+                for (Item elItemAReubicar:losItems
+                        ) {
+                    inicio++;
+                    elItemAReubicar.setIdItem(inicio);
+
+
+                    for (Pregunta preg:elItemAReubicar.getListaPreguntas()
+                            ) {
+                        preg.setIdItem(elItemAReubicar.getIdItem());
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                adapterItems.notifyDataSetChanged();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(adapterItems.getContext(), adapterItems.getContext().getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
 
     public static class Subidor extends AsyncTask< String, Void, Void> {
 

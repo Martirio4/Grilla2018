@@ -1,12 +1,12 @@
 package com.auditoria.grilla5s.View.Activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -24,12 +24,15 @@ import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
 import io.realm.Realm;
 
-public class ActivityPreAuditoria extends AppCompatActivity implements FragmentPreAudit.Auditable{
+public class EditorAvanzadoCuestionarioActivity extends AppCompatActivity implements FragmentPreAudit.Auditable{
+
 
     private ControllerDatos controllerDatos;
     public static String idAudit;
+    public static String tipoCuestionario;
     private String idArea;
     public static final String IDAREA="IDAREA";
+    public static final String TIPOCUESTIONARIO ="TIPOCUESTIONARIO" ;
     public static final String ORIGEN="ORIGEN";
     //SOLO RECIBO ESTA KEY CUANDO QUIERO EDITAR UNA AUDITORIA
     public static final String IDAUDIT="IDAUDIT";
@@ -37,6 +40,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     private ViewPager pager;
     private Toolbar toolbar;
     private String origen;
+    private AdapterPagerEses adapterPager;
 
 
 
@@ -52,47 +56,9 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
             origen=bundle.getString(ORIGEN);
             idArea=bundle.getString(IDAREA);
             idAudit=bundle.getString(IDAUDIT);
+            tipoCuestionario=bundle.getString(TIPOCUESTIONARIO);
         }
 
-        //SI EL ORIGEN ES NUEVA AUDITORIA SIGO NORMAL, INSTANCIO UNA NUVA AUDITORIA
-        if (origen!=null && origen.equals("NUEVA_AUDITORIA")) {
-
-            idArea=bundle.getString(IDAREA);
-
-            //      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
-            controllerDatos= new ControllerDatos(this);
-
-
-            Realm realm = Realm.getDefaultInstance();
-            Area elArea=realm.where(Area.class)
-                    .equalTo("idArea",idArea)
-                    .findFirst();
-
-            //SI EL AREA NO TIENE TIPO, LE ASIGNA TIPO "A"
-            if (elArea!=null && elArea.getTipoArea()!=null){
-                idAudit=controllerDatos.instanciarAuditoria(elArea.getTipoArea());
-            }
-            else if(elArea!=null && elArea.getTipoArea()==null){
-                //si no tiene tipo la instacio como zona industrial
-                idAudit=controllerDatos.instanciarAuditoria("A");
-            }
-
-            realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-            Auditoria auditActual= realm.where(Auditoria.class)
-                    .equalTo("idAuditoria",idAudit)
-                    .findFirst();
-            Area areaAIncluir = realm.where(Area.class)
-                    .equalTo("idArea",idArea)
-                    .findFirst();
-
-            if (auditActual!=null && areaAIncluir!=null){
-                auditActual.setAreaAuditada(areaAIncluir);
-            }
-            }
-            });
-        }
 
         toolbar =  findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -105,7 +71,12 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
         controllerDatos=new ControllerDatos(this);
-        AdapterPagerEses adapterPager=new AdapterPagerEses(getSupportFragmentManager());
+
+        if (origen.equals("EDITARCUESTIONARIO")) {
+             adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen,tipoCuestionario);        }
+        else{
+             adapterPager=new AdapterPagerEses(getSupportFragmentManager());
+        }
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
 
@@ -156,6 +127,9 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public static String pedirIdAudit(){
         return idAudit;
     }
+    public static String pedirTipoCuestionario(){
+        return tipoCuestionario;
+    }
 
     @Override
     public void auditarItem(Item unItem) {
@@ -198,7 +172,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public void onBackPressed() {
 
         if (origen.equals("REVISAR")) {
-            ActivityPreAuditoria.super.onBackPressed();
+            EditorAvanzadoCuestionarioActivity.super.onBackPressed();
         }
         else {
             new MaterialDialog.Builder(this)
@@ -212,7 +186,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            ActivityPreAuditoria.super.onBackPressed();
+                            EditorAvanzadoCuestionarioActivity.super.onBackPressed();
                         }
                     })
                     .negativeText(getResources().getString(R.string.cancel))
@@ -235,7 +209,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         return super.onOptionsItemSelected(item);
     }
 
-
+   
 
     @Override
     public void actualizarPuntaje(String idAudit) {

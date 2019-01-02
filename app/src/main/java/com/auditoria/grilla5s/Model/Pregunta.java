@@ -14,6 +14,7 @@ public class Pregunta extends RealmObject {
     private Integer puntaje;
     private String idAudit;
     private Integer idItem;
+    private Integer idEse;
     private String idCuestionario;
     private RealmList<Foto> listaFotos;
 
@@ -87,5 +88,13 @@ public class Pregunta extends RealmObject {
 
     public void setIdCuestioniario(String idCuestioniario) {
         this.idCuestionario = idCuestioniario;
+    }
+
+    public Integer getIdEse() {
+        return idEse;
+    }
+
+    public void setIdEse(Integer idEse) {
+        this.idEse = idEse;
     }
 }
