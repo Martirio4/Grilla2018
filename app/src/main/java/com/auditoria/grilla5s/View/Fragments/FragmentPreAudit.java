@@ -58,6 +58,7 @@ public class FragmentPreAudit extends Fragment {
         void titularToolbar();
         void cerrarAuditoria();
         void actualizarPuntaje(String idAudit);
+        void agregarNuevoCriterio(String laEse, String tipoCuestionario, AdapterItems elAdapter);
     }
 
 
@@ -85,35 +86,7 @@ public class FragmentPreAudit extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    new MaterialDialog.Builder(getContext())
-                            .title(getResources().getString(R.string.nuevoItem))
-                            .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                            .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                            .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                            .content(getResources().getString(R.string.agregueTituloItem))
-                            .inputType(InputType.TYPE_CLASS_TEXT)
-                            .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
-                                @Override
-                                public void onInput(MaterialDialog dialog, final CharSequence input) {
-                                    Item nuevoItem= new Item();
-                                    nuevoItem.setCriterio(input.toString());
-                                    nuevoItem.setIdCuestionario(tipoCuestionario);
-                                    nuevoItem.setIdEse(Integer.parseInt(laEse));
-                                    nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
-
-                                    Realm realm = Realm.getDefaultInstance();
-                                    RealmResults<Item> losItem = realm.where(Item.class)
-                                            .equalTo("idCuestionario", tipoCuestionario)
-                                            .equalTo("idEse", Integer.parseInt(laEse))
-                                            .findAll();
-                                    if (losItem!=null){
-                                        nuevoItem.setIdItem(losItem.size()+1);
-                                    }
-
-                                    FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem,adapterItems);
-
-                                }
-                            }).show();
+                   auditable.agregarNuevoCriterio(laEse,tipoCuestionario,adapterItems);
 
                 }
             });
@@ -185,10 +158,11 @@ public class FragmentPreAudit extends Fragment {
         return view;
     }
 
-    public static FragmentPreAudit CrearfragmentPreAudit(String laEse) {
+    public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen) {
         FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
         Bundle unBundle = new Bundle();
         unBundle.putString(LAESE, laEse);
+        unBundle.putString(ORIGEN,origen);
         fragmentPreAudit.setArguments(unBundle);
 
         return fragmentPreAudit;

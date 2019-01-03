@@ -37,7 +37,7 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
             if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
                 listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString(),origen,idCuestionario));
             } else {
-                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
+                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit((i.toString()),origen));
             }
         }
 
@@ -48,21 +48,16 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
 
     //CONSTRUCTOR GENERAL
-    public AdapterPagerEses(FragmentManager fm) {
+    public AdapterPagerEses(FragmentManager fm, String origen) {
         super(fm);
-
+        this.origen=origen;
         //INICIALIZO LA LISTA DE FRAGMENT
         listaFragments = new ArrayList<>();
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-
         for(Integer i=1;i<6;i++){
-            if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
-                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString(),origen,idCuestionario));
-            } else {
-                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString()));
-            }
+                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit((i.toString()),origen));
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.

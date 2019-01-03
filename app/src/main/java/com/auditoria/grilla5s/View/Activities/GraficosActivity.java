@@ -443,7 +443,7 @@ public class GraficosActivity extends AppCompatActivity {
                 for (Pregunta unaPreg : lasPreguntas
                         ) {
 
-                    if (unaPreg.getIdPregunta().equals(111) || unaPreg.getIdPregunta().equals(112)) {
+                    if (unaPreg==lasPreguntas.get(0)||unaPreg==lasPreguntas.get(1)) {
                         //nada
                     } else {
                         Random r = new Random();

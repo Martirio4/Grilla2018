@@ -89,4 +89,9 @@ public class Item extends RealmObject {
     public void setIdEse(Integer idEse) {
         this.idEse = idEse;
     }
+
+    public void addlistaPreguntas(RealmList<Pregunta> listaPreguntas) {
+        this.listaPreguntas.clear();
+        this.listaPreguntas.addAll(listaPreguntas);
+    }
 }

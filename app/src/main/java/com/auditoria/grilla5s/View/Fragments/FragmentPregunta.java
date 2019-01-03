@@ -65,6 +65,7 @@ public class FragmentPregunta extends Fragment {
 
 
     public static final String ENUNCIADOPREGUNTA="ENUNCIADOPREGUNTA";
+    public static final String TIPOCUESTIONARIO="TIPOCUESTIONARIO";
     public static final String IDPREGUNTA="IDPREGUNTA";
     public static final String IDITEM="IDITEM";
     public static final String IDAUDITORIA="IDAUDITORIA";
@@ -75,8 +76,8 @@ public class FragmentPregunta extends Fragment {
     private RecyclerView recyclerFotos;
     private AdapterFotos adapterFotos;
     private AdapterFotos adapterFotosViejas;
-    TextView tagCommentNuevo;
-    TextView tagCommentViejo;
+    private TextView tagCommentNuevo;
+    private TextView tagCommentViejo;
 
     private LinearLayoutManager layoutManager;
     private LinearLayoutManager layoutManagerViejo;
@@ -93,6 +94,7 @@ public class FragmentPregunta extends Fragment {
     private String idPregunta;
     private String idAudit;
     private String idItem;
+    private String idCuestionario;
 
     private TextView textoPregunta;
     private TextView criterioDescripcion;
@@ -166,6 +168,7 @@ public class FragmentPregunta extends Fragment {
             idPregunta=bundle.getString(IDPREGUNTA);
             enunciado=bundle.getString(ENUNCIADOPREGUNTA);
             esRevision=bundle.getBoolean(ESREVISION);
+            idCuestionario=bundle.getString(TIPOCUESTIONARIO);
         }
 
         Realm realm = Realm.getDefaultInstance();

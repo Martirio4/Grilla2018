@@ -65,10 +65,6 @@
             android:name="com.auditoria.grilla5s.View.Activities.EditarCuestionarioActivity"
             android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
             />
-        <activity
-            android:name="com.auditoria.grilla5s.View.Activities.EditorAvanzadoCuestionarioActivity"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.EditarCuestionarioActivity"
-            />
     </application>
 
 </manifest>

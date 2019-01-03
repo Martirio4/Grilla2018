@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -17,12 +18,16 @@ import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
+import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class ActivityPreAuditoria extends AppCompatActivity implements FragmentPreAudit.Auditable{
 
@@ -31,12 +36,15 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     private String idArea;
     public static final String IDAREA="IDAREA";
     public static final String ORIGEN="ORIGEN";
+    public static final String TIPOCUESTIONARIO ="TIPOCUESTIONARIO" ;
     //SOLO RECIBO ESTA KEY CUANDO QUIERO EDITAR UNA AUDITORIA
     public static final String IDAUDIT="IDAUDIT";
 
     private ViewPager pager;
     private Toolbar toolbar;
     private String origen;
+    public static String tipoCuestionario;
+    private AdapterPagerEses adapterPager;
 
 
 
@@ -44,6 +52,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_auditoria);
+        controllerDatos= new ControllerDatos(this);
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
@@ -52,6 +61,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
             origen=bundle.getString(ORIGEN);
             idArea=bundle.getString(IDAREA);
             idAudit=bundle.getString(IDAUDIT);
+            tipoCuestionario=bundle.getString(TIPOCUESTIONARIO);
         }
 
         //SI EL ORIGEN ES NUEVA AUDITORIA SIGO NORMAL, INSTANCIO UNA NUVA AUDITORIA
@@ -60,8 +70,6 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
             idArea=bundle.getString(IDAREA);
 
             //      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
-            controllerDatos= new ControllerDatos(this);
-
 
             Realm realm = Realm.getDefaultInstance();
             Area elArea=realm.where(Area.class)
@@ -99,13 +107,20 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.blancoNomad));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
+            if (origen.equals("NUEVA_AUDITORIA")) {
+                toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
+            } else if (origen.equals("EDITARCUESTIONARIO")){
+                toolbar.setTitle(getResources().getString(R.string.tituloPreAuditEditarCuestionario));
+            }
         }
 
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
-        controllerDatos=new ControllerDatos(this);
-        AdapterPagerEses adapterPager=new AdapterPagerEses(getSupportFragmentManager());
+        if (origen.equals("EDITARCUESTIONARIO")) {
+            adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen,tipoCuestionario);        }
+        else {
+            adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen);
+        }
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
 
@@ -162,7 +177,8 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Intent intent=new Intent(this, ActivityAuditoria.class);
         Bundle bundle=new Bundle();
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
-        bundle.putString(ActivityAuditoria.IDITEM, String.valueOf(unItem.getIdItem()));
+        bundle.putInt(ActivityAuditoria.IDESE,unItem.getIdEse() );
+        bundle.putInt(ActivityAuditoria.IDITEM, unItem.getIdItem());
         if(origen.equals("REVISAR")){
             bundle.putBoolean(ActivityAuditoria.ESREVISION, true);
         }
@@ -198,6 +214,9 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public void onBackPressed() {
 
         if (origen.equals("REVISAR")) {
+            ActivityPreAuditoria.super.onBackPressed();
+        }
+        else if (origen.equals("EDITARCUESTIONARIO")){
             ActivityPreAuditoria.super.onBackPressed();
         }
         else {
@@ -240,5 +259,38 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     @Override
     public void actualizarPuntaje(String idAudit) {
         FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
+    }
+
+    @Override
+    public void agregarNuevoCriterio(final String laEse, final String tipoCuestionario, final AdapterItems elAdapter) {
+        new MaterialDialog.Builder(this)
+                .title(getResources().getString(R.string.nuevoItem))
+                .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                .content(getResources().getString(R.string.agregueTituloItem))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, final CharSequence input) {
+                        Item nuevoItem= new Item();
+                        nuevoItem.setCriterio(input.toString());
+                        nuevoItem.setIdCuestionario(tipoCuestionario);
+                        nuevoItem.setIdEse(Integer.parseInt(laEse));
+                        nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
+
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmResults<Item> losItem = realm.where(Item.class)
+                                .equalTo("idCuestionario", tipoCuestionario)
+                                .equalTo("idEse", Integer.parseInt(laEse))
+                                .findAll();
+                        if (losItem!=null){
+                            nuevoItem.setIdItem(losItem.size()+1);
+                        }
+
+                        FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem,elAdapter);
+
+                    }
+                }).show();
     }
 }

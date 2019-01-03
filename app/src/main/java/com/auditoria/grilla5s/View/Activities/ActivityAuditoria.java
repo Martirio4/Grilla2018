@@ -38,10 +38,13 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     public static final String IDAUDITORIA ="IDAUDITORIA";
     public static final String IDITEM="IDITEM";
+    public static final String IDESE="IDESE";
+
     public static final String ESREVISION="ESREVISION";
 
     public static String idAudit;
-    public static String idItem;
+    public static Integer idItem;
+    public Integer idese;
     private ViewPager pager;
     private String resultadoInputFoto;
     private FloatingActionMenu fabMenu;
@@ -60,26 +63,23 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         if (bundle!=null) {
             idAudit =bundle.getString(IDAUDITORIA);
-            idItem=bundle.getString(IDITEM);
+            idItem=bundle.getInt(IDITEM);
             esRevision=bundle.getBoolean(ESREVISION);
+            idese=bundle.getInt(IDESE);
         }
 
 
 //        SETEAR EL VIEWPAGER
 
-
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta>resultPregunta=realm.where(Pregunta.class)
                 .equalTo("idAudit", idAudit)
+                .equalTo("idItem", idItem)
+                .equalTo("idEse",idese )
                 .findAll();
 
         RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
-        for (Pregunta laPregunta :resultPregunta) {
-            String elItemStr = String.valueOf(laPregunta.getIdItem());
-            if (elItemStr.startsWith(idItem)){
-                listaPreguntasOriginales.add(laPregunta);
-            }
-        }
+        listaPreguntasOriginales.addAll(resultPregunta);
 
         //GENERO LISTA DE TITULOS ORDINALES
         List<String> laListaDeTitulos=new ArrayList<>();

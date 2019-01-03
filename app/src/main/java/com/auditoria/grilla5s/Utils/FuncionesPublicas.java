@@ -267,10 +267,12 @@ public class FuncionesPublicas {
             public void execute(Realm realm) {
                 Item elItem = realm.where(Item.class)
                         .equalTo("idItem", unItem.getIdItem())
+                        .equalTo("idEse", unItem.getIdEse())
                         .equalTo("idCuestionario", unItem.getIdCuestionario())
                         .findFirst();
                 if (elItem!=null&& !s.isEmpty()){
                     elItem.setCriterio(s);
+                    System.out.println(s);
                 }
             }
         });

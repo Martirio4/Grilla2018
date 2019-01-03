@@ -664,5 +664,6 @@
     <string name="OK">OK</string>
     <string name="tituloDialogoModificarItem">Modificar Criterio</string>
     <string name="elItemNoSeAgrego">El item no fue creado</string>
+    <string name="tituloPreAuditEditarCuestionario">Editar Cuestionario</string>
 
 </resources>

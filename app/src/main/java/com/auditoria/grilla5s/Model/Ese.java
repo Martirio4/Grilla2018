@@ -72,4 +72,5 @@ public class Ese extends RealmObject {
     public void setIdCuestionario(String idCuestionario) {
         this.idCuestionario = idCuestionario;
     }
+
 }

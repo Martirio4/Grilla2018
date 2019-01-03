@@ -90,7 +90,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
             CuestionarioViewHolder.fabEliminar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    eliminable = (Eliminable) fragmentManageCuestionarios;
+                    eliminable = fragmentManageCuestionarios;
                     eliminable.EliminarCuestionario(unCuestionario);
 
                 }

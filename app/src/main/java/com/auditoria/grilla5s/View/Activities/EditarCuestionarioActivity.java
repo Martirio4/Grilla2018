@@ -56,10 +56,10 @@ public class EditarCuestionarioActivity extends AppCompatActivity implements Fra
     public void abrirCuestionario(Cuestionario cuestionario) {
         //USO EL FRAGMENT PRE AUDIT PARA VER LOS ITEMS Y MODIFICAR
         Bundle bundle = new Bundle();
-        bundle.putString(EditorAvanzadoCuestionarioActivity.TIPOCUESTIONARIO , cuestionario.getIdCuestionario());
-        bundle.putString(EditorAvanzadoCuestionarioActivity.ORIGEN, "EDITARCUESTIONARIO");
+        bundle.putString(ActivityPreAuditoria.TIPOCUESTIONARIO , cuestionario.getIdCuestionario());
+        bundle.putString(ActivityPreAuditoria.ORIGEN, "EDITARCUESTIONARIO");
 
-        Intent intent = new Intent(EditarCuestionarioActivity.this, EditorAvanzadoCuestionarioActivity.class);
+        Intent intent = new Intent(EditarCuestionarioActivity.this, ActivityPreAuditoria.class);
         intent.putExtras(bundle);
 
         startActivity(intent);
