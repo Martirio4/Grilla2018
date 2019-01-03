@@ -7,13 +7,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Area;
-import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -33,19 +30,11 @@ import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
@@ -361,11 +350,15 @@ public class FragmentManageAreas extends Fragment {
                            // Toast.makeText(getContext(), R.string.noSeEliminoFoto, Toast.LENGTH_SHORT).show();
                         }
                     }
-                    FuncionesPublicas.crearDialogoNombreArea(unaFoto,FragmentManageAreas.this,"areas");
+                    FuncionesPublicas.crearDialogoNombreArea(unaFoto,FragmentManageAreas.this,FuncionesPublicas.MANAGE_AREAS);
 
                 }
 
             }
+
+
+
+
 
             @Override
             public void onCanceled(EasyImage.ImageSource source, int type) {

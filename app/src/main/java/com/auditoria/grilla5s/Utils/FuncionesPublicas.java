@@ -50,6 +50,24 @@ import pl.tajchert.nammu.PermissionCallback;
 
 public class FuncionesPublicas {
 
+    public static final String REVISAR="REVISAR_AUDITORIA";
+    public static final String NUEVA_AUDITORIA="NUEVA_AUDITORIA";
+    public static final String EDITAR_CUESTIONARIO="EDITAR_CUESTIONARIO";
+    public static final String FRAGMENTMANAGER_AREAS = "FRAGMENTMANAGER_AREAS";
+    public static final String FRAGMENT_RADAR = "FRAGMENT_RADAR";
+    public static final String FRAGMENT_GRAFICO_AREA = "FRAGMENT_GRAFICO_AREA";
+    public static final String EDITAR_AUDITORIA = "EDITAR_AUDITORIA";
+    public static final String FRAGMENT_GRAFICO_BARRAS = "FRAGMENT_BARRAS_APILADAS";
+    public static final String MIS_AUDITORIAS = "MIS_AUDITORIAS";
+    public static final String FRAGMENT_EDITOR_CUESTIONARIOS = "FRAGMENT_EDITOR_CUESTIONARIOS";
+    public static final String FRAGMENT_ZOOM = "FRAGMENT_ZOOM";
+    public static final String SELECCION_AREAS = "SELECCION_AREAS";
+    public static final String MANAGE_AREAS = "MANAGE_AREAS";
+    public static final String RANKING = "RANKING";
+    public static final String AUDITORIA = "AUDITORIA";
+    public static final String AREAS = "AREAS";
+
+
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -590,11 +608,11 @@ public class FuncionesPublicas {
                                             }
                                         });
 
-                                        if (origen.equals("areas")){
+                                        if (origen.equals(MANAGE_AREAS)){
                                             FragmentManageAreas elFragment = (FragmentManageAreas) fragment;
                                             elFragment.updateAdapter();
                                         }
-                                        else if (origen.equals("seleccion")){
+                                        else if (origen.equals(SELECCION_AREAS)){
                                             FragmentSeleccionArea elFragment = (FragmentSeleccionArea) fragment;
                                             elFragment.updateAdapter();
                                         }

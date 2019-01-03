@@ -19,23 +19,28 @@ import io.realm.RealmList;
 
 public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
 
+    private final String origen;
+    private final Integer idEse;
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
     private RealmList<Pregunta> listaPregunta = new RealmList<>();
     private List<String> unaListaTitulos;
 
 
-    public AdapterPagerPreguntas(FragmentManager fm,RealmList<Pregunta>listaPregunta,Boolean esRevision) {
+    public AdapterPagerPreguntas(FragmentManager fm, RealmList<Pregunta> listaPregunta, String elOrigen, Integer elIdEse) {
         super(fm);
 
         //INICIALIZO LA LISTA DE FRAGMENT
-        listaFragments = new ArrayList<>();
+        this.idEse = elIdEse;
+        this.origen=elOrigen;
         this.listaPregunta=listaPregunta;
+
+        listaFragments = new ArrayList<>();
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
         for (Pregunta unaPreg:listaPregunta
              ) {
-           listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg,esRevision));
+           listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg, origen,idEse));
         }
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.

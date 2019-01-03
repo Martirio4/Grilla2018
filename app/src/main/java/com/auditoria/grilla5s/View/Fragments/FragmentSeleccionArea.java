@@ -290,7 +290,7 @@ public class FragmentSeleccionArea extends Fragment {
                             // Toast.makeText(getContext(), R.string.noSeEliminoFoto, Toast.LENGTH_SHORT).show();
                         }
                     }
-                    FuncionesPublicas.crearDialogoNombreArea(unaFoto, FragmentSeleccionArea.this,"seleccion");
+                    FuncionesPublicas.crearDialogoNombreArea(unaFoto, FragmentSeleccionArea.this,FuncionesPublicas.SELECCION_AREAS);
 
 
                 }

@@ -55,13 +55,10 @@ public class FragmentRevisarAuditoria extends Fragment {
     private AdapterVerAudit adapter4;
 
     private Auditoria mAudit;
-    
-
 
     public FragmentRevisarAuditoria() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -178,149 +175,6 @@ public class FragmentRevisarAuditoria extends Fragment {
 
         return view;
     }
-/*
-    public void cargarSeiri(){
-        RealmList<Pregunta> lista=mAudit.g();
-
-        sub1.setText(lista.get(0).getTextoPregunta());
-        sub2.setText(lista.get(1).getTextoPregunta());
-        sub3.setText(lista.get(2).getTextoPregunta());
-        sub4.setText(lista.get(3).getTextoPregunta());
-
-        String aux0=lista.get(0).getPuntaje().toString();
-        String aux1=lista.get(1).getPuntaje().toString();
-        String aux2=lista.get(2).getPuntaje().toString();
-        String aux3=lista.get(3).getPuntaje().toString();
-
-        punt1.setText(aux0);
-        punt2.setText(aux1);
-        punt3.setText(aux2);
-        punt4.setText(aux3);
-
-        adapter1.setListaFotosOriginales(lista.get(0).getListaFotos());
-        adapter1.notifyDataSetChanged();
-        adapter2.setListaFotosOriginales(lista.get(1).getListaFotos());
-        adapter2.notifyDataSetChanged();
-        adapter3.setListaFotosOriginales(lista.get(2).getListaFotos());
-        adapter3.notifyDataSetChanged();
-        adapter4.setListaFotosOriginales(lista.get(3).getListaFotos());
-        adapter4.notifyDataSetChanged();
-
-    }
-    public void cargarSeiton(){
-        RealmList<SubItem> lista=mAudit.getSubItems();
-
-        sub1.setText(lista.get(4).getTextoPregunta());
-        sub2.setText(lista.get(5).getTextoPregunta());
-        sub3.setText(lista.get(6).getTextoPregunta());
-        sub4.setText(lista.get(7).getTextoPregunta());
-
-        String aux0=lista.get(4).getPuntaje().toString();
-        String aux1=lista.get(5).getPuntaje().toString();
-        String aux2=lista.get(6).getPuntaje().toString();
-        String aux3=lista.get(7).getPuntaje().toString();
-
-        punt1.setText(aux0);
-        punt2.setText(aux1);
-        punt3.setText(aux2);
-        punt4.setText(aux3);
-
-        adapter1.setListaFotosOriginales(lista.get(4).getListaFotos());
-        adapter1.notifyDataSetChanged();
-        adapter2.setListaFotosOriginales(lista.get(5).getListaFotos());
-        adapter2.notifyDataSetChanged();
-        adapter3.setListaFotosOriginales(lista.get(6).getListaFotos());
-        adapter3.notifyDataSetChanged();
-        adapter4.setListaFotosOriginales(lista.get(7).getListaFotos());
-        adapter4.notifyDataSetChanged();
-
-    }
-    public void cargarSeiso(){
-        RealmList<SubItem> lista=mAudit.getSubItems();
-
-        sub1.setText(lista.get(8).getTextoPregunta());
-        sub2.setText(lista.get(9).getTextoPregunta());
-        sub3.setText(lista.get(10).getTextoPregunta());
-        sub4.setText(lista.get(11).getTextoPregunta());
-
-        String aux0=lista.get(8).getPuntaje().toString();
-        String aux1=lista.get(9).getPuntaje().toString();
-        String aux2=lista.get(10).getPuntaje().toString();
-        String aux3=lista.get(11).getPuntaje().toString();
-
-        punt1.setText(aux0);
-        punt2.setText(aux1);
-        punt3.setText(aux2);
-        punt4.setText(aux3);
-
-        adapter1.setListaFotosOriginales(lista.get(8).getListaFotos());
-        adapter1.notifyDataSetChanged();
-        adapter2.setListaFotosOriginales(lista.get(9).getListaFotos());
-        adapter2.notifyDataSetChanged();
-        adapter3.setListaFotosOriginales(lista.get(10).getListaFotos());
-        adapter3.notifyDataSetChanged();
-        adapter4.setListaFotosOriginales(lista.get(11).getListaFotos());
-        adapter4.notifyDataSetChanged();
-
-    }
-    public void cargarSeiketsu(){
-        RealmList<SubItem> lista=mAudit.getSubItems();
-
-        sub1.setText(lista.get(12).getTextoPregunta());
-        sub2.setText(lista.get(13).getTextoPregunta());
-        sub3.setText(lista.get(14).getTextoPregunta());
-        sub4.setText(lista.get(15).getTextoPregunta());
-
-        String aux0=lista.get(12).getPuntaje().toString();
-        String aux1=lista.get(13).getPuntaje().toString();
-        String aux2=lista.get(14).getPuntaje().toString();
-        String aux3=lista.get(15).getPuntaje().toString();
-
-        punt1.setText(aux0);
-        punt2.setText(aux1);
-        punt3.setText(aux2);
-        punt4.setText(aux3);
-
-        adapter1.setListaFotosOriginales(lista.get(12).getListaFotos());
-        adapter1.notifyDataSetChanged();
-        adapter2.setListaFotosOriginales(lista.get(13).getListaFotos());
-        adapter2.notifyDataSetChanged();
-        adapter3.setListaFotosOriginales(lista.get(14).getListaFotos());
-        adapter3.notifyDataSetChanged();
-        adapter4.setListaFotosOriginales(lista.get(15).getListaFotos());
-        adapter4.notifyDataSetChanged();
-
-    }
-    public void cargarShitsuke(){
-        RealmList<SubItem> lista=mAudit.getSubItems();
-
-        sub1.setText(lista.get(16).getTextoPregunta());
-        sub2.setText(lista.get(17).getTextoPregunta());
-        sub3.setText(lista.get(18).getTextoPregunta());
-        sub4.setText(lista.get(19).getTextoPregunta());
-
-        String aux0=lista.get(16).getPuntaje().toString();
-        String aux1=lista.get(17).getPuntaje().toString();
-        String aux2=lista.get(18).getPuntaje().toString();
-        String aux3=lista.get(19).getPuntaje().toString();
-
-        punt1.setText(aux0);
-        punt2.setText(aux1);
-        punt3.setText(aux2);
-        punt4.setText(aux3);
-
-        adapter1.setListaFotosOriginales(lista.get(16).getListaFotos());
-        adapter1.notifyDataSetChanged();
-        adapter2.setListaFotosOriginales(lista.get(17).getListaFotos());
-        adapter2.notifyDataSetChanged();
-        adapter3.setListaFotosOriginales(lista.get(18).getListaFotos());
-        adapter3.notifyDataSetChanged();
-        adapter4.setListaFotosOriginales(lista.get(19).getListaFotos());
-        adapter4.notifyDataSetChanged();
-
-    }
-    */
-
 
     public static Fragment crearFragment(String unString) {
 

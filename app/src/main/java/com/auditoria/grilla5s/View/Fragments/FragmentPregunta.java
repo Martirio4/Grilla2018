@@ -70,6 +70,8 @@ public class FragmentPregunta extends Fragment {
     public static final String IDITEM="IDITEM";
     public static final String IDAUDITORIA="IDAUDITORIA";
     public static final String ESREVISION ="ESREVISION";
+    private static final String ORIGEN = "ORIGEN";
+    private static final String IDESE = "IDESE";
 
     private File fotoOriginal;
     private File fotoComprimida;
@@ -93,7 +95,8 @@ public class FragmentPregunta extends Fragment {
     private String enunciado;
     private String idPregunta;
     private String idAudit;
-    private String idItem;
+    private Integer idEse;
+    private Integer idItem;
     private String idCuestionario;
 
     private TextView textoPregunta;
@@ -132,7 +135,7 @@ public class FragmentPregunta extends Fragment {
 
     private Foto unaFoto;
     private RecyclerView recyclerFotosViejas;
-    private boolean esRevision;
+    private String origen;
 
 
     public FragmentPregunta() {
@@ -164,22 +167,34 @@ public class FragmentPregunta extends Fragment {
         else{
 
             idAudit=bundle.getString(IDAUDITORIA);
-            idItem=bundle.getString(IDITEM);
+            idItem=bundle.getInt(IDITEM);
             idPregunta=bundle.getString(IDPREGUNTA);
             enunciado=bundle.getString(ENUNCIADOPREGUNTA);
-            esRevision=bundle.getBoolean(ESREVISION);
+            origen=bundle.getString(ORIGEN);
             idCuestionario=bundle.getString(TIPOCUESTIONARIO);
+            idEse=bundle.getInt(IDESE);
         }
 
         Realm realm = Realm.getDefaultInstance();
-        Item elItem= realm.where(Item.class)
-                .equalTo("idAudit",idAudit)
-                .equalTo("idItem",Integer.parseInt(idItem))
-                .findFirst();
+        Item elItem= null;
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
+            elItem = realm.where(Item.class)
+                    .equalTo("idAudit",idAudit)
+                    .equalTo("idItem",idItem)
+                    .equalTo("idEse", idEse)
+                    .findFirst();
+        }
+
+        else{
+            elItem = realm.where(Item.class)
+                    .equalTo("idCuestionario",idCuestionario)
+                    .equalTo("idItem",idItem)
+                    .equalTo("idEse",idEse)
+                    .findFirst();
+        }
 
         rg1= view.findViewById(R.id.rg1);
         rg2= view.findViewById(R.id.rg2);
-        verCriterio=view.findViewById(R.id.btn_criterios);
         rb0 = view.findViewById(R.id.item0);
         rb1 = view.findViewById(R.id.item1);
         rb2 = view.findViewById(R.id.item2);
@@ -213,445 +228,384 @@ public class FragmentPregunta extends Fragment {
         criterioTitulo.setText(elItem.getCriterio());
         criterioDescripcion.setText(elItem.getTextoItem());
 
-
-//        HANDLE RADIOGROUP
-        //LISTENER PARA EL RADIOGROUP
-        listener1= new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                if (checkedId!=-1) {
-                        puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()));
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-
-                            Pregunta preg = realm.where(Pregunta.class)
-                                    .equalTo("idAudit",idAudit)
-                                    .equalTo("idPregunta",Integer.parseInt( idPregunta))
-                                    .findFirst();
-                            if (preg!=null) {
-                                preg.setPuntaje(puntuacion);
-                            }
-
-                        }
-                    });
-
-                    limpiarRadioGroups(1,checkedId);
-
-                }
-            }
-        };
-
-        listener2 =new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId !=-1) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-
-                            Pregunta preg = realm.where(Pregunta.class)
-                                    .equalTo("idAudit",idAudit)
-                                    .equalTo("idPregunta",Integer.parseInt( idPregunta))
-                                    .findFirst();
-                            if (preg!=null) {
-                                preg.setPuntaje(9);
-                            }
-
-                        }
-                    });
-                    limpiarRadioGroups(2,checkedId);
-
-                }
-            }
-        };
-
-        rg1.setOnCheckedChangeListener(listener1);
-        rg2.setOnCheckedChangeListener(listener2);
-
-
-
-
-        //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
-        Realm mrealm = Realm.getDefaultInstance();
-        Pregunta pregunta = realm.where(Pregunta.class)
-                .equalTo("idAudit",idAudit)
-                .equalTo("idPregunta",Integer.parseInt(idPregunta))
-                .findFirst();
-        if (pregunta!=null && pregunta.getPuntaje()!=null){
-            if (pregunta.getPuntaje()!=9) {
-                Integer puntaje=pregunta.getPuntaje();
-                RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje));
-                unRadioButton.setChecked(true);
-            }
-            else{
-                RadioButton unRadioButton=(RadioButton) (rg2.getChildAt(0));
-                unRadioButton.setChecked(true);
-            }
-        }
-        if (pregunta!=null&&pregunta.getComentario()!=null){
-            tagCommentNuevo.setVisibility(View.VISIBLE);
-            textViewCommentNuevo.setVisibility(View.VISIBLE);
-            textViewCommentNuevo.setText(pregunta.getComentario());
-            evidenciaNueva.setVisibility(View.VISIBLE);
-
-        }
-
-
-
-        verCriterio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean wrapInScrollView = true;
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                        .title(R.string.criteriaTitulo)
-                        .backgroundColor(getContext().getResources().getColor(R.color.blancoNomad))
-                        .customView(R.layout.custom_view, wrapInScrollView)
-                        .positiveText(R.string.ok)
-                        .show();
-
-                View laVista = dialog.getCustomView();
-                TextView opcion1=laVista.findViewById(R.id.textoOpcion1);
-                TextView opcion2=laVista.findViewById(R.id.textoOpcion2);
-                TextView opcion3=laVista.findViewById(R.id.textoOpcion3);
-                TextView opcion4=laVista.findViewById(R.id.textoOpcion4);
-                TextView opcion5=laVista.findViewById(R.id.textoOpcion5);
-                TextView opcion6=laVista.findViewById(R.id.textoOpcion6);
-
-
-                if (idItem.startsWith("1")) {
-
-                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiri));
-                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiri));
-                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiri));
-                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiri));
-                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiri));
-                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiri));
-                    
-                } else if (idItem.startsWith("2")) {
-                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiton));
-                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiton));
-                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiton));
-                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiton));
-                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiton));
-                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiton));
-                } else if (idItem.startsWith("3")) {
-                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiso));
-                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiso));
-                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiso));
-                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiso));
-                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiso));
-                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiso));
-                } else if (idItem.startsWith("4")) {
-                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_seiketsu));
-                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_seiketsu));
-                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_seiketsu));
-                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_seiketsu));
-                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_seiketsu));
-                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_seiketsu));
-                } else {
-                    opcion1.setText(getContext().getResources().getString(R.string.textoOpcion1_shitsuke));
-                    opcion2.setText(getContext().getResources().getString(R.string.textoOpcion2_shitsuke));
-                    opcion3.setText(getContext().getResources().getString(R.string.textoOpcion3_shitsuke));
-                    opcion4.setText(getContext().getResources().getString(R.string.textoOpcion4_shitsuke));
-                    opcion5.setText(getContext().getResources().getString(R.string.textoOpcion5_shitsuke));
-                    opcion6.setText(getContext().getResources().getString(R.string.textoOpcion6_shitsuke));
-                }
-
-            }
-        });
-
-
-
-
-//      RECYCLERVIEW FOTOS
-        recyclerFotos= view.findViewById(R.id.recyclerFotos);
-        layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerFotos.setLayoutManager(layoutManager);
-        adapterFotos= new AdapterFotos();
-        adapterFotos.setContext(getContext());
-        listaFotos=cargarFotos();
-        adapterFotos.setListaFotosOriginales(listaFotos);
-        recyclerFotos.setAdapter(adapterFotos);
-
-        View.OnClickListener listenerFotoNueva =new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer posicion=recyclerFotos.getChildAdapterPosition(v);
-                RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
-                Foto unaFoto=unaLista.get(posicion);
-                avisable.zoomearImagen(unaFoto);
-
-            }
-        };
-        View.OnLongClickListener listenerBorrarFoto = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                Integer posicion = recyclerFotos.getChildAdapterPosition(view);
-                RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
-                final Foto unaFoto=unaLista.get(posicion);
-
-                Realm realm=Realm.getDefaultInstance();
-                Auditoria mAudit=realm.where(Auditoria.class)
-                        .equalTo("idAuditoria",unaFoto.getIdAudit())
-                        .findFirst();
-
-                if (!mAudit.getAuditEstaCerrada()) {
-                    new MaterialDialog.Builder(getContext())
-                            .title(getResources().getString(R.string.borraFoto))
-                            .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                            .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                            .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                            .content(getResources().getString(R.string.deseaBorrarFoto))
-                            .negativeText(getResources().getString(R.string.no))
-                            .positiveText(getResources().getString(R.string.si))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    avisable.borrarFoto(unaFoto);
-                                    adapterFotos.borrarFoto(unaFoto);
-                                    adapterFotos.notifyDataSetChanged();
-
-                                }
-                            })
-                            .show();
-
-                }
-                return false;
-            }
-        };
-
-        adapterFotos.setListener(listenerFotoNueva);
-        //si estoy en modo revision no le permito que haga longclick
-        if (esRevision) {
-           adapterFotos.setLongListener(new View.OnLongClickListener() {
-               @Override
-               public boolean onLongClick(View view) {
-                   return false;
-               }
-           });
-        }
-        else{
-            adapterFotos.setLongListener(listenerBorrarFoto);
-            adapterFotos.notifyDataSetChanged();
-        }
-
-//      RECYCLERVIEW FOTOS AUDITORIA PREVIA Y COMMENT AUDITORIA VIEJA
-
-        recyclerFotosViejas= view.findViewById(R.id.recyclerFotosViejas);
-        layoutManagerViejo= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerFotosViejas.setLayoutManager(layoutManagerViejo);
-        adapterFotosViejas= new AdapterFotos();
-        adapterFotosViejas.setContext(getContext());
-
-//      ESTE METODO LE CARGA LAS FOTOS VIEJAS Y EL COMENTARIO GRAL
-        cargarFotosViejas();
-        recyclerFotosViejas.setAdapter(adapterFotosViejas);
-        View.OnClickListener listenerZoomViejo=new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer posicion=recyclerFotosViejas.getChildAdapterPosition(v);
-                RealmList<Foto> unaLista=adapterFotosViejas.getListaFotosOriginales();
-                Foto unaFoto=unaLista.get(posicion);
-                avisable.zoomearImagen(unaFoto);
-
-
-            }
-        };
-        adapterFotosViejas.setListener(listenerZoomViejo);
-        adapterFotosViejas.notifyDataSetChanged();
-
-
-
-
         //agregar los fabs al menu
-        fabMenu=(FloatingActionMenu)view.findViewById(R.id.fab_menu);
+        fabMenu= view.findViewById(R.id.fab_menu);
         fabMenu.setMenuButtonColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
 
 
+        if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA) || origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)) {
+//        HANDLE RADIOGROUP
+            //LISTENER PARA EL RADIOGROUP
+            verCriterio=view.findViewById(R.id.btn_criterios);
+            listener1= new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-        fabCamara = new FloatingActionButton(getActivity());
-        fabCamara.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
-        fabCamara.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabCamara.setLabelText(getString(R.string.sacarFoto));
-        fabCamara.setImageResource(R.drawable.ic_camera_alt_black_24dp);
-        fabMenu.addMenuButton(fabCamara);
+                    if (checkedId!=-1) {
+                            puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()));
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+                                Pregunta preg = realm.where(Pregunta.class)
+                                        .equalTo("idAudit",idAudit)
+                                        .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                                        .findFirst();
+                                if (preg!=null) {
+                                    preg.setPuntaje(puntuacion);
+                                }
+
+                            }
+                        });
+
+                        limpiarRadioGroups(1,checkedId);
+
+                    }
+                }
+            };
+
+            listener2 =new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                    if (checkedId !=-1) {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+                                Pregunta preg = realm.where(Pregunta.class)
+                                        .equalTo("idAudit",idAudit)
+                                        .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                                        .findFirst();
+                                if (preg!=null) {
+                                    preg.setPuntaje(9);
+                                }
+
+                            }
+                        });
+                        limpiarRadioGroups(2,checkedId);
+
+                    }
+                }
+            };
+
+            rg1.setOnCheckedChangeListener(listener1);
+            rg2.setOnCheckedChangeListener(listener2);
+
+
+            //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
+            Realm mrealm = Realm.getDefaultInstance();
+            Pregunta pregunta = realm.where(Pregunta.class)
+                    .equalTo("idAudit",idAudit)
+                    .equalTo("idPregunta",Integer.parseInt(idPregunta))
+                    .findFirst();
+            if (pregunta!=null && pregunta.getPuntaje()!=null){
+                if (pregunta.getPuntaje()!=9) {
+                    Integer puntaje=pregunta.getPuntaje();
+                    RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje));
+                    unRadioButton.setChecked(true);
+                }
+                else{
+                    RadioButton unRadioButton=(RadioButton) (rg2.getChildAt(0));
+                    unRadioButton.setChecked(true);
+                }
+            }
+            if (pregunta!=null&&pregunta.getComentario()!=null){
+                tagCommentNuevo.setVisibility(View.VISIBLE);
+                textViewCommentNuevo.setVisibility(View.VISIBLE);
+                textViewCommentNuevo.setText(pregunta.getComentario());
+                evidenciaNueva.setVisibility(View.VISIBLE);
+
+            }
+
+
+            verCriterio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                }
+            });
+
+
+//      RECYCLERVIEW FOTOS
+            recyclerFotos= view.findViewById(R.id.recyclerFotos);
+            layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            recyclerFotos.setLayoutManager(layoutManager);
+            adapterFotos= new AdapterFotos();
+            adapterFotos.setContext(getContext());
+            listaFotos=cargarFotos();
+            adapterFotos.setListaFotosOriginales(listaFotos);
+            recyclerFotos.setAdapter(adapterFotos);
+
+            View.OnClickListener listenerFotoNueva =new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Integer posicion=recyclerFotos.getChildAdapterPosition(v);
+                    RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
+                    Foto unaFoto=unaLista.get(posicion);
+                    avisable.zoomearImagen(unaFoto);
+
+                }
+            };
+            View.OnLongClickListener listenerBorrarFoto = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    Integer posicion = recyclerFotos.getChildAdapterPosition(view);
+                    RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
+                    final Foto unaFoto=unaLista.get(posicion);
+
+                    Realm realm=Realm.getDefaultInstance();
+                    Auditoria mAudit=realm.where(Auditoria.class)
+                            .equalTo("idAuditoria",unaFoto.getIdAudit())
+                            .findFirst();
+
+                    if (!mAudit.getAuditEstaCerrada()) {
+                        new MaterialDialog.Builder(getContext())
+                                .title(getResources().getString(R.string.borraFoto))
+                                .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                                .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                                .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                                .content(getResources().getString(R.string.deseaBorrarFoto))
+                                .negativeText(getResources().getString(R.string.no))
+                                .positiveText(getResources().getString(R.string.si))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        avisable.borrarFoto(unaFoto);
+                                        adapterFotos.borrarFoto(unaFoto);
+                                        adapterFotos.notifyDataSetChanged();
+
+                                    }
+                                })
+                                .show();
+
+                    }
+                    return false;
+                }
+            };
+
+            adapterFotos.setListener(listenerFotoNueva);
+            //si estoy en modo revision no le permito que haga longclick
+            if (origen.equals(FuncionesPublicas.REVISAR)) {
+               adapterFotos.setLongListener(new View.OnLongClickListener() {
+                   @Override
+                   public boolean onLongClick(View view) {
+                       return false;
+                   }
+               });
+            }
+            else{
+                adapterFotos.setLongListener(listenerBorrarFoto);
+                adapterFotos.notifyDataSetChanged();
+            }
+
+//      RECYCLERVIEW FOTOS AUDITORIA PREVIA Y COMMENT AUDITORIA VIEJA
+
+            recyclerFotosViejas= view.findViewById(R.id.recyclerFotosViejas);
+            layoutManagerViejo= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            recyclerFotosViejas.setLayoutManager(layoutManagerViejo);
+            adapterFotosViejas= new AdapterFotos();
+            adapterFotosViejas.setContext(getContext());
+
+//      ESTE METODO LE CARGA LAS FOTOS VIEJAS Y EL COMENTARIO GRAL
+            cargarFotosViejas();
+            recyclerFotosViejas.setAdapter(adapterFotosViejas);
+            View.OnClickListener listenerZoomViejo=new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Integer posicion=recyclerFotosViejas.getChildAdapterPosition(v);
+                    RealmList<Foto> unaLista=adapterFotosViejas.getListaFotosOriginales();
+                    Foto unaFoto=unaLista.get(posicion);
+                    avisable.zoomearImagen(unaFoto);
+
+                }
+            };
+            adapterFotosViejas.setListener(listenerZoomViejo);
+            adapterFotosViejas.notifyDataSetChanged();
+
+
+
+            fabCamara = new FloatingActionButton(getActivity());
+            fabCamara.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+            fabCamara.setButtonSize(FloatingActionButton.SIZE_MINI);
+            fabCamara.setLabelText(getString(R.string.sacarFoto));
+            fabCamara.setImageResource(R.drawable.ic_camera_alt_black_24dp);
+            fabMenu.addMenuButton(fabCamara);
 
             fabCamara.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
             fabCamara.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
-        fabCamara.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (FuncionesPublicas.isExternalStorageWritable()) {
-                    if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        fabMenu.close(true);
-                        EasyImage.openCamera(FragmentPregunta.this, 1);
-                    }
-                    else {
+            fabCamara.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (FuncionesPublicas.isExternalStorageWritable()) {
+                        if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            fabMenu.close(true);
+                            EasyImage.openCamera(FragmentPregunta.this, 1);
+                        }
+                        else {
 
-//                      PIDO PERMISO PARA USAR LA MEMORIA EXTERNA
+    //                      PIDO PERMISO PARA USAR LA MEMORIA EXTERNA
 
-                        if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            //User already refused to give us this permission or removed it
-                            //Now he/she can mark "never ask again" (sic!)
-                            Snackbar.make(getView(), getResources().getString(R.string.appNecesitaPermiso),
-                                    Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string.ok), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                            new PermissionCallback() {
-                                                @Override
-                                                public void permissionGranted() {
-                                                    fabMenu.close(true);
-                                                    EasyImage.openCamera(FragmentPregunta.this, 1);
-                                                }
+                            if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                //User already refused to give us this permission or removed it
+                                //Now he/she can mark "never ask again" (sic!)
+                                Snackbar.make(getView(), getResources().getString(R.string.appNecesitaPermiso),
+                                        Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string.ok), new View.OnClickListener() {
+                                    @Override public void onClick(View view) {
+                                        Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                new PermissionCallback() {
+                                                    @Override
+                                                    public void permissionGranted() {
+                                                        fabMenu.close(true);
+                                                        EasyImage.openCamera(FragmentPregunta.this, 1);
+                                                    }
 
-                                                @Override
-                                                public void permissionRefused() {
-                                                    Toast.makeText(getContext(), getResources().getString(R.string.damePermiso), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
-                            }).show();
-                        } else {
-                            //First time asking for permission
-                            // or phone doesn't offer permission
-                            // or user marked "never ask again"
-                            Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    new PermissionCallback() {
-                                        @Override
-                                        public void permissionGranted() {
-                                            fabMenu.close(true);
-                                            EasyImage.openCamera(FragmentPregunta.this, 1);
-                                        }
+                                                    @Override
+                                                    public void permissionRefused() {
+                                                        Toast.makeText(getContext(), getResources().getString(R.string.damePermiso), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                }).show();
+                            } else {
+                                //First time asking for permission
+                                // or phone doesn't offer permission
+                                // or user marked "never ask again"
+                                Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        new PermissionCallback() {
+                                            @Override
+                                            public void permissionGranted() {
+                                                fabMenu.close(true);
+                                                EasyImage.openCamera(FragmentPregunta.this, 1);
+                                            }
 
-                                        @Override
-                                        public void permissionRefused() {
-                                            Toast.makeText(getContext(), getResources().getString(R.string.damePermiso), Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void permissionRefused() {
+                                                Toast.makeText(getContext(), getResources().getString(R.string.damePermiso), Toast.LENGTH_SHORT).show();
 
-                                        }
-                                    });
+                                            }
+                                        });
+                            }
                         }
                     }
+                    else {
+                        new MaterialDialog.Builder(getContext())
+                                .title(getResources().getString(R.string.titNoMemoria))
+                                .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                                .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                                .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                                .content(getResources().getString(R.string.noMemoria))
+                                .positiveText(getResources().getString(R.string.ok))
+                                .show();
+                    }
                 }
-                else {
-                    new MaterialDialog.Builder(getContext())
-                            .title(getResources().getString(R.string.titNoMemoria))
-                            .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                            .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                            .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                            .content(getResources().getString(R.string.noMemoria))
-                            .positiveText(getResources().getString(R.string.ok))
-                            .show();
+            });
+
+
+            fabComment = new FloatingActionButton(getActivity());
+            fabComment.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+            fabComment.setButtonSize(FloatingActionButton.SIZE_MINI);
+            fabComment.setLabelText(getString(R.string.agregarComentario));
+            fabComment.setImageResource(R.drawable.ic_comment_black_24dp);
+            fabMenu.addMenuButton(fabComment);
+
+            fabComment.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
+                    ContextCompat.getColor(getActivity(), R.color.light_grey),
+                    ContextCompat.getColor(getActivity(), R.color.white_transparent));
+            fabComment.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+
+            fabComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    crearDialogoCommentGeneral();
+
+                    fabMenu.close(true);
                 }
-            }
-        });
+            });
 
 
-        fabComment = new FloatingActionButton(getActivity());
-        fabComment.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
-        fabComment.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabComment.setLabelText(getString(R.string.agregarComentario));
-        fabComment.setImageResource(R.drawable.ic_comment_black_24dp);
-        fabMenu.addMenuButton(fabComment);
-
-        fabComment.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
-                ContextCompat.getColor(getActivity(), R.color.light_grey),
-                ContextCompat.getColor(getActivity(), R.color.white_transparent));
-        fabComment.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
-
-        fabComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                crearDialogoCommentGeneral();
-
-                fabMenu.close(true);
-            }
-        });
-
-
-
-        fabGuardar = new FloatingActionButton(getActivity());
-        fabGuardar.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabGuardar.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
-        fabGuardar.setLabelText(getString(R.string.guardarAuditoria));
-        fabGuardar.setImageResource(R.drawable.ic_save_black_24dp);
-        fabMenu.addMenuButton(fabGuardar);
+            fabGuardar = new FloatingActionButton(getActivity());
+            fabGuardar.setButtonSize(FloatingActionButton.SIZE_MINI);
+            fabGuardar.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+            fabGuardar.setLabelText(getString(R.string.guardarAuditoria));
+            fabGuardar.setImageResource(R.drawable.ic_save_black_24dp);
+            fabMenu.addMenuButton(fabGuardar);
 
             fabGuardar.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
             fabGuardar.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
-        fabGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //--guardar auditoria en firebase--//
+            fabGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //--guardar auditoria en firebase--//
 
-                fabMenu.close(true);
-               corroborarFinalizacionAuditoria(idAudit);
+                    fabMenu.close(true);
+                   corroborarFinalizacionAuditoria(idAudit);
 
-            }
-        });
+                }
+            });
 
-        fabSalir = new FloatingActionButton(getActivity());
-        fabSalir.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabSalir.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
-        fabSalir.setLabelText(getString(R.string.salir));
-        fabSalir.setImageResource(R.drawable.ic_exit_to_app_black_24dp);
-        fabMenu.addMenuButton(fabSalir);
+            fabSalir = new FloatingActionButton(getActivity());
+            fabSalir.setButtonSize(FloatingActionButton.SIZE_MINI);
+            fabSalir.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+            fabSalir.setLabelText(getString(R.string.salir));
+            fabSalir.setImageResource(R.drawable.ic_exit_to_app_black_24dp);
+            fabMenu.addMenuButton(fabSalir);
 
             fabSalir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
             fabSalir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
-        fabSalir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fabMenu.close(true);
-                new MaterialDialog.Builder(getContext())
-                        .title("Warning!")
-                        .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                        .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                        .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                        .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.guardardar))
-                        .positiveText(getResources().getString(R.string.si))
-                        .neutralText(getResources().getString(R.string.cancel))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                avisable.salirDeAca();
-                            }
-                        })
-                        .negativeText(getResources().getString(R.string.no))
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            fabSalir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fabMenu.close(true);
+                    new MaterialDialog.Builder(getContext())
+                            .title(R.string.advertencia)
+                            .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                            .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                            .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                            .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.guardardar))
+                            .positiveText(getResources().getString(R.string.si))
+                            .neutralText(getResources().getString(R.string.cancel))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    avisable.salirDeAca();
+                                }
+                            })
+                            .negativeText(getResources().getString(R.string.no))
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                FuncionesPublicas.borrarAuditoriaSeleccionada(ActivityAuditoria.idAudit);
-                                //aca lo que pasa si voy para atras
+                                    FuncionesPublicas.borrarAuditoriaSeleccionada(ActivityAuditoria.idAudit);
+                                    //aca lo que pasa si voy para atras
 
-                                avisable.salirDeAca();
-                            }
-                        })
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    avisable.salirDeAca();
+                                }
+                            })
+                            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            }
-                        })
-                        .show();
+                                }
+                            })
+                            .show();
 
-            }
-        });
+                }
+            });
+        }
 
         config = getActivity().getSharedPreferences("prefs",0);
         boolean quiereVerTuto = config.getBoolean("quiereVerTuto",false);
@@ -669,7 +623,7 @@ public class FragmentPregunta extends Fragment {
         }
 
 //        SI ES SOLO REVISION BLOQUEO TODAS LAS EDICIONES
-        if (esRevision){
+        if (origen.equals(FuncionesPublicas.REVISAR) || origen .equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
             rb0.setEnabled(false);
             rb1.setEnabled(false);
             rb3.setEnabled(false);
@@ -855,7 +809,7 @@ public class FragmentPregunta extends Fragment {
         else {
 
             new MaterialDialog.Builder(getContext())
-                    .title("Warning!")
+                    .title(getString(R.string.advertencia))
                     .title(getResources().getString(R.string.advertencia))
                     .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                     .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
@@ -882,15 +836,15 @@ public class FragmentPregunta extends Fragment {
 
 
 
-    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta,Boolean soloRevision) {
+    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta, String origen, Integer idEse) {
         FragmentPregunta detalleFragment = new FragmentPregunta();
         Bundle unBundle = new Bundle();
-
+            unBundle.putInt(IDESE,idEse);
             unBundle.putString(ENUNCIADOPREGUNTA, laPregunta.getTextoPregunta());
-            unBundle.putString(IDITEM, String.valueOf(laPregunta.getIdItem()));
+            unBundle.putInt(IDITEM,laPregunta.getIdItem());
             unBundle.putString(IDPREGUNTA, String.valueOf(laPregunta.getIdPregunta()));
             unBundle.putString(IDAUDITORIA, laPregunta.getIdAudit());
-            unBundle.putBoolean(ESREVISION, soloRevision);
+            unBundle.putString(ORIGEN, origen);
 
         detalleFragment.setArguments(unBundle);
         return detalleFragment;

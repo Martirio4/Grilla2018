@@ -142,7 +142,7 @@ public class GraficosActivity extends AppCompatActivity {
 
         FragmentActivity unaActivity = this;
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        FragmentRadar fragmentRadar = (FragmentRadar) fragmentManager.findFragmentByTag("radar");
+        FragmentRadar fragmentRadar = (FragmentRadar) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_RADAR);
 
         if (fragmentRadar != null && fragmentRadar.isVisible()) {
             //
@@ -183,7 +183,7 @@ public class GraficosActivity extends AppCompatActivity {
                     editarAuditoria(idAudit, mAudit.getAreaAuditada().getIdArea());
                 } else {
                     Snackbar.make(fabEditarAuditoria, getResources().getString(R.string.auditCerradaNoPuedeEditar), Snackbar.LENGTH_SHORT)
-                            .setAction("Ok", new View.OnClickListener() {
+                            .setAction(getString(R.string.ok), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                 }
@@ -214,7 +214,7 @@ public class GraficosActivity extends AppCompatActivity {
                 Bundle bundle123 = new Bundle();
                 bundle123.putString(ActivityPreAuditoria.IDAUDIT, idAudit);
                 bundle123.putString(ActivityPreAuditoria.IDAREA, auditActual.getAreaAuditada().getIdArea());
-                bundle123.putString(ActivityPreAuditoria.ORIGEN, "REVISAR");
+                bundle123.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.REVISAR);
 
                 inten.putExtras(bundle123);
                 startActivity(inten);
@@ -259,7 +259,7 @@ public class GraficosActivity extends AppCompatActivity {
 
 
                         new MaterialDialog.Builder(GraficosActivity.this)
-                                .title("Warning!")
+                                .title(getString(R.string.advertencia))
                                 .title(getResources().getString(R.string.advertencia))
                                 .contentColor(ContextCompat.getColor(GraficosActivity.this, R.color.primary_text))
                                 .titleColor(ContextCompat.getColor(GraficosActivity.this, R.color.tile4))
@@ -316,7 +316,7 @@ public class GraficosActivity extends AppCompatActivity {
 
 
                 new MaterialDialog.Builder(v.getContext())
-                        .title("Warning!")
+                        .title(getString(R.string.advertencia))
                         .title(getResources().getString(R.string.advertencia))
                         .contentColor(ContextCompat.getColor(v.getContext(), R.color.primary_text))
                         .titleColor(ContextCompat.getColor(v.getContext(), R.color.tile4))
@@ -484,7 +484,7 @@ public class GraficosActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentBarrasApiladasPorArea.setArguments(bundle);
-        fragmentTransaction.add(R.id.contenedorGraficos, fragmentBarrasApiladasPorArea, "fragmentGraficoArea");
+        fragmentTransaction.add(R.id.contenedorGraficos, fragmentBarrasApiladasPorArea, FuncionesPublicas.FRAGMENT_GRAFICO_AREA);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -494,7 +494,7 @@ public class GraficosActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ActivityPreAuditoria.class);
         Bundle bundle = new Bundle();
         bundle.putString(ActivityPreAuditoria.IDAREA, idArea);
-        bundle.putString(ActivityPreAuditoria.ORIGEN, "EDITAR_AUDITORIA");
+        bundle.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.EDITAR_AUDITORIA);
         bundle.putString(ActivityPreAuditoria.IDAUDIT, idAudit);
 
         intent.putExtras(bundle);
@@ -641,7 +641,7 @@ public class GraficosActivity extends AppCompatActivity {
         graficoFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.contenedorGraficos, graficoFragment, "radar");
+        fragmentTransaction.add(R.id.contenedorGraficos, graficoFragment, FuncionesPublicas.FRAGMENT_RADAR);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         }
@@ -667,7 +667,7 @@ public class GraficosActivity extends AppCompatActivity {
         fragmentBarrasApiladas.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.contenedorGraficos, fragmentBarrasApiladas, "barras");
+        fragmentTransaction.add(R.id.contenedorGraficos, fragmentBarrasApiladas, FuncionesPublicas.FRAGMENT_GRAFICO_BARRAS);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -738,7 +738,7 @@ public class GraficosActivity extends AppCompatActivity {
     }
 
     public void definirDondeIrOnBack() {
-        if (origenIntent.equals("myAudits")) {
+        if (origenIntent.equals(FuncionesPublicas.MIS_AUDITORIAS)) {
             Intent unIntent = new Intent(GraficosActivity.this, ActivityMyAudits.class);
             startActivity(unIntent);
         } else {

@@ -73,7 +73,7 @@ public class FragmentBarrasApiladasPorArea extends Fragment {
         idArea=bundle.getString(IDAREA);
         elOrigen=bundle.getString(ORIGEN);
         View view;
-        if (elOrigen.equals("ranking")) {
+        if (elOrigen.equals(FuncionesPublicas.RANKING)) {
             view = inflater.inflate(R.layout.fragment_barras_apiladas_por_area, container, false);
         } else {
             view = inflater.inflate(R.layout.fragment_barras_apiladas_por_area_corto, container, false);

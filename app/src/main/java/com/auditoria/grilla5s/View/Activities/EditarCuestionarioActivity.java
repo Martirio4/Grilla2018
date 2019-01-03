@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
 import com.auditoria.grilla5s.View.Fragments.FragmentEditorCuestionarios;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
@@ -42,7 +43,7 @@ public class EditarCuestionarioActivity extends AppCompatActivity implements Fra
         FragmentEditorCuestionarios fragmentEditorBaseCuestionarios = new FragmentEditorCuestionarios();
         android.support.v4.app.FragmentManager fragmentManager= getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedorEditor,fragmentEditorBaseCuestionarios,"FragmentEditorBaseCuestionario");
+        fragmentTransaction.replace(R.id.contenedorEditor,fragmentEditorBaseCuestionarios,FuncionesPublicas.FRAGMENT_EDITOR_CUESTIONARIOS);
         fragmentTransaction.commit();
     }
 
@@ -57,7 +58,7 @@ public class EditarCuestionarioActivity extends AppCompatActivity implements Fra
         //USO EL FRAGMENT PRE AUDIT PARA VER LOS ITEMS Y MODIFICAR
         Bundle bundle = new Bundle();
         bundle.putString(ActivityPreAuditoria.TIPOCUESTIONARIO , cuestionario.getIdCuestionario());
-        bundle.putString(ActivityPreAuditoria.ORIGEN, "EDITARCUESTIONARIO");
+        bundle.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.EDITAR_CUESTIONARIO);
 
         Intent intent = new Intent(EditarCuestionarioActivity.this, ActivityPreAuditoria.class);
         intent.putExtras(bundle);

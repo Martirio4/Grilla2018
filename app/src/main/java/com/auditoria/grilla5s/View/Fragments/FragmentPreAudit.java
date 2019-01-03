@@ -78,7 +78,7 @@ public class FragmentPreAudit extends Fragment {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
         }
 
-        if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
+        if (origen!=null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
             fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
             fabPreAudit.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
@@ -111,7 +111,7 @@ public class FragmentPreAudit extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         RealmList<Item>listaItemsOriginales;
 
-        if (origen.equals("EDITARCUESTIONARIO")) {
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
 
             RealmResults<Item> listaItems=realm.where(Item.class)
                     .equalTo("idCuestionario",tipoCuestionario)
@@ -200,7 +200,7 @@ public class FragmentPreAudit extends Fragment {
         else {
 
             new MaterialDialog.Builder(getContext())
-                    .title("Warning!")
+                    .title(getString(R.string.advertencia))
                     .title(getResources().getString(R.string.advertencia))
                     .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                     .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))

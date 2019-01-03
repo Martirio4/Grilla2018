@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentEditorCuestionarios;
 
 
@@ -82,7 +83,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
 
         FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        final FragmentEditorCuestionarios fragmentManageCuestionarios = (FragmentEditorCuestionarios) fragmentManager.findFragmentByTag("FragmentEditorBaseCuestionario");
+        final FragmentEditorCuestionarios fragmentManageCuestionarios = (FragmentEditorCuestionarios) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_EDITOR_CUESTIONARIOS);
 
 
         if (fragmentManageCuestionarios != null && fragmentManageCuestionarios.isVisible()) {
@@ -170,7 +171,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
 
             if (losCuestionarios !=null){
 
-                textUltima.setText("aca que va?");
+                textUltima.setText("");
             }
 
 

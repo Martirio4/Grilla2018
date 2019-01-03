@@ -242,9 +242,12 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
             textViewNumero.setText(String.valueOf(unItem.getIdItem()));
             textViewDescripcion.setText(unItem.getCriterio());
 
-            if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
+            if (origen!=null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
                 botonEditar.setVisibility(View.VISIBLE);
                 botonEliminar.setVisibility(View.VISIBLE);
+                textViewFaltantes.setTextColor(ContextCompat.getColor(textViewFaltantes.getContext(),R.color.tile5));
+                String elTexto = unItem.getListaPreguntas().size() + " " +textViewFaltantes.getContext().getString(R.string.preguntas);
+                textViewFaltantes.setText(elTexto);
             }
             else {
                 botonEditar.setVisibility(View.GONE);

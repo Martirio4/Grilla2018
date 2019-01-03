@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         FragmentSettings fragmentManageAreas = new FragmentSettings();
         FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,"fragmentManageAreas");
+        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,FuncionesPublicas.FRAGMENTMANAGER_AREAS);
         fragmentTransaction.commit();
     }
 
@@ -84,8 +84,8 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
-                //SE ELIMINA ESTA LINEA, DEJO BORRAR LAS AREAS.
-                //PENSAR SI LAS AREAS SOLO LAS PUEDE DAR DE ALTA EL USUARIO LIDER
+                //SE ELIMINA ESTA LINEA, DEJO BORRAR LAS MANAGE_AREAS.
+                //PENSAR SI LAS MANAGE_AREAS SOLO LAS PUEDE DAR DE ALTA EL USUARIO LIDER
                 //.equalTo("usuario", usuario)
                 .findAll();
 
@@ -132,7 +132,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
 
         FragmentManager fragmentManager = (FragmentManager) this.getSupportFragmentManager();
-        FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag("fragmentManageAreas");
+        FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
             fragmentManageAreas.updateAdapter();
@@ -191,7 +191,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         FragmentManageAreas fragmentManageAreas = new FragmentManageAreas();
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,"fragmentManageAreas");
+        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,FuncionesPublicas.FRAGMENTMANAGER_AREAS);
         fragmentTransaction.commit();
     }
 }

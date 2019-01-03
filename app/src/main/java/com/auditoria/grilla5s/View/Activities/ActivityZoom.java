@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentZoom;
 
 import io.realm.Realm;
@@ -38,7 +39,7 @@ public class ActivityZoom extends AppCompatActivity {
             mFragmentZoom.setArguments(mBundle);
             FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.contenedorZoom,mFragmentZoom,"zoom");
+            fragmentTransaction.replace(R.id.contenedorZoom,mFragmentZoom, FuncionesPublicas.FRAGMENT_ZOOM);
             fragmentTransaction.commit();
 
     }

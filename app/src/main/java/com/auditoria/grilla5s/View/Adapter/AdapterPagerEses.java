@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
 
@@ -34,7 +35,7 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
 
         for(Integer i=1;i<6;i++){
-            if (origen!=null && origen.equals("EDITARCUESTIONARIO")) {
+            if (origen!=null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
                 listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString(),origen,idCuestionario));
             } else {
                 listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit((i.toString()),origen));

@@ -19,6 +19,7 @@ import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerAudits;
 import com.auditoria.grilla5s.View.Fragments.FragmentBarrasApiladasPorArea;
 import com.auditoria.grilla5s.View.Fragments.FragmentMyAudits;
@@ -99,7 +100,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentRanki
     public void onBackPressed() {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentByTag("fragmentGraficoArea");
+        Fragment fragment = fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_GRAFICO_AREA);
         if (fragment!=null && fragment.isVisible()){
             fragmentManager.popBackStack();
         }
@@ -115,7 +116,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentRanki
         Intent intent=new Intent(this, GraficosActivity.class);
         Bundle unBundle=new Bundle();
         unBundle.putString(GraficosActivity.AUDIT,unAuditoria.getIdAuditoria());
-        unBundle.putString(GraficosActivity.ORIGEN, "myAudits");
+        unBundle.putString(GraficosActivity.ORIGEN, FuncionesPublicas.MIS_AUDITORIAS);
         unBundle.putString(GraficosActivity.AREA, unAuditoria.getAreaAuditada().getIdArea());
         intent.putExtras(unBundle);
         startActivity(intent);
@@ -141,7 +142,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentRanki
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentBarrasApiladasPorArea.setArguments(bundle);
-            fragmentTransaction.replace(R.id.otroReferenta, fragmentBarrasApiladasPorArea,"fragmentGraficoArea");
+            fragmentTransaction.replace(R.id.otroReferenta, fragmentBarrasApiladasPorArea,FuncionesPublicas.FRAGMENT_GRAFICO_AREA);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
@@ -153,7 +154,7 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentRanki
             case android.R.id.home:
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                Fragment fragment = fragmentManager.findFragmentByTag("fragmentGraficoArea");
+                Fragment fragment = fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_GRAFICO_AREA);
                 if (fragment!=null && fragment.isVisible()){
                     fragmentManager.popBackStack();
                 }

@@ -39,17 +39,19 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     public static final String IDAUDITORIA ="IDAUDITORIA";
     public static final String IDITEM="IDITEM";
     public static final String IDESE="IDESE";
+    public static final String ORIGEN="ORIGEN";
+    public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
 
-    public static final String ESREVISION="ESREVISION";
 
     public static String idAudit;
+    public String origen;
     public static Integer idItem;
     public Integer idese;
     private ViewPager pager;
     private String resultadoInputFoto;
     private FloatingActionMenu fabMenu;
     private Toolbar toolbar;
-    private Boolean esRevision;
+    private String idCuestionario;
 
 
     @Override
@@ -64,19 +66,30 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         if (bundle!=null) {
             idAudit =bundle.getString(IDAUDITORIA);
             idItem=bundle.getInt(IDITEM);
-            esRevision=bundle.getBoolean(ESREVISION);
+            origen=bundle.getString(ORIGEN);
             idese=bundle.getInt(IDESE);
+            idCuestionario=bundle.getString(IDCUESTIONARIO);
         }
 
-
-//        SETEAR EL VIEWPAGER
+//      SETEAR EL VIEWPAGER
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pregunta>resultPregunta=realm.where(Pregunta.class)
-                .equalTo("idAudit", idAudit)
-                .equalTo("idItem", idItem)
-                .equalTo("idEse",idese )
-                .findAll();
+
+        RealmResults<Pregunta>resultPregunta;
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
+            resultPregunta = realm.where(Pregunta.class)
+                    .equalTo("idCuestionario", idCuestionario)
+                    .equalTo("idItem", idItem)
+                    .equalTo("idEse",idese )
+                    .findAll();
+        } else {
+            resultPregunta = realm.where(Pregunta.class)
+
+             .equalTo("idAudit", idAudit)
+                    .equalTo("idItem", idItem)
+                    .equalTo("idEse",idese )
+                    .findAll();
+        }
 
         RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
         listaPreguntasOriginales.addAll(resultPregunta);
@@ -88,14 +101,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             laListaDeTitulos.add(aux.toString()+"°");
         }
         pager=findViewById(R.id.viewPagerAuditoria);
-        AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,esRevision);
+        AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
         pager.setAdapter(adapterPager);
         adapterPager.setUnaListaTitulos(laListaDeTitulos);
         adapterPager.notifyDataSetChanged();
 
 
         // Get a support ActionBar corresponding to this toolbar
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
 
@@ -104,17 +117,20 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         unText.setTypeface(robotoR);
         unText.setTextColor(getResources().getColor(R.color.tile5));
 
-        unText.setText(getResources().getString(R.string.audit5s));
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
+            unText.setText(getResources().getString(R.string.editarCuestionarios));
+        } else {
+            unText.setText(getResources().getString(R.string.audit5s));
+        }
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         }
 
 
 //        SETEAR EL TABLAYOUT
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -122,12 +138,10 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             public void onTabSelected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition(), true);
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition(), true);
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition(), true);
@@ -138,15 +152,11 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
-
             @Override
             public void onPageSelected(int position) {
-
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-                
             }
         });
 

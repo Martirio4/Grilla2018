@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterArea;
 
 import io.realm.Realm;
@@ -78,7 +79,7 @@ public class FragmentRankingAreas extends Fragment {
                 Integer posicion = recyclerAreas.getChildAdapterPosition(v);
                 RealmList<Area> listaAreas = adapterAreas.getListaAreasOriginales();
                 Area areaClickeada = listaAreas.get(posicion);
-                graficable.graficarArea(areaClickeada,"ranking");
+                graficable.graficarArea(areaClickeada, FuncionesPublicas.RANKING);
             }
         };
         adapterAreas.setListener(listenerArea);

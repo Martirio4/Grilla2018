@@ -65,7 +65,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         }
 
         //SI EL ORIGEN ES NUEVA AUDITORIA SIGO NORMAL, INSTANCIO UNA NUVA AUDITORIA
-        if (origen!=null && origen.equals("NUEVA_AUDITORIA")) {
+        if (origen!=null && origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)) {
 
             idArea=bundle.getString(IDAREA);
 
@@ -76,14 +76,10 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                     .equalTo("idArea",idArea)
                     .findFirst();
 
-            //SI EL AREA NO TIENE TIPO, LE ASIGNA TIPO "A"
-            if (elArea!=null && elArea.getTipoArea()!=null){
-                idAudit=controllerDatos.instanciarAuditoria(elArea.getTipoArea());
-            }
-            else if(elArea!=null && elArea.getTipoArea()==null){
-                //si no tiene tipo la instacio como zona industrial
-                idAudit=controllerDatos.instanciarAuditoria("A");
-            }
+
+            assert elArea != null;
+            idAudit=controllerDatos.instanciarAuditoria(elArea.getTipoArea());
+
 
             realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -107,16 +103,16 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.blancoNomad));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if (origen.equals("NUEVA_AUDITORIA")) {
+            if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)) {
                 toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
-            } else if (origen.equals("EDITARCUESTIONARIO")){
+            } else if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
                 toolbar.setTitle(getResources().getString(R.string.tituloPreAuditEditarCuestionario));
             }
         }
 
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
-        if (origen.equals("EDITARCUESTIONARIO")) {
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen,tipoCuestionario);        }
         else {
             adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen);
@@ -176,15 +172,12 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public void auditarItem(Item unItem) {
         Intent intent=new Intent(this, ActivityAuditoria.class);
         Bundle bundle=new Bundle();
+        bundle.putString(ActivityAuditoria.IDCUESTIONARIO,unItem.getIdCuestionario());
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
         bundle.putInt(ActivityAuditoria.IDESE,unItem.getIdEse() );
         bundle.putInt(ActivityAuditoria.IDITEM, unItem.getIdItem());
-        if(origen.equals("REVISAR")){
-            bundle.putBoolean(ActivityAuditoria.ESREVISION, true);
-        }
-        else{
-            bundle.putBoolean(ActivityAuditoria.ESREVISION, false);
-        }
+        bundle.putString(ActivityAuditoria.ORIGEN, origen);
+
         intent.putExtras(bundle);
         startActivity(intent);
 
@@ -202,7 +195,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Intent intent=new Intent(this, GraficosActivity.class);
         Bundle bundle=new Bundle();
         bundle.putString(GraficosActivity.AUDIT, idAudit);
-        bundle.putString(GraficosActivity.ORIGEN, "auditoria");
+        bundle.putString(GraficosActivity.ORIGEN, FuncionesPublicas.NUEVA_AUDITORIA);
         bundle.putString(GraficosActivity.AREA,idArea);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -213,15 +206,15 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     @Override
     public void onBackPressed() {
 
-        if (origen.equals("REVISAR")) {
+        if (origen.equals(FuncionesPublicas.REVISAR)) {
             ActivityPreAuditoria.super.onBackPressed();
         }
-        else if (origen.equals("EDITARCUESTIONARIO")){
+        else if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
             ActivityPreAuditoria.super.onBackPressed();
         }
         else {
             new MaterialDialog.Builder(this)
-                    .title("Warning!")
+                    .title(getString(R.string.advertencia))
                     .title(getResources().getString(R.string.advertencia))
                     .contentColor(ContextCompat.getColor(this, R.color.primary_text))
                     .titleColor(ContextCompat.getColor(this, R.color.tile4))

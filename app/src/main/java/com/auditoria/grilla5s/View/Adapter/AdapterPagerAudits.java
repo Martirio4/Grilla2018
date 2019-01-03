@@ -6,12 +6,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentMyAudits;
 import com.auditoria.grilla5s.View.Fragments.FragmentRanking;
 import com.auditoria.grilla5s.View.Fragments.FragmentRankingAreas;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.auditoria.grilla5s.Utils.FuncionesPublicas.RANKING;
 
 /**
  * Created by Pablo on 31/5/2017.
@@ -35,13 +38,13 @@ public class AdapterPagerAudits extends FragmentStatePagerAdapter {
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
         for (String unString : unaListaTitulos) {
-            if (unString.equals("auditoria")){
+            if (unString.equals(FuncionesPublicas.AUDITORIA)){
                 listaFragments.add(FragmentMyAudits.crearFragmentMyAudit());
             }
-            if (unString.equals("ranking")){
+            if (unString.equals(FuncionesPublicas.RANKING)){
                 listaFragments.add(FragmentRanking.crearFragmentRanking());
             }
-            if (unString.equals("areas")){
+            if (unString.equals(FuncionesPublicas.AREAS)){
                 listaFragments.add(FragmentRankingAreas.crearFragmentRankingAreas());
             }
         }

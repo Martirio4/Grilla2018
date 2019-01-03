@@ -151,12 +151,12 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         Intent intent = new Intent(this, ActivityPreAuditoria.class);
         Bundle bundle = new Bundle();
         bundle.putString(ActivityPreAuditoria.IDAREA, unArea.getIdArea());
-        bundle.putString(ActivityPreAuditoria.ORIGEN, "NUEVA_AUDITORIA");
+        bundle.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.NUEVA_AUDITORIA);
         bundle.putString(ActivityPreAuditoria.IDAUDIT, "NULL");
 
         intent.putExtras(bundle);
         startActivity(intent);
-        FragmentManager fragmentManager = (FragmentManager) this.getSupportFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.popBackStack();
     }
 
@@ -168,7 +168,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = (FragmentManager) this.getSupportFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         FragmentSeleccionArea seleccionAreas = (FragmentSeleccionArea) fragmentManager.findFragmentByTag("seleccion");
 
 
