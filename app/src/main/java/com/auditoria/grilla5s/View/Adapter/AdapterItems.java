@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -65,6 +66,16 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
         return context;
     }
 
+    public void addItem(Item nuevoItem) {
+    this.listaItemsOriginales.add(nuevoItem);
+    AdapterItems.this.notifyDataSetChanged();
+    }
+
+    public void remove(Item elItemABorrar) {
+        this.listaItemsOriginales.remove(elItemABorrar);
+        notifyDataSetChanged();
+    }
+
     public interface Notificable{
         void eliminarItem(Item unItem);
     }
@@ -99,6 +110,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(view.getContext())
+                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
                         .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
                         .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
                         .title(R.string.advertencia)
@@ -110,8 +122,8 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 listaItemsOriginales.remove(position);
-                                FuncionesPublicas.borrarItem(unItem.getIdItem(),unItem.getIdCuestionario(), unItem.getIdEse(), AdapterItems.this);
-                                AdapterItems.this.notifyDataSetChanged();
+                                FuncionesPublicas.borrarItem(unItem.getIdItem(),unItem.getIdEse(), unItem.getIdCuestionario(), AdapterItems.this);
+
                             }
                         })
                         .negativeText(R.string.cancel)
@@ -122,22 +134,44 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
         itemViewHolder.botonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(view.getContext())
-                        .title(view.getResources().getString(R.string.EditarItem))
-                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
-                        .content(view.getResources().getString(R.string.favorEditeItem))
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(view.getResources().getString(R.string.comment),unItem.getCriterio(), new MaterialDialog.InputCallback() {
+                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                        //.title(view.getResources().getString(R.string.EditarItem))
+                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        //.content(view.getResources().getString(R.string.favorEditeItem))
+                        //.inputType(InputType.TYPE_CLASS_TEXT)
+                        /*.input(view.getResources().getString(R.string.comment),unItem.getCriterio(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {
 
-                                FuncionesPublicas.cambiarTextoItem(unItem,input.toString());
 
-                                AdapterItems.this.notifyDataSetChanged();
                             }
-                        }).show();
+                        })*/
+                        .customView(R.layout.dialogo_editar,false)
+                        .build();
+
+                View laView=mDialog.getCustomView();
+                final EditText content= laView.findViewById(R.id.editTextoItem);
+                content.setText(unItem.getCriterio());
+
+                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
+                tituloDialogo.setText(getContext().getString(R.string.tituloDialogoModificarItem));
+                tituloDialogo.setFocusableInTouchMode(false);
+
+                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
+                botonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
+                            FuncionesPublicas.cambiarTextoItem(unItem,content.getText().toString());
+                        }
+                        AdapterItems.this.notifyDataSetChanged();
+                        mDialog.hide();
+                    }
+                });
+                mDialog.show();
             }
         });
 

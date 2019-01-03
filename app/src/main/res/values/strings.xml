@@ -661,5 +661,8 @@
     <string name="favorEditeItem">Edite el texto.</string>
     <string name="nuevoItem">Nuevo Item</string>
     <string name="agregueTituloItem">Escriba el titulo para el item.</string>
+    <string name="OK">OK</string>
+    <string name="tituloDialogoModificarItem">Modificar Criterio</string>
+    <string name="elItemNoSeAgrego">El item no fue creado</string>
 
 </resources>

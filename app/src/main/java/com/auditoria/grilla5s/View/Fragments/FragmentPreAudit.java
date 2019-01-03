@@ -29,6 +29,7 @@ import com.github.clans.fab.FloatingActionButton;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudit;
 
@@ -97,20 +98,19 @@ public class FragmentPreAudit extends Fragment {
                                     Item nuevoItem= new Item();
                                     nuevoItem.setCriterio(input.toString());
                                     nuevoItem.setIdCuestionario(tipoCuestionario);
+                                    nuevoItem.setIdEse(Integer.parseInt(laEse));
                                     nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
 
                                     Realm realm = Realm.getDefaultInstance();
-                                    Ese unaEse = realm.where(Ese.class)
+                                    RealmResults<Item> losItem = realm.where(Item.class)
                                             .equalTo("idCuestionario", tipoCuestionario)
                                             .equalTo("idEse", Integer.parseInt(laEse))
-                                            .findFirst();
-                                    if (unaEse!=null){
-                                        Integer numeroOrdenItem = unaEse.getListaItem().size()+1;
-                                        String idItemNuevo= laEse + String.valueOf(numeroOrdenItem);
-                                        nuevoItem.setIdItem(Integer.parseInt(idItemNuevo));
+                                            .findAll();
+                                    if (losItem!=null){
+                                        nuevoItem.setIdItem(losItem.size()+1);
                                     }
 
-                                    FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem);
+                                    FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem,adapterItems);
 
                                 }
                             }).show();
@@ -143,6 +143,7 @@ public class FragmentPreAudit extends Fragment {
             RealmResults<Item> listaItems=realm.where(Item.class)
                     .equalTo("idCuestionario",tipoCuestionario)
                     .equalTo("idEse", Integer.parseInt(laEse))
+                    .sort("idItem", Sort.ASCENDING)
                     .findAll();
 
             //si el item pertenece a la ese, loo agrego a la lista

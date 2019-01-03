@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import pl.tajchert.nammu.Nammu;
@@ -225,15 +226,15 @@ public class FuncionesPublicas {
         new Subidor().execute(idAudit);
     }
 
-    public static void agregarItem(final String idCuestionario, final Item unItem){
+    public static void agregarItem(final String idCuestionario, final Item unItem, final AdapterItems adapterItems){
         Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
+            realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
-                    Item mItem = realm.copyToRealm(unItem);
-                    Integer idEse=Integer.parseInt((String.valueOf(unItem.getIdItem()).substring(0,1)));
+                public void execute(Realm bgRealm) {
+                    Item mItem = bgRealm.copyToRealm(unItem);
+                    Integer idEse=unItem.getIdEse();
 
-                    final Ese laEse = realm.where(Ese.class)
+                    final Ese laEse = bgRealm.where(Ese.class)
                             .equalTo("idCuestionario", idCuestionario)
                             .equalTo("idEse",idEse)
                             .findFirst();
@@ -241,7 +242,21 @@ public class FuncionesPublicas {
                         laEse.addItem(mItem);
                     }
                 }
-            });
+            }
+                    , new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            adapterItems.addItem(unItem);
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            Toast.makeText(adapterItems.getContext(), adapterItems.getContext().getString(R.string.elItemNoSeAgrego), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+            );
     }
 
 
@@ -306,14 +321,13 @@ public class FuncionesPublicas {
         });
     }
 
-    public static void borrarItem(final Integer idItem, final String idCuestionario, final Integer idEse, final AdapterItems adapterItems) {
+    public static void borrarItem(final Integer idItem, final Integer idEse, final String idCuestionario, final AdapterItems adapterItems) {
 
-        Realm bgrealm = Realm.getDefaultInstance();
+        final Realm bgrealm = Realm.getDefaultInstance();
 
         bgrealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Integer laEse= Integer.parseInt(String.valueOf(idItem).substring(0,1));
 
                 //BORRO LAS PREGUNTAS DE ESE ITEM
                 RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
@@ -325,7 +339,7 @@ public class FuncionesPublicas {
 
                 //BORRO EL ITEM
                 Item elItem = realm.where(Item.class)
-                        .equalTo("idItem", idItem)
+                        .equalTo("idItem",idItem )
                         .equalTo("idEse", idEse)
                         .equalTo("idCuestionario", idCuestionario)
                         .findFirst();
@@ -333,28 +347,41 @@ public class FuncionesPublicas {
                     elItem.deleteFromRealm();
                 }
 
+
                 //REACOMODO LOS NUMEROS DE ITEM
-                RealmResults<Item> losItems = realm.where(Item.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .equalTo("idEse",idEse)
-                        .sort("idItem",Sort.ASCENDING)
-                        .findAll();
-                Integer inicio=0;
-                for (Item elItemAReubicar:losItems
-                        ) {
-                    inicio++;
-                    elItemAReubicar.setIdItem(inicio);
 
 
-                    for (Pregunta preg:elItemAReubicar.getListaPreguntas()
-                            ) {
-                        preg.setIdItem(elItemAReubicar.getIdItem());
-                    }
-                }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
+                adapterItems.notifyDataSetChanged();
+                bgrealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<Item> losItems = bgrealm.where(Item.class)
+                                .equalTo("idCuestionario", idCuestionario)
+                                .equalTo("idEse",idEse)
+                                .sort("idItem",Sort.ASCENDING)
+                                .findAll();
+                        Integer inicio=0;
+                        for (Item elItemAReubicar:losItems
+                                ) {
+                            inicio++;
+                            elItemAReubicar.setIdItem(inicio);
+
+
+                            for (Pregunta preg:elItemAReubicar.getListaPreguntas()
+                                    ) {
+                                preg.setIdItem(elItemAReubicar.getIdItem());
+                            }
+                        }
+                        RealmList<Item> lalis = new RealmList<>();
+                        lalis.addAll(losItems);
+                        adapterItems.setListaItemsOriginales(lalis);
+                        adapterItems.notifyDataSetChanged();
+                    }
+                });
                 adapterItems.notifyDataSetChanged();
             }
         }, new Realm.Transaction.OnError() {
