@@ -11,7 +11,7 @@ import io.realm.RealmObject;
 
 public class Ese extends RealmObject {
 
-    private Integer idEse;
+    private String idEse;
     private String idAudit;
     private Double puntajeEse;
     private RealmList<Item> listaItem;
@@ -21,11 +21,11 @@ public class Ese extends RealmObject {
     public Ese() {
     }
 
-    public Integer getIdEse() {
+    public String getIdEse() {
         return idEse;
     }
 
-    public void setIdEse(Integer idEse) {
+    public void setIdEse(String idEse) {
         this.idEse = idEse;
     }
 

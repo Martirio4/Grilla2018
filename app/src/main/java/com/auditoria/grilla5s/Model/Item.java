@@ -10,11 +10,11 @@ import io.realm.RealmObject;
  */
 
 public class Item extends RealmObject {
-    private String criterio;
+    private String tituloItem;
     private String textoItem;
     private String idAudit;
-    private Integer idEse;
-    private Integer idItem;
+    private String idEse;
+    private String idItem;
     private RealmList<Pregunta> listaPreguntas;
     private Double puntajeItem;
     private String idCuestionario;
@@ -22,12 +22,12 @@ public class Item extends RealmObject {
     public Item() {
     }
 
-    public String getCriterio() {
-        return criterio;
+    public String getTituloItem() {
+        return tituloItem;
     }
 
-    public void setCriterio(String criterio) {
-        this.criterio = criterio;
+    public void setTituloItem(String tituloItem) {
+        this.tituloItem = tituloItem;
     }
 
     public String getTextoItem() {
@@ -46,11 +46,11 @@ public class Item extends RealmObject {
         this.idAudit = idAudit;
     }
 
-    public Integer getIdItem() {
+    public String getIdItem() {
         return idItem;
     }
 
-    public void setIdItem(Integer idItem) {
+    public void setIdItem(String idItem) {
         this.idItem = idItem;
     }
 
@@ -82,11 +82,11 @@ public class Item extends RealmObject {
         this.idCuestionario = idCuestionario;
     }
 
-    public Integer getIdEse() {
+    public String getIdEse() {
         return idEse;
     }
 
-    public void setIdEse(Integer idEse) {
+    public void setIdEse(String idEse) {
         this.idEse = idEse;
     }
 

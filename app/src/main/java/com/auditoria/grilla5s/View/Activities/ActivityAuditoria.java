@@ -211,8 +211,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
     public void onBackPressed() {
 
@@ -221,13 +219,11 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
 
         if (fragmentZoom != null && fragmentZoom.isVisible()) {
-           fragmentManager.popBackStack();
+            fragmentManager.popBackStack();
         }
         else {
                 super.onBackPressed();
         }
-
-
     }
 
     @Override
@@ -237,6 +233,11 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         mBundle.putString(ActivityZoom.IDFOTO,unaFoto.getIdFoto());
         intent.putExtras(mBundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void cargarAuditoriaEnFirebase(String idAudit) {
+
     }
 
     @Override
@@ -268,10 +269,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         });
     }
 
-    @Override
-    public void cargarAuditoriaEnFirebase(String idAudit) {
-        FuncionesPublicas.subirAFireBase(idAudit);
-    }
+
 
     @Override
     public void actualizarPuntaje(String idAudit) {

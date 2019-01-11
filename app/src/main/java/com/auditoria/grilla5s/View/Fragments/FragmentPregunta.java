@@ -225,7 +225,7 @@ public class FragmentPregunta extends Fragment {
         rb5.setText("5");
         rb6.setText("n/a");
         textoPregunta.setText(enunciado);
-        criterioTitulo.setText(elItem.getCriterio());
+        criterioTitulo.setText(elItem.getTituloItem());
         criterioDescripcion.setText(elItem.getTextoItem());
 
         //agregar los fabs al menu

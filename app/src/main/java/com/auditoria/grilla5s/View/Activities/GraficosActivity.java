@@ -1056,7 +1056,7 @@ public class GraficosActivity extends AppCompatActivity {
 //
 //                merge columna criterio
                     laHoja.mergeCells(columna, fila, columna, fila + cantPreguntas - 1);
-                    escribirCelda(columna, fila, unItem.getCriterio(), "textoNormal", laHoja);
+                    escribirCelda(columna, fila, unItem.getTituloItem(), "textoNormal", laHoja);
                     columna++;
 //                merge columna item
                     laHoja.mergeCells(columna, fila, columna, fila + cantPreguntas - 1);

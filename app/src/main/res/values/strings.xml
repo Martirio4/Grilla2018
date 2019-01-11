@@ -325,7 +325,7 @@
     <string name="auditCerradaNoPuedeEditar">Auditorías finalizadas no pueden editarse</string>
     <string name="fotosViejas">Hallazgos última auditoría</string>
     <string name="findingsNuevo">Hallazgos</string>
-    <string name="criterio">Criterio:</string>
+    <string name="tituloItem">Criterio:</string>
     <string name="item">Descripcion:</string>
     <string name="auditoriaIncompleta">Auditoría incompleta.</string>
     <string name="resultados">Resultados</string>

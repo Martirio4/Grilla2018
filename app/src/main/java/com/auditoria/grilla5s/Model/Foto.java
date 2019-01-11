@@ -13,7 +13,7 @@ public class Foto extends RealmObject {
     private String idAudit;
     @PrimaryKey
     private String idFoto;
-    private Integer idPregunta;
+    private String idPregunta;
     private String comentarioFoto;
 
     public Foto() {
@@ -51,11 +51,11 @@ public class Foto extends RealmObject {
         this.idFoto = idFoto;
     }
 
-    public Integer getIdPregunta() {
+    public String getIdPregunta() {
         return idPregunta;
     }
 
-    public void setIdPregunta(Integer idPregunta) {
+    public void setIdPregunta(String idPregunta) {
         this.idPregunta = idPregunta;
     }
 }

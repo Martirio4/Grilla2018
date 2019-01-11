@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +17,11 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 
-import io.realm.Realm;
 import io.realm.RealmList;
 
 /**
@@ -102,7 +98,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final Item unItem = listaItemsOriginales.get(position);
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-        itemViewHolder.cargarItem(unItem);
+        itemViewHolder.cargarItem(unItem,position);
 
 
 
@@ -141,7 +137,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
                         //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
                         //.content(view.getResources().getString(R.string.favorEditeItem))
                         //.inputType(InputType.TYPE_CLASS_TEXT)
-                        /*.input(view.getResources().getString(R.string.comment),unItem.getCriterio(), new MaterialDialog.InputCallback() {
+                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {
 
@@ -153,7 +149,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
 
                 View laView=mDialog.getCustomView();
                 final EditText content= laView.findViewById(R.id.editTextoItem);
-                content.setText(unItem.getCriterio());
+                content.setText(unItem.getTituloItem());
 
                 TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
                 tituloDialogo.setText(getContext().getString(R.string.tituloDialogoModificarItem));
@@ -237,10 +233,10 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
             textViewFaltantes.setTypeface(robotoL);
         }
 
-        public void cargarItem(Item unItem) {
+        public void cargarItem(Item unItem, Integer ordenCarga) {
             String prueba =String.valueOf(unItem.getIdItem());
-            textViewNumero.setText(String.valueOf(unItem.getIdItem()));
-            textViewDescripcion.setText(unItem.getCriterio());
+            textViewNumero.setText(ordenCarga);
+            textViewDescripcion.setText(unItem.getTituloItem());
 
             if (origen!=null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
                 botonEditar.setVisibility(View.VISIBLE);

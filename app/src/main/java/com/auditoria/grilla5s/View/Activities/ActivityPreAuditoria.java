@@ -177,7 +177,6 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         bundle.putInt(ActivityAuditoria.IDESE,unItem.getIdEse() );
         bundle.putInt(ActivityAuditoria.IDITEM, unItem.getIdItem());
         bundle.putString(ActivityAuditoria.ORIGEN, origen);
-
         intent.putExtras(bundle);
         startActivity(intent);
 
@@ -267,7 +266,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                     @Override
                     public void onInput(MaterialDialog dialog, final CharSequence input) {
                         Item nuevoItem= new Item();
-                        nuevoItem.setCriterio(input.toString());
+                        nuevoItem.setTituloItem(input.toString());
                         nuevoItem.setIdCuestionario(tipoCuestionario);
                         nuevoItem.setIdEse(Integer.parseInt(laEse));
                         nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
