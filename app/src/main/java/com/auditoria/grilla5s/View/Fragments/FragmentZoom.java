@@ -2,6 +2,7 @@ package com.auditoria.grilla5s.View.Fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,17 +32,19 @@ public class FragmentZoom extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_fragment_zoom, container, false);
         Bundle bundle = getArguments();
 
-        rutaFoto=bundle.getString(RUTAFOTO);
-        comentarioFoto=bundle.getString(COMENTARIOFOTO);
+        if (bundle != null) {
+            rutaFoto=bundle.getString(RUTAFOTO);
+            comentarioFoto=bundle.getString(COMENTARIOFOTO);
+        }
 
-        PhotoView laFoto=(PhotoView) view.findViewById(R.id.imagenZoomeada);
-        TextView elTexto=(TextView) view.findViewById(R.id.textoImagenZoomeada);
+        PhotoView laFoto= view.findViewById(R.id.imagenZoomeada);
+        TextView elTexto= view.findViewById(R.id.textoImagenZoomeada);
         if (comentarioFoto!=null && !comentarioFoto.isEmpty()) {
             elTexto.setVisibility(View.VISIBLE);
             elTexto.setText(comentarioFoto);

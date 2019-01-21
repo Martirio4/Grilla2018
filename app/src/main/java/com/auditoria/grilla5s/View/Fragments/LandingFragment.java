@@ -151,27 +151,7 @@ public class LandingFragment extends Fragment {
 
         lin5.setVisibility(View.GONE);
 
-        //PARA LA PRUEBA DE ANIMACION
-        /*
-        View.OnLongClickListener listenerLong= new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (lin5.getVisibility()==View.VISIBLE){
-                    lin5.setVisibility(View.GONE);
-                }
-                else{
-                    lin5.setVisibility(View.VISIBLE);
-                    animationTarget.startAnimation(animation);
-                }
-                return true;
-            }
-        };
 
-        botonIssue.setOnLongClickListener(listenerLong);
-        lin4.setOnLongClickListener(listenerLong);
-        texto4.setOnLongClickListener(listenerLong);
-        //PARA LA PRUEBA DE ANIMACION
-    */
         config = getActivity().getSharedPreferences("prefs", 0);
         boolean firstRun = config.getBoolean("firstRun", false);
         if (!firstRun){
@@ -180,18 +160,6 @@ public class LandingFragment extends Fragment {
             editor.putBoolean("firstRun", true);
             editor.commit();
         }
-
-/*
-        animationTarget= view.findViewById(R.id.btn_star);
-        animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.rotate_around_center_point);
-        animationTarget.startAnimation(animation);
-
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        Integer dpi=metrics.densityDpi;
-        Toast.makeText(getActivity(), dpi.toString(), Toast.LENGTH_LONG).show();
-        */
-
 
         return view;
     }
@@ -253,7 +221,7 @@ public class LandingFragment extends Fragment {
     private void crearDialogoBienvenida() {
 
         new MaterialDialog.Builder(getActivity())
-                .title(getResources().getString(R.string.bienvenido)/*+" "+ FirebaseAuth.getInstance().getCurrentUser().getEmail()*/)
+                .title(getResources().getString(R.string.bienvenido))
                 .buttonsGravity(GravityEnum.CENTER)
                 .contentColor(ContextCompat.getColor(getActivity(), R.color.primary_text))
                 .backgroundColor(ContextCompat.getColor(getActivity(), R.color.tile1))

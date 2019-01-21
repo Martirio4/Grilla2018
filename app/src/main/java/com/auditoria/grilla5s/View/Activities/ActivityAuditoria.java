@@ -45,8 +45,8 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     public static String idAudit;
     public String origen;
-    public static Integer idItem;
-    public Integer idese;
+    public static String idItem;
+    public String idese;
     private ViewPager pager;
     private String resultadoInputFoto;
     private FloatingActionMenu fabMenu;
@@ -65,9 +65,9 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         if (bundle!=null) {
             idAudit =bundle.getString(IDAUDITORIA);
-            idItem=bundle.getInt(IDITEM);
+            idItem=bundle.getString(IDITEM);
             origen=bundle.getString(ORIGEN);
-            idese=bundle.getInt(IDESE);
+            idese=bundle.getString(IDESE);
             idCuestionario=bundle.getString(IDCUESTIONARIO);
         }
 
@@ -110,12 +110,12 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         // Get a support ActionBar corresponding to this toolbar
         toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.marfil));
+
 
         Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
         TextView unText=toolbar.findViewById(R.id.textoToolbar);
         unText.setTypeface(robotoR);
-        unText.setTextColor(getResources().getColor(R.color.tile5));
+        unText.setTextColor(getResources().getColor(R.color.blancoNomad));
 
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             unText.setText(getResources().getString(R.string.editarCuestionarios));
@@ -233,11 +233,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         mBundle.putString(ActivityZoom.IDFOTO,unaFoto.getIdFoto());
         intent.putExtras(mBundle);
         startActivity(intent);
-    }
-
-    @Override
-    public void cargarAuditoriaEnFirebase(String idAudit) {
-
     }
 
     @Override

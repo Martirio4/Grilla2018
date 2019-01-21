@@ -29,7 +29,7 @@ public class EditarCuestionarioActivity extends AppCompatActivity implements Fra
         TextView unText=toolbar.findViewById(R.id.textoToolbar);
         unText.setTypeface(robotoR);
         unText.setTextColor(getResources().getColor(R.color.blancoNomad));
-        unText.setText(getString(R.string.settings));
+        unText.setText(getString(R.string.settingsMin));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

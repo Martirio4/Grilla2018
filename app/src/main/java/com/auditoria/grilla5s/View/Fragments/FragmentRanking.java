@@ -3,14 +3,13 @@ package com.auditoria.grilla5s.View.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -26,8 +25,6 @@ public class FragmentRanking extends Fragment {
     private RealmList<Auditoria> listaAuditorias;
     private RecyclerView recyclerAreas;
     private AdapterAuditorias adapterAudits;
-    private LinearLayoutManager layoutManager;
-    private RealmList<Area> listaAreas;
     private Graficable graficable;
 
     public void updateAdapter() {
@@ -40,7 +37,7 @@ public class FragmentRanking extends Fragment {
     }
 
     public interface Graficable{
-        public void GraficarAuditVieja(Auditoria unAuditoria);
+        void GraficarAuditVieja(Auditoria unAuditoria);
     }
     public FragmentRanking() {
         // Required empty public constructor
@@ -48,7 +45,7 @@ public class FragmentRanking extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_my_audits, container, false);
@@ -58,7 +55,7 @@ public class FragmentRanking extends Fragment {
         recyclerAreas= view.findViewById(R.id.recyclerArea);
         adapterAudits= new AdapterAuditorias();
         adapterAudits.setContext(getContext());
-        layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerAreas.setLayoutManager(layoutManager);
         adapterAudits.setListaAuditsOriginales(listaAuditorias);
         recyclerAreas.setAdapter(adapterAudits);

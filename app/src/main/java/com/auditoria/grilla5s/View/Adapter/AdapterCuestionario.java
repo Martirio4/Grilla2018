@@ -1,7 +1,6 @@
 package com.auditoria.grilla5s.View.Adapter;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Typeface;
@@ -88,12 +87,20 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
 
         if (fragmentManageCuestionarios != null && fragmentManageCuestionarios.isVisible()) {
 
-            CuestionarioViewHolder.fabEliminar.setOnClickListener(new View.OnClickListener() {
+            CuestionarioViewHolder.btnEliminar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     eliminable = fragmentManageCuestionarios;
                     eliminable.EliminarCuestionario(unCuestionario);
 
+                }
+            });
+
+            CuestionarioViewHolder.btnEditar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    eliminable =fragmentManageCuestionarios;
+                    eliminable.editarNombreCuestionario(unCuestionario);
                 }
             });
         }
@@ -135,7 +142,8 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
     private static class CuestionarioViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView textView;
-        private ImageButton fabEliminar;
+        private ImageButton btnEliminar;
+        private ImageButton btnEditar;
         private TextView textUltima;
         private LinearLayout linearUltima;
         private TextView tagultima;
@@ -149,12 +157,14 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
             textUltima=itemView.findViewById(R.id.ultimoPuntaje);
             tagultima=itemView.findViewById(R.id.tagUltimoPuntaje);
             textViewTipo= itemView.findViewById(R.id.tipoArea);
-            fabEliminar = itemView.findViewById(R.id.botonEliminar);
+            btnEliminar = itemView.findViewById(R.id.botonEliminar);
+            btnEditar=itemView.findViewById(R.id.botonEditarItem);
 
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textView.setTypeface(robotoL);
             textViewTipo.setTypeface(robotoL);
-            fabEliminar.setVisibility(View.VISIBLE);
+            btnEliminar.setVisibility(View.VISIBLE);
+            btnEditar.setVisibility(View.VISIBLE);
 
         }
 
@@ -181,6 +191,8 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
     }
 
     public interface Eliminable {
-        public void EliminarCuestionario(Cuestionario unCuestionario);
+        void EliminarCuestionario(Cuestionario unCuestionario);
+
+        void editarNombreCuestionario(Cuestionario unCuestionario);
     }
 }

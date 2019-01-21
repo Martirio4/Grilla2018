@@ -8,23 +8,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.auditoria.grilla5s.Model.Ese;
-import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
-import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.github.clans.fab.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -38,62 +37,68 @@ import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudi
  */
 public class FragmentPreAudit extends Fragment {
 
-    public final static String LAESE="LAESE";
+    public final static String LAESE = "LAESE";
     private String laEse;
 
-    public static final String TIPOCUESTIONARIO ="TIPOCUESTIONARIO" ;
+    public static final String TIPOCUESTIONARIO = "TIPOCUESTIONARIO";
     private String tipoCuestionario;
 
-    public static final String ORIGEN ="ORIGEN" ;
+    public static final String ORIGEN = "ORIGEN";
     private String origen;
 
     public FragmentPreAudit() {
         // Required empty public constructor
     }
+
     private Auditable auditable;
     private AdapterItems adapterItems;
+    private TextView textoFab;
 
-    public interface Auditable{
+    public interface Auditable {
         void auditarItem(Item unItem);
-        void titularToolbar();
+
+
+
         void cerrarAuditoria();
+
         void actualizarPuntaje(String idAudit);
-        void agregarNuevoCriterio(String laEse, String tipoCuestionario, AdapterItems elAdapter);
+
+        void agregarNuevoItem(String laEse, String tipoCuestionario, AdapterItems elAdapter);
     }
 
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_fragment_pre_audit, container, false);
+        View view = inflater.inflate(R.layout.fragment_fragment_pre_audit, container, false);
         Bundle bundle = getArguments();
-        if (bundle!=null) {
-            laEse=bundle.getString(LAESE);
-            origen=bundle.getString(ORIGEN);
-            tipoCuestionario=bundle.getString(TIPOCUESTIONARIO);
-        }
-        else {
+        if (bundle != null) {
+            laEse = bundle.getString(LAESE);
+            origen = bundle.getString(ORIGEN);
+            tipoCuestionario = bundle.getString(TIPOCUESTIONARIO);
+        } else {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
         }
 
-        if (origen!=null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
+        textoFab=view.findViewById(R.id.textoFabPreAudit);
+
+        if (origen != null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
-            fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
+            fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));
             fabPreAudit.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
             fabPreAudit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                   auditable.agregarNuevoCriterio(laEse,tipoCuestionario,adapterItems);
+                    auditable.agregarNuevoItem(laEse, tipoCuestionario, adapterItems);
 
                 }
             });
-        }
-        else {
+            textoFab.setText(getString(R.string.nuevoItem));
+        } else {
             FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
-            fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
+            fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));
             fabPreAudit.setImageResource(R.drawable.ic_save_black_24dp);
             fabPreAudit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,22 +106,22 @@ public class FragmentPreAudit extends Fragment {
                     corroborarFinalizacionAuditoria(idAudit);
                 }
             });
+            textoFab.setText(getString(R.string.guardarAuditoria));
         }
 
         final RecyclerView recyclerPreAudit = view.findViewById(R.id.recyclerPreAudit);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerPreAudit.setLayoutManager(linearLayoutManager);
 
 //      LE PIDO A LA REALM TODOS LOS ITEM QUE TIENEN AUDITORIA Y QUE COMIENZAN CON LA MISMA ESE
         Realm realm = Realm.getDefaultInstance();
-        RealmList<Item>listaItemsOriginales;
+        RealmList<Item> listaItemsOriginales;
 
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
 
-            RealmResults<Item> listaItems=realm.where(Item.class)
-                    .equalTo("idCuestionario",tipoCuestionario)
-                    .equalTo("idEse", Integer.parseInt(laEse))
-                    .sort("idItem", Sort.ASCENDING)
+            RealmResults<Item> listaItems = realm.where(Item.class)
+                    .equalTo("idCuestionario", tipoCuestionario)
+                    .equalTo("idEse", laEse)
                     .findAll();
 
             //si el item pertenece a la ese, loo agrego a la lista
@@ -126,9 +131,9 @@ public class FragmentPreAudit extends Fragment {
 
         } else {
 
-            RealmResults<Item> listaItems=realm.where(Item.class)
-                    .equalTo("idAudit",ActivityPreAuditoria.pedirIdAudit())
-                    .equalTo("idEse", Integer.parseInt(laEse))
+            RealmResults<Item> listaItems = realm.where(Item.class)
+                    .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
+                    .equalTo("idEse", laEse)
                     .findAll();
 
             //si el item pertenece a la ese, loo agrego a la lista
@@ -137,7 +142,7 @@ public class FragmentPreAudit extends Fragment {
 
         }
 
-        adapterItems=new AdapterItems();
+        adapterItems = new AdapterItems();
         adapterItems.setContext(getContext());
         adapterItems.setListaItemsOriginales(listaItemsOriginales);
         adapterItems.setOrigen(origen);
@@ -154,7 +159,7 @@ public class FragmentPreAudit extends Fragment {
             }
         };
         adapterItems.setListener(listenerItem);
-        auditable.titularToolbar();
+
         return view;
     }
 
@@ -162,12 +167,13 @@ public class FragmentPreAudit extends Fragment {
         FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
         Bundle unBundle = new Bundle();
         unBundle.putString(LAESE, laEse);
-        unBundle.putString(ORIGEN,origen);
+        unBundle.putString(ORIGEN, origen);
         fragmentPreAudit.setArguments(unBundle);
 
         return fragmentPreAudit;
     }
-    public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen,String idCuestionario) {
+
+    public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen, String idCuestionario) {
         FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
         Bundle unBundle = new Bundle();
         unBundle.putString(LAESE, laEse);
@@ -180,7 +186,7 @@ public class FragmentPreAudit extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        auditable= (Auditable) context;
+        auditable = (Auditable) context;
         super.onAttach(context);
     }
 
@@ -192,12 +198,11 @@ public class FragmentPreAudit extends Fragment {
 
     private void corroborarFinalizacionAuditoria(final String idAudit) {
 
-        if (FuncionesPublicas.completoTodosLosPuntos(idAudit)){
+        if (FuncionesPublicas.completoTodosLosPuntos(idAudit)) {
             auditable.cerrarAuditoria();
             auditable.actualizarPuntaje(idAudit);
             //auditable.cargarAuditoriaEnFirebase(idAudit);
-        }
-        else {
+        } else {
 
             new MaterialDialog.Builder(getContext())
                     .title(getString(R.string.advertencia))
@@ -205,7 +210,7 @@ public class FragmentPreAudit extends Fragment {
                     .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                     .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
                     .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
-                    .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
+                    .content(getResources().getString(R.string.auditoriaSinTerminar) + "\n" + getResources().getString(R.string.continuar))
                     .positiveText(getResources().getString(R.string.si))
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override

@@ -4,6 +4,7 @@ package com.auditoria.grilla5s.View.Fragments;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -52,12 +53,6 @@ public class FragmentRadar extends Fragment {
     private Double punt5;
     private Boolean completo;
 
-    private Double puntpro;
-    private String areaAuditada;
-
-
-    private TextView textViewIncompleto;
-
 
     public FragmentRadar() {
         // Required empty public constructor
@@ -65,20 +60,23 @@ public class FragmentRadar extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_radar_chart, container, false);
 
         Bundle unBundle=getArguments();
 
-        punt1=unBundle.getDouble(PUNJTAJE1);
-        punt2=unBundle.getDouble(PUNJTAJE2);
-        punt3=unBundle.getDouble(PUNJTAJE3);
-        punt4=unBundle.getDouble(PUNJTAJE4);
-        punt5=unBundle.getDouble(PUNJTAJE5);
-        areaAuditada=unBundle.getString(AREA);
-        completo=unBundle.getBoolean(COMPLETO);
+        String areaAuditada = null;
+        if (unBundle!=null) {
+            punt1=unBundle.getDouble(PUNJTAJE1);
+            punt2=unBundle.getDouble(PUNJTAJE2);
+            punt3=unBundle.getDouble(PUNJTAJE3);
+            punt4=unBundle.getDouble(PUNJTAJE4);
+            punt5=unBundle.getDouble(PUNJTAJE5);
+            areaAuditada = unBundle.getString(AREA);
+            completo=unBundle.getBoolean(COMPLETO);
+        }
 
         if (punt1==9.9){
             punt1=0.0;
@@ -100,7 +98,7 @@ public class FragmentRadar extends Fragment {
         Typeface robotoR = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
         TextView textoTitulo= view.findViewById(R.id.textoAreaResultado);
         TextView tagTitulo=view.findViewById(R.id.tagRadarChart);
-        textViewIncompleto=view.findViewById(R.id.textoIncompleto);
+        TextView textViewIncompleto = view.findViewById(R.id.textoIncompleto);
 
         if (completo){
             textViewIncompleto.setVisibility(View.GONE);
@@ -118,7 +116,7 @@ public class FragmentRadar extends Fragment {
         tv.setTextColor(Color.WHITE);
         tv.setBackgroundColor(Color.rgb(60, 65, 82));
 */
-        mChart = (RadarChart) view.findViewById(R.id.chart1);
+        mChart = view.findViewById(R.id.chart1);
         mChart.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.marfil));
 
         mChart.getDescription().setEnabled(false);
@@ -185,13 +183,9 @@ public class FragmentRadar extends Fragment {
 
 
     public void setData() {
-
-        float mult = 80;
-        float min = 20;
-        int cnt = 5;
-
-        ArrayList<RadarEntry> entries1 = new ArrayList<RadarEntry>();
-        ArrayList<RadarEntry> entries2 = new ArrayList<RadarEntry>();
+        
+        ArrayList<RadarEntry> entries1 = new ArrayList<>();
+        ArrayList<RadarEntry> entries2 = new ArrayList<>();
 
         Float punto1= Float.parseFloat(punt1.toString());
         Float punto2= Float.parseFloat(punt2.toString());
@@ -246,7 +240,7 @@ public class FragmentRadar extends Fragment {
         set2.setDrawHighlightCircleEnabled(true);
         set2.setDrawHighlightIndicators(false);
 
-        ArrayList<IRadarDataSet> sets = new ArrayList<IRadarDataSet>();
+        ArrayList<IRadarDataSet> sets = new ArrayList<>();
         sets.add(set1);
         sets.add(set2);
 

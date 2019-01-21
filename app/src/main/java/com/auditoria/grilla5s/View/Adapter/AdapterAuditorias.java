@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -102,7 +103,9 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     listaAuditsOriginales.remove(position);
-                                    FuncionesPublicas.borrarAuditoriaSeleccionada(unAuditoria.getIdAuditoria());
+                                    if (FuncionesPublicas.borrarAuditoriaSeleccionada(unAuditoria.getIdAuditoria())) {
+                                        Toast.makeText(context, context.getString(R.string.auditEliminada), Toast.LENGTH_SHORT).show();
+                                    }
                                     AdapterAuditorias.this.notifyDataSetChanged();
                                 }
                             })

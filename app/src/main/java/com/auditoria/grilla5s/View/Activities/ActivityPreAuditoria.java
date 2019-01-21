@@ -1,6 +1,7 @@
 package com.auditoria.grilla5s.View.Activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,8 @@ import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -45,8 +48,6 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     private String origen;
     public static String tipoCuestionario;
     private AdapterPagerEses adapterPager;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +99,25 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
             });
         }
 
+        Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+
+
+
+
         toolbar =  findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.blancoNomad));
+
         if (getSupportActionBar() != null) {
+
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            TextView unText=toolbar.findViewById(R.id.textoToolbar);
+            unText.setTypeface(robotoR);
+            unText.setTextColor(getResources().getColor(R.color.blancoNomad));
+
             if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)) {
-                toolbar.setTitle(getResources().getString(R.string.tituloFragmentPreAudit));
+                unText.setText(getResources().getText(R.string.tituloFragmentPreAudit));
             } else if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
-                toolbar.setTitle(getResources().getString(R.string.tituloPreAuditEditarCuestionario));
+                unText.setText(getResources().getText(R.string.editarCuestionarios));
             }
         }
 
@@ -174,18 +185,12 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Bundle bundle=new Bundle();
         bundle.putString(ActivityAuditoria.IDCUESTIONARIO,unItem.getIdCuestionario());
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
-        bundle.putInt(ActivityAuditoria.IDESE,unItem.getIdEse() );
-        bundle.putInt(ActivityAuditoria.IDITEM, unItem.getIdItem());
+        bundle.putString(ActivityAuditoria.IDESE,unItem.getIdEse() );
+        bundle.putString(ActivityAuditoria.IDITEM, unItem.getIdItem());
         bundle.putString(ActivityAuditoria.ORIGEN, origen);
         intent.putExtras(bundle);
         startActivity(intent);
 
-    }
-
-    @Override
-    public void titularToolbar() {
-        TextView texto = toolbar.findViewById(R.id.textoToolbar);
-        texto.setText(getResources().getString(R.string.tituloFragmentPreAudit));
     }
 
     @Override
@@ -254,7 +259,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     }
 
     @Override
-    public void agregarNuevoCriterio(final String laEse, final String tipoCuestionario, final AdapterItems elAdapter) {
+    public void agregarNuevoItem(final String laEse, final String tipoCuestionario, final AdapterItems elAdapter) {
         new MaterialDialog.Builder(this)
                 .title(getResources().getString(R.string.nuevoItem))
                 .contentColor(ContextCompat.getColor(this, R.color.primary_text))
@@ -265,22 +270,16 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                 .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, final CharSequence input) {
-                        Item nuevoItem= new Item();
-                        nuevoItem.setTituloItem(input.toString());
-                        nuevoItem.setIdCuestionario(tipoCuestionario);
-                        nuevoItem.setIdEse(Integer.parseInt(laEse));
-                        nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
+                        if (input!=null && !input.toString().isEmpty()) {
+                            Item nuevoItem= new Item();
+                            nuevoItem.setTituloItem(input.toString());
+                            nuevoItem.setIdCuestionario(tipoCuestionario);
+                            nuevoItem.setIdEse(laEse);
+                            nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
+                            nuevoItem.setIdItem(FuncionesPublicas.IDITEMS + UUID.randomUUID());
 
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmResults<Item> losItem = realm.where(Item.class)
-                                .equalTo("idCuestionario", tipoCuestionario)
-                                .equalTo("idEse", Integer.parseInt(laEse))
-                                .findAll();
-                        if (losItem!=null){
-                            nuevoItem.setIdItem(losItem.size()+1);
+                            FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem,elAdapter);
                         }
-
-                        FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem,elAdapter);
 
                     }
                 }).show();

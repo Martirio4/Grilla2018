@@ -22,6 +22,7 @@ import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea;
@@ -66,6 +67,16 @@ public class FuncionesPublicas {
     public static final String RANKING = "RANKING";
     public static final String AUDITORIA = "AUDITORIA";
     public static final String AREAS = "AREAS";
+
+//    ID'S
+    public static final String IDITEMS = "ITEM_";
+    public static final String IDAREAS = "AREA_";
+    public static final String IDESES = "ESE_";
+    public static final String IDCRITERIOS = "CRIT_";
+    public static final String IDCUESTIONARIOS = "CUE_";
+    public static final String IDPREGUNTAS = "PREG_";
+
+
 
 
     public static boolean isExternalStorageWritable() {
@@ -114,7 +125,9 @@ public class FuncionesPublicas {
                         .equalTo("idAuditoria", idAudit)
                         .findFirst();
 
-                result2.deleteFromRealm();
+                if (result2!=null) {
+                    result2.deleteFromRealm();
+                }
             }
         });
         return true;
@@ -364,6 +377,34 @@ public class FuncionesPublicas {
                     elItem.deleteFromRealm();
                 }
 
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+               adapterItems.notifyDataSetChanged();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(adapterItems.getContext(), adapterItems.getContext().getString(R.string.itemNoEliminado), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    public static void cambiarNombreCuestionario(final Cuestionario unCuestionario, final String nuevoTexto, final AdapterCuestionario adapterCuestionario) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Cuestionario elCues = realm.where(Cuestionario.class)
+                        .equalTo("idCuestionario", unCuestionario.getIdCuestionario())
+                        .findFirst();
+                if (elCues!=null){
+                    elCues.setNombreCuestionario(nuevoTexto);
+                    adapterCuestionario.notifyDataSetChanged();
+                }
             }
         });
 

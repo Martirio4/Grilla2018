@@ -56,17 +56,13 @@ public class FragmentSettings extends Fragment {
     private Button areas;
     private Button borrar;
     private Button tuto;
-    private Button editCuestionarios;
 
 
     private ImageView lin1;
     private ImageView lin2;
     private ImageView lin3;
     private ImageView lin4;
-    private ImageView lin5;
     private Notificable notificable;
-
-    private DatabaseReference mDatabase;
 
 
     public FragmentSettings() {
@@ -83,7 +79,7 @@ public class FragmentSettings extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         config = getActivity().getSharedPreferences("prefs",0);
         // Inflate the layout for this fragment
@@ -91,14 +87,14 @@ public class FragmentSettings extends Fragment {
         lin1=view.findViewById(R.id.targetnum);
         lin2=view.findViewById(R.id.targetnum2);
         lin3=view.findViewById(R.id.targetnum3);
-        lin5=view.findViewById(R.id.targetnum5);
+        ImageView lin5 = view.findViewById(R.id.targetnum5);
         lin4=view.findViewById(R.id.targetnum4);
 
         areas=view.findViewById(R.id.botonManageAreas);
         Button logout=view.findViewById(R.id.botonLogOut);
         borrar=view.findViewById(R.id.botonBorrarTodo);
         tuto=view.findViewById(R.id.botonTuto);
-        editCuestionarios = view.findViewById(R.id.botonRateApp);
+        Button editCuestionarios = view.findViewById(R.id.botonRateApp);
         Button salir=view.findViewById(R.id.botonVolver);
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
 
@@ -261,7 +257,7 @@ public class FragmentSettings extends Fragment {
     private void registrarEnvioDeRating() {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         if (user != null) {
             final DatabaseReference reference = mDatabase.child("usuarios").child(user.getUid()).child("estadisticas").child("calificoApp");
 

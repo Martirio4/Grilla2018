@@ -34,21 +34,19 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentRanki
 
     private ViewPager pager;
     private AdapterPagerAudits adapterPager;
-    private TabLayout tabLayout;
-    private ControllerDatos controllerDatos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_audits);
-        pager=(ViewPager)findViewById(R.id.viewPagerMyAudits);
-        controllerDatos=new ControllerDatos(this);
-        adapterPager= new AdapterPagerAudits(getSupportFragmentManager(),controllerDatos.traerListaViewPager());
+        pager= findViewById(R.id.viewPagerMyAudits);
+        ControllerDatos controllerDatos = new ControllerDatos(this);
+        adapterPager= new AdapterPagerAudits(getSupportFragmentManager(), controllerDatos.traerListaViewPager());
         pager.setAdapter(adapterPager);
         adapterPager.notifyDataSetChanged();
 
 //        SETEAR EL TABLAYOUT
-        tabLayout = (TabLayout) findViewById(R.id.tabLayoutMyAudits);
+        TabLayout tabLayout = findViewById(R.id.tabLayoutMyAudits);
         tabLayout.setupWithViewPager(pager);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

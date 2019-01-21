@@ -87,14 +87,31 @@
                     android:layout_height="0dp" />
             </LinearLayout>
 
-            <ImageButton
-                android:background="@android:color/transparent"
-                android:id="@+id/botonEliminar"
+              <LinearLayout
+                android:layout_gravity="end|center_vertical"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:src="@drawable/ic_close_black_24dp"
-                />
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:layout_weight="50"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/botonEliminar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_close_black_24dp"
+                    />
+                <ImageButton
+                    android:layout_weight="50"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/botonEditarItem"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

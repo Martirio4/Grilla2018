@@ -24,9 +24,6 @@ import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 
 import io.realm.RealmList;
 
-/**
- * Created by elmar on 18/5/2017.
- */
 
 public class AdapterItems extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
@@ -215,7 +212,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
 
 
 
-        public ItemViewHolder(View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
 
             textViewNumero=  itemView.findViewById(R.id.tv_numero_item);
@@ -233,9 +230,8 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
             textViewFaltantes.setTypeface(robotoL);
         }
 
-        public void cargarItem(Item unItem, Integer ordenCarga) {
-            String prueba =String.valueOf(unItem.getIdItem());
-            textViewNumero.setText(ordenCarga);
+        void cargarItem(Item unItem, Integer ordenCarga) {
+            textViewNumero.setText(String.valueOf(ordenCarga+1));
             textViewDescripcion.setText(unItem.getTituloItem());
 
             if (origen!=null && origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {

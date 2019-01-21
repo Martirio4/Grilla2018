@@ -6,6 +6,7 @@
     <string name="firstTime">Primera vez, click aquí</string>
     <string name="myAudits">AUDITORIAS</string>
     <string name="settings">AJUSTES</string>
+    <string name="settingsMin">Ajustes</string>
     <string name="criterio11">Materiales innecesarios</string>
     <string name="criterio12">Herramientas innecesarias</string>
     <string name="criterio13">Máquinas o equipos innecesarios</string>
@@ -650,9 +651,9 @@
     <string name="areaExterna">área externa</string>
     <string name="definirAreaNueva">Nueva área</string>
     <string name="managaCuestionarios">Gestionar cuestionarios</string>
-    <string name="editarCuestionarios">Gestionar Cuestionarios</string>
-    <string name="addCuestionario">Nuevo Cuestionario</string>
-    <string name="nombreCuestionario">Ingrese un nombre del nuevo cuestionario</string>
+    <string name="editarCuestionarios">Editar Cuestionarios</string>
+    <string name="addCuestionario">Nuevo...</string>
+    <string name="nombreCuestionario">Ingrese el nombre del nuevo cuestionario</string>
     <string name="cambioRealizado">Cambios realizados</string>
     <string name="cuestionarioEliminado">El cuestionario fue eliminado</string>
     <string name="cuestionarioNoEliminado">El cuestionario no fue eliminado.</string>
@@ -666,5 +667,10 @@
     <string name="elItemNoSeAgrego">El item no fue creado</string>
     <string name="tituloPreAuditEditarCuestionario">Editar Cuestionario</string>
     <string name="preguntas">Preguntas</string>
+    <string name="itemNoEliminado">El item no se eliminó, intente de nuevo.</string>
+    <string name="cuestionarioName">Nombre del cuestionario</string>
+    <string name="editarNombreCuestionario">Editar nombre cuestionario</string>
+    <string name="nombreCues">Nombre</string>
+    <string name="auditEliminada">La auditoría fue eliminada</string>
 
 </resources>

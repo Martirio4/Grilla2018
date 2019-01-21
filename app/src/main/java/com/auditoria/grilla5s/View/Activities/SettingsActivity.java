@@ -42,15 +42,14 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         layout=findViewById(R.id.contenedor_landing);
         cargarFragmentSettings();
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
         Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
         TextView unText=toolbar.findViewById(R.id.textoToolbar);
         unText.setTypeface(robotoR);
         unText.setTextColor(getResources().getColor(R.color.blancoNomad));
-        unText.setText(getResources().getText(R.string.settings));
+        unText.setText(getResources().getText(R.string.settingsMin));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

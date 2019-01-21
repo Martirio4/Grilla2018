@@ -25,7 +25,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -69,7 +68,6 @@ public class FragmentPregunta extends Fragment {
     public static final String IDPREGUNTA="IDPREGUNTA";
     public static final String IDITEM="IDITEM";
     public static final String IDAUDITORIA="IDAUDITORIA";
-    public static final String ESREVISION ="ESREVISION";
     private static final String ORIGEN = "ORIGEN";
     private static final String IDESE = "IDESE";
 
@@ -81,50 +79,34 @@ public class FragmentPregunta extends Fragment {
     private TextView tagCommentNuevo;
     private TextView tagCommentViejo;
 
-    private LinearLayoutManager layoutManager;
-    private LinearLayoutManager layoutManagerViejo;
     private Integer puntuacion;
 
     private Avisable avisable;
-    private SharedPreferences config;
     private LinearLayout linear;
-    private Toolbar toolbar;
 
     RealmList<Foto> listaFotos;
 
     private String enunciado;
     private String idPregunta;
     private String idAudit;
-    private Integer idEse;
-    private Integer idItem;
+    private String idEse;
+    private String idItem;
     private String idCuestionario;
 
-    private TextView textoPregunta;
-    private TextView criterioDescripcion;
-    private TextView criterioTitulo;
     private TextView textViewCommentNuevo;
     private TextView textViewCommentViejo;
     private RadioGroup rg1;
     private TextView tituloAuditVieja;
 
-    private AppCompatRadioButton rb0;
-    private AppCompatRadioButton rb1;
-    private AppCompatRadioButton rb2;
-    private AppCompatRadioButton rb3;
-    private AppCompatRadioButton rb4;
-    private AppCompatRadioButton rb5;
     private TextView evidenciaNueva;
 
     private RadioGroup rg2;
-    private AppCompatRadioButton rb6;
 
     private Button verCriterio;
 
     private FloatingActionMenu fabMenu;
     private FloatingActionButton fabCamara;
-    private FloatingActionButton fabComment;
     private FloatingActionButton fabGuardar;
-    private FloatingActionButton fabSalir;
 
     private RadioGroup.OnCheckedChangeListener listener1;
     private RadioGroup.OnCheckedChangeListener listener2;
@@ -147,13 +129,12 @@ public class FragmentPregunta extends Fragment {
         void salirDeAca();
         void borrarFoto(Foto unaFoto);
         void zoomearImagen(Foto unaFoto);
-        void cargarAuditoriaEnFirebase(String idAudit);
         void actualizarPuntaje(String idAudit);
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view= inflater.inflate(R.layout.fragment_pregunta, container, false);
@@ -167,16 +148,16 @@ public class FragmentPregunta extends Fragment {
         else{
 
             idAudit=bundle.getString(IDAUDITORIA);
-            idItem=bundle.getInt(IDITEM);
+            idItem=bundle.getString(IDITEM);
             idPregunta=bundle.getString(IDPREGUNTA);
             enunciado=bundle.getString(ENUNCIADOPREGUNTA);
             origen=bundle.getString(ORIGEN);
             idCuestionario=bundle.getString(TIPOCUESTIONARIO);
-            idEse=bundle.getInt(IDESE);
+            idEse=bundle.getString(IDESE);
         }
 
         Realm realm = Realm.getDefaultInstance();
-        Item elItem= null;
+        Item elItem;
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             elItem = realm.where(Item.class)
                     .equalTo("idAudit",idAudit)
@@ -195,15 +176,15 @@ public class FragmentPregunta extends Fragment {
 
         rg1= view.findViewById(R.id.rg1);
         rg2= view.findViewById(R.id.rg2);
-        rb0 = view.findViewById(R.id.item0);
-        rb1 = view.findViewById(R.id.item1);
-        rb2 = view.findViewById(R.id.item2);
-        rb3 = view.findViewById(R.id.item3);
-        rb4 = view.findViewById(R.id.item4);
-        rb5 = view.findViewById(R.id.item5);
-        rb6=view.findViewById(R.id.itemNA);
+        AppCompatRadioButton rb0 = view.findViewById(R.id.item0);
+        AppCompatRadioButton rb1 = view.findViewById(R.id.item1);
+        AppCompatRadioButton rb2 = view.findViewById(R.id.item2);
+        AppCompatRadioButton rb3 = view.findViewById(R.id.item3);
+        AppCompatRadioButton rb4 = view.findViewById(R.id.item4);
+        AppCompatRadioButton rb5 = view.findViewById(R.id.item5);
+        AppCompatRadioButton rb6 = view.findViewById(R.id.itemNA);
 
-        textoPregunta = view.findViewById(R.id.textoPregunta);
+        TextView textoPregunta = view.findViewById(R.id.textoPregunta);
         textViewCommentNuevo = view.findViewById(R.id.tv_comment_nuevo);
         textViewCommentViejo = view.findViewById(R.id.tv_comment_viejo);
         tagCommentNuevo=view.findViewById(R.id.tv_tagCommentNuevo);
@@ -212,8 +193,8 @@ public class FragmentPregunta extends Fragment {
         evidenciaNueva = view.findViewById(R.id.tv_fotos_nuevas);
         separador=view.findViewById(R.id.SeparadorSuperior);
         separadorInvertido=view.findViewById(R.id.SeparadorInferior);
-        criterioTitulo =view.findViewById(R.id.tituloCriterio);
-        criterioDescripcion =view.findViewById(R.id.descripcionCriterio);
+        TextView criterioTitulo = view.findViewById(R.id.tituloCriterio);
+        TextView criterioDescripcion = view.findViewById(R.id.descripcionCriterio);
 
         linear=view.findViewById(R.id.vistaCentral);
 
@@ -225,8 +206,11 @@ public class FragmentPregunta extends Fragment {
         rb5.setText("5");
         rb6.setText("n/a");
         textoPregunta.setText(enunciado);
-        criterioTitulo.setText(elItem.getTituloItem());
-        criterioDescripcion.setText(elItem.getTextoItem());
+        if (elItem!=null) {
+            criterioTitulo.setText(elItem.getTituloItem());
+            criterioDescripcion.setText(elItem.getTextoItem());
+        }
+
 
         //agregar los fabs al menu
         fabMenu= view.findViewById(R.id.fab_menu);
@@ -246,11 +230,11 @@ public class FragmentPregunta extends Fragment {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void execute(Realm realm) {
+                            public void execute(@NonNull Realm realm) {
 
                                 Pregunta preg = realm.where(Pregunta.class)
                                         .equalTo("idAudit",idAudit)
-                                        .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                                        .equalTo("idPregunta",idPregunta)
                                         .findFirst();
                                 if (preg!=null) {
                                     preg.setPuntaje(puntuacion);
@@ -259,7 +243,7 @@ public class FragmentPregunta extends Fragment {
                             }
                         });
 
-                        limpiarRadioGroups(1,checkedId);
+                        limpiarRadioGroups(1);
 
                     }
                 }
@@ -273,11 +257,11 @@ public class FragmentPregunta extends Fragment {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void execute(Realm realm) {
+                            public void execute(@NonNull Realm realm) {
 
                                 Pregunta preg = realm.where(Pregunta.class)
                                         .equalTo("idAudit",idAudit)
-                                        .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                                        .equalTo("idPregunta", idPregunta)
                                         .findFirst();
                                 if (preg!=null) {
                                     preg.setPuntaje(9);
@@ -285,7 +269,7 @@ public class FragmentPregunta extends Fragment {
 
                             }
                         });
-                        limpiarRadioGroups(2,checkedId);
+                        limpiarRadioGroups(2);
 
                     }
                 }
@@ -296,10 +280,10 @@ public class FragmentPregunta extends Fragment {
 
 
             //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
-            Realm mrealm = Realm.getDefaultInstance();
+
             Pregunta pregunta = realm.where(Pregunta.class)
                     .equalTo("idAudit",idAudit)
-                    .equalTo("idPregunta",Integer.parseInt(idPregunta))
+                    .equalTo("idPregunta",idPregunta)
                     .findFirst();
             if (pregunta!=null && pregunta.getPuntaje()!=null){
                 if (pregunta.getPuntaje()!=9) {
@@ -332,7 +316,7 @@ public class FragmentPregunta extends Fragment {
 
 //      RECYCLERVIEW FOTOS
             recyclerFotos= view.findViewById(R.id.recyclerFotos);
-            layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerFotos.setLayoutManager(layoutManager);
             adapterFotos= new AdapterFotos();
             adapterFotos.setContext(getContext());
@@ -359,11 +343,14 @@ public class FragmentPregunta extends Fragment {
                     final Foto unaFoto=unaLista.get(posicion);
 
                     Realm realm=Realm.getDefaultInstance();
-                    Auditoria mAudit=realm.where(Auditoria.class)
-                            .equalTo("idAuditoria",unaFoto.getIdAudit())
-                            .findFirst();
+                    Auditoria mAudit= null;
+                    if (unaFoto != null) {
+                        mAudit = realm.where(Auditoria.class)
+                                .equalTo("idAuditoria",unaFoto.getIdAudit())
+                                .findFirst();
+                    }
 
-                    if (!mAudit.getAuditEstaCerrada()) {
+                    if (mAudit!=null && !mAudit.getAuditEstaCerrada()) {
                         new MaterialDialog.Builder(getContext())
                                 .title(getResources().getString(R.string.borraFoto))
                                 .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
@@ -406,7 +393,7 @@ public class FragmentPregunta extends Fragment {
 //      RECYCLERVIEW FOTOS AUDITORIA PREVIA Y COMMENT AUDITORIA VIEJA
 
             recyclerFotosViejas= view.findViewById(R.id.recyclerFotosViejas);
-            layoutManagerViejo= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManagerViejo = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerFotosViejas.setLayoutManager(layoutManagerViejo);
             adapterFotosViejas= new AdapterFotos();
             adapterFotosViejas.setContext(getContext());
@@ -509,7 +496,7 @@ public class FragmentPregunta extends Fragment {
             });
 
 
-            fabComment = new FloatingActionButton(getActivity());
+            FloatingActionButton fabComment = new FloatingActionButton(getActivity());
             fabComment.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
             fabComment.setButtonSize(FloatingActionButton.SIZE_MINI);
             fabComment.setLabelText(getString(R.string.agregarComentario));
@@ -554,7 +541,7 @@ public class FragmentPregunta extends Fragment {
                 }
             });
 
-            fabSalir = new FloatingActionButton(getActivity());
+            FloatingActionButton fabSalir = new FloatingActionButton(getActivity());
             fabSalir.setButtonSize(FloatingActionButton.SIZE_MINI);
             fabSalir.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
             fabSalir.setLabelText(getString(R.string.salir));
@@ -607,9 +594,9 @@ public class FragmentPregunta extends Fragment {
             });
         }
 
-        config = getActivity().getSharedPreferences("prefs",0);
+        SharedPreferences config = getActivity().getSharedPreferences("prefs", 0);
         boolean quiereVerTuto = config.getBoolean("quiereVerTuto",false);
-        boolean primeraVezFragmentSubitem =config.getBoolean("primeraVezFragmentSubitem",false);
+        boolean primeraVezFragmentSubitem = config.getBoolean("primeraVezFragmentSubitem",false);
 
         //SI EL USUARIO ELIGIO VER TUTORIALES ME FIJO SI YA PASO POR ESTA PAGINA.
         if (quiereVerTuto) {
@@ -651,11 +638,13 @@ public class FragmentPregunta extends Fragment {
         Pregunta laPreguntaVieja;
 
         Realm realm = Realm.getDefaultInstance();
-        String idArea;
+        String idArea=null;
         Auditoria auditActual= realm. where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();
-        idArea=auditActual.getAreaAuditada().getIdArea();
+        if (auditActual!=null) {
+            idArea=auditActual.getAreaAuditada().getIdArea();
+        }
 
         //TRAIGO TODAS LAS AUDITS QUE NO SEAN LA ACTUAL
         RealmResults<Auditoria>allAudits=realm.where(Auditoria.class)
@@ -668,7 +657,7 @@ public class FragmentPregunta extends Fragment {
             if (unAudit.getAreaAuditada().getIdArea().equals(idArea)&&unAudit.getEsUltimaAuditoria()){
                  laPreguntaVieja = realm.where(Pregunta.class)
                         .equalTo("idAudit",unAudit.getIdAuditoria())
-                        .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                        .equalTo("idPregunta", idPregunta)
                         .findFirst();
                  //SI LA PREGUNTA VIEJA TIENE FOTOS
 
@@ -710,7 +699,7 @@ public class FragmentPregunta extends Fragment {
        adapterFotosViejas.notifyDataSetChanged();
     }
 
-    public void limpiarRadioGroups(Integer cualToque, Integer puntaje){
+    public void limpiarRadioGroups(Integer cualToque){
         switch (cualToque){
             case 1:
                 rg2.setOnCheckedChangeListener(null);
@@ -836,13 +825,13 @@ public class FragmentPregunta extends Fragment {
 
 
 
-    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta, String origen, Integer idEse) {
+    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta, String origen, String idEse) {
         FragmentPregunta detalleFragment = new FragmentPregunta();
         Bundle unBundle = new Bundle();
-            unBundle.putInt(IDESE,idEse);
+            unBundle.putString(IDESE,idEse);
             unBundle.putString(ENUNCIADOPREGUNTA, laPregunta.getTextoPregunta());
-            unBundle.putInt(IDITEM,laPregunta.getIdItem());
-            unBundle.putString(IDPREGUNTA, String.valueOf(laPregunta.getIdPregunta()));
+            unBundle.putString(IDITEM,laPregunta.getIdItem());
+            unBundle.putString(IDPREGUNTA,laPregunta.getIdPregunta());
             unBundle.putString(IDAUDITORIA, laPregunta.getIdAudit());
             unBundle.putString(ORIGEN, origen);
 
@@ -882,15 +871,15 @@ public class FragmentPregunta extends Fragment {
                         unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
                         unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
                         unaFoto.setIdAudit(idAudit);
-                        unaFoto.setIdPregunta(Integer.parseInt( idPregunta));
+                        unaFoto.setIdPregunta(idPregunta);
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void execute(Realm realm) {
+                            public void execute(@NonNull Realm realm) {
                                 Pregunta preg = realm.where(Pregunta.class)
                                         .equalTo("idAudit", idAudit)
-                                        .equalTo("idPregunta", Integer.parseInt( idPregunta))
+                                        .equalTo("idPregunta",  idPregunta)
                                         .findFirst();
 
                                     realm.copyToRealmOrUpdate(unaFoto);
@@ -899,7 +888,9 @@ public class FragmentPregunta extends Fragment {
                                         .equalTo("idFoto", unaFoto.getIdFoto())
                                         .findFirst();
 
-                                preg.getListaFotos().add(foto);
+                                if (preg!=null) {
+                                    preg.getListaFotos().add(foto);
+                                }
                                 //posible bug dejar esto adentro
                             }
                         });
@@ -947,7 +938,7 @@ public class FragmentPregunta extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         Pregunta preg=realm.where(Pregunta.class)
                 .equalTo("idAudit", idAudit)
-                .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                .equalTo("idPregunta",idPregunta)
                 .findFirst();
 
         if (preg==null||preg.getListaFotos().size()<1){
@@ -980,7 +971,7 @@ public class FragmentPregunta extends Fragment {
                 .inputRange(0,40)
                 .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
                     @Override
-                    public void onInput(MaterialDialog dialog, final CharSequence input) {
+                    public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
 
                         Realm realm= Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -1011,7 +1002,7 @@ public class FragmentPregunta extends Fragment {
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
                     @Override
-                    public void onInput(MaterialDialog dialog, final CharSequence input) {
+                    public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                         String inputString=input.toString();
                         if (!inputString.isEmpty()){
                             evidenciaNueva.setVisibility(View.VISIBLE);
@@ -1027,10 +1018,10 @@ public class FragmentPregunta extends Fragment {
                         Realm realm= Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void execute(Realm realm) {
+                            public void execute(@NonNull Realm realm) {
                                 Pregunta pregunta = realm.where(Pregunta.class)
                                         .equalTo("idAudit",idAudit)
-                                        .equalTo("idPregunta",Integer.parseInt( idPregunta))
+                                        .equalTo("idPregunta",idPregunta)
                                         .findFirst();
 
                                 if (pregunta!=null) {
@@ -1045,7 +1036,7 @@ public class FragmentPregunta extends Fragment {
     //DOY DE ALTA LA FOTO EN REALM
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 

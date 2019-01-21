@@ -116,7 +116,7 @@ public class FragmentSeleccionArea extends Fragment {
         };
         adapterArea.setListener(listenerArea);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.my_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         Typeface robotoR = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
