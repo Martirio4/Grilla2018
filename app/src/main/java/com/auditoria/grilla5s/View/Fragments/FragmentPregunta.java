@@ -160,7 +160,7 @@ public class FragmentPregunta extends Fragment {
         Item elItem;
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             elItem = realm.where(Item.class)
-                    .equalTo("idAudit",idAudit)
+                    .equalTo("idCuestionario",idCuestionario)
                     .equalTo("idItem",idItem)
                     .equalTo("idEse", idEse)
                     .findFirst();
@@ -168,7 +168,8 @@ public class FragmentPregunta extends Fragment {
 
         else{
             elItem = realm.where(Item.class)
-                    .equalTo("idCuestionario",idCuestionario)
+
+                    .equalTo("idAudit",idAudit)
                     .equalTo("idItem",idItem)
                     .equalTo("idEse",idEse)
                     .findFirst();

@@ -64,6 +64,7 @@ public class FragmentPreAudit extends Fragment {
         void actualizarPuntaje(String idAudit);
 
         void agregarNuevoItem(String laEse, String tipoCuestionario, AdapterItems elAdapter);
+
     }
 
 
@@ -149,15 +150,18 @@ public class FragmentPreAudit extends Fragment {
         recyclerPreAudit.setAdapter(adapterItems);
         adapterItems.notifyDataSetChanged();
 
-        View.OnClickListener listenerItem = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
-                RealmList<Item> listaAuditorias = adapterItems.getListaItemsOriginales();
-                Item itemClickeado = listaAuditorias.get(posicion);
-                auditable.auditarItem(itemClickeado);
-            }
-        };
+        View.OnClickListener listenerItem;
+
+            listenerItem = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
+                    RealmList<Item> listaAuditorias = adapterItems.getListaItemsOriginales();
+                    Item itemClickeado = listaAuditorias.get(posicion);
+                    auditable.auditarItem(itemClickeado);
+                }
+            };
+
         adapterItems.setListener(listenerItem);
 
         return view;

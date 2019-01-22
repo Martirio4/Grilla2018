@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentVerPregunta;
 import com.auditoria.grilla5s.View.Fragments.FragmentZoom;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -58,7 +60,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auditoria);
-
+        //RECIBO EL INTENT Y EN FUNCION DEL ORIGEN CARGO EL LAYOUT QUE CORRESPONDE
 
         Intent intent= getIntent();
         Bundle bundle= intent.getExtras();
@@ -70,11 +72,28 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             idese=bundle.getString(IDESE);
             idCuestionario=bundle.getString(IDCUESTIONARIO);
         }
+//------ TOOLBAR HANDLING
+        toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+        TextView unText=toolbar.findViewById(R.id.textoToolbar);
+        unText.setTypeface(robotoR);
+        unText.setTextColor(getResources().getColor(R.color.blancoNomad));
 
-//      SETEAR EL VIEWPAGER
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
+            unText.setText(getResources().getString(R.string.editarCuestionarios));
+        } else {
+            unText.setText(getResources().getString(R.string.audit5s));
+        }
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+//------ TOOLBAR HANDLING//
+
+        //TRAIGO LA LISTA DE PREGUNTAS
 
         Realm realm = Realm.getDefaultInstance();
-
         RealmResults<Pregunta>resultPregunta;
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
             resultPregunta = realm.where(Pregunta.class)
@@ -94,71 +113,81 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
         listaPreguntasOriginales.addAll(resultPregunta);
 
-        //GENERO LISTA DE TITULOS ORDINALES
-        List<String> laListaDeTitulos=new ArrayList<>();
-        for (Integer i=0;i<listaPreguntasOriginales.size();i++){
-            Integer aux=i+1;
-            laListaDeTitulos.add(aux.toString()+"°");
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
+            cargarFragmentVerPreguntas();
         }
-        pager=findViewById(R.id.viewPagerAuditoria);
-        AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
-        pager.setAdapter(adapterPager);
-        adapterPager.setUnaListaTitulos(laListaDeTitulos);
-        adapterPager.notifyDataSetChanged();
+        else{
+            //      SETEAR EL VIEWPAGER
+            //GENERO LISTA DE TITULOS ORDINALES
+            List<String> laListaDeTitulos=new ArrayList<>();
+            for (Integer i=0;i<listaPreguntasOriginales.size();i++){
+                Integer aux=i+1;
+                laListaDeTitulos.add(aux.toString()+"°");
+            }
+            pager=findViewById(R.id.viewPagerAuditoria);
+            AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
+            pager.setAdapter(adapterPager);
+            adapterPager.setUnaListaTitulos(laListaDeTitulos);
+            adapterPager.notifyDataSetChanged();
 
+            TabLayout tabLayout = findViewById(R.id.tabLayout);
+            tabLayout.setupWithViewPager(pager);
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    pager.setCurrentItem(tab.getPosition(), true);
+                }
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    pager.setCurrentItem(tab.getPosition(), true);
+                }
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                    pager.setCurrentItem(tab.getPosition(), true);
+                }
+            });
 
-        // Get a support ActionBar corresponding to this toolbar
-        toolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
-
-
-        Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
-        TextView unText=toolbar.findViewById(R.id.textoToolbar);
-        unText.setTypeface(robotoR);
-        unText.setTextColor(getResources().getColor(R.color.blancoNomad));
-
-        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
-            unText.setText(getResources().getString(R.string.editarCuestionarios));
-        } else {
-            unText.setText(getResources().getString(R.string.audit5s));
+            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
+                @Override
+                public void onPageSelected(int position) {
+                }
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
         }
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+
+
+
+
+
+
 
 
 //        SETEAR EL TABLAYOUT
 
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(pager);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                pager.setCurrentItem(tab.getPosition(), true);
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                pager.setCurrentItem(tab.getPosition(), true);
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                pager.setCurrentItem(tab.getPosition(), true);
-            }
-        });
 
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-            @Override
-            public void onPageSelected(int position) {
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+
+    }
+
+    private void cargarFragmentVerPreguntas() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FragmentVerPregunta.TIPOCUESTIONARIO,idCuestionario);
+        bundle.putString(FragmentVerPregunta.IDITEM,idItem);
+        bundle.putString(FragmentVerPregunta.IDESE,idese);
+        bundle.putString(FragmentVerPregunta.ORIGEN,origen);
+
+        FragmentVerPregunta fragmentVerPregunta= new FragmentVerPregunta();
+        fragmentVerPregunta.setArguments(bundle);
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contenedorViewPager,fragmentVerPregunta,FuncionesPublicas.FRAGMENT_VER_PREGUNTAS);
+        fragmentTransaction.commit();
 
     }
 

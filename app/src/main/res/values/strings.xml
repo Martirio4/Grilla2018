@@ -672,5 +672,6 @@
     <string name="editarNombreCuestionario">Editar nombre cuestionario</string>
     <string name="nombreCues">Nombre</string>
     <string name="auditEliminada">La auditoría fue eliminada</string>
+    <string name="agregarPregunta">Nueva Pregunta</string>
 
 </resources>

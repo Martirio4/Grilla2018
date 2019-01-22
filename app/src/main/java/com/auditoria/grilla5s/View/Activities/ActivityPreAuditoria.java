@@ -193,6 +193,8 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
     }
 
+
+
     @Override
     public void cerrarAuditoria() {
 

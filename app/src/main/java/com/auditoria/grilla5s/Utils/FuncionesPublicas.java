@@ -75,8 +75,7 @@ public class FuncionesPublicas {
     public static final String IDCRITERIOS = "CRIT_";
     public static final String IDCUESTIONARIOS = "CUE_";
     public static final String IDPREGUNTAS = "PREG_";
-
-
+    public static final String FRAGMENT_VER_PREGUNTAS ="FRAGMENT_VER_PREGUNTAS";
 
 
     public static boolean isExternalStorageWritable() {
