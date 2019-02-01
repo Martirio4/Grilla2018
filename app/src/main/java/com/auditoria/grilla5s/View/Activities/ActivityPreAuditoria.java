@@ -33,6 +33,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class ActivityPreAuditoria extends AppCompatActivity implements FragmentPreAudit.Auditable{
+    
 
     private ControllerDatos controllerDatos;
     public static String idAudit;
