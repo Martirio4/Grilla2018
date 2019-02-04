@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -177,7 +176,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     private void cargarFragmentVerPreguntas() {
         Bundle bundle = new Bundle();
-        bundle.putString(FragmentVerPregunta.TIPOCUESTIONARIO,idCuestionario);
+        bundle.putString(FragmentVerPregunta.IDCUESTIONARIO,idCuestionario);
         bundle.putString(FragmentVerPregunta.IDITEM,idItem);
         bundle.putString(FragmentVerPregunta.IDESE,idese);
         bundle.putString(FragmentVerPregunta.ORIGEN,origen);

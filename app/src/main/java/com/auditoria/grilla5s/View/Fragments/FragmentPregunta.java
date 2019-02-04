@@ -64,7 +64,7 @@ public class FragmentPregunta extends Fragment {
 
 
     public static final String ENUNCIADOPREGUNTA="ENUNCIADOPREGUNTA";
-    public static final String TIPOCUESTIONARIO="TIPOCUESTIONARIO";
+    public static final String IDCUESTIONARIO ="IDCUESTIONARIO";
     public static final String IDPREGUNTA="IDPREGUNTA";
     public static final String IDITEM="IDITEM";
     public static final String IDAUDITORIA="IDAUDITORIA";
@@ -152,7 +152,7 @@ public class FragmentPregunta extends Fragment {
             idPregunta=bundle.getString(IDPREGUNTA);
             enunciado=bundle.getString(ENUNCIADOPREGUNTA);
             origen=bundle.getString(ORIGEN);
-            idCuestionario=bundle.getString(TIPOCUESTIONARIO);
+            idCuestionario=bundle.getString(IDCUESTIONARIO);
             idEse=bundle.getString(IDESE);
         }
 

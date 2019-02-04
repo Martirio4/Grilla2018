@@ -12,8 +12,17 @@ public class Cuestionario extends RealmObject {
 
     @PrimaryKey
     private String idCuestionario;
+    private String tipoCuestionario;
     private String nombreCuestionario;
     private RealmList<Ese> listaEses;
+
+    public String getTipoCuestionario() {
+        return tipoCuestionario;
+    }
+
+    public void setTipoCuestionario(String tipoCuestionario) {
+        this.tipoCuestionario = tipoCuestionario;
+    }
 
     public String getIdCuestionario() {
         return idCuestionario;

@@ -173,6 +173,7 @@ public class ControllerDatos {
                 Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class,"cuesDefault_"+UUID.randomUUID());
                 
                 nuevoCuestionario.setNombreCuestionario(nombreArea);
+                nuevoCuestionario.setTipoCuestionario(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA);
 
                     Ese ese1= realm.createObject(Ese.class);
                     ese1.setIdEse(String.valueOf(1));
@@ -517,7 +518,7 @@ public class ControllerDatos {
 
             }
 
-    public void crearNuevoCuestionario(final String nombreCuestionario){
+    public void crearNuevoCuestionario(final String nombreCuestionario, final String tipoCuestionario){
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -527,6 +528,7 @@ public class ControllerDatos {
                 if (listaCuestionarios!=null){
                     Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class,"cues_"+UUID.randomUUID());
                     nuevoCuestionario.setNombreCuestionario(nombreCuestionario);
+                    nuevoCuestionario.setTipoCuestionario(tipoCuestionario);
                 }
             }
         });

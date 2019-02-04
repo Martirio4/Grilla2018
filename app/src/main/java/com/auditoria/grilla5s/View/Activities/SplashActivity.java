@@ -14,8 +14,6 @@ public class SplashActivity extends AppCompatActivity {
 
     //DURACION DE DE LA ESPERA
 
-    private final int SPLASH_DISPLAY_LENGHT = 1500;
-
 
     @Override
     protected void onCreate(Bundle splash) {
@@ -24,6 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         TextView version=findViewById(R.id.versionApp);
         version.setText(BuildConfig.VERSION_NAME);
 
+        int SPLASH_DISPLAY_LENGHT = 1500;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

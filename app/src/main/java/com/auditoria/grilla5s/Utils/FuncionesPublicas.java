@@ -68,6 +68,9 @@ public class FuncionesPublicas {
     public static final String AUDITORIA = "AUDITORIA";
     public static final String AREAS = "AREAS";
 
+    public static final String ESTRUCTURA_SIMPLE="ESTRUCTURA_SIMPLE";
+    public static final String ESTRUCTURA_ESTRUCTURADA="ESTRUCTURA_ESTRUCTURADA";
+
 //    ID'S
     public static final String IDITEMS = "ITEM_";
     public static final String IDAREAS = "AREA_";

@@ -4,23 +4,31 @@ package com.auditoria.grilla5s.View.Fragments;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
+import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
+import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
@@ -67,7 +75,7 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_editor_base_cuestionarios, container, false);
+        final View view = inflater.inflate(R.layout.fragment_editor_base_cuestionarios, container, false);
         controllerDatos=new ControllerDatos(view.getContext());
 
         recyclerCuestionarios=view.findViewById(R.id.recyclerCuestionarios);
@@ -116,7 +124,7 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
         fabNuevoCuestionario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-            crearDialogoNuevoCuestionario();
+            crearDialogoNuevoCuestionario(view);
                 
             }
         });
@@ -125,7 +133,64 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
         return view;
     }
 
-    private void crearDialogoNuevoCuestionario() {
+    private void crearDialogoNuevoCuestionario(View view) {
+
+        final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                .cancelable(false)
+                .customView(R.layout.dialogo_estructura,false)
+                .build();
+
+        View laView=mDialog.getCustomView();
+        assert laView != null;
+        final ImageView imagenSimple = laView.findViewById(R.id.img_simple);
+        final ImageView imagenEstructurado = laView.findViewById(R.id.img_estructurado);
+        final RadioGroup radioGroup =laView.findViewById(R.id.rg_estructura);
+        final AppCompatRadioButton rb_Simple=laView.findViewById(R.id.rbEstructuraSimple);
+        final AppCompatRadioButton rb_Estructurada=laView.findViewById(R.id.rbEstructuraEstructurada);
+
+        radioGroup.check(R.id.rbEstructuraSimple);
+
+        imagenSimple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioGroup.check(R.id.rbEstructuraSimple);
+            }
+        });
+        imagenEstructurado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioGroup.check(R.id.rbEstructuraEstructurada);
+            }
+        });
+
+
+        TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
+        tituloDialogo.setFocusableInTouchMode(false);
+
+        TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
+        botonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tipoCuestionario=null;
+                switch (radioGroup.getCheckedRadioButtonId()){
+                    case R.id.rbEstructuraSimple:
+                        tipoCuestionario=FuncionesPublicas.ESTRUCTURA_SIMPLE;
+                        break;
+                    case    R.id.rbEstructuraEstructurada:
+                        tipoCuestionario=FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA;
+                        break;
+                }
+                darNombreCuestionario(tipoCuestionario);
+                mDialog.hide();
+            }
+        });
+        mDialog.show();
+
+
+
+    }
+
+    public void darNombreCuestionario(final String tipoCuestionario){
         new MaterialDialog.Builder(getContext())
                 .title(getResources().getString(R.string.addCuestionario))
                 .inputRange(1,40)
@@ -137,11 +202,10 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
                 .input(getResources().getString(R.string.cuestionarioName),"", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                       controllerDatos.crearNuevoCuestionario(input.toString());
-                       actualizarDatosRecycler();
+                        controllerDatos.crearNuevoCuestionario(input.toString(), tipoCuestionario);
+                        actualizarDatosRecycler();
                     }
                 }).show();
-
     }
 
     private void actualizarDatosRecycler() {
@@ -156,10 +220,34 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
     }
 
     @Override
-    public void EliminarCuestionario(Cuestionario unCuestionario) {
-        adapterCuestionario.getListaCuestionariosOriginales().remove(unCuestionario);
-        adapterCuestionario.notifyDataSetChanged();
-        controllerDatos.eliminarCuestionario(unCuestionario.getIdCuestionario());
+    public void EliminarCuestionario(final Cuestionario unCuestionario) {
+
+            new MaterialDialog.Builder(getContext())
+                    .title(getResources().getString(R.string.tituloDeleteCuestionario))
+                    .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                    .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
+                    .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
+                    .content(R.string.deseaBorrarCuestionario)
+                    .positiveText(getResources().getString(R.string.delete))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            adapterCuestionario.getListaCuestionariosOriginales().remove(unCuestionario);
+                            adapterCuestionario.notifyDataSetChanged();
+                            controllerDatos.eliminarCuestionario(unCuestionario.getIdCuestionario());
+                        }
+                    })
+                    .negativeText(getResources().getString(R.string.cancel))
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        }
+                    })
+                    .show();
+
+
+
     }
 
     @Override

@@ -673,5 +673,10 @@
     <string name="nombreCues">Nombre</string>
     <string name="auditEliminada">La auditoría fue eliminada</string>
     <string name="agregarPregunta">Nueva Pregunta</string>
+    <string name="estructuraSimplificada">Simple</string>
+    <string name="estructuraEstructurada">Estructurado</string>
+    <string name="elegirEstructura">Estructura</string>
+    <string name="deseaBorrarCuestionario">Desea borrar el cuestionario seleccionado? Esta acción no puede deshacerse.</string>
+    <string name="tituloDeleteCuestionario">Eliminar cuestionario</string>
 
 </resources>

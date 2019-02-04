@@ -23,12 +23,9 @@ import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.github.clans.fab.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudit;
 
@@ -40,8 +37,8 @@ public class FragmentPreAudit extends Fragment {
     public final static String LAESE = "LAESE";
     private String laEse;
 
-    public static final String TIPOCUESTIONARIO = "TIPOCUESTIONARIO";
-    private String tipoCuestionario;
+    public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
+    private String idCuestionario;
 
     public static final String ORIGEN = "ORIGEN";
     private String origen;
@@ -63,7 +60,7 @@ public class FragmentPreAudit extends Fragment {
 
         void actualizarPuntaje(String idAudit);
 
-        void agregarNuevoItem(String laEse, String tipoCuestionario, AdapterItems elAdapter);
+        void agregarNuevoItem(String laEse, String idCuestionario, AdapterItems elAdapter);
 
     }
 
@@ -77,7 +74,7 @@ public class FragmentPreAudit extends Fragment {
         if (bundle != null) {
             laEse = bundle.getString(LAESE);
             origen = bundle.getString(ORIGEN);
-            tipoCuestionario = bundle.getString(TIPOCUESTIONARIO);
+            idCuestionario = bundle.getString(IDCUESTIONARIO);
         } else {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
         }
@@ -92,7 +89,7 @@ public class FragmentPreAudit extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    auditable.agregarNuevoItem(laEse, tipoCuestionario, adapterItems);
+                    auditable.agregarNuevoItem(laEse, idCuestionario, adapterItems);
 
                 }
             });
@@ -121,7 +118,7 @@ public class FragmentPreAudit extends Fragment {
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
 
             RealmResults<Item> listaItems = realm.where(Item.class)
-                    .equalTo("idCuestionario", tipoCuestionario)
+                    .equalTo("idCuestionario", idCuestionario)
                     .equalTo("idEse", laEse)
                     .findAll();
 
@@ -182,7 +179,7 @@ public class FragmentPreAudit extends Fragment {
         Bundle unBundle = new Bundle();
         unBundle.putString(LAESE, laEse);
         unBundle.putString(ORIGEN, origen);
-        unBundle.putString(TIPOCUESTIONARIO, idCuestionario);
+        unBundle.putString(IDCUESTIONARIO, idCuestionario);
         fragmentPreAudit.setArguments(unBundle);
 
         return fragmentPreAudit;
