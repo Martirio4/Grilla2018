@@ -89,7 +89,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
     public void comenzarAuditoria(Area unArea) {
         Realm realm=Realm.getDefaultInstance();
         Cuestionario elCuestionario = realm.where(Cuestionario.class)
-                .equalTo("idCuestionario", unArea.getTipoArea())
+                .equalTo("idCuestionario", unArea.getIdCuestionario())
                 .findFirst();
 
         if (elCuestionario!=null) {
@@ -131,7 +131,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
                                         .findFirst();
                                 if (realmArea1!=null) {
                                     //ASIGNO ID DE CUESTIONARIO AL AREA
-                                    realmArea1.setTipoArea(unaListaId.get(which));
+                                    realmArea1.setIdCuestionario(unaListaId.get(which));
                                     //ABRO PREAUDITORIA Y SIGO
                                     abrirActivityPreAuditoria(unArea);
                                 }

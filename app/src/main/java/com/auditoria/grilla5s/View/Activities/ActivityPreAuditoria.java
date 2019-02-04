@@ -78,7 +78,8 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
 
             assert elArea != null;
-            idAudit= controllerDatos.instanciarAuditoria(elArea.getTipoArea());
+
+            idAudit= controllerDatos.instanciarAuditoria(elArea.getIdCuestionario());
 
 
             realm.executeTransaction(new Realm.Transaction() {
@@ -120,16 +121,9 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
-        AdapterPagerEses adapterPager;
-        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
-            adapterPager =new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario);        }
-        else {
-            adapterPager =new AdapterPagerEses(getSupportFragmentManager(),origen);
-        }
+        AdapterPagerEses adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario);
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
-
-
         adapterPager.notifyDataSetChanged();
 
         //        SETEAR EL TABLAYOUT

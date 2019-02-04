@@ -73,4 +73,8 @@ public class Ese extends RealmObject {
         this.idCuestionario = idCuestionario;
     }
 
+    public void addPregunta(Pregunta unaPregunta){
+        this.listaPreguntas.add(unaPregunta);
+    }
+
 }

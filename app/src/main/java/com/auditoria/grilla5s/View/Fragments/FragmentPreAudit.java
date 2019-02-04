@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
@@ -50,6 +51,7 @@ public class FragmentPreAudit extends Fragment {
     private Auditable auditable;
     private AdapterItems adapterItems;
     private TextView textoFab;
+    private String estructuraCuestionario;
 
     public interface Auditable {
         void auditarItem(Item unItem);
@@ -75,7 +77,17 @@ public class FragmentPreAudit extends Fragment {
             laEse = bundle.getString(LAESE);
             origen = bundle.getString(ORIGEN);
             idCuestionario = bundle.getString(IDCUESTIONARIO);
-        } else {
+
+            Realm realm= Realm.getDefaultInstance();
+            Cuestionario elCuestionario = realm.where(Cuestionario.class)
+                .equalTo("idCuestionario",idCuestionario)
+                .findFirst();
+            if (elCuestionario !=null){
+                estructuraCuestionario = elCuestionario.getTipoCuestionario();
+            }
+
+         }
+        else {
             Toast.makeText(getContext(), getResources().getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
         }
 
@@ -162,16 +174,6 @@ public class FragmentPreAudit extends Fragment {
         adapterItems.setListener(listenerItem);
 
         return view;
-    }
-
-    public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen) {
-        FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
-        Bundle unBundle = new Bundle();
-        unBundle.putString(LAESE, laEse);
-        unBundle.putString(ORIGEN, origen);
-        fragmentPreAudit.setArguments(unBundle);
-
-        return fragmentPreAudit;
     }
 
     public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen, String idCuestionario) {

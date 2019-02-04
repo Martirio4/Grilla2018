@@ -380,7 +380,7 @@
     <string name="deseaBorrarFoto">Desea borrar la foto seleccionada?</string>
     <string name="borraFoto">Borrar foto</string>
     <string name="noHayAuditorias">El area seleccionada no posee auditorías.</string>
-    <string name="tipoArea">Elija tipo de área</string>
+    <string name="idCuestionario">Elija tipo de área</string>
     <string name="textoPregunta111B">Artículos de consumo</string>
     <string name="textoPregunta112B">Pertenencias personales</string>
     <string name="textoPregunta113B">Productos acabados / inventario</string>

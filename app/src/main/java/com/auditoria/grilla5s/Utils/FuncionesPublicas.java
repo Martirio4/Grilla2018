@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import pl.tajchert.nammu.Nammu;
@@ -599,7 +598,7 @@ public class FuncionesPublicas {
                                                         .findFirst();
                                                 if (realmArea1!=null) {
                                                     //ASIGNO ID DE CUESTIONARIO AL AREA
-                                                    realmArea1.setTipoArea(unaListaId.get(which));
+                                                    realmArea1.setIdCuestionario(unaListaId.get(which));
                                                 }
                                                 else{
                                                     Toast.makeText(fragment.getContext(), "Error", Toast.LENGTH_SHORT).show();

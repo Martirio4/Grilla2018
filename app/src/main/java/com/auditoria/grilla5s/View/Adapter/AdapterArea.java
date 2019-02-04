@@ -200,10 +200,10 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
 
             textView.setText(unArea.getNombreArea());
 
-            if (unArea.getTipoArea()!=null) {
+            if (unArea.getIdCuestionario()!=null) {
                 //CARGO EL TIPO DE AREA
                 Cuestionario elCuestionario = realm.where(Cuestionario.class)
-                        .equalTo("idCuestionario", unArea.getTipoArea())
+                        .equalTo("idCuestionario", unArea.getIdCuestionario())
                         .findFirst();
 
                 if (elCuestionario!=null){
