@@ -77,4 +77,7 @@ public class Ese extends RealmObject {
         this.listaPreguntas.add(unaPregunta);
     }
 
+    public void removePregunta(Pregunta unPregunta) {
+        this.listaPreguntas.remove(unPregunta);
+    }
 }

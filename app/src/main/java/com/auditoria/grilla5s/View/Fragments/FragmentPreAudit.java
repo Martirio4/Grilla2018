@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.Model.Item;
+import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
@@ -44,6 +45,7 @@ public class FragmentPreAudit extends Fragment {
 
     public static final String ORIGEN = "ORIGEN";
     private String origen;
+    private RecyclerView recyclerPreAudit;
 
     public FragmentPreAudit() {
         // Required empty public constructor
@@ -60,7 +62,8 @@ public class FragmentPreAudit extends Fragment {
         void cerrarAuditoria();
         void actualizarPuntaje(String idAudit);
         void agregarNuevoItem(String laEse, String idCuestionario, AdapterItems elAdapter);
-
+        void agregarNuevaPregunta(String laEse, String idCuestionario, AdapterPreguntas adapterPreguntas);
+        void auditarPregunta(Pregunta preguntaClickeada);
     }
 
 
@@ -94,27 +97,27 @@ public class FragmentPreAudit extends Fragment {
             FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
             fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));
             fabPreAudit.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
+
             //SI LA AUDITORIA ES ESTRUCTURADA EL FAB AGREGA ITEM, SINO AGREGA PREGUNTAS.
-            if (estructuraCuestionario.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
-                fabPreAudit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        auditable.agregarNuevoItem(laEse, idCuestionario, adapterItems);
-
-                    }
-                });
-                textoFab.setText(getString(R.string.nuevoItem));
-            } else {
-                fabPreAudit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        auditable.agregarNuevaPregunta(laEse,idCuestionario,adapterItems);
-
-                    }
-                });
-                textoFab.setText(getString(R.string.nuevaPregunta));
+            switch (estructuraCuestionario){
+                case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
+                    fabPreAudit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            auditable.agregarNuevoItem(laEse, idCuestionario, adapterItems);
+                        }
+                    });
+                    textoFab.setText(getString(R.string.nuevoItem));
+                    break;
+                case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+                    fabPreAudit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            auditable.agregarNuevaPregunta(laEse,idCuestionario,adapterPreguntas);
+                        }
+                    });
+                    textoFab.setText(getString(R.string.nuevaPregunta));
+                    break;
             }
         }
         else {
@@ -130,61 +133,117 @@ public class FragmentPreAudit extends Fragment {
             textoFab.setText(getString(R.string.guardarAuditoria));
         }
 
-        final RecyclerView recyclerPreAudit = view.findViewById(R.id.recyclerPreAudit);
+        recyclerPreAudit = view.findViewById(R.id.recyclerPreAudit);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerPreAudit.setLayoutManager(linearLayoutManager);
 
-//      LE PIDO A LA REALM TODOS LOS ITEM QUE TIENEN AUDITORIA Y QUE COMIENZAN CON LA MISMA ESE
+//      INSTANCIO EL ADAPTER SEGUN CORRESPONDA Y LE CARGO SU SET DE DATOS Y SU LISTENER
+        instanciarAdapter_CargarDatos_CargarListener();
+        return view;
+    }
+
+    private void instanciarAdapter_CargarDatos_CargarListener() {
+        switch (estructuraCuestionario){
+            case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
+                popularRecyclerItems();
+                break;
+            case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+                popularRecyclerPreguntas();
+                break;
+        }
+    }
+
+    private void popularRecyclerItems() {
         Realm realm = Realm.getDefaultInstance();
         RealmList<Item> listaItemsOriginales;
-
-        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
-
-            RealmResults<Item> listaItems = realm.where(Item.class)
-                    .equalTo("idCuestionario", idCuestionario)
-                    .equalTo("idEse", laEse)
-                    .findAll();
-
-            //si el item pertenece a la ese, loo agrego a la lista
-            listaItemsOriginales = new RealmList<>();
-            listaItemsOriginales.addAll(listaItems);
-
-
-        } else {
-
-            RealmResults<Item> listaItems = realm.where(Item.class)
-                    .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
-                    .equalTo("idEse", laEse)
-                    .findAll();
-
-            //si el item pertenece a la ese, loo agrego a la lista
-            listaItemsOriginales = new RealmList<>();
-            listaItemsOriginales.addAll(listaItems);
-
+        listaItemsOriginales = new RealmList<>();
+        switch (origen){
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                RealmResults<Item> listaItems1 = realm.where(Item.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idEse", laEse)
+                        .findAll();
+                listaItemsOriginales.addAll(listaItems1);
+            break;
+            default:
+                RealmResults<Item> listaItems2 = realm.where(Item.class)
+                        .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
+                        .equalTo("idEse", laEse)
+                        .findAll();
+                listaItemsOriginales.addAll(listaItems2);
+            break;
         }
+
+
+        //si el item pertenece a la ese, loo agrego a la lista
+
 
         adapterItems = new AdapterItems();
         adapterItems.setContext(getContext());
         adapterItems.setListaItemsOriginales(listaItemsOriginales);
         adapterItems.setOrigen(origen);
         recyclerPreAudit.setAdapter(adapterItems);
-        adapterItems.notifyDataSetChanged();
 
         View.OnClickListener listenerItem;
 
-            listenerItem = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
-                    RealmList<Item> listaAuditorias = adapterItems.getListaItemsOriginales();
-                    Item itemClickeado = listaAuditorias.get(posicion);
-                    auditable.auditarItem(itemClickeado);
-                }
-            };
+        listenerItem = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
+                RealmList<Item> listaAuditorias = adapterItems.getListaItemsOriginales();
+                Item itemClickeado = listaAuditorias.get(posicion);
+                auditable.auditarItem(itemClickeado);
+            }
+        };
 
         adapterItems.setListener(listenerItem);
 
-        return view;
+        adapterItems.notifyDataSetChanged();
+    }
+    private void popularRecyclerPreguntas() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmList<Pregunta> listaPreguntasOriginales = new RealmList<>();
+
+        switch (origen){
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                RealmResults<Pregunta> listaPreguntas1 = realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idEse", laEse)
+                        .findAll();
+                listaPreguntasOriginales.addAll(listaPreguntas1);
+            break;
+            default:
+                RealmResults<Pregunta> listaPreguntas2 = realm.where(Pregunta.class)
+                        .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
+                        .equalTo("idEse", laEse)
+                        .findAll();
+                listaPreguntasOriginales.addAll(listaPreguntas2);
+            break;
+        }
+
+        //si el item pertenece a la ese, loo agrego a la lista
+
+        adapterPreguntas = new AdapterPreguntas();
+        adapterPreguntas.setContext(getContext());
+        adapterPreguntas.setListaPreguntasOriginales(listaPreguntasOriginales);
+        adapterPreguntas.setOrigen(origen);
+        recyclerPreAudit.setAdapter(adapterPreguntas);
+
+        View.OnClickListener listenerPregunta;
+
+        listenerPregunta = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
+                RealmList<Pregunta> listaPreguntas = adapterPreguntas.getListaPreguntasOriginales();
+                Pregunta preguntaClickeada = listaPreguntas.get(posicion);
+                auditable.auditarPregunta(preguntaClickeada);
+            }
+        };
+
+        adapterPreguntas.setListener(listenerPregunta);
+
+        adapterPreguntas.notifyDataSetChanged();
     }
 
     public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen, String idCuestionario) {
@@ -206,7 +265,16 @@ public class FragmentPreAudit extends Fragment {
 
     @Override
     public void onResume() {
-        adapterItems.notifyDataSetChanged();
+        switch (estructuraCuestionario){
+            case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
+                adapterItems.notifyDataSetChanged();
+                break;
+            case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+                adapterPreguntas.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
         super.onResume();
     }
 

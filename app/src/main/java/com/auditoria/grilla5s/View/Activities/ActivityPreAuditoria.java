@@ -24,6 +24,8 @@ import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
+import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
+import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
 import java.util.UUID;
@@ -180,6 +182,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         bundle.putString(ActivityAuditoria.IDESE,unItem.getIdEse() );
         bundle.putString(ActivityAuditoria.IDITEM, unItem.getIdItem());
         bundle.putString(ActivityAuditoria.ORIGEN, origen);
+        bundle.putString(ActivityAuditoria.TIPOESTRUCTURA, FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA);
         intent.putExtras(bundle);
         startActivity(intent);
 
@@ -279,5 +282,47 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
                     }
                 }).show();
+    }
+
+    @Override
+    public void agregarNuevaPregunta(final String laEse, final String idCuestionario, final AdapterPreguntas adapterPreguntas) {
+        new MaterialDialog.Builder(this)
+                .title(getResources().getString(R.string.nuevaPregunta))
+                .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                .content(getResources().getString(R.string.agreguePRegunta))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
+                        if (input!=null && !input.toString().isEmpty()) {
+                            Pregunta nuevaPregunta= new Pregunta();
+                            nuevaPregunta.setTextoPregunta(input.toString());
+                            nuevaPregunta.setIdCuestioniario(idCuestionario);
+                            nuevaPregunta.setIdEse(laEse);
+                            nuevaPregunta.setIdItem(null);
+                            nuevaPregunta.setIdPregunta(FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+
+                            FuncionesPublicas.agregarPregunta(idCuestionario,nuevaPregunta,adapterPreguntas);
+                        }
+
+                    }
+                }).show();
+    }
+
+    @Override
+    public void auditarPregunta(Pregunta preguntaClickeada) {
+        Intent intent=new Intent(this, ActivityAuditoria.class);
+        Bundle bundle=new Bundle();
+        bundle.putString(ActivityAuditoria.IDCUESTIONARIO,preguntaClickeada.getIdCuestioniario());
+        bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
+        bundle.putString(ActivityAuditoria.IDESE,preguntaClickeada.getIdEse() );
+        bundle.putString(ActivityAuditoria.IDITEM, null);
+        bundle.putString(ActivityAuditoria.ORIGEN, origen);
+        bundle  .putString(ActivityAuditoria.TIPOESTRUCTURA, FuncionesPublicas.ESTRUCTURA_SIMPLE);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
     }
 }
