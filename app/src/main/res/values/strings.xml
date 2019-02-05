@@ -678,5 +678,7 @@
     <string name="elegirEstructura">Estructura</string>
     <string name="deseaBorrarCuestionario">Desea borrar el cuestionario seleccionado? Esta acción no puede deshacerse.</string>
     <string name="tituloDeleteCuestionario">Eliminar cuestionario</string>
+    <string name="nuevaPregunta">Nueva Pregunta</string>
+    <string name="tipoArea">Tipo Area</string>
 
 </resources>

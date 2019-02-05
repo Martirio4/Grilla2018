@@ -22,6 +22,7 @@ import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
+import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 import com.github.clans.fab.FloatingActionButton;
 
 import io.realm.Realm;
@@ -50,18 +51,14 @@ public class FragmentPreAudit extends Fragment {
 
     private Auditable auditable;
     private AdapterItems adapterItems;
+    private AdapterPreguntas adapterPreguntas;
     private TextView textoFab;
     private String estructuraCuestionario;
 
     public interface Auditable {
         void auditarItem(Item unItem);
-
-
-
         void cerrarAuditoria();
-
         void actualizarPuntaje(String idAudit);
-
         void agregarNuevoItem(String laEse, String idCuestionario, AdapterItems elAdapter);
 
     }
@@ -97,16 +94,30 @@ public class FragmentPreAudit extends Fragment {
             FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
             fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));
             fabPreAudit.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
-            fabPreAudit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            //SI LA AUDITORIA ES ESTRUCTURADA EL FAB AGREGA ITEM, SINO AGREGA PREGUNTAS.
+            if (estructuraCuestionario.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
+                fabPreAudit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                    auditable.agregarNuevoItem(laEse, idCuestionario, adapterItems);
+                        auditable.agregarNuevoItem(laEse, idCuestionario, adapterItems);
 
-                }
-            });
-            textoFab.setText(getString(R.string.nuevoItem));
-        } else {
+                    }
+                });
+                textoFab.setText(getString(R.string.nuevoItem));
+            } else {
+                fabPreAudit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        auditable.agregarNuevaPregunta(laEse,idCuestionario,adapterItems);
+
+                    }
+                });
+                textoFab.setText(getString(R.string.nuevaPregunta));
+            }
+        }
+        else {
             FloatingActionButton fabPreAudit = view.findViewById(R.id.fabGuardarAudit);
             fabPreAudit.setColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));
             fabPreAudit.setImageResource(R.drawable.ic_save_black_24dp);

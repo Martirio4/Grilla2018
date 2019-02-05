@@ -160,18 +160,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             });
         }
 
-
-
-
-
-
-
-
-
-//        SETEAR EL TABLAYOUT
-
-
-
     }
 
     private void cargarFragmentVerPreguntas() {
@@ -218,7 +206,9 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         Bundle bundle=new Bundle();
         bundle.putString(GraficosActivity.AUDIT, idAudit);
         bundle.putString(GraficosActivity.ORIGEN, "auditoria");
-        bundle.putString(GraficosActivity.AREA, maAudit.getAreaAuditada().getIdArea());
+        if (maAudit!=null) {
+            bundle.putString(GraficosActivity.AREA, maAudit.getAreaAuditada().getIdArea());
+        }
         intent.putExtras(bundle);
         startActivity(intent);
         ActivityAuditoria.this.finish();

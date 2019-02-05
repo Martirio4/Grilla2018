@@ -463,11 +463,26 @@ public class FuncionesPublicas {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
+
+                String tipoEstructura=null;
                 Auditoria mAudit = realm.where(Auditoria.class)
                         .equalTo("idAuditoria", idAudit)
                         .findFirst();
+                Pregunta mPreguntA= realm.where(Pregunta.class)
+                        .equalTo("idAuditoria", idAudit)
+                        .findFirst();
+                //si una pregunta de esta auditoria no tiene idItem, es porque la estructura es simple
+                if (mPreguntA!=null){
+                    if (mPreguntA.getIdItem()==null){
+                        tipoEstructura=FuncionesPublicas.ESTRUCTURA_SIMPLE;
+                    }
+                    else{
+                        tipoEstructura=FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA;
+                    }
+                }
 
-                if (mAudit != null) {
+                assert tipoEstructura != null;
+                if (mAudit != null && tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
                     Double sumatoriaEse = 0.0;
                     Integer divisorEse = 0;
                     Integer cantidadItems =0;
@@ -477,7 +492,6 @@ public class FuncionesPublicas {
 
                         for (Item unItem : unaEse.getListaItem()) {
                             Integer sumatoriaPreguntas = 0;
-                            Integer auxiliarNulos=0;
                             Integer divisorPreguntas = 0;
 
                             for (Pregunta unaPregunta : unItem.getListaPreguntas()) {
@@ -523,6 +537,41 @@ public class FuncionesPublicas {
                         cantidadItems=cantidadItems+divisorItems;
                     }
 
+                    mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/5.0);
+                }
+                if (mAudit != null && tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
+                    Double sumatoriaEse = 0.0;
+                    Integer divisorEse = 0;
+
+                    for (Ese unaEse : mAudit.getListaEses()) {
+
+                        Integer sumatoriaPreguntas = 0;
+                        Integer divisorPreguntas = 0;
+
+                        for (Pregunta unaPregunta : unaEse.getListaPreguntas()) {
+
+                            if (unaPregunta.getPuntaje()==null) {
+                                mAudit.setAuditEstaCerrada(false);
+                                divisorPreguntas++;
+                            }
+                            else if (unaPregunta.getPuntaje()!=9){
+
+                                sumatoriaPreguntas = sumatoriaPreguntas + unaPregunta.getPuntaje();
+                                divisorPreguntas++;
+                            }
+                        }
+
+                        if (divisorPreguntas==0) {
+                            unaEse.setPuntajeEse(9.9);
+                        }
+                        else{
+
+                            unaEse.setPuntajeEse((sumatoriaPreguntas/divisorPreguntas)*1.0);
+                            sumatoriaEse = sumatoriaEse + unaEse.getPuntajeEse();
+                            divisorEse++;
+                        }
+                    }
+                    //chequear esta linea
                     mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/5.0);
                 }
             }
