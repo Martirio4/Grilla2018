@@ -630,7 +630,7 @@
     <string name="signOut">Saír da sua conta</string>
     <string name="settings">"OPÇÕES "</string>
     <string name="auditResult1">Audit.</string>
-    <string name="tipoArea">Escolha o tipo de área</string>
+    <string name="idCuestionario">Escolha o tipo de área</string>
     <string name="noHayAuditorias">A área selecionada não possui auditorias.</string>
     <string name="borraFoto">"Excluir foto "</string>
     <string name="deseaBorrarFoto">Deseja excluir a foto selecionada?</string>

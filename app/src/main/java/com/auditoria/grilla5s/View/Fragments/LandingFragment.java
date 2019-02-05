@@ -71,10 +71,10 @@ public class LandingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_landing, container, false);
 
-        botonIssue = (ImageButton) view.findViewById(R.id.btn_issue);
-        botonaudits = (ImageButton) view.findViewById(R.id.btn_search);
-        botonSettings = (ImageButton) view.findViewById(R.id.btn_setting);
-        botonStart = (ImageButton) view.findViewById(R.id.btn_start);
+        botonIssue = view.findViewById(R.id.btn_issue);
+        botonaudits = view.findViewById(R.id.btn_search);
+        botonSettings = view.findViewById(R.id.btn_setting);
+        botonStart = view.findViewById(R.id.btn_start);
 
         texto1 = view.findViewById(R.id.primeraOpcion);
         texto2 = view.findViewById(R.id.segundaOpcion);

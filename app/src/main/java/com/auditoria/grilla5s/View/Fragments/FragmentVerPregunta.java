@@ -23,7 +23,6 @@ import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 
@@ -33,7 +32,7 @@ import io.realm.RealmResults;
 public class FragmentVerPregunta extends Fragment {
 
 
-    public static final String TIPOCUESTIONARIO = "TIPOCUESTIONARIO";
+    public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
     public static final String IDITEM = "IDITEM";
     public static final String ORIGEN = "ORIGEN";
     public static final String IDESE = "IDESE";
@@ -64,7 +63,7 @@ public class FragmentVerPregunta extends Fragment {
 
             idItem = bundle.getString(IDITEM);
             origen = bundle.getString(ORIGEN);
-            idCuestionario = bundle.getString(TIPOCUESTIONARIO);
+            idCuestionario = bundle.getString(IDCUESTIONARIO);
             idEse = bundle.getString(IDESE);
         }
         TextView textoPregunta = view.findViewById(R.id.textoPregunta);

@@ -380,7 +380,7 @@
     <string name="deseaBorrarFoto">Desea borrar la foto seleccionada?</string>
     <string name="borraFoto">Borrar foto</string>
     <string name="noHayAuditorias">El area seleccionada no posee auditorías.</string>
-    <string name="tipoArea">Elija tipo de área</string>
+    <string name="idCuestionario">Elija tipo de área</string>
     <string name="textoPregunta111B">Artículos de consumo</string>
     <string name="textoPregunta112B">Pertenencias personales</string>
     <string name="textoPregunta113B">Productos acabados / inventario</string>
@@ -673,5 +673,12 @@
     <string name="nombreCues">Nombre</string>
     <string name="auditEliminada">La auditoría fue eliminada</string>
     <string name="agregarPregunta">Nueva Pregunta</string>
+    <string name="estructuraSimplificada">Simple</string>
+    <string name="estructuraEstructurada">Estructurado</string>
+    <string name="elegirEstructura">Estructura</string>
+    <string name="deseaBorrarCuestionario">Desea borrar el cuestionario seleccionado? Esta acción no puede deshacerse.</string>
+    <string name="tituloDeleteCuestionario">Eliminar cuestionario</string>
+    <string name="nuevaPregunta">Nueva Pregunta</string>
+    <string name="tipoArea">Tipo Area</string>
 
 </resources>

@@ -30,30 +30,27 @@ import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 
 public class ActivityPreAuditoria extends AppCompatActivity implements FragmentPreAudit.Auditable{
 
-    private ControllerDatos controllerDatos;
+
     public static String idAudit;
     private String idArea;
     public static final String IDAREA="IDAREA";
     public static final String ORIGEN="ORIGEN";
-    public static final String TIPOCUESTIONARIO ="TIPOCUESTIONARIO" ;
+    public static final String IDCUESTIONARIO ="IDCUESTIONARIO" ;
     //SOLO RECIBO ESTA KEY CUANDO QUIERO EDITAR UNA AUDITORIA
     public static final String IDAUDIT="IDAUDIT";
 
     private ViewPager pager;
-    private Toolbar toolbar;
     private String origen;
-    public static String tipoCuestionario;
-    private AdapterPagerEses adapterPager;
+    public static String idCuestionario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_auditoria);
-        controllerDatos= new ControllerDatos(this);
+        ControllerDatos controllerDatos = new ControllerDatos(this);
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
@@ -62,13 +59,15 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
             origen=bundle.getString(ORIGEN);
             idArea=bundle.getString(IDAREA);
             idAudit=bundle.getString(IDAUDIT);
-            tipoCuestionario=bundle.getString(TIPOCUESTIONARIO);
+            idCuestionario =bundle.getString(IDCUESTIONARIO);
         }
 
         //SI EL ORIGEN ES NUEVA AUDITORIA SIGO NORMAL, INSTANCIO UNA NUVA AUDITORIA
         if (origen!=null && origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)) {
 
-            idArea=bundle.getString(IDAREA);
+            if (bundle!=null) {
+                idArea=bundle.getString(IDAREA);
+            }
 
             //      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
 
@@ -79,12 +78,13 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
 
             assert elArea != null;
-            idAudit=controllerDatos.instanciarAuditoria(elArea.getTipoArea());
+
+            idAudit= controllerDatos.instanciarAuditoria(elArea.getIdCuestionario());
 
 
             realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
             Auditoria auditActual= realm.where(Auditoria.class)
                     .equalTo("idAuditoria",idAudit)
                     .findFirst();
@@ -102,15 +102,13 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
 
 
-
-
-        toolbar =  findViewById(R.id.my_toolbar);
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            TextView unText=toolbar.findViewById(R.id.textoToolbar);
+            TextView unText= toolbar.findViewById(R.id.textoToolbar);
             unText.setTypeface(robotoR);
             unText.setTextColor(getResources().getColor(R.color.blancoNomad));
 
@@ -123,15 +121,9 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
-        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
-            adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen,tipoCuestionario);        }
-        else {
-            adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen);
-        }
+        AdapterPagerEses adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario);
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
-
-
         adapterPager.notifyDataSetChanged();
 
         //        SETEAR EL TABLAYOUT
@@ -212,34 +204,36 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     @Override
     public void onBackPressed() {
 
-        if (origen.equals(FuncionesPublicas.REVISAR)) {
-            ActivityPreAuditoria.super.onBackPressed();
-        }
-        else if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
-            ActivityPreAuditoria.super.onBackPressed();
-        }
-        else {
-            new MaterialDialog.Builder(this)
-                    .title(getString(R.string.advertencia))
-                    .title(getResources().getString(R.string.advertencia))
-                    .contentColor(ContextCompat.getColor(this, R.color.primary_text))
-                    .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                    .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
-                    .content(getResources().getString(R.string.auditoriaSinTerminar)+"\n"+getResources().getString(R.string.continuar))
-                    .positiveText(getResources().getString(R.string.si))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            ActivityPreAuditoria.super.onBackPressed();
-                        }
-                    })
-                    .negativeText(getResources().getString(R.string.cancel))
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        }
-                    })
-                    .show();
+        switch (origen) {
+            case FuncionesPublicas.REVISAR:
+                ActivityPreAuditoria.super.onBackPressed();
+                break;
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                ActivityPreAuditoria.super.onBackPressed();
+                break;
+            default:
+                new MaterialDialog.Builder(this)
+                        .title(getString(R.string.advertencia))
+                        .title(getResources().getString(R.string.advertencia))
+                        .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                        .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                        .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                        .content(getResources().getString(R.string.auditoriaSinTerminar) + "\n" + getResources().getString(R.string.continuar))
+                        .positiveText(getResources().getString(R.string.si))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                ActivityPreAuditoria.super.onBackPressed();
+                            }
+                        })
+                        .negativeText(getResources().getString(R.string.cancel))
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        })
+                        .show();
+                break;
         }
     }
 
@@ -261,7 +255,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     }
 
     @Override
-    public void agregarNuevoItem(final String laEse, final String tipoCuestionario, final AdapterItems elAdapter) {
+    public void agregarNuevoItem(final String laEse, final String idCuestionario, final AdapterItems elAdapter) {
         new MaterialDialog.Builder(this)
                 .title(getResources().getString(R.string.nuevoItem))
                 .contentColor(ContextCompat.getColor(this, R.color.primary_text))
@@ -271,16 +265,16 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
                     @Override
-                    public void onInput(MaterialDialog dialog, final CharSequence input) {
+                    public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                         if (input!=null && !input.toString().isEmpty()) {
                             Item nuevoItem= new Item();
                             nuevoItem.setTituloItem(input.toString());
-                            nuevoItem.setIdCuestionario(tipoCuestionario);
+                            nuevoItem.setIdCuestionario(idCuestionario);
                             nuevoItem.setIdEse(laEse);
                             nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
                             nuevoItem.setIdItem(FuncionesPublicas.IDITEMS + UUID.randomUUID());
 
-                            FuncionesPublicas.agregarItem(tipoCuestionario,nuevoItem,elAdapter);
+                            FuncionesPublicas.agregarItem(idCuestionario,nuevoItem,elAdapter);
                         }
 
                     }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:padding="@dimen/margenChico"
+    android:background="@color/tile1"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal|center_vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:textAlignment="center"
+        android:layout_marginTop="@dimen/margenGrande"
+        android:layout_marginStart="@dimen/margenGrande"
+        android:layout_marginEnd="@dimen/margenGrande"
+        android:layout_marginBottom="@dimen/margenGrande"
+        android:fontFamily="sans-serif"
+        android:textSize="20sp"
+        android:textColor="@color/tile4"
+        android:id="@+id/tituloDialogoItem"
+        android:text="@string/elegirEstructura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_marginEnd="@dimen/margenChico"
+        android:layout_marginStart="@dimen/margenChico"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_simple"
+                android:background="@drawable/boton3"
+                android:src="@drawable/simple"
+                android:layout_weight="50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/img_estructurado"
+                android:background="@drawable/boton3"
+                android:src="@drawable/complicado"
+                android:layout_weight="50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+
+
+        </LinearLayout>
+
+
+
+            <RadioGroup
+                android:id="@+id/rg_estructura"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:text="@string/estructuraSimplificada"
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:id="@+id/rbEstructuraSimple"
+                    android:layout_width="0dp"
+                    android:layout_weight="50"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:text="@string/estructuraEstructurada"
+                    android:textColorHighlight="@color/colorAccent"
+                    app:buttonTint="@color/tile4"
+                    android:id="@+id/rbEstructuraEstructurada"
+                    android:layout_width="0dp"
+                    android:layout_weight="50"
+                    android:layout_height="wrap_content" />
+            </RadioGroup>
+
+
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/margenChico"
+        android:layout_marginBottom="@dimen/margenChico"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="14sp"
+                android:layout_weight="50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp"
+                android:gravity="end"
+                android:textStyle="bold"
+                android:id="@+id/botonDialogoNo"
+                android:layout_weight="50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:fontFamily="sans-serif"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/OK"
+                android:id="@+id/botonDialogoSi"
+                android:layout_weight="50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

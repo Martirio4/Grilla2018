@@ -83,9 +83,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
-                //SE ELIMINA ESTA LINEA, DEJO BORRAR LAS MANAGE_AREAS.
-                //PENSAR SI LAS MANAGE_AREAS SOLO LAS PUEDE DAR DE ALTA EL USUARIO LIDER
-                //.equalTo("usuario", usuario)
+
                 .findAll();
 
         for (Auditoria audit:result2
@@ -102,8 +100,6 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
             @Override
             public void execute(Realm realm) {
 
-                String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
                 RealmResults<Area> lasAreas=realm.where(Area.class)
                         .equalTo("idArea",unArea.getIdArea())
                         .findAll();
@@ -116,9 +112,12 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
                                 .findFirst();
 
                         File file = new File(elArea.getFotoArea().getRutaFoto());
-                        boolean deleted = file.delete();
+                        file.delete();
 
-                        laFoto.deleteFromRealm();
+
+                        if (laFoto!=null) {
+                            laFoto.deleteFromRealm();
+                        }
 
 
                     }
@@ -130,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
 
 
-        FragmentManager fragmentManager = (FragmentManager) this.getSupportFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
