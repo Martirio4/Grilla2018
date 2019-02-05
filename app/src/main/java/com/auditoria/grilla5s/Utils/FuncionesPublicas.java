@@ -24,6 +24,7 @@ import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
+import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea;
 import com.google.firebase.auth.FirebaseAuth;
@@ -409,6 +410,80 @@ public class FuncionesPublicas {
             }
         });
 
+    }
+
+    public static void agregarPregunta(final String idCuestionario, final Pregunta nuevaPregunta, final AdapterPreguntas adapterPreguntas) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+                                          @Override
+                                          public void execute(Realm bgRealm) {
+                                              Pregunta mPregunta = bgRealm.copyToRealm(nuevaPregunta);
+                                              String idEse=nuevaPregunta.getIdEse();
+
+                                              final Ese laEse = bgRealm.where(Ese.class)
+                                                      .equalTo("idCuestionario", idCuestionario)
+                                                      .equalTo("idEse",idEse)
+                                                      .findFirst();
+                                              if (laEse!=null){
+                                                  laEse.addPregunta(mPregunta);
+                                              }
+                                          }
+                                      }
+                , new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        adapterPreguntas.addPregunta(nuevaPregunta);
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Toast.makeText(adapterPreguntas.getContext(), adapterPreguntas.getContext().getString(R.string.laPreguntaNoSeAgrego), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+        );
+    }
+
+    public static void borrarPregunta(final Pregunta unPregunta, final AdapterPreguntas adapterPreguntas) {
+        Realm realm = Realm.getDefaultInstance();
+        if (unPregunta.getIdItem()==null){
+
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                                              @Override
+                                              public void execute(Realm bgRealm) {
+                                                  Ese unaEse = bgRealm.where(Ese.class)
+                                                          .equalTo("idCuestionario", unPregunta.getIdCuestioniario())
+                                                          .equalTo("idEse", unPregunta.getIdEse())
+                                                          .findFirst();
+                                                  if (unaEse!=null){
+                                                      unaEse.removePregunta(unPregunta);
+                                                  }
+                                                  Pregunta laPregunta = bgRealm.where(Pregunta.class)
+                                                          .equalTo("idPregunta",unPregunta.getIdPregunta())
+                                                          .equalTo("idCuestionario",unPregunta.getIdCuestioniario())
+                                                          .findFirst();
+                                                  if (laPregunta!=null){
+                                                      laPregunta.deleteFromRealm();
+                                                  }
+                                              }
+                                          }
+                    , new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            adapterPreguntas.remove(unPregunta);
+                            adapterPreguntas.notifyDataSetChanged();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            Toast.makeText(adapterPreguntas.getContext(), adapterPreguntas.getContext().getString(R.string.laPreguntaNoSeBorro), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+            );
+        }
     }
 
 

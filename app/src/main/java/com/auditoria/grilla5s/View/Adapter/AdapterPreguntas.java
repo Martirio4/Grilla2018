@@ -82,13 +82,11 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-
         View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_pre_auditoria, parent, false);
-        PreguntaViewHolder PreguntasViewHolder = new PreguntaViewHolder(viewCelda);
-
+        PreguntaViewHolder ItemsViewHolder = new PreguntaViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
 
-        return PreguntasViewHolder;
+        return ItemsViewHolder;
     }
 
     @Override
@@ -96,8 +94,6 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         final Pregunta unPregunta = listaPreguntasOriginales.get(position);
         PreguntaViewHolder itemViewHolder = (PreguntaViewHolder) holder;
         itemViewHolder.cargarPregunta(unPregunta,position);
-
-
 
         itemViewHolder.botonEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,21 +103,18 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
                         .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
                         .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
                         .title(R.string.advertencia)
-                        .content(R.string.itemSeEliminara)
-                        .positiveText(R.string.continuar)
+                        .content(R.string.preguntaSeElimina)
+                        .positiveText(R.string.eliminar)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            private Context context;
-
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                listaPreguntasOriginales.remove(position);
-                               // FuncionesPublicas.borrarPregunta(unPregunta.getIdPregunta(),unPregunta.getIdEse(), unPregunta.getIdCuestionario(), AdapterPreguntas.this);
-
+                                FuncionesPublicas.borrarPregunta(unPregunta, AdapterPreguntas.this);
                             }
                         })
                         .negativeText(R.string.cancel)
                         .show();
             }
+
         });
 
 
@@ -176,7 +169,8 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
             textViewNumero=  itemView.findViewById(R.id.tv_numero_item);
             textViewDescripcion=  itemView.findViewById(R.id.tv_descripcion_item);
             textViewFaltantes=itemView.findViewById(R.id.tv_preguntasFaltantes);
-
+            botonEliminar = itemView.findViewById(R.id.botonEliminarItem);
+            botonEditar=itemView.findViewById(R.id.botonEditarItem);
 
 
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
@@ -187,8 +181,8 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         }
 
         void cargarPregunta(Pregunta unPregunta, Integer ordenCarga) {
-
-
+            textViewNumero.setText(String.valueOf(ordenCarga+1));
+            textViewDescripcion.setText(unPregunta.getTextoPregunta());
         }
 
 

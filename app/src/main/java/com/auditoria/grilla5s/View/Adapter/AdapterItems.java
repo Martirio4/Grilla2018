@@ -82,10 +82,8 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-
         View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_pre_auditoria, parent, false);
         ItemViewHolder ItemsViewHolder = new ItemViewHolder(viewCelda);
-
         viewCelda.setOnClickListener(this);
 
         return ItemsViewHolder;
@@ -96,8 +94,6 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
         final Item unItem = listaItemsOriginales.get(position);
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         itemViewHolder.cargarItem(unItem,position);
-
-
 
         itemViewHolder.botonEliminar.setOnClickListener(new View.OnClickListener() {
             @Override

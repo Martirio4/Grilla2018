@@ -672,7 +672,6 @@
     <string name="editarNombreCuestionario">Editar nombre cuestionario</string>
     <string name="nombreCues">Nombre</string>
     <string name="auditEliminada">La auditoría fue eliminada</string>
-    <string name="agregarPregunta">Nueva Pregunta</string>
     <string name="estructuraSimplificada">Simple</string>
     <string name="estructuraEstructurada">Estructurado</string>
     <string name="elegirEstructura">Estructura</string>
@@ -680,5 +679,10 @@
     <string name="tituloDeleteCuestionario">Eliminar cuestionario</string>
     <string name="nuevaPregunta">Nueva Pregunta</string>
     <string name="tipoArea">Tipo Area</string>
+    <string name="agreguePRegunta">Por favor, ingrese texto para la pregunta</string>
+    <string name="laPreguntaNoSeAgrego">La pregunta no fue agregada. Reintente.</string>
+    <string name="preguntaSeElimina">La pregunta será eliminada. Desea Continuar?</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="laPreguntaNoSeBorro">La pregunta no fue borrada. Reintente.</string>
 
 </resources>

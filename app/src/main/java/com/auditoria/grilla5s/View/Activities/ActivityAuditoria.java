@@ -42,6 +42,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     public static final String IDESE="IDESE";
     public static final String ORIGEN="ORIGEN";
     public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
+    public static final String TIPOESTRUCTURA = "TIPOESTRUCTURA";
 
 
     public static String idAudit;
@@ -53,6 +54,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     private FloatingActionMenu fabMenu;
     private Toolbar toolbar;
     private String idCuestionario;
+    private String tipoEstructura;
 
 
     @Override
@@ -70,6 +72,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             origen=bundle.getString(ORIGEN);
             idese=bundle.getString(IDESE);
             idCuestionario=bundle.getString(IDCUESTIONARIO);
+            tipoEstructura=bundle.getString(TIPOESTRUCTURA);
         }
 //------ TOOLBAR HANDLING
         toolbar = findViewById(R.id.my_toolbar);
@@ -94,19 +97,13 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta>resultPregunta;
-        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
-            resultPregunta = realm.where(Pregunta.class)
-                    .equalTo("idCuestionario", idCuestionario)
-                    .equalTo("idItem", idItem)
-                    .equalTo("idEse",idese )
-                    .findAll();
-        } else {
-            resultPregunta = realm.where(Pregunta.class)
-
-             .equalTo("idAudit", idAudit)
-                    .equalTo("idItem", idItem)
-                    .equalTo("idEse",idese )
-                    .findAll();
+        switch (origen){
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+               resultPregunta= cargarPreguntasCuestionario();
+               break;
+            default:
+               resultPregunta= cargarPreguntasAuditoria();
+               break;
         }
 
         RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
@@ -160,6 +157,56 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             });
         }
 
+    }
+
+    private RealmResults<Pregunta> cargarPreguntasAuditoria() {
+        Realm realm= Realm.getDefaultInstance();
+        switch (tipoEstructura){
+            case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
+                return realm.where(Pregunta.class)
+                        .equalTo("idAudit", idAudit)
+                        .equalTo("idItem", idItem)
+                        .equalTo("idEse",idese )
+                        .findAll();
+
+            case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+                return realm.where(Pregunta.class)
+                        .equalTo("idAudit", idAudit)
+                        .equalTo("idEse",idese )
+                        .findAll();
+
+            default:
+                return realm.where(Pregunta.class)
+                        .equalTo("idAudit", idAudit)
+                        .equalTo("idItem", idItem)
+                        .equalTo("idEse",idese )
+                        .findAll();
+        }
+    }
+
+    private RealmResults<Pregunta> cargarPreguntasCuestionario() {
+        Realm realm= Realm.getDefaultInstance();
+        switch (tipoEstructura){
+            case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
+                return realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idItem", idItem)
+                        .equalTo("idEse",idese )
+                        .findAll();
+
+            case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+                return realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idEse",idese )
+                        .findAll();
+
+            default:
+                return realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idItem", idItem)
+                        .equalTo("idEse",idese )
+                        .findAll();
+        }
     }
 
     private void cargarFragmentVerPreguntas() {
@@ -288,4 +335,5 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     public void actualizarPuntaje(String idAudit) {
         FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
     }
+
 }

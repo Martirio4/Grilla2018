@@ -70,7 +70,9 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_manage_areas2, parent, false);
         viewCelda.setOnClickListener(this);
+
         CuestionarioViewHolder CuestionariosViewHolder = new CuestionarioViewHolder(viewCelda);
+
         return CuestionariosViewHolder;
     }
 
@@ -81,7 +83,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
         CuestionarioViewHolder.cargarCuestionario(unCuestionario);
 
         FragmentActivity unaActivity = (FragmentActivity) context;
-        FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
+        FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
         final FragmentEditorCuestionarios fragmentManageCuestionarios = (FragmentEditorCuestionarios) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_EDITOR_CUESTIONARIOS);
 
 
@@ -156,7 +158,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
             linearUltima=itemView.findViewById(R.id.linearUltimoPuntaje);
             textUltima=itemView.findViewById(R.id.ultimoPuntaje);
             tagultima=itemView.findViewById(R.id.tagUltimoPuntaje);
-            textViewTipo= itemView.findViewById(R.id.tipoArea);
+            textViewTipo= itemView.findViewById(R.id.idCuestionario);
             btnEliminar = itemView.findViewById(R.id.botonEliminar);
             btnEditar=itemView.findViewById(R.id.botonEditarItem);
 

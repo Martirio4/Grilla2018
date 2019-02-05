@@ -162,7 +162,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             linearUltima=itemView.findViewById(R.id.linearUltimoPuntaje);
             textUltima=itemView.findViewById(R.id.ultimoPuntaje);
             tagultima=itemView.findViewById(R.id.tagUltimoPuntaje);
-            textViewTipo= itemView.findViewById(R.id.tipoArea);
+            textViewTipo= itemView.findViewById(R.id.idCuestionario);
 
 
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
