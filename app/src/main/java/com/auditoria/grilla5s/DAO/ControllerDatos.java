@@ -209,6 +209,130 @@ public class ControllerDatos {
     }
 
 
+    public void crearCuestionariosDefault(final String nombreArea,final Boolean esEstructuraSimple) {
+        Realm nBgRealm=Realm.getDefaultInstance();
+
+        //region  CREACION CUESTIONARIO A
+        nBgRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm realm) {
+                Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class,"cuesDefault_"+UUID.randomUUID());
+
+                nuevoCuestionario.setNombreCuestionario(nombreArea);
+                nuevoCuestionario.setTipoCuestionario(FuncionesPublicas.ESTRUCTURA_SIMPLE);
+
+//              PRIMERA ESE
+                Ese ese1= realm.createObject(Ese.class);
+                ese1.setIdEse(String.valueOf(1));
+                ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese1.setPuntajeEse(0.0);
+                Pregunta pregunta111 = realm.createObject(Pregunta.class);
+                pregunta111.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta111.setPuntaje(null);
+                pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
+                pregunta111.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta111.setIdEse(ese1.getIdEse());
+                Pregunta pregunta112 = realm.createObject(Pregunta.class);
+                pregunta112.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta112.setPuntaje(null);
+                pregunta112.setTextoPregunta(context.getResources().getString(R.string.textoPregunta112));
+                pregunta112.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta112.setIdEse(ese1.getIdEse());
+                ese1.addPregunta(pregunta111);
+                ese1.addPregunta(pregunta112);
+
+//              SEGUNDA ESE
+                Ese ese2= realm.createObject(Ese.class);
+                ese2.setIdEse(String.valueOf(2));
+                ese2.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese2.setPuntajeEse(0.0);
+                Pregunta pregunta121 = realm.createObject(Pregunta.class);
+                pregunta121.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta121.setPuntaje(null);
+                pregunta121.setTextoPregunta(context.getResources().getString(R.string.textoPregunta121));
+                pregunta121.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta121.setIdEse(ese1.getIdEse());
+                Pregunta pregunta122 = realm.createObject(Pregunta.class);
+                pregunta122.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta122.setPuntaje(null);
+                pregunta122.setTextoPregunta(context.getResources().getString(R.string.textoPregunta122));
+                pregunta122.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta122.setIdEse(ese1.getIdEse());
+                ese2.addPregunta(pregunta121);
+                ese2.addPregunta(pregunta122);
+
+//              TERCERA ESE
+                Ese ese3= realm.createObject(Ese.class);
+                ese3.setIdEse(String.valueOf(3));
+                ese3.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese3.setPuntajeEse(0.0);
+                Pregunta pregunta211 = realm.createObject(Pregunta.class);
+                pregunta211.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta211.setPuntaje(null);
+                pregunta211.setTextoPregunta(context.getResources().getString(R.string.textoPregunta211));
+                pregunta211.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta211.setIdEse(ese2.getIdEse());
+                Pregunta pregunta212 = realm.createObject(Pregunta.class);
+                pregunta212.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta212.setPuntaje(null);
+                pregunta212.setTextoPregunta(context.getResources().getString(R.string.textoPregunta212));
+                pregunta212.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta212.setIdEse(ese2.getIdEse());
+                ese3.addPregunta(pregunta211);
+                ese3.addPregunta(pregunta212);
+
+
+
+//              CUARTA ESE
+                Ese ese4= realm.createObject(Ese.class);
+                ese4.setIdEse(String.valueOf(4));
+                ese4.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese4.setPuntajeEse(0.0);
+                Pregunta pregunta321 = realm.createObject(Pregunta.class);
+                pregunta321.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta321.setPuntaje(null);
+                pregunta321.setTextoPregunta(context.getResources().getString(R.string.textoPregunta321));
+                pregunta321.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta321.setIdEse(ese3.getIdEse());
+                Pregunta pregunta322 = realm.createObject(Pregunta.class);
+                pregunta322.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta322.setPuntaje(null);
+                pregunta322.setTextoPregunta(context.getResources().getString(R.string.textoPregunta322));
+                pregunta322.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta322.setIdEse(ese3.getIdEse());
+                ese4.addPregunta(pregunta321);
+                ese4.addPregunta(pregunta322);
+
+//              QUINTA ESE
+                Ese ese5= realm.createObject(Ese.class);
+                ese5.setIdEse(String.valueOf(5));
+                ese5.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese5.setPuntajeEse(0.0);
+                Pregunta pregunta411 = realm.createObject(Pregunta.class);
+                pregunta411.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta411.setPuntaje(null);
+                pregunta411.setTextoPregunta(context.getResources().getString(R.string.textoPregunta411));
+                pregunta411.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta411.setIdEse(ese4.getIdEse());
+                Pregunta pregunta412 = realm.createObject(Pregunta.class);
+                pregunta412.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
+                pregunta412.setPuntaje(null);
+                pregunta412.setTextoPregunta(context.getResources().getString(R.string.textoPregunta412));
+                pregunta412.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+                pregunta412.setIdEse(ese4.getIdEse());
+                ese5.addPregunta(pregunta411);
+                ese5.addPregunta(pregunta412);
+
+                if (esEstructuraSimple) {
+                    nuevoCuestionario.addEse(ese1);
+                    nuevoCuestionario.addEse(ese2);
+                    nuevoCuestionario.addEse(ese3);
+                    nuevoCuestionario.addEse(ese4);
+                    nuevoCuestionario.addEse(ese5);
+                }
+            }
+        });
+    }
 
     public void crearCuestionariosDefault(final String nombreArea){
 

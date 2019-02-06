@@ -79,6 +79,8 @@ public class FuncionesPublicas {
     public static final String IDCUESTIONARIOS = "CUE_";
     public static final String IDPREGUNTAS = "PREG_";
     public static final String FRAGMENT_VER_PREGUNTAS ="FRAGMENT_VER_PREGUNTAS";
+    public static final String FRAGMENT_SELECCION_AREAS ="FRAGMENT_SELECCION_AREAS" ;
+    public static final String FRAGMENT_LANDING = "FRAGMENT_LANDING";
 
 
     public static boolean isExternalStorageWritable() {
@@ -290,7 +292,7 @@ public class FuncionesPublicas {
     }
 
 
-    public static void cambiarTextoItem(final Item unItem, final String s) {
+    public static void cambiarTextoItem(final Item unItem, final String s, final Context context) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -302,7 +304,24 @@ public class FuncionesPublicas {
                         .findFirst();
                 if (elItem!=null&& !s.isEmpty()){
                     elItem.setTituloItem(s);
-                    System.out.println(s);
+                    Toast.makeText(context, context.getString(R.string.itemFueModificada), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    public static void cambiarTextoPregunta(final Pregunta unaPregunta, final String s,final Context context) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Pregunta laPre = realm.where(Pregunta.class)
+                        .equalTo("idPregunta", unaPregunta.getIdPregunta())
+                        .equalTo("idEse", unaPregunta.getIdEse())
+                        .equalTo("idCuestionario", unaPregunta.getIdCuestionario())
+                        .findFirst();
+                if (laPre !=null&& !s.isEmpty()){
+                    laPre.setTextoPregunta(s);
+                    Toast.makeText(context, context.getString(R.string.preguntaFueModificada), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -453,7 +472,7 @@ public class FuncionesPublicas {
                                               @Override
                                               public void execute(Realm bgRealm) {
                                                   Ese unaEse = bgRealm.where(Ese.class)
-                                                          .equalTo("idCuestionario", unPregunta.getIdCuestioniario())
+                                                          .equalTo("idCuestionario", unPregunta.getIdCuestionario())
                                                           .equalTo("idEse", unPregunta.getIdEse())
                                                           .findFirst();
                                                   if (unaEse!=null){
@@ -461,7 +480,7 @@ public class FuncionesPublicas {
                                                   }
                                                   Pregunta laPregunta = bgRealm.where(Pregunta.class)
                                                           .equalTo("idPregunta",unPregunta.getIdPregunta())
-                                                          .equalTo("idCuestionario",unPregunta.getIdCuestioniario())
+                                                          .equalTo("idCuestionario",unPregunta.getIdCuestionario())
                                                           .findFirst();
                                                   if (laPregunta!=null){
                                                       laPregunta.deleteFromRealm();
@@ -484,6 +503,22 @@ public class FuncionesPublicas {
 
             );
         }
+    }
+
+    public static void cambiarTextoArea(final Area unArea, final String s, final Context context) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Area elArea = realm.where(Area.class)
+                        .equalTo("idArea", unArea.getIdArea())
+                        .findFirst();
+                if (elArea !=null&& !s.isEmpty()){
+                    elArea.setNombreArea(s);
+                    Toast.makeText(context, context.getString(R.string.areaFueModificada), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 

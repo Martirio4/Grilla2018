@@ -11,16 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea;
 import com.squareup.picasso.Picasso;
@@ -76,7 +79,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         View viewCelda;
         FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag("fragmentManageAreas");
+        FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
 
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
@@ -97,9 +100,10 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         AreaViewHolder AreaViewHolder = (AreaViewHolder) holder;
         AreaViewHolder.cargarArea(unArea);
 
+
         FragmentActivity unaActivity = (FragmentActivity) context;
-        FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag("fragmentManageAreas");
+        FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
+        FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
 
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
@@ -109,10 +113,52 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
                 public void onClick(View v) {
                     eliminable = (Eliminable) getRequiredActivity(v);
                     eliminable.EliminarArea(unArea);
-
                 }
             });
         }
+        AreaViewHolder.fabEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                        //.title(view.getResources().getString(R.string.EditarItem))
+                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        //.content(view.getResources().getString(R.string.favorEditeItem))
+                        //.inputType(InputType.TYPE_CLASS_TEXT)
+                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, final CharSequence input) {
+
+
+                            }
+                        })*/
+                        .customView(R.layout.dialogo_editar,false)
+                        .build();
+
+                View laView=mDialog.getCustomView();
+                final EditText content= laView.findViewById(R.id.editTextoItem);
+                content.setText(unArea.getNombreArea());
+
+                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
+                tituloDialogo.setText(context.getString(R.string.editarArea));
+                tituloDialogo.setFocusableInTouchMode(false);
+
+                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
+                botonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
+                            FuncionesPublicas.cambiarTextoArea(unArea,content.getText().toString(),context);
+                        }
+                        AdapterArea.this.notifyDataSetChanged();
+                        mDialog.hide();
+                    }
+                });
+                mDialog.show();
+            }
+        });
 
     }
 
@@ -150,6 +196,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         private ImageView imageView;
         private TextView textView;
         private ImageButton fabEliminar;
+        private ImageButton fabEditar;
         private TextView textUltima;
         private LinearLayout linearUltima;
         private TextView tagultima;
@@ -168,16 +215,19 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textView.setTypeface(robotoL);
             textViewTipo.setTypeface(robotoL);
-            fabEliminar = (ImageButton) itemView.findViewById(R.id.botonEliminar);
+            fabEliminar = itemView.findViewById(R.id.botonEliminar);
             fabEliminar.setVisibility(View.GONE);
+            fabEditar= itemView.findViewById(R.id.botonEditarItem);
+            fabEditar.setVisibility(View.GONE);
 
             FragmentActivity unaActivity = (FragmentActivity) itemView.getContext();
             FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-            FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag("fragmentManageAreas");
-            FragmentSeleccionArea fragmentSeleccionArea = (FragmentSeleccionArea) fragmentManager.findFragmentByTag("seleccion");
+            FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
+            FragmentSeleccionArea fragmentSeleccionArea = (FragmentSeleccionArea) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_SELECCION_AREAS);
 
             if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
                 fabEliminar.setVisibility(View.VISIBLE);
+                fabEditar.setVisibility(View.VISIBLE);
             }
             if (fragmentManageAreas==null&&fragmentSeleccionArea==null){
                 linearUltima.setVisibility(View.VISIBLE);
@@ -228,6 +278,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
     }
 
     public interface Eliminable {
-        public void EliminarArea(Area unArea);
+        void EliminarArea(Area unArea);
+
     }
 }

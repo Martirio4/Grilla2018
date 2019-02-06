@@ -82,7 +82,7 @@ public class Pregunta extends RealmObject {
         this.listaFotos = listaFotos;
     }
 
-    public String getIdCuestioniario() {
+    public String getIdCuestionario() {
         return idCuestionario;
     }
 

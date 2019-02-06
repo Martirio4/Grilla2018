@@ -16,6 +16,8 @@
     <dimen name="margenGrande">16dp</dimen>
     <dimen name="margenTextoViejo">72dp</dimen>
 
+    <dimen name="paddingBottomRecycler">74dp</dimen>
+
 
 
     <dimen name="margenMini">4dp</dimen>
@@ -24,4 +26,6 @@
     <dimen name="titulosMain">40sp</dimen>
     <dimen name="textoSettings">30sp</dimen>
     <dimen name="textoAreaRevisarAudit">18sp</dimen>
+    <dimen name="textoRecyclerPreAudit">30sp</dimen>
+    <dimen name="circuloRecyclerPreAudit">38sp</dimen>
 </resources>

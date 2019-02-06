@@ -23,7 +23,6 @@ import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterArea;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSettings;
-import com.google.firebase.auth.FirebaseAuth;
 
 
 import java.io.File;
@@ -72,9 +71,12 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
     @Override
     public void EliminarArea(Area unArea) {
 
-       CrearDialogoBorrarArea(unArea);
+       crearDialogoBorrarArea(unArea);
 
     }
+
+
+
 
 
     //este metodo anda bien?
@@ -140,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         }
     }
     
-    public void CrearDialogoBorrarArea(final Area unArea){
+    public void crearDialogoBorrarArea(final Area unArea){
         new MaterialDialog.Builder(this)
                 .title(getResources().getString(R.string.deleteTituloDialog))
                 .contentColor(ContextCompat.getColor(this, R.color.primary_text))

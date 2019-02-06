@@ -122,7 +122,7 @@ public class FragmentManageAreas extends Fragment {
                 .findAll();
         listaAreas=new RealmList<>();
         listaAreas.addAll(result2);
-        recyclerAreas= (RecyclerView)view.findViewById(R.id.recyclerArea);
+        recyclerAreas= view.findViewById(R.id.recyclerArea);
         adapterArea= new AdapterArea();
         adapterArea.setContext(getContext());
         layoutManager= new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);

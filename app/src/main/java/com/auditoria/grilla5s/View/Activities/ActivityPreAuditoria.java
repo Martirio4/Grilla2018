@@ -24,7 +24,6 @@ import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerEses;
-import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
@@ -315,7 +314,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     public void auditarPregunta(Pregunta preguntaClickeada) {
         Intent intent=new Intent(this, ActivityAuditoria.class);
         Bundle bundle=new Bundle();
-        bundle.putString(ActivityAuditoria.IDCUESTIONARIO,preguntaClickeada.getIdCuestioniario());
+        bundle.putString(ActivityAuditoria.IDCUESTIONARIO,preguntaClickeada.getIdCuestionario());
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
         bundle.putString(ActivityAuditoria.IDESE,preguntaClickeada.getIdEse() );
         bundle.putString(ActivityAuditoria.IDITEM, null);

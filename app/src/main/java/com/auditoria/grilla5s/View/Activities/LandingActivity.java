@@ -66,9 +66,11 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         boolean firstRun = config.getBoolean("firstRun", false);
         if (!firstRun){
             ControllerDatos controllerDatos=new ControllerDatos(this);
+            controllerDatos.crearCuestionariosDefault(getString(R.string.areaGeneral),true);
             controllerDatos.crearCuestionariosDefault(getString(R.string.areaIndustrial));
             controllerDatos.crearCuestionariosDefault(getString(R.string.areaOficina));
             controllerDatos.crearCuestionariosDefault(getString(R.string.areaExterna));
+
             SharedPreferences.Editor editor = config.edit();
             editor.putBoolean("firstRun", true);
             editor.commit();
@@ -80,7 +82,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         FragmentLanding fragmentLanding=new FragmentLanding();
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedor_landing_completo,fragmentLanding,"landing");
+        fragmentTransaction.replace(R.id.contenedor_landing_completo,fragmentLanding,FuncionesPublicas.FRAGMENT_LANDING);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -171,7 +173,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
     @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = this.getSupportFragmentManager();
-        FragmentSeleccionArea seleccionAreas = (FragmentSeleccionArea) fragmentManager.findFragmentByTag("seleccion");
+        FragmentSeleccionArea seleccionAreas = (FragmentSeleccionArea) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_SELECCION_AREAS);
 
 
         if (seleccionAreas != null && seleccionAreas.isVisible()) {
@@ -204,7 +206,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         int id = item.getItemId();
 
         FragmentManager fragmentManager1 = this.getSupportFragmentManager();
-        FragmentSeleccionArea fragmentSeleccionAerea = (FragmentSeleccionArea) fragmentManager1.findFragmentByTag("seleccion");
+        FragmentSeleccionArea fragmentSeleccionAerea = (FragmentSeleccionArea) fragmentManager1.findFragmentByTag(FuncionesPublicas.FRAGMENT_SELECCION_AREAS);
 
         if (fragmentSeleccionAerea != null && fragmentSeleccionAerea.isVisible()) {
 
@@ -223,7 +225,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         FragmentSeleccionArea fragmentSeleccionAerea = new FragmentSeleccionArea();
         FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedor_landing_completo,fragmentSeleccionAerea,"seleccion");
+        fragmentTransaction.replace(R.id.contenedor_landing_completo,fragmentSeleccionAerea,FuncionesPublicas.FRAGMENT_SELECCION_AREAS);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

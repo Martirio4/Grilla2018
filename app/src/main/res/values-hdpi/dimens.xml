@@ -21,5 +21,6 @@
     <dimen name="titulosMain">30sp</dimen>
     <dimen name="textoSettings">20sp</dimen>
     <dimen name="textoAreaRevisarAudit">18sp</dimen>
+    <dimen name="textoRecyclerPreAudit">30sp</dimen>
 
 </resources>

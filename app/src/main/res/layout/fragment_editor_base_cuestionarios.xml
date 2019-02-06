@@ -26,6 +26,8 @@
 
 
         <android.support.v7.widget.RecyclerView
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/paddingBottomRecycler"
             android:id="@+id/recyclerCuestionarios"
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/margenChico"

@@ -684,5 +684,10 @@
     <string name="preguntaSeElimina">La pregunta será eliminada. Desea Continuar?</string>
     <string name="eliminar">Eliminar</string>
     <string name="laPreguntaNoSeBorro">La pregunta no fue borrada. Reintente.</string>
+    <string name="areaGeneral">General</string>
+    <string name="preguntaFueModificada">Pregunta modificada con éxito</string>
+    <string name="itemFueModificada">El Titulo fue modificado con éxito.</string>
+    <string name="editarArea">Editar área</string>
+    <string name="areaFueModificada">El area fue modificada con éxito.</string>
 
 </resources>

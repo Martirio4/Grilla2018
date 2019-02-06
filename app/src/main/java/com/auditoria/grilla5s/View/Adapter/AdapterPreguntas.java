@@ -82,7 +82,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_pre_auditoria, parent, false);
+        View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_pre_auditoria_para_estructura_simple, parent, false);
         PreguntaViewHolder ItemsViewHolder = new PreguntaViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
 
@@ -115,6 +115,50 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
                         .show();
             }
 
+        });
+
+        itemViewHolder.botonEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                        //.title(view.getResources().getString(R.string.EditarItem))
+                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        //.content(view.getResources().getString(R.string.favorEditeItem))
+                        //.inputType(InputType.TYPE_CLASS_TEXT)
+                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, final CharSequence input) {
+
+
+                            }
+                        })*/
+                        .customView(R.layout.dialogo_editar,false)
+                        .build();
+
+                View laView=mDialog.getCustomView();
+                final EditText content= laView.findViewById(R.id.editTextoItem);
+                content.setText(unPregunta.getTextoPregunta());
+
+                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
+                tituloDialogo.setText(getContext().getString(R.string.tituloDialogoModificarItem));
+                tituloDialogo.setFocusableInTouchMode(false);
+
+                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
+                botonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
+                            FuncionesPublicas.cambiarTextoPregunta(unPregunta,content.getText().toString(),context);
+                        }
+                        AdapterPreguntas.this.notifyDataSetChanged();
+                        mDialog.hide();
+                    }
+                });
+                mDialog.show();
+            }
         });
 
 
@@ -157,7 +201,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
     private static class PreguntaViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewNumero;
         private TextView textViewDescripcion;
-        private TextView textViewFaltantes;
+
         private ImageButton botonEliminar;
         private ImageButton botonEditar;
 
@@ -168,7 +212,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
 
             textViewNumero=  itemView.findViewById(R.id.tv_numero_item);
             textViewDescripcion=  itemView.findViewById(R.id.tv_descripcion_item);
-            textViewFaltantes=itemView.findViewById(R.id.tv_preguntasFaltantes);
+
             botonEliminar = itemView.findViewById(R.id.botonEliminarItem);
             botonEditar=itemView.findViewById(R.id.botonEditarItem);
 
@@ -177,7 +221,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
             Typeface robotoR = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Regular.ttf");
             textViewNumero.setTypeface(robotoR);
             textViewDescripcion.setTypeface(robotoL);
-            textViewFaltantes.setTypeface(robotoL);
+
         }
 
         void cargarPregunta(Pregunta unPregunta, Integer ordenCarga) {

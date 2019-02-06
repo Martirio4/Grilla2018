@@ -154,7 +154,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
                     public void onClick(View view) {
 
                         if (content.getText()!=null && !content.getText().toString().isEmpty()) {
-                            FuncionesPublicas.cambiarTextoItem(unItem,content.getText().toString());
+                            FuncionesPublicas.cambiarTextoItem(unItem,content.getText().toString(),context);
                         }
                         AdapterItems.this.notifyDataSetChanged();
                         mDialog.hide();
