@@ -174,11 +174,11 @@ public class ControllerDatos {
 
     public List<String> traerEses(){
         List<String>lista =new ArrayList<>();
-        lista.add("1S Seiri");
-        lista.add("2S Seiton");
-        lista.add("3S Seiso");
-        lista.add("4S Seiketsu");
-        lista.add("5S Shitsuke");
+        lista.add(FuncionesPublicas.PRIMERA_ESE);
+        lista.add(FuncionesPublicas.SEGUNDA_ESE);
+        lista.add(FuncionesPublicas.TERCERA_ESE);
+        lista.add(FuncionesPublicas.CUARTA_ESE);
+        lista.add(FuncionesPublicas.QUINTA_ESE);
         return lista;
     }
 
@@ -198,15 +198,7 @@ public class ControllerDatos {
         lista.add("5");
         return lista;
     }
-    public List<String> traerTitulosVerAudit(){
-        List<String>lista =new ArrayList<>();
-        lista.add("1S Seiri");
-        lista.add("2S Seiton");
-        lista.add("3S Seiso");
-        lista.add("4S Seiketsu");
-        lista.add("5S Shitsuke");
-        return lista;
-    }
+
 
 
     public void crearCuestionariosDefault(final String nombreArea,final Boolean esEstructuraSimple) {

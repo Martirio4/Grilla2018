@@ -689,5 +689,6 @@
     <string name="itemFueModificada">El Titulo fue modificado con éxito.</string>
     <string name="editarArea">Editar área</string>
     <string name="areaFueModificada">El area fue modificada con éxito.</string>
+    <string name="criterioModificado">El criterio fue modificado con éxito.</string>
 
 </resources>

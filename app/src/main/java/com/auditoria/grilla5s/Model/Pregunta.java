@@ -17,6 +17,7 @@ public class Pregunta extends RealmObject {
     private String idEse;
     private String idCuestionario;
     private RealmList<Foto> listaFotos;
+    private RealmList<Criterio>listaCriterios;
 
     public Pregunta() {
     }

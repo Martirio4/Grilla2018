@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.auditoria.grilla5s.Model.Pregunta;
+import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentVerPregunta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +31,28 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
         listaFragments = new ArrayList<>();
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        for (Pregunta unaPreg:listaPregunta
-             ) {
-           listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg, elOrigen, elIdEse));
+        switch (elOrigen){
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+
+                for (Pregunta unaPreg:listaPregunta
+                        ) {
+                    listaFragments.add(FragmentVerPregunta.CrearfragmentVerPregunta(unaPreg));
+                }
+
+                break;
+            case FuncionesPublicas.NUEVA_AUDITORIA:
+
+                for (Pregunta unaPreg:listaPregunta
+                        ) {
+                    listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg, elOrigen, elIdEse));
+                }
+
+                break;
+
         }
+
+
+
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
         notifyDataSetChanged();

@@ -109,53 +109,50 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
         listaPreguntasOriginales.addAll(resultPregunta);
 
-        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
-            cargarFragmentVerPreguntas();
+
+        //      SETEAR EL VIEWPAGER
+        //GENERO LISTA DE TITULOS ORDINALES
+        List<String> laListaDeTitulos=new ArrayList<>();
+        for (Integer i=0;i<listaPreguntasOriginales.size();i++){
+            Integer aux=i+1;
+            laListaDeTitulos.add(aux.toString()+"°");
         }
-        else{
-            //      SETEAR EL VIEWPAGER
-            //GENERO LISTA DE TITULOS ORDINALES
-            List<String> laListaDeTitulos=new ArrayList<>();
-            for (Integer i=0;i<listaPreguntasOriginales.size();i++){
-                Integer aux=i+1;
-                laListaDeTitulos.add(aux.toString()+"°");
+        pager=findViewById(R.id.viewPagerAuditoria);
+        AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
+        pager.setAdapter(adapterPager);
+        adapterPager.setUnaListaTitulos(laListaDeTitulos);
+        adapterPager.notifyDataSetChanged();
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(pager);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pager.setCurrentItem(tab.getPosition(), true);
             }
-            pager=findViewById(R.id.viewPagerAuditoria);
-            AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
-            pager.setAdapter(adapterPager);
-            adapterPager.setUnaListaTitulos(laListaDeTitulos);
-            adapterPager.notifyDataSetChanged();
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                pager.setCurrentItem(tab.getPosition(), true);
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                pager.setCurrentItem(tab.getPosition(), true);
+            }
+        });
 
-            TabLayout tabLayout = findViewById(R.id.tabLayout);
-            tabLayout.setupWithViewPager(pager);
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    pager.setCurrentItem(tab.getPosition(), true);
-                }
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-                    pager.setCurrentItem(tab.getPosition(), true);
-                }
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-                    pager.setCurrentItem(tab.getPosition(), true);
-                }
-            });
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
-            pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                }
-                @Override
-                public void onPageSelected(int position) {
-                }
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                }
-            });
-        }
 
     }
 
@@ -186,6 +183,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     private RealmResults<Pregunta> cargarPreguntasCuestionario() {
         Realm realm= Realm.getDefaultInstance();
+
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
                 return realm.where(Pregunta.class)
@@ -209,21 +207,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         }
     }
 
-    private void cargarFragmentVerPreguntas() {
-        Bundle bundle = new Bundle();
-        bundle.putString(FragmentVerPregunta.IDCUESTIONARIO,idCuestionario);
-        bundle.putString(FragmentVerPregunta.IDITEM,idItem);
-        bundle.putString(FragmentVerPregunta.IDESE,idese);
-        bundle.putString(FragmentVerPregunta.ORIGEN,origen);
 
-        FragmentVerPregunta fragmentVerPregunta= new FragmentVerPregunta();
-        fragmentVerPregunta.setArguments(bundle);
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedorViewPager,fragmentVerPregunta,FuncionesPublicas.FRAGMENT_VER_PREGUNTAS);
-        fragmentTransaction.commit();
-
-    }
 
 
     @Override

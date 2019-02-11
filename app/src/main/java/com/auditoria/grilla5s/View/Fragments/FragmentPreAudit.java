@@ -58,12 +58,12 @@ public class FragmentPreAudit extends Fragment {
     private String estructuraCuestionario;
 
     public interface Auditable {
-        void auditarItem(Item unItem);
+        void auditar(Item unItem);
+        void auditar(Pregunta unaPregunta);
         void cerrarAuditoria();
         void actualizarPuntaje(String idAudit);
         void agregarNuevoItem(String laEse, String idCuestionario, AdapterItems elAdapter);
         void agregarNuevaPregunta(String laEse, String idCuestionario, AdapterPreguntas adapterPreguntas);
-        void auditarPregunta(Pregunta preguntaClickeada);
     }
 
 
@@ -157,6 +157,13 @@ public class FragmentPreAudit extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         RealmList<Item> listaItemsOriginales;
         listaItemsOriginales = new RealmList<>();
+
+        adapterItems = new AdapterItems();
+        adapterItems.setContext(getContext());
+        adapterItems.setOrigen(origen);
+        recyclerPreAudit.setAdapter(adapterItems);
+
+
         switch (origen){
             case FuncionesPublicas.EDITAR_CUESTIONARIO:
                 RealmResults<Item> listaItems1 = realm.where(Item.class)
@@ -164,45 +171,41 @@ public class FragmentPreAudit extends Fragment {
                         .equalTo("idEse", laEse)
                         .findAll();
                 listaItemsOriginales.addAll(listaItems1);
-            break;
+                break;
             default:
                 RealmResults<Item> listaItems2 = realm.where(Item.class)
                         .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
                         .equalTo("idEse", laEse)
                         .findAll();
                 listaItemsOriginales.addAll(listaItems2);
-            break;
+
+                break;
         }
-
-
-        //si el item pertenece a la ese, loo agrego a la lista
-
-
-        adapterItems = new AdapterItems();
-        adapterItems.setContext(getContext());
-        adapterItems.setListaItemsOriginales(listaItemsOriginales);
-        adapterItems.setOrigen(origen);
-        recyclerPreAudit.setAdapter(adapterItems);
-
         View.OnClickListener listenerItem;
-
         listenerItem = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
                 RealmList<Item> listaAuditorias = adapterItems.getListaItemsOriginales();
                 Item itemClickeado = listaAuditorias.get(posicion);
-                auditable.auditarItem(itemClickeado);
+                auditable.auditar(itemClickeado);
             }
         };
 
         adapterItems.setListener(listenerItem);
-
+        adapterItems.setListaItemsOriginales(listaItemsOriginales);
         adapterItems.notifyDataSetChanged();
     }
     private void popularRecyclerPreguntas() {
         Realm realm = Realm.getDefaultInstance();
         RealmList<Pregunta> listaPreguntasOriginales = new RealmList<>();
+
+         //si el item pertenece a la ese, loo agrego a la lista
+        adapterPreguntas = new AdapterPreguntas();
+        adapterPreguntas.setContext(getContext());
+
+        adapterPreguntas.setOrigen(origen);
+        recyclerPreAudit.setAdapter(adapterPreguntas);
 
         switch (origen){
             case FuncionesPublicas.EDITAR_CUESTIONARIO:
@@ -221,13 +224,6 @@ public class FragmentPreAudit extends Fragment {
             break;
         }
 
-        //si el item pertenece a la ese, loo agrego a la lista
-
-        adapterPreguntas = new AdapterPreguntas();
-        adapterPreguntas.setContext(getContext());
-        adapterPreguntas.setListaPreguntasOriginales(listaPreguntasOriginales);
-        adapterPreguntas.setOrigen(origen);
-        recyclerPreAudit.setAdapter(adapterPreguntas);
 
         View.OnClickListener listenerPregunta;
 
@@ -237,12 +233,11 @@ public class FragmentPreAudit extends Fragment {
                 Integer posicion = recyclerPreAudit.getChildAdapterPosition(v);
                 RealmList<Pregunta> listaPreguntas = adapterPreguntas.getListaPreguntasOriginales();
                 Pregunta preguntaClickeada = listaPreguntas.get(posicion);
-                auditable.auditarPregunta(preguntaClickeada);
+                auditable.auditar(preguntaClickeada);
             }
         };
-
         adapterPreguntas.setListener(listenerPregunta);
-
+        adapterPreguntas.setListaPreguntasOriginales(listaPreguntasOriginales);
         adapterPreguntas.notifyDataSetChanged();
     }
 

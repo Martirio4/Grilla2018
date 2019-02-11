@@ -57,7 +57,7 @@ public class ActivityVerAuditorias extends AppCompatActivity {
         controllerDatos=new ControllerDatos(this);
         adapterPager=new AdapterPagerVerAudits(getSupportFragmentManager());
         adapterPager.setListaEses(controllerDatos.traerListaVerAudit());
-        adapterPager.setUnaListaTitulos(controllerDatos.traerTitulosVerAudit());
+        adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
         adapterPager.notifyDataSetChanged();
 

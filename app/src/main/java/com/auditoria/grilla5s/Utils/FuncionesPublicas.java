@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Criterio;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.Model.Ese;
 import com.auditoria.grilla5s.Model.Foto;
@@ -50,6 +51,12 @@ import pl.tajchert.nammu.PermissionCallback;
  */
 
 public class FuncionesPublicas {
+
+    public static final String PRIMERA_ESE ="1S SEIRI";
+    public static final String  SEGUNDA_ESE="2S SEITON";
+    public static final String  TERCERA_ESE="3S SEISO";
+    public static final String  CUARTA_ESE="4S SEIKETSU";
+    public static final String  QUINTA_ESE="5S SHITSUKE";
 
     public static final String REVISAR="REVISAR_AUDITORIA";
     public static final String NUEVA_AUDITORIA="NUEVA_AUDITORIA";
@@ -519,6 +526,26 @@ public class FuncionesPublicas {
                 }
             }
         });
+    }
+
+    public static void cambiarTextoCriterio(final Criterio unCriterio, final String s, final Context context) {
+        Realm realm =Realm.getDefaultInstance();
+        realm   .executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                Criterio mCriterio= realm   .where(Criterio.class)
+                        .equalTo("idPregunta", unCriterio.getIdCuestionario())
+                        .equalTo("idCriterio", unCriterio.getIdCuestionario())
+                        .findFirst();
+                if (mCriterio!=null){
+                    mCriterio.setTextoCriterio(s);
+                    Toast.makeText(context, context.getString(R.string.criterioModificado), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
 

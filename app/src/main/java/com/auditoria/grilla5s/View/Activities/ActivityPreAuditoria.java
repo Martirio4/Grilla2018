@@ -172,20 +172,6 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         return idAudit;
     }
 
-    @Override
-    public void auditarItem(Item unItem) {
-        Intent intent=new Intent(this, ActivityAuditoria.class);
-        Bundle bundle=new Bundle();
-        bundle.putString(ActivityAuditoria.IDCUESTIONARIO,unItem.getIdCuestionario());
-        bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
-        bundle.putString(ActivityAuditoria.IDESE,unItem.getIdEse() );
-        bundle.putString(ActivityAuditoria.IDITEM, unItem.getIdItem());
-        bundle.putString(ActivityAuditoria.ORIGEN, origen);
-        bundle.putString(ActivityAuditoria.TIPOESTRUCTURA, FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA);
-        intent.putExtras(bundle);
-        startActivity(intent);
-
-    }
 
 
 
@@ -310,9 +296,28 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                 }).show();
     }
 
+
+
+
+
+    //    AUDITAR ITEM Y AUDITAR PREGUNTA------
     @Override
-    public void auditarPregunta(Pregunta preguntaClickeada) {
-        Intent intent=new Intent(this, ActivityAuditoria.class);
+    public void auditar(Item unItem) {
+        Intent intent=new Intent(ActivityPreAuditoria.this, ActivityAuditoria.class);
+        Bundle bundle=new Bundle();
+        bundle.putString(ActivityAuditoria.IDCUESTIONARIO,unItem.getIdCuestionario());
+        bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
+        bundle.putString(ActivityAuditoria.IDESE,unItem.getIdEse() );
+        bundle.putString(ActivityAuditoria.IDITEM, unItem.getIdItem());
+        bundle.putString(ActivityAuditoria.ORIGEN, origen);
+        bundle.putString(ActivityAuditoria.TIPOESTRUCTURA, FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+    }
+    @Override
+    public void auditar(Pregunta preguntaClickeada) {
+        Intent intent=new Intent(ActivityPreAuditoria.this, ActivityAuditoria.class);
         Bundle bundle=new Bundle();
         bundle.putString(ActivityAuditoria.IDCUESTIONARIO,preguntaClickeada.getIdCuestionario());
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
@@ -324,4 +329,5 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         startActivity(intent);
 
     }
+//    ------AUDITAR ITEM Y AUDITAR PREGUNTA//
 }
