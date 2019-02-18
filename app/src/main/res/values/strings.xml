@@ -660,6 +660,7 @@
     <string name="itemSeEliminara">El item seleccionado y todas las preguntas relacionadas serán eliminados.</string>
     <string name="EditarItem">Editar Item</string>
     <string name="favorEditeItem">Edite el texto.</string>
+    <string name="favorEditePregunta">Edite el texto de la pregunta.</string>
     <string name="nuevoItem">Nuevo Item</string>
     <string name="agregueTituloItem">Escriba el titulo para el item.</string>
     <string name="OK">OK</string>
@@ -690,5 +691,14 @@
     <string name="editarArea">Editar área</string>
     <string name="areaFueModificada">El area fue modificada con éxito.</string>
     <string name="criterioModificado">El criterio fue modificado con éxito.</string>
+    <string name="criterioPreg1">Malo</string>
+    <string name="criterioPreg2">Regular</string>
+    <string name="criterioPreg3">Bueno</string>
+    <string name="criterioPreg4">Excelente</string>
+    <string name="textoPregunta">Texto de la pregunta:</string>
+    <string name="editarCriterios">Editar Criterios</string>
+    <string name="EditarPregunta">Editar Pregunta</string>
+    <string name="EditarCriterio">Editar Criterio</string>
+    <string name="favorEditeCriterio">Edite el texto del criterio.</string>
 
 </resources>

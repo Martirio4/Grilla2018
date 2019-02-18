@@ -7,12 +7,14 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -91,57 +93,41 @@ public class AdapterCriterios extends RecyclerView.Adapter implements View.OnCli
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final Criterio unCriterio = listaCriteriosOriginales.get(position);
-        CriterioViewHolder itemViewHolder = (CriterioViewHolder) holder;
-        itemViewHolder.cargarCriterio(unCriterio,position);
+        final CriterioViewHolder itemViewHolder = (CriterioViewHolder) holder;
+        itemViewHolder.cargarCriterio(unCriterio);
 
 
         itemViewHolder.botonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                        //.title(view.getResources().getString(R.string.EditarItem))
-                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
-                        //.content(view.getResources().getString(R.string.favorEditeItem))
-                        //.inputType(InputType.TYPE_CLASS_TEXT)
-                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, final CharSequence input) {
-
-
-                            }
-                        })*/
-                        .customView(R.layout.dialogo_editar,false)
-                        .build();
-
-                View laView=mDialog.getCustomView();
-                final EditText content= laView.findViewById(R.id.editTextoItem);
                 assert unCriterio != null;
-                content.setText(unCriterio.getTextoCriterio());
+                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                        .title(view.getResources().getString(R.string.EditarCriterio))
+                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        .content(view.getResources().getString(R.string.favorEditeCriterio))
+                        .input(view.getResources().getString(R.string.comment), unCriterio.getTextoCriterio(), new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
 
-                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
-                tituloDialogo.setText(getContext().getString(R.string.tituloDialogoModificarItem));
-                tituloDialogo.setFocusableInTouchMode(false);
-
-                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
-                botonOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
-                            FuncionesPublicas.cambiarTextoCriterio(unCriterio,content.getText().toString(),context);
-                        }
-                        AdapterCriterios.this.notifyDataSetChanged();
-                        mDialog.hide();
-                    }
-                });
+                                if (input!=null && !input.toString().isEmpty()) {
+                                    FuncionesPublicas.cambiarTextoCriterio(unCriterio,input.toString(),context);
+                                    itemViewHolder.textViewDescripcion.setText(input.toString());
+                                }
+                                AdapterCriterios.this.notifyDataSetChanged();
+                            }
+                        })
+                        .build();
+                EditText elEdit = mDialog.getInputEditText();
+                if (elEdit!=null) {
+                    elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_FLAG_MULTI_LINE |
+                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                }
                 mDialog.show();
             }
         });
-
-
-
 
     }
 
@@ -181,6 +167,7 @@ public class AdapterCriterios extends RecyclerView.Adapter implements View.OnCli
         private TextView textViewNumero;
         private TextView textViewDescripcion;
         private ImageButton botonEditar;
+        private ScrollView scroll;
 
 
 
@@ -191,17 +178,29 @@ public class AdapterCriterios extends RecyclerView.Adapter implements View.OnCli
             textViewDescripcion=  itemView.findViewById(R.id.tv_descripcion_item);
             botonEditar=itemView.findViewById(R.id.botonEditarItem);
 
-
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             Typeface robotoR = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Regular.ttf");
             textViewNumero.setTypeface(robotoR);
             textViewDescripcion.setTypeface(robotoL);
-
         }
 
-        void cargarCriterio(Criterio unCriterio, Integer ordenCarga) {
-            textViewNumero.setText(unCriterio.getPuntajeCriterio());
+        void cargarCriterio(Criterio unCriterio) {
+            textViewNumero.setText(String.valueOf(unCriterio.getPuntajeCriterio()));
             textViewDescripcion.setText(unCriterio.getTextoCriterio());
+            switch (unCriterio.getPuntajeCriterio()){
+                case 1:
+                    textViewNumero.setBackground(textViewDescripcion.getContext().getResources().getDrawable(R.drawable.boton_malo));
+                    break;
+                case 2:
+                    textViewNumero.setBackground(textViewDescripcion.getContext().getResources().getDrawable(R.drawable.boton_regular));
+                    break;
+                case 3:
+                    textViewNumero.setBackground(textViewDescripcion.getContext().getResources().getDrawable(R.drawable.boton_bueno));
+                    break;
+                case 4:
+                    textViewNumero.setBackground(textViewDescripcion.getContext().getResources().getDrawable(R.drawable.boton_excelente));
+                    break;
+            }
         }
 
 

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,42 +125,27 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                        //.title(view.getResources().getString(R.string.EditarItem))
-                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
-                        //.content(view.getResources().getString(R.string.favorEditeItem))
-                        //.inputType(InputType.TYPE_CLASS_TEXT)
-                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
+                        .title(view.getResources().getString(R.string.EditarItem))
+                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        .content(view.getResources().getString(R.string.favorEditeItem))
+                        .input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {
-
-
+                                if (input!=null && !input.toString().isEmpty()) {
+                                    FuncionesPublicas.cambiarTextoItem(unItem,input.toString(),context);
+                                }
+                                AdapterItems.this.notifyDataSetChanged();
                             }
-                        })*/
-                        .customView(R.layout.dialogo_editar,false)
+                        })
                         .build();
-
-                View laView=mDialog.getCustomView();
-                final EditText content= laView.findViewById(R.id.editTextoItem);
-                content.setText(unItem.getTituloItem());
-
-                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
-                tituloDialogo.setText(getContext().getString(R.string.tituloDialogoModificarItem));
-                tituloDialogo.setFocusableInTouchMode(false);
-
-                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
-                botonOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
-                            FuncionesPublicas.cambiarTextoItem(unItem,content.getText().toString(),context);
-                        }
-                        AdapterItems.this.notifyDataSetChanged();
-                        mDialog.hide();
-                    }
-                });
+                EditText elEdit = mDialog.getInputEditText();
+                if (elEdit!=null) {
+                    elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_FLAG_MULTI_LINE |
+                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                }
                 mDialog.show();
             }
         });

@@ -9,12 +9,21 @@ import io.realm.RealmObject;
 public class Criterio extends RealmObject {
 
     private String idCriterio;
+    private String idAudit;
     private String idEse;
     private String idItem;
     private String idPregunta;
     private String idCuestionario;
     private String textoCriterio;
     private Integer puntajeCriterio;
+
+    public String getIdAudit() {
+        return idAudit;
+    }
+
+    public void setIdAudit(String idAudit) {
+        this.idAudit = idAudit;
+    }
 
     public String getIdCriterio() {
         return idCriterio;

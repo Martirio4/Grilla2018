@@ -7,10 +7,12 @@
     tools:context="com.auditoria.grilla5s.View.Activities.ActivityAuditoria">
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/blancoNomad"
@@ -37,6 +39,13 @@
                 android:gravity="center"
                 android:text="@string/enunciado"
                 android:textColor="@color/secondary_text" />
+            <TextView
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:text="@string/textoPregunta"
+                android:textAlignment="textStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,23 +53,34 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:textSize="@dimen/textoAreaRevisarAudit"
+                    android:padding="@dimen/margenChico"
+                    android:background="@drawable/boton_pre_audit"
                     android:id="@+id/textoPregunta"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/altoRecyclerFotosViejas"
                     android:layout_marginEnd="@dimen/margenChico"
                     android:layout_marginStart="@dimen/margenChico"
                     android:layout_marginTop="@dimen/margenChico"
                     android:gravity="center"
                     android:text="@string/enunciado"
                     android:textColor="@color/primary_text"
-                    android:textSize="20sp" />
+                     />
             </LinearLayout>
 
+            <TextView
+                android:paddingStart="@dimen/margenChico"
+                android:paddingEnd="@dimen/margenChico"
+                android:text="@string/editarCriterios"
+                android:layout_marginTop="@dimen/margenGrande"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="@dimen/margenGrande"
                 android:id="@+id/RecyclerVerPreguntas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
             </android.support.v7.widget.RecyclerView>
 
 
@@ -76,7 +96,6 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
 
 
         <com.github.clans.fab.FloatingActionButton

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,43 +121,31 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         itemViewHolder.botonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                assert unPregunta != null;
                 final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                        //.title(view.getResources().getString(R.string.EditarItem))
-                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
-                        //.content(view.getResources().getString(R.string.favorEditeItem))
-                        //.inputType(InputType.TYPE_CLASS_TEXT)
-                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
+                        .title(view.getResources().getString(R.string.EditarPregunta))
+                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        .content(view.getResources().getString(R.string.favorEditePregunta))
+                        .input(view.getResources().getString(R.string.textoPregunta),unPregunta.getTextoPregunta(),new MaterialDialog.InputCallback() {
                             @Override
-                            public void onInput(MaterialDialog dialog, final CharSequence input) {
+                            public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
+                                if (input!=null && !input.toString().isEmpty()) {
 
-
-                            }
-                        })*/
-                        .customView(R.layout.dialogo_editar,false)
-                        .build();
-
-                View laView=mDialog.getCustomView();
-                final EditText content= laView.findViewById(R.id.editTextoItem);
-                content.setText(unPregunta.getTextoPregunta());
-
-                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
-                tituloDialogo.setText(getContext().getString(R.string.tituloDialogoModificarItem));
-                tituloDialogo.setFocusableInTouchMode(false);
-
-                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
-                botonOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
-                            FuncionesPublicas.cambiarTextoPregunta(unPregunta,content.getText().toString(),context);
+                            FuncionesPublicas.cambiarTextoPregunta(unPregunta,input.toString(),context);
                         }
                         AdapterPreguntas.this.notifyDataSetChanged();
-                        mDialog.hide();
-                    }
-                });
+                            }
+                        })
+
+                        .build();
+                EditText elEdit = mDialog.getInputEditText();
+                if (elEdit!=null) {
+                    elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_FLAG_MULTI_LINE |
+                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                }
                 mDialog.show();
             }
         });

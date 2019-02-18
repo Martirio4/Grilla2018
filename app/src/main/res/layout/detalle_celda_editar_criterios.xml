@@ -9,7 +9,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/altoTarjeta3"
+        android:layout_height="@dimen/altoCriterios"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/margenMini"
         android:layout_marginStart="@dimen/margenChico"
@@ -44,8 +44,9 @@
                     android:layout_height="match_parent" />
 
                 <LinearLayout
+                    android:layout_weight="80"
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <TextView
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dignissim metus felis, a dictum odio gravida in. In quam arcu, placerat ut est vel, accumsan maximus sem. In hac habitasse platea dictumst. Nam id leo sapien. Nam in lorem non ipsum consectetur bibendum. Mauris sit amet risus"
@@ -58,6 +59,13 @@
                         android:layout_height="match_parent" />
 
                 </LinearLayout>
+
+                <ImageButton
+                    android:background="@android:color/transparent"
+                    android:id="@+id/botonEditarItem"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
         </LinearLayout>
 
         <FrameLayout
@@ -70,12 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:background="@android:color/transparent"
-                    android:id="@+id/botonEditarItem"
-                    android:src="@drawable/ic_edit_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+
 
 
             </LinearLayout>

@@ -19,6 +19,22 @@ public class Pregunta extends RealmObject {
     private RealmList<Foto> listaFotos;
     private RealmList<Criterio>listaCriterios;
 
+    public void setIdCuestionario(String idCuestionario) {
+        this.idCuestionario = idCuestionario;
+    }
+
+    public void addCriterio(Criterio unCriterio){
+        this.listaCriterios.add(unCriterio);
+    }
+
+    public RealmList<Criterio> getListaCriterios() {
+        return listaCriterios;
+    }
+
+    public void setListaCriterios(RealmList<Criterio> listaCriterios) {
+        this.listaCriterios = listaCriterios;
+    }
+
     public Pregunta() {
     }
 

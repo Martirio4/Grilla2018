@@ -43,6 +43,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     public static final String ORIGEN="ORIGEN";
     public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
     public static final String TIPOESTRUCTURA = "TIPOESTRUCTURA";
+    public static final String IDPREGUNTA_CLICKEADA = "IDPREGUNTA_CLICKEADA";
 
 
     public static String idAudit;
@@ -55,6 +56,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     private Toolbar toolbar;
     private String idCuestionario;
     private String tipoEstructura;
+    private String idpreguntaClickeada;
 
 
     @Override
@@ -73,6 +75,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             idese=bundle.getString(IDESE);
             idCuestionario=bundle.getString(IDCUESTIONARIO);
             tipoEstructura=bundle.getString(TIPOESTRUCTURA);
+            idpreguntaClickeada=bundle.getString(IDPREGUNTA_CLICKEADA);
         }
 //------ TOOLBAR HANDLING
         toolbar = findViewById(R.id.my_toolbar);
@@ -153,6 +156,16 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             }
         });
 
+        Integer contador=0;
+        for (Pregunta laPreg :
+                listaPreguntasOriginales) {
+            if (laPreg.getIdPregunta().equals(idpreguntaClickeada)){
+                pager.setCurrentItem(contador);
+            }
+            else{
+                contador++;
+            }
+        }
 
     }
 

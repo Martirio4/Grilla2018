@@ -7,15 +7,20 @@ import android.support.annotation.NonNull;
 
 import android.support.v4.app.Fragment;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Criterio;
 import com.auditoria.grilla5s.Model.Cuestionario;
@@ -24,6 +29,7 @@ import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterCriterios;
+import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -51,6 +57,7 @@ public class FragmentVerPregunta extends Fragment {
     private TextView criterioTitulo;
     private TextView criterioDescripcion;
     private ControllerDatos controllerDatos;
+
 
 
     private RecyclerView recyclerPreguntas;
@@ -91,8 +98,7 @@ public class FragmentVerPregunta extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         RealmList<Criterio> listaCriteriosRealm =new RealmList<>();
         switch (tipoEstructura){
-
-            case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+            case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
                 RealmResults<Criterio> losCriterios1 = realm.where(Criterio.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idEse", idEse)
@@ -100,10 +106,9 @@ public class FragmentVerPregunta extends Fragment {
                         .equalTo("idPregunta",idpregunta )
                         .findAll();
                 listaCriteriosRealm.addAll(losCriterios1);
-
                 break;
 
-            default:
+            case FuncionesPublicas.ESTRUCTURA_SIMPLE:
                 RealmResults<Criterio> losCriterios2 = realm.where(Criterio.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idEse", idEse)
@@ -112,6 +117,14 @@ public class FragmentVerPregunta extends Fragment {
                 listaCriteriosRealm.addAll(losCriterios2);
                 break;
 
+            default:
+                RealmResults<Criterio> losCriterios3 = realm.where(Criterio.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .equalTo("idEse", idEse)
+                        .equalTo("idPregunta",idpregunta )
+                        .findAll();
+                listaCriteriosRealm.addAll(losCriterios3);
+                break;
         }
 
         adapterCriterios.setListaCriteriosOriginales(listaCriteriosRealm);
@@ -124,22 +137,53 @@ public class FragmentVerPregunta extends Fragment {
 
     private void cargarTitulosFragment() {
         Realm realm= Realm.getDefaultInstance();
-        criterioTitulo.setText(controllerDatos.traerEses().get(Integer.parseInt(idEse)+1));
+        criterioTitulo.setText(controllerDatos.traerEses().get(Integer.parseInt(idEse)-1));
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
                 criterioDescripcion.setVisibility(View.GONE);
-                Pregunta mPregunta1=realm.where(Pregunta.class)
+                final Pregunta mPregunta1=realm.where(Pregunta.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idEse", idEse)
                         .equalTo("idPregunta", idpregunta)
                         .findFirst();
                 if (mPregunta1!=null){
                     textoPregunta.setText(mPregunta1.getTextoPregunta());
+                    textoPregunta.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                                    .title(view.getResources().getString(R.string.EditarPregunta))
+                                    .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                                    .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                                    .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                                    .content(view.getResources().getString(R.string.favorEditePregunta))
+                                    .input(view.getResources().getString(R.string.textoPregunta),mPregunta1.getTextoPregunta(),new MaterialDialog.InputCallback() {
+                                        @Override
+                                        public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
+                                            if (input!=null && !input.toString().isEmpty()) {
+
+                                                FuncionesPublicas.cambiarTextoPregunta(mPregunta1,input.toString(),getContext());
+                                                textoPregunta.setText(input.toString());
+                                            }
+                                            adapterCriterios.notifyDataSetChanged();
+                                        }
+                                    })
+
+                                    .build();
+                            EditText elEdit = mDialog.getInputEditText();
+                            if (elEdit!=null) {
+                                elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
+                                        InputType.TYPE_TEXT_FLAG_MULTI_LINE |
+                                        InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                            }
+                            mDialog.show();
+                        }
+                    });
                 }
                 break;
                 default:
                     criterioDescripcion.setVisibility(View.VISIBLE);
-                    Pregunta mPregunta2=realm.where(Pregunta.class)
+                    final Pregunta mPregunta2=realm.where(Pregunta.class)
                             .equalTo("idCuestionario", idCuestionario)
                             .equalTo("idEse", idEse)
                             .equalTo("idItem", idItem)
@@ -155,6 +199,37 @@ public class FragmentVerPregunta extends Fragment {
                     if (mPregunta2!=null && mItem1!=null ){
                         criterioDescripcion.setText(mItem1.getTituloItem());
                         textoPregunta.setText(mPregunta2.getTextoPregunta());
+                        textoPregunta.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
+                                        .title(view.getResources().getString(R.string.EditarPregunta))
+                                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                                        .content(view.getResources().getString(R.string.favorEditePregunta))
+                                        .input(view.getResources().getString(R.string.textoPregunta),mPregunta2.getTextoPregunta(),new MaterialDialog.InputCallback() {
+                                            @Override
+                                            public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
+                                                if (input!=null && !input.toString().isEmpty()) {
+
+                                                    FuncionesPublicas.cambiarTextoPregunta(mPregunta2,input.toString(),getContext());
+                                                    textoPregunta.setText(input.toString());
+                                                }
+                                                adapterCriterios.notifyDataSetChanged();
+                                            }
+                                        })
+
+                                        .build();
+                                EditText elEdit = mDialog.getInputEditText();
+                                if (elEdit!=null) {
+                                    elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
+                                            InputType.TYPE_TEXT_FLAG_MULTI_LINE |
+                                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                                }
+                                mDialog.show();
+                            }
+                        });
                     }
                 break;
         }

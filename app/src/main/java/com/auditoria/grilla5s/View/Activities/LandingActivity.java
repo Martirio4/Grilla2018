@@ -157,6 +157,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         bundle.putString(ActivityPreAuditoria.IDAREA, unArea.getIdArea());
         bundle.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.NUEVA_AUDITORIA);
         bundle.putString(ActivityPreAuditoria.IDAUDIT, "NULL");
+        bundle.putString(ActivityPreAuditoria.IDCUESTIONARIO, unArea.getIdCuestionario());
 
         intent.putExtras(bundle);
         startActivity(intent);

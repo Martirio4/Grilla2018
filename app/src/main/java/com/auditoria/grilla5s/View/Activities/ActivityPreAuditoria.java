@@ -320,11 +320,12 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         Intent intent=new Intent(ActivityPreAuditoria.this, ActivityAuditoria.class);
         Bundle bundle=new Bundle();
         bundle.putString(ActivityAuditoria.IDCUESTIONARIO,preguntaClickeada.getIdCuestionario());
+        bundle.putString(ActivityAuditoria.IDPREGUNTA_CLICKEADA,preguntaClickeada.getIdPregunta());
         bundle.putString(ActivityAuditoria.IDAUDITORIA, idAudit);
         bundle.putString(ActivityAuditoria.IDESE,preguntaClickeada.getIdEse() );
         bundle.putString(ActivityAuditoria.IDITEM, null);
         bundle.putString(ActivityAuditoria.ORIGEN, origen);
-        bundle  .putString(ActivityAuditoria.TIPOESTRUCTURA, FuncionesPublicas.ESTRUCTURA_SIMPLE);
+        bundle .putString(ActivityAuditoria.TIPOESTRUCTURA, FuncionesPublicas.ESTRUCTURA_SIMPLE);
         intent.putExtras(bundle);
         startActivity(intent);
 

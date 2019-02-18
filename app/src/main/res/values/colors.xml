@@ -24,6 +24,11 @@
     <color name="textoRojo">#7c2117</color>
 
 
+    <color name="malo">#fde3e3</color>
+    <color name="regular">#fdfae3</color>
+    <color name="bueno">#effde3</color>
+    <color name="excelente">#e3fde3</color>
+
     <color name="tile1">#e3f2fd</color>
     <color name="tile2">#64b5f6</color>
     <color name="tile3">#2196f3</color>

@@ -88,6 +88,7 @@ public class FuncionesPublicas {
     public static final String FRAGMENT_VER_PREGUNTAS ="FRAGMENT_VER_PREGUNTAS";
     public static final String FRAGMENT_SELECCION_AREAS ="FRAGMENT_SELECCION_AREAS" ;
     public static final String FRAGMENT_LANDING = "FRAGMENT_LANDING";
+    public static final String ID_AUDITORIA = "AUDIT_";
 
 
     public static boolean isExternalStorageWritable() {
@@ -535,8 +536,8 @@ public class FuncionesPublicas {
             public void execute(Realm realm) {
 
                 Criterio mCriterio= realm   .where(Criterio.class)
-                        .equalTo("idPregunta", unCriterio.getIdCuestionario())
-                        .equalTo("idCriterio", unCriterio.getIdCuestionario())
+                        .equalTo("idPregunta", unCriterio.getIdPregunta())
+                        .equalTo("idCriterio", unCriterio.getIdCriterio())
                         .findFirst();
                 if (mCriterio!=null){
                     mCriterio.setTextoCriterio(s);
@@ -606,7 +607,7 @@ public class FuncionesPublicas {
                         .equalTo("idAuditoria", idAudit)
                         .findFirst();
                 Pregunta mPreguntA= realm.where(Pregunta.class)
-                        .equalTo("idAuditoria", idAudit)
+                        .equalTo("idAudit", idAudit)
                         .findFirst();
                 //si una pregunta de esta auditoria no tiene idItem, es porque la estructura es simple
                 if (mPreguntA!=null){

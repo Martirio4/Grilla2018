@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.auditoria.grilla5s.Model.Auditoria;
+import com.auditoria.grilla5s.Model.Criterio;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.Model.Ese;
 import com.auditoria.grilla5s.Model.Item;
@@ -37,34 +38,15 @@ public class ControllerDatos {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
-
-                Auditoria auditoriaModelo =new Auditoria();
                 Cuestionario elCuestionario = realm.where(Cuestionario.class)
                         .equalTo("idCuestionario",idCuestionario)
                         .findFirst();
+
                 if (elCuestionario!=null) {
-                    RealmList<Ese>listaEse = new RealmList<>();
-                    
                     switch (elCuestionario.getTipoCuestionario()){
                         case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
-//                            TRAIGO UN MODELO DE LA ESTRUCTURA EN FORMA DE AUDIT
-                            for (Ese unaEses :
-                                    elCuestionario.getListaEses()) {
-                                RealmList<Item> listaItem=new RealmList<>();
-                                for (Item unItem :
-                                        unaEses.getListaItem()) {
-                                    RealmList<Pregunta>listaPregunta=new RealmList<>();
-                                    listaPregunta.addAll(unItem.getListaPreguntas());
-                                    unItem.addlistaPreguntas(listaPregunta);
-                                    listaItem.add(unItem);
-                                }
-                                unaEses.setListaItem(listaItem);
-                                listaEse.add(unaEses);
-                            }
-                            auditoriaModelo.setListaEses(listaEse);
-
 //                            CREO EL OBJETO AUDITORIA EN LA REALM Y LE SETEO LOS VALORES DEFAULT USANDO EL MODELO CREADO
-                            Auditoria auditoriaNuevaEstructurada = realm.createObject(Auditoria.class,"Audit_" + UUID.randomUUID());
+                            Auditoria auditoriaNuevaEstructurada = realm.createObject(Auditoria.class,FuncionesPublicas.ID_AUDITORIA + UUID.randomUUID());
                             //nuevaAuditoria.setIdAuditoria("Audit_" + UUID.randomUUID());
                             idAuditInstanciada=auditoriaNuevaEstructurada.getIdAuditoria();
                             auditoriaNuevaEstructurada.setFechaAuditoria(determinarFecha());
@@ -72,20 +54,21 @@ public class ControllerDatos {
                             auditoriaNuevaEstructurada.setAuditEstaCerrada(false);
                             auditoriaNuevaEstructurada.setPuntajeFinal(0.0);
 
-                            for (Ese eseModelo:auditoriaModelo.getListaEses()
+                            for (Ese eseModelo:elCuestionario.getListaEses()
                                     ) {
                                 Ese eseNueva= new Ese();
+                                eseNueva.setIdCuestionario(idCuestionario);
                                 eseNueva.setIdAudit(idAuditInstanciada);
                                 eseNueva.setIdEse(eseModelo.getIdEse());
                                 eseNueva.setPuntajeEse(eseModelo.getPuntajeEse());
                                 eseNueva.setListaItem(new RealmList<Item>());
 
-                               
                                     for (Item itemModelo:eseModelo.getListaItem()
                                             ) {
                                         Item itemNuevo = new Item();
-                                        itemNuevo.setIdItem(itemModelo.getIdItem());
-                                        itemNuevo.setIdEse(eseModelo.getIdEse());
+                                        itemNuevo.setIdCuestionario(idCuestionario);
+                                        itemNuevo.setIdItem(FuncionesPublicas.IDITEMS+UUID.randomUUID());
+                                        itemNuevo.setIdEse(eseNueva.getIdEse());
                                         itemNuevo.setIdAudit(idAuditInstanciada);
                                         itemNuevo.setPuntajeItem(itemModelo.getPuntajeItem());
                                         itemNuevo.setTituloItem(itemModelo.getTituloItem());
@@ -95,30 +78,37 @@ public class ControllerDatos {
                                         for (Pregunta preguntaModelo:itemModelo.getListaPreguntas()
                                                 ) {
                                             Pregunta preguntaNueva=new Pregunta();
+                                            preguntaNueva.setIdCuestioniario(idCuestionario);
                                             preguntaNueva.setIdAudit(idAuditInstanciada);
-                                            preguntaNueva.setIdItem(preguntaModelo.getIdItem());
-                                            preguntaNueva.setIdEse(eseModelo.getIdEse());
-                                            preguntaNueva.setIdPregunta(preguntaModelo.getIdPregunta());
+                                            preguntaNueva.setIdItem(itemNuevo.getIdItem());
+                                            preguntaNueva.setIdEse(eseNueva.getIdEse());
+                                            preguntaNueva.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
                                             preguntaNueva.setTextoPregunta(preguntaModelo.getTextoPregunta());
                                             preguntaNueva.setPuntaje(preguntaModelo.getPuntaje());
+                                            preguntaNueva.setListaCriterios(new RealmList<Criterio>());
+
+                                            for (Criterio criterioModelo :
+                                                    preguntaModelo.getListaCriterios()) {
+                                                    Criterio criterioNuevo=new Criterio();
+                                                    criterioNuevo.setIdCuestionario(idCuestionario);
+                                                    criterioNuevo.setIdAudit(idAuditInstanciada);
+                                                    criterioNuevo.setIdEse(eseNueva.getIdEse());
+                                                    criterioNuevo.setIdItem(itemNuevo.getIdItem());
+                                                    criterioNuevo.setIdPregunta(preguntaNueva.getIdPregunta());
+                                                    criterioNuevo.setIdCriterio(FuncionesPublicas.IDCRITERIOS+UUID.randomUUID());
+                                                    criterioNuevo.setPuntajeCriterio(criterioModelo.getPuntajeCriterio());
+                                                    criterioNuevo.setTextoCriterio(criterioModelo.getTextoCriterio());
+                                                    preguntaNueva.addCriterio(criterioNuevo);
+                                            }
                                             itemNuevo.addPregunta(preguntaNueva);
                                         }
                                         eseNueva.addItem(itemNuevo);
                                     }
-                                
                                 auditoriaNuevaEstructurada.addEse(eseNueva);
                             }
                             break;
                         case FuncionesPublicas.ESTRUCTURA_SIMPLE:
-//                            TRAIGO UN MODELO DE LA ESTRUCTURA EN FORMA DE AUDIT
-                            for (Ese unaEses :
-                                    elCuestionario.getListaEses()) {
-                                RealmList<Pregunta>listaPregunta=new RealmList<>();
-                                listaPregunta.addAll(unaEses.getListaPreguntas());
-                                unaEses.setListaPreguntas(listaPregunta);
-                                listaEse.add(unaEses);
-                            }
-                            auditoriaModelo.setListaEses(listaEse);
+
 //                            CREO EL OBJETO EN LA REALM
                             Auditoria auditoriaNuevaSimple = realm.createObject(Auditoria.class,"Audit_" + UUID.randomUUID());
                             //nuevaAuditoria.setIdAuditoria("Audit_" + UUID.randomUUID());
@@ -128,7 +118,7 @@ public class ControllerDatos {
                             auditoriaNuevaSimple.setAuditEstaCerrada(false);
                             auditoriaNuevaSimple.setPuntajeFinal(0.0);
 
-                            for (Ese eseModelo:auditoriaModelo.getListaEses()
+                            for (Ese eseModelo:elCuestionario.getListaEses()
                                     ) {
                                 Ese eseNueva= new Ese();
                                 eseNueva.setIdAudit(idAuditInstanciada);
@@ -139,13 +129,27 @@ public class ControllerDatos {
                                         ) {
                                     Pregunta preguntaNueva=new Pregunta();
                                     preguntaNueva.setIdAudit(idAuditInstanciada);
+                                    preguntaNueva.setIdItem(null);
                                     preguntaNueva.setIdItem(preguntaModelo.getIdItem());
                                     preguntaNueva.setIdEse(eseModelo.getIdEse());
                                     preguntaNueva.setIdPregunta(preguntaModelo.getIdPregunta());
                                     preguntaNueva.setTextoPregunta(preguntaModelo.getTextoPregunta());
                                     preguntaNueva.setPuntaje(preguntaModelo.getPuntaje());
+                                    preguntaNueva.setListaCriterios(new RealmList<Criterio>());
+                                    for (Criterio criterioModelo :
+                                            preguntaModelo.getListaCriterios()) {
+                                        Criterio criterioNuevo=new Criterio();
+                                        criterioNuevo.setIdCuestionario(idCuestionario);
+                                        criterioNuevo.setIdAudit(idAuditInstanciada);
+                                        criterioNuevo.setIdEse(eseNueva.getIdEse());
+                                        criterioNuevo.setIdItem(null);
+                                        criterioNuevo.setIdPregunta(preguntaNueva.getIdPregunta());
+                                        criterioNuevo.setIdCriterio(FuncionesPublicas.IDCRITERIOS+UUID.randomUUID());
+                                        criterioNuevo.setPuntajeCriterio(criterioModelo.getPuntajeCriterio());
+                                        criterioNuevo.setTextoCriterio(criterioModelo.getTextoCriterio());
+                                        preguntaNueva.addCriterio(criterioNuevo);
+                                    }
                                     eseNueva.addPregunta(preguntaNueva);
-
                                 }
                                 auditoriaNuevaSimple.addEse(eseNueva);
                             }
@@ -158,15 +162,10 @@ public class ControllerDatos {
                 //------ FIN - COPIO ESTRUCTURA DEL CUESTIONARIO ------//
             }
         });
-
         return idAuditInstanciada;
     }
 
     //endregion
-
-
-
-
     private java.util.Date determinarFecha(){
         Calendar cal = Calendar.getInstance();
         return (cal.getTime());
@@ -199,8 +198,6 @@ public class ControllerDatos {
         return lista;
     }
 
-
-
     public void crearCuestionariosDefault(final String nombreArea,final Boolean esEstructuraSimple) {
         Realm nBgRealm=Realm.getDefaultInstance();
 
@@ -224,6 +221,8 @@ public class ControllerDatos {
                 pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
                 pregunta111.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
                 pregunta111.setIdEse(ese1.getIdEse());
+
+
                 Pregunta pregunta112 = realm.createObject(Pregunta.class);
                 pregunta112.setIdPregunta(FuncionesPublicas.IDPREGUNTAS+UUID.randomUUID());
                 pregunta112.setPuntaje(null);
@@ -232,6 +231,7 @@ public class ControllerDatos {
                 pregunta112.setIdEse(ese1.getIdEse());
                 ese1.addPregunta(pregunta111);
                 ese1.addPregunta(pregunta112);
+
 
 //              SEGUNDA ESE
                 Ese ese2= realm.createObject(Ese.class);
@@ -272,8 +272,6 @@ public class ControllerDatos {
                 pregunta212.setIdEse(ese2.getIdEse());
                 ese3.addPregunta(pregunta211);
                 ese3.addPregunta(pregunta212);
-
-
 
 //              CUARTA ESE
                 Ese ese4= realm.createObject(Ese.class);
@@ -322,8 +320,46 @@ public class ControllerDatos {
                     nuevoCuestionario.addEse(ese4);
                     nuevoCuestionario.addEse(ese5);
                 }
+
+                for (Ese ese:nuevoCuestionario.getListaEses()
+                     ) {
+                    for (Pregunta preg :
+                            ese.getListaPreguntas()) {
+                        cargarCriteriosPregunta(realm,preg);
+                    }
+                }
             }
         });
+    }
+
+    //SE TOMARON CUATRO CRITERIOS
+    private void cargarCriteriosPregunta(Realm realm, Pregunta preg) {
+        for (int i=0;i<4;i++){
+            preg.setListaCriterios(new RealmList<Criterio>());
+            Criterio unCriterio =realm.createObject(Criterio.class);
+            if (preg.getIdItem()!=null){
+                unCriterio.setIdItem(preg.getIdItem());
+            }
+            unCriterio.setIdCriterio(FuncionesPublicas.IDCRITERIOS+UUID.randomUUID());
+            unCriterio.setIdCuestionario(preg.getIdCuestionario());
+            unCriterio.setIdEse(preg.getIdEse());
+            unCriterio.setIdPregunta(preg.getIdPregunta());
+            unCriterio.setPuntajeCriterio(i+1);
+            switch (i){
+                case 0:
+                    unCriterio.setTextoCriterio(context.getString(R.string.criterioPreg1));
+                    break;
+                case 1:
+                    unCriterio.setTextoCriterio(context.getString(R.string.criterioPreg2));
+                    break;
+                case 2:
+                    unCriterio.setTextoCriterio(context.getString(R.string.criterioPreg3));
+                    break;
+                case 3:
+                    unCriterio.setTextoCriterio(context.getString(R.string.criterioPreg4));
+                    break;
+            }
+        }
     }
 
     public void crearCuestionariosDefault(final String nombreArea){
@@ -673,7 +709,16 @@ public class ControllerDatos {
 
                 nuevoCuestionario.addEse(ese5);
 
-
+                for (Ese ese :
+                        nuevoCuestionario.getListaEses()) {
+                    for (Item item :
+                            ese.getListaItem()) {
+                        for (Pregunta preg :
+                                item.getListaPreguntas()) {
+                            cargarCriteriosPregunta(realm, preg);
+                        }
+                    }
+                }
 
             }
         });
