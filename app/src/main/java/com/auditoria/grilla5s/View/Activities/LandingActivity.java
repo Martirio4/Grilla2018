@@ -66,6 +66,7 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         boolean firstRun = config.getBoolean("firstRun", false);
         if (!firstRun){
             ControllerDatos controllerDatos=new ControllerDatos(this);
+            controllerDatos.crearCriteriosDefault();
             controllerDatos.crearCuestionariosDefault(getString(R.string.areaGeneral),true);
             controllerDatos.crearCuestionariosDefault(getString(R.string.areaIndustrial));
             controllerDatos.crearCuestionariosDefault(getString(R.string.areaOficina));

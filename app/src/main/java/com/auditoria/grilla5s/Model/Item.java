@@ -4,20 +4,23 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 9/2/2018.
  */
 
 public class Item extends RealmObject {
-    private String tituloItem;
-    private String textoItem;
-    private String idAudit;
-    private String idEse;
+
+    @PrimaryKey
     private String idItem;
     private RealmList<Pregunta> listaPreguntas;
     private Double puntajeItem;
     private String idCuestionario;
+    private String tituloItem;
+    private String textoItem;
+    private String idAudit;
+    private String idEse;
 
     public Item() {
     }

@@ -1,14 +1,16 @@
 package com.auditoria.grilla5s.View.Adapter;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.widget.Toast;
 
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
-import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
-import com.auditoria.grilla5s.View.Fragments.FragmentVerPregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentPregunta_;
+import com.auditoria.grilla5s.View.Fragments.FragmentEditarPregunta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
     private List<String> unaListaTitulos;
+
 
 
     public AdapterPagerPreguntas(FragmentManager fm, RealmList<Pregunta> listaPregunta, String elOrigen, String elIdEse) {
@@ -36,7 +39,7 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
 
                 for (Pregunta unaPreg:listaPregunta
                         ) {
-                    listaFragments.add(FragmentVerPregunta.CrearfragmentVerPregunta(unaPreg));
+                    listaFragments.add(FragmentEditarPregunta.CrearfragmentVerPregunta(unaPreg));
                 }
 
                 break;
@@ -44,7 +47,7 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
 
                 for (Pregunta unaPreg:listaPregunta
                         ) {
-                    listaFragments.add(FragmentPregunta.CrearfragmentPregunta(unaPreg, elOrigen, elIdEse));
+                    listaFragments.add(FragmentPregunta_.CrearfragmentPregunta(unaPreg, elOrigen, elIdEse));
                 }
 
                 break;
@@ -83,4 +86,10 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
 
 
 
+    public void addPregunta(Pregunta nuevaPregunta) {
+    String tamanio=String.valueOf(this.unaListaTitulos.size()+1)+FuncionesPublicas.SIMBOLO_ORDINAL;
+    this.unaListaTitulos.add(tamanio);
+    this.listaFragments.add(FragmentEditarPregunta.CrearfragmentVerPregunta(nuevaPregunta));
+    this.notifyDataSetChanged();
+    }
 }

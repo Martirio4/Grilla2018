@@ -37,6 +37,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
     public static String idAudit;
     private String idArea;
+    private AdapterPagerEses adapterPager;
     public static final String IDAREA="IDAREA";
     public static final String ORIGEN="ORIGEN";
     public static final String IDCUESTIONARIO ="IDCUESTIONARIO" ;
@@ -47,11 +48,13 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     private String origen;
     public static String idCuestionario;
 
+    private ControllerDatos controllerDatos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_auditoria);
-        ControllerDatos controllerDatos = new ControllerDatos(this);
+        controllerDatos = new ControllerDatos(this);
 
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
@@ -122,7 +125,16 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
 //       CARGO EL VIEWPAGER
         pager=findViewById(R.id.viewPagerPreAuditoria);
-        AdapterPagerEses adapterPager=new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario);
+
+        if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)) {
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idAudit));
+        }
+        if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idCuestionario));
+        }
+        else{
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idAudit));
+        }
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
         adapterPager.notifyDataSetChanged();
@@ -261,8 +273,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                             nuevoItem.setIdEse(laEse);
                             nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
                             nuevoItem.setIdItem(FuncionesPublicas.IDITEMS + UUID.randomUUID());
-
-                            FuncionesPublicas.agregarItem(idCuestionario,nuevoItem,elAdapter);
+                            controllerDatos.agregarItem(idCuestionario,nuevoItem,elAdapter);
                         }
 
                     }
@@ -288,8 +299,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                             nuevaPregunta.setIdEse(laEse);
                             nuevaPregunta.setIdItem(null);
                             nuevaPregunta.setIdPregunta(FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-
-                            FuncionesPublicas.agregarPregunta(idCuestionario,nuevaPregunta,adapterPreguntas);
+                            controllerDatos.agregarPregunta(idCuestionario,nuevaPregunta,adapterPreguntas);
                         }
 
                     }
@@ -330,5 +340,5 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         startActivity(intent);
 
     }
-//    ------AUDITAR ITEM Y AUDITAR PREGUNTA//
+
 }

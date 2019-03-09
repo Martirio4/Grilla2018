@@ -14,7 +14,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -23,14 +22,11 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
-import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
-import com.auditoria.grilla5s.View.Adapter.AdapterItems;
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
 
 import io.realm.Realm;
@@ -41,7 +37,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentEditorCuestionarios extends Fragment implements AdapterCuestionario.Eliminable {
+public class FragmentGestionCuestionarios extends Fragment implements AdapterCuestionario.Eliminable {
 
     private RealmList<Cuestionario> listaCuestionarios;
     private RecyclerView recyclerCuestionarios;
@@ -60,9 +56,10 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
     private LinearLayout linearSnackbar;
     private Notificable notificable;
     private TextView textoBotonEditorCuestionarios;
+    private FloatingActionButton fabAgregarPregunta;
 
 
-    public FragmentEditorCuestionarios() {
+    public FragmentGestionCuestionarios() {
         // Required empty public constructor
     }
 
@@ -75,7 +72,7 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_editor_base_cuestionarios, container, false);
+        final View view = inflater.inflate(R.layout.fragment_gestion_cuestionarios, container, false);
         controllerDatos=new ControllerDatos(view.getContext());
 
         recyclerCuestionarios=view.findViewById(R.id.recyclerCuestionarios);
@@ -204,6 +201,7 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         controllerDatos.crearNuevoCuestionario(input.toString(), tipoCuestionario);
                         actualizarDatosRecycler();
+                        recyclerCuestionarios.scrollToPosition(adapterCuestionario.getListaCuestionariosOriginales().size()-1);
                     }
                 }).show();
     }
@@ -252,14 +250,14 @@ public class FragmentEditorCuestionarios extends Fragment implements AdapterCues
 
     @Override
     public void editarNombreCuestionario(final Cuestionario unCuestionario) {
-        final MaterialDialog mDialog = new MaterialDialog.Builder(FragmentEditorCuestionarios.this.getContext())
+        final MaterialDialog mDialog = new MaterialDialog.Builder(FragmentGestionCuestionarios.this.getContext())
                 .inputRange(1,40)
-                .title(FragmentEditorCuestionarios.this.getContext().getResources().getString(R.string.editarNombreCuestionario))
-                .contentColor(ContextCompat.getColor(FragmentEditorCuestionarios.this.getContext(), R.color.primary_text))
-                .backgroundColor(ContextCompat.getColor(FragmentEditorCuestionarios.this.getContext(), R.color.tile1))
-                .titleColor(ContextCompat.getColor(FragmentEditorCuestionarios.this.getContext(), R.color.tile4))
-                .content(FragmentEditorCuestionarios.this.getResources().getString(R.string.favorEditeItem))
-                .input(FragmentEditorCuestionarios.this.getResources().getString(R.string.nombreCues),"", new MaterialDialog.InputCallback() {
+                .title(FragmentGestionCuestionarios.this.getContext().getResources().getString(R.string.editarNombreCuestionario))
+                .contentColor(ContextCompat.getColor(FragmentGestionCuestionarios.this.getContext(), R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(FragmentGestionCuestionarios.this.getContext(), R.color.tile1))
+                .titleColor(ContextCompat.getColor(FragmentGestionCuestionarios.this.getContext(), R.color.tile4))
+                .content(FragmentGestionCuestionarios.this.getResources().getString(R.string.favorEditeItem))
+                .input(FragmentGestionCuestionarios.this.getResources().getString(R.string.nombreCues),"", new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {
                                 FuncionesPublicas.cambiarNombreCuestionario(unCuestionario,input.toString(),adapterCuestionario);

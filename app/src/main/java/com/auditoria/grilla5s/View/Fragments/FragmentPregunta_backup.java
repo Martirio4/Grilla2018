@@ -59,7 +59,7 @@ import pl.tajchert.nammu.PermissionCallback;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPregunta extends Fragment {
+public class FragmentPregunta_backup extends Fragment {
 
 
 
@@ -120,7 +120,7 @@ public class FragmentPregunta extends Fragment {
     private String origen;
 
 
-    public FragmentPregunta() {
+    public FragmentPregunta_backup() {
         // Required empty public constructor
     }
 
@@ -137,7 +137,7 @@ public class FragmentPregunta extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view= inflater.inflate(R.layout.fragment_pregunta, container, false);
+        final View view= inflater.inflate(R.layout.fragment_pregunta_, container, false);
 
 
 
@@ -435,24 +435,24 @@ public class FragmentPregunta extends Fragment {
                     if (FuncionesPublicas.isExternalStorageWritable()) {
                         if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             fabMenu.close(true);
-                            EasyImage.openCamera(FragmentPregunta.this, 1);
+                            EasyImage.openCamera(FragmentPregunta_backup.this, 1);
                         }
                         else {
 
     //                      PIDO PERMISO PARA USAR LA MEMORIA EXTERNA
 
-                            if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta_backup.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                 //User already refused to give us this permission or removed it
                                 //Now he/she can mark "never ask again" (sic!)
                                 Snackbar.make(getView(), getResources().getString(R.string.appNecesitaPermiso),
                                         Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string.ok), new View.OnClickListener() {
                                     @Override public void onClick(View view) {
-                                        Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Nammu.askForPermission(FragmentPregunta_backup.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                                 new PermissionCallback() {
                                                     @Override
                                                     public void permissionGranted() {
                                                         fabMenu.close(true);
-                                                        EasyImage.openCamera(FragmentPregunta.this, 1);
+                                                        EasyImage.openCamera(FragmentPregunta_backup.this, 1);
                                                     }
 
                                                     @Override
@@ -466,12 +466,12 @@ public class FragmentPregunta extends Fragment {
                                 //First time asking for permission
                                 // or phone doesn't offer permission
                                 // or user marked "never ask again"
-                                Nammu.askForPermission(FragmentPregunta.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Nammu.askForPermission(FragmentPregunta_backup.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                         new PermissionCallback() {
                                             @Override
                                             public void permissionGranted() {
                                                 fabMenu.close(true);
-                                                EasyImage.openCamera(FragmentPregunta.this, 1);
+                                                EasyImage.openCamera(FragmentPregunta_backup.this, 1);
                                             }
 
                                             @Override
@@ -826,8 +826,8 @@ public class FragmentPregunta extends Fragment {
 
 
 
-    public static FragmentPregunta CrearfragmentPregunta(Pregunta laPregunta, String origen, String idEse) {
-        FragmentPregunta detalleFragment = new FragmentPregunta();
+    public static FragmentPregunta_backup CrearfragmentPregunta(Pregunta laPregunta, String origen, String idEse) {
+        FragmentPregunta_backup detalleFragment = new FragmentPregunta_backup();
         Bundle unBundle = new Bundle();
             unBundle.putString(IDESE,idEse);
             unBundle.putString(ENUNCIADOPREGUNTA, laPregunta.getTextoPregunta());

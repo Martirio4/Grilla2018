@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -18,10 +20,14 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.DAO.ControllerDatos;
+import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
+import com.auditoria.grilla5s.View.Fragments.FragmentGestionCuestionarios;
+import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
 import io.realm.RealmList;
 
@@ -33,15 +39,19 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
     private static String origen;
-    private Notificable notificable;
+    private ControllerDatos controllerDatos;
+    private Eliminable eliminable;
+    private EditText elEdit;
 
+
+
+    public AdapterPreguntas(Context context) {
+        this.context = context;
+        this.controllerDatos=new ControllerDatos(context);
+    }
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     public void setListaPreguntasOriginales(RealmList<Pregunta> listaPreguntasOriginales) {
@@ -70,11 +80,6 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         notifyDataSetChanged();
     }
 
-    public interface Notificable{
-        void eliminarPregunta(Pregunta unPregunta);
-    }
-
-
     public RealmList<Pregunta> getListaPreguntasOriginales() {
         return listaPreguntasOriginales;
     }
@@ -86,14 +91,13 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_pre_auditoria_para_estructura_simple, parent, false);
         PreguntaViewHolder ItemsViewHolder = new PreguntaViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
-
         return ItemsViewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final Pregunta unPregunta = listaPreguntasOriginales.get(position);
-        PreguntaViewHolder itemViewHolder = (PreguntaViewHolder) holder;
+        final PreguntaViewHolder itemViewHolder = (PreguntaViewHolder) holder;
         itemViewHolder.cargarPregunta(unPregunta,position);
 
         itemViewHolder.botonEliminar.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +113,8 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                FuncionesPublicas.borrarPregunta(unPregunta, AdapterPreguntas.this);
+                                listaPreguntasOriginales.remove(position);
+                                controllerDatos.borrarPregunta(unPregunta, AdapterPreguntas.this);
                             }
                         })
                         .negativeText(R.string.cancel)
@@ -121,26 +126,30 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         itemViewHolder.botonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 assert unPregunta != null;
                 final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
                         .title(view.getResources().getString(R.string.EditarPregunta))
                         .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
                         .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
                         .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+
                         .content(view.getResources().getString(R.string.favorEditePregunta))
                         .input(view.getResources().getString(R.string.textoPregunta),unPregunta.getTextoPregunta(),new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                                 if (input!=null && !input.toString().isEmpty()) {
-
-                            FuncionesPublicas.cambiarTextoPregunta(unPregunta,input.toString(),context);
-                        }
-                        AdapterPreguntas.this.notifyDataSetChanged();
+                                    itemViewHolder.textViewDescripcion.setText(input.toString());
+                                    controllerDatos.cambiarTextoPregunta(unPregunta,input.toString(),AdapterPreguntas.this);
+                                }
+                                else{
+                                   return;
+                                }
+                                AdapterPreguntas.this.notifyDataSetChanged();
                             }
                         })
-
                         .build();
-                EditText elEdit = mDialog.getInputEditText();
+                elEdit = mDialog.getInputEditText();
                 if (elEdit!=null) {
                     elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_FLAG_MULTI_LINE |
@@ -150,21 +159,8 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
             }
         });
 
-
-
-
     }
 
-    private Activity getRequiredActivity(View req_view) {
-        Context context = req_view.getContext();
-        while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
-                return (Activity)context;
-            }
-            context = ((ContextWrapper)context).getBaseContext();
-        }
-        return null;
-    }
 
     @Override
     public int getItemCount() {
@@ -195,7 +191,6 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         private ImageButton botonEditar;
 
 
-
         PreguntaViewHolder(View itemView) {
             super(itemView);
 
@@ -220,6 +215,12 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
 
 
     }
+    public interface Eliminable {
+        void eliminarPregunta(Pregunta unaPreg);
+
+        void editarPregunta(Pregunta unaPreg);
+    }
+
 
     
 

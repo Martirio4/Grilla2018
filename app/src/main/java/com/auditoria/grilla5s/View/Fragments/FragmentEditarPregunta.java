@@ -2,6 +2,7 @@ package com.auditoria.grilla5s.View.Fragments;
 
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -15,21 +16,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Criterio;
 import com.auditoria.grilla5s.Model.Cuestionario;
+import com.auditoria.grilla5s.Model.Ese;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterCriterios;
 import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
+import com.github.clans.fab.FloatingActionButton;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -39,7 +43,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentVerPregunta extends Fragment {
+public class FragmentEditarPregunta extends Fragment {
 
 
     public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
@@ -57,15 +61,24 @@ public class FragmentVerPregunta extends Fragment {
     private TextView criterioTitulo;
     private TextView criterioDescripcion;
     private ControllerDatos controllerDatos;
+    private Auditable auditable;
+    private ImageButton btn_eliminarPregunta;
 
 
 
     private RecyclerView recyclerPreguntas;
     private AdapterCriterios adapterCriterios;
 
-    public FragmentVerPregunta() {
+    private FloatingActionButton fabAgregarPregunta;
+
+    public FragmentEditarPregunta() {
         // Required empty public constructor
     }
+    public interface Auditable{
+        void agregarPregunta(CharSequence input, String idEse, String idItem, String idCuestionario);
+        void cerrarFragmentEdicion();
+    }
+   
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -85,9 +98,46 @@ public class FragmentVerPregunta extends Fragment {
         }
         traerTipoEstructura();
 
+         btn_eliminarPregunta=view.findViewById(R.id.botonEliminarPregunta);
+         fabAgregarPregunta=view.findViewById(R.id.fabNuevaPregunta);
          textoPregunta = view.findViewById(R.id.textoPregunta);
          criterioTitulo = view.findViewById(R.id.tituloCriterio);
          criterioDescripcion = view.findViewById(R.id.descripcionCriterio);
+
+         btn_eliminarPregunta.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+
+                         new MaterialDialog.Builder(view.getContext())
+                                 .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                                 .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                                 .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                                 .title(R.string.advertencia)
+                                 .content(R.string.preguntaSeElimina)
+                                 .positiveText(R.string.eliminar)
+                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                     @Override
+                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                         Realm realm = Realm.getDefaultInstance();
+                                         Pregunta mPregunta=realm.where(Pregunta.class)
+                                                 .equalTo("idCuestionario", idCuestionario)
+                                                 .equalTo("idEse", idEse)
+                                                 .equalTo("idItem", idItem)
+                                                 .equalTo("idPregunta", idpregunta)
+                                                 .findFirst();
+                                         if (mPregunta!=null){
+                                             controllerDatos.borrarPregunta(mPregunta, null);
+                                             auditable.cerrarFragmentEdicion();
+                                         }
+                                     }
+                                 })
+                                 .negativeText(R.string.cancel)
+                                 .show();
+                     }
+
+
+             });
+
 
         recyclerPreguntas= view.findViewById(R.id.RecyclerVerPreguntas);
         adapterCriterios = new AdapterCriterios();
@@ -132,12 +182,52 @@ public class FragmentVerPregunta extends Fragment {
         adapterCriterios.notifyDataSetChanged();
         cargarTitulosFragment();
 
+        fabAgregarPregunta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(view.getContext())
+                        .title(getResources().getString(R.string.nuevaPregunta))
+                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                        .content(getResources().getString(R.string.agreguePRegunta))
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(getResources().getString(R.string.comment),"", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
+                                if (input!=null && !input.toString().isEmpty()) {
+                                    auditable.agregarPregunta(input.toString(),idEse,idItem,idCuestionario);
+                                }
+
+                            }
+                        }).show();
+            }
+        });
+
         return view;
     }
 
     private void cargarTitulosFragment() {
         Realm realm= Realm.getDefaultInstance();
-        criterioTitulo.setText(controllerDatos.traerEses().get(Integer.parseInt(idEse)-1));
+
+        Integer elInt=0;
+//        AGREGO TIULO DE ESE
+        RealmResults<Ese>listaEse=realm.where(Ese.class)
+                .equalTo("idCuestionario",idCuestionario)
+                .equalTo("idEse", idEse)
+                .findAll();
+        if (listaEse!=null){
+            for (Ese laEse :
+                    listaEse) {
+                if (laEse.getIdEse().equals(idEse)){
+                    elInt=listaEse.indexOf(laEse)+1;
+                    break;
+                }
+            }
+        }
+        final ControllerDatos controllerDatos=new ControllerDatos(getContext());
+        criterioTitulo.setText(controllerDatos.traerEses().get(elInt));
+
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
                 criterioDescripcion.setVisibility(View.GONE);
@@ -162,7 +252,7 @@ public class FragmentVerPregunta extends Fragment {
                                         public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                                             if (input!=null && !input.toString().isEmpty()) {
 
-                                                FuncionesPublicas.cambiarTextoPregunta(mPregunta1,input.toString(),getContext());
+                                                controllerDatos.cambiarTextoPregunta(mPregunta1,input.toString(),null);
                                                 textoPregunta.setText(input.toString());
                                             }
                                             adapterCriterios.notifyDataSetChanged();
@@ -180,8 +270,8 @@ public class FragmentVerPregunta extends Fragment {
                         }
                     });
                 }
-                break;
-                default:
+            break;
+            default:
                     criterioDescripcion.setVisibility(View.VISIBLE);
                     final Pregunta mPregunta2=realm.where(Pregunta.class)
                             .equalTo("idCuestionario", idCuestionario)
@@ -213,7 +303,7 @@ public class FragmentVerPregunta extends Fragment {
                                             public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                                                 if (input!=null && !input.toString().isEmpty()) {
 
-                                                    FuncionesPublicas.cambiarTextoPregunta(mPregunta2,input.toString(),getContext());
+                                                    controllerDatos.cambiarTextoPregunta(mPregunta2,input.toString(),null);
                                                     textoPregunta.setText(input.toString());
                                                 }
                                                 adapterCriterios.notifyDataSetChanged();
@@ -231,7 +321,7 @@ public class FragmentVerPregunta extends Fragment {
                             }
                         });
                     }
-                break;
+            break;
         }
     }
 
@@ -248,17 +338,21 @@ public class FragmentVerPregunta extends Fragment {
     }
 
     public static Fragment CrearfragmentVerPregunta(Pregunta unaPreg) {
-        FragmentVerPregunta fragmentVerPregunta=new FragmentVerPregunta();
+        FragmentEditarPregunta fragmentVerPregunta=new FragmentEditarPregunta();
         Bundle bundle=new Bundle();
-        bundle.putString(FragmentVerPregunta.IDCUESTIONARIO,unaPreg.getIdCuestionario());
-        bundle.putString(FragmentVerPregunta.IDITEM,unaPreg.getIdItem());
-        bundle.putString(FragmentVerPregunta.IDESE,unaPreg.getIdEse());
-        bundle.putString(FragmentVerPregunta.IDPREGUNTA,unaPreg.getIdPregunta());
+        bundle.putString(FragmentEditarPregunta.IDCUESTIONARIO,unaPreg.getIdCuestionario());
+        bundle.putString(FragmentEditarPregunta.IDITEM,unaPreg.getIdItem());
+        bundle.putString(FragmentEditarPregunta.IDESE,unaPreg.getIdEse());
+        bundle.putString(FragmentEditarPregunta.IDPREGUNTA,unaPreg.getIdPregunta());
         fragmentVerPregunta.setArguments(bundle);
         return fragmentVerPregunta;
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.auditable=(Auditable)context;
+    }
 }
 
 

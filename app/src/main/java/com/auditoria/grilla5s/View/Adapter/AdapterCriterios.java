@@ -85,7 +85,7 @@ public class AdapterCriterios extends RecyclerView.Adapter implements View.OnCli
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_editar_criterios, parent, false);
         CriterioViewHolder ItemsViewHolder = new CriterioViewHolder(viewCelda);
-        viewCelda.setOnClickListener(this);
+        //viewCelda.setOnClickListener(this);
 
         return ItemsViewHolder;
     }

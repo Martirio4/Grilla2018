@@ -23,8 +23,10 @@ import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
+import com.auditoria.grilla5s.View.Activities.ActivityAuditoria;
 import com.auditoria.grilla5s.View.Adapter.AdapterCuestionario;
 import com.auditoria.grilla5s.View.Adapter.AdapterItems;
+import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 import com.auditoria.grilla5s.View.Fragments.FragmentManageAreas;
 import com.auditoria.grilla5s.View.Fragments.FragmentSeleccionArea;
@@ -83,12 +85,15 @@ public class FuncionesPublicas {
     public static final String IDAREAS = "AREA_";
     public static final String IDESES = "ESE_";
     public static final String IDCRITERIOS = "CRIT_";
+    public static final String IDCRITERIOS_DEFAULT = "CRITDEF_";
     public static final String IDCUESTIONARIOS = "CUE_";
     public static final String IDPREGUNTAS = "PREG_";
     public static final String FRAGMENT_VER_PREGUNTAS ="FRAGMENT_VER_PREGUNTAS";
     public static final String FRAGMENT_SELECCION_AREAS ="FRAGMENT_SELECCION_AREAS" ;
     public static final String FRAGMENT_LANDING = "FRAGMENT_LANDING";
     public static final String ID_AUDITORIA = "AUDIT_";
+    public static final String SIMBOLO_ORDINAL = "°";
+    public static final String IDCUESTIONARIOS_DEFAULT = "CUEDEF_";
 
 
     public static boolean isExternalStorageWritable() {
@@ -300,40 +305,7 @@ public class FuncionesPublicas {
     }
 
 
-    public static void cambiarTextoItem(final Item unItem, final String s, final Context context) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Item elItem = realm.where(Item.class)
-                        .equalTo("idItem", unItem.getIdItem())
-                        .equalTo("idEse", unItem.getIdEse())
-                        .equalTo("idCuestionario", unItem.getIdCuestionario())
-                        .findFirst();
-                if (elItem!=null&& !s.isEmpty()){
-                    elItem.setTituloItem(s);
-                    Toast.makeText(context, context.getString(R.string.itemFueModificada), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    public static void cambiarTextoPregunta(final Pregunta unaPregunta, final String s,final Context context) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Pregunta laPre = realm.where(Pregunta.class)
-                        .equalTo("idPregunta", unaPregunta.getIdPregunta())
-                        .equalTo("idEse", unaPregunta.getIdEse())
-                        .equalTo("idCuestionario", unaPregunta.getIdCuestionario())
-                        .findFirst();
-                if (laPre !=null&& !s.isEmpty()){
-                    laPre.setTextoPregunta(s);
-                    Toast.makeText(context, context.getString(R.string.preguntaFueModificada), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
+
 
     public static Integer dameEseParaIdItem(Integer idItem){
         return Integer.parseInt(String.valueOf(idItem).substring(0,1));
@@ -360,6 +332,13 @@ public class FuncionesPublicas {
                         .findAll();
                 lasEses.deleteAllFromRealm();
 
+                RealmResults<Criterio>losCriterios=bgRealm.where(Criterio.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .not()
+                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
+                        .findAll();
+                losCriterios.deleteAllFromRealm();
+
                 Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .findFirst();
@@ -380,47 +359,7 @@ public class FuncionesPublicas {
         });
     }
 
-    public static void borrarItem(final String idItem, final String idEse, final String idCuestionario, final AdapterItems adapterItems) {
 
-        final Realm bgrealm = Realm.getDefaultInstance();
-
-        bgrealm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                //BORRO LAS PREGUNTAS DE ESE ITEM
-                RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .equalTo("idItem", idItem)
-                        .equalTo("idEse", idEse)
-                        .findAll();
-                lasPreguntas.deleteAllFromRealm();
-
-                //BORRO EL ITEM
-                Item elItem = realm.where(Item.class)
-                        .equalTo("idItem",idItem )
-                        .equalTo("idEse", idEse)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .findFirst();
-                if (elItem!=null) {
-                    elItem.deleteFromRealm();
-                }
-
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-               adapterItems.notifyDataSetChanged();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Toast.makeText(adapterItems.getContext(), adapterItems.getContext().getString(R.string.itemNoEliminado), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }
 
     public static void cambiarNombreCuestionario(final Cuestionario unCuestionario, final String nuevoTexto, final AdapterCuestionario adapterCuestionario) {
         Realm realm = Realm.getDefaultInstance();
@@ -440,78 +379,12 @@ public class FuncionesPublicas {
     }
 
     public static void agregarPregunta(final String idCuestionario, final Pregunta nuevaPregunta, final AdapterPreguntas adapterPreguntas) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-                                          @Override
-                                          public void execute(Realm bgRealm) {
-                                              Pregunta mPregunta = bgRealm.copyToRealm(nuevaPregunta);
-                                              String idEse=nuevaPregunta.getIdEse();
 
-                                              final Ese laEse = bgRealm.where(Ese.class)
-                                                      .equalTo("idCuestionario", idCuestionario)
-                                                      .equalTo("idEse",idEse)
-                                                      .findFirst();
-                                              if (laEse!=null){
-                                                  laEse.addPregunta(mPregunta);
-                                              }
-                                          }
-                                      }
-                , new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        adapterPreguntas.addPregunta(nuevaPregunta);
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        Toast.makeText(adapterPreguntas.getContext(), adapterPreguntas.getContext().getString(R.string.laPreguntaNoSeAgrego), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-
-        );
     }
 
-    public static void borrarPregunta(final Pregunta unPregunta, final AdapterPreguntas adapterPreguntas) {
-        Realm realm = Realm.getDefaultInstance();
-        if (unPregunta.getIdItem()==null){
-
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                                              @Override
-                                              public void execute(Realm bgRealm) {
-                                                  Ese unaEse = bgRealm.where(Ese.class)
-                                                          .equalTo("idCuestionario", unPregunta.getIdCuestionario())
-                                                          .equalTo("idEse", unPregunta.getIdEse())
-                                                          .findFirst();
-                                                  if (unaEse!=null){
-                                                      unaEse.removePregunta(unPregunta);
-                                                  }
-                                                  Pregunta laPregunta = bgRealm.where(Pregunta.class)
-                                                          .equalTo("idPregunta",unPregunta.getIdPregunta())
-                                                          .equalTo("idCuestionario",unPregunta.getIdCuestionario())
-                                                          .findFirst();
-                                                  if (laPregunta!=null){
-                                                      laPregunta.deleteFromRealm();
-                                                  }
-                                              }
-                                          }
-                    , new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            adapterPreguntas.remove(unPregunta);
-                            adapterPreguntas.notifyDataSetChanged();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            Toast.makeText(adapterPreguntas.getContext(), adapterPreguntas.getContext().getString(R.string.laPreguntaNoSeBorro), Toast.LENGTH_SHORT).show();
-                        }
-                    }
 
 
-            );
-        }
-    }
+
 
     public static void cambiarTextoArea(final Area unArea, final String s, final Context context) {
         Realm realm = Realm.getDefaultInstance();
@@ -770,8 +643,9 @@ public class FuncionesPublicas {
 
                         new MaterialDialog.Builder(fragment.getContext())
                                 .title(R.string.tipoArea)
+                                .backgroundColor(ContextCompat.getColor(fragment.getContext(), R.color.tile1))
                                 .items(unaListaNombre)
-                                .widgetColor(fragment.getContext().getResources().getColor(R.color.tile3))
+                                .titleColor(ContextCompat.getColor(fragment.getContext(), R.color.tile4))
                                 .cancelable(false)
                                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                                     @Override
@@ -821,6 +695,51 @@ public class FuncionesPublicas {
 
 
     }
+
+    public static List<String> traerIdEses(String origen, String idAudit){
+        List<String> laLista=new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Ese>listaEses;
+
+        switch (origen){
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                listaEses =realm.where(Ese.class)
+                        .equalTo("idCuestionario", idAudit)
+                        .findAll();
+                if (listaEses!=null){
+                    for (Ese unaEse :
+                            listaEses) {
+                        laLista.add(unaEse.getIdEse());
+                    }
+                }
+            break;
+            case FuncionesPublicas.NUEVA_AUDITORIA:
+                listaEses =realm.where(Ese.class)
+                        .equalTo("idAudit", idAudit)
+                        .findAll();
+                if (listaEses!=null){
+                    for (Ese unaEse :
+                            listaEses) {
+                        laLista.add(unaEse.getIdEse());
+                    }
+                }
+            break;
+            default:
+                    listaEses =realm.where(Ese.class)
+                            .equalTo("idAudit", idAudit)
+                            .findAll();
+                    if (listaEses!=null){
+                        for (Ese unaEse :
+                                listaEses) {
+                            laLista.add(unaEse.getIdEse());
+                        }
+                    }
+            break;
+        }
+        return laLista;
+    }
+    
+    
 
 
 }

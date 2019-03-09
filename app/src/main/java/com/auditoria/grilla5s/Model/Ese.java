@@ -4,13 +4,14 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 9/2/2018.
  */
 
 public class Ese extends RealmObject {
-
+    @PrimaryKey
     private String idEse;
     private String idAudit;
     private Double puntajeEse;

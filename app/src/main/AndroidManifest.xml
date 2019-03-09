@@ -40,6 +40,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.auditoria.grilla5s.View.Activities.SettingsActivity"
+            android:theme="@style/AppTheme2"
             android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -55,6 +56,7 @@
             android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity" />
         <activity
             android:name="com.auditoria.grilla5s.View.Activities.LandingActivity"
+            android:theme="@style/AppTheme2"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.auditoria.grilla5s.View.Activities.ActivityAuditoria"
@@ -62,7 +64,7 @@
             android:screenOrientation="portrait" />
         <activity android:name="com.auditoria.grilla5s.View.Activities.ActivityZoom" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.EditarCuestionarioActivity"
+            android:name="com.auditoria.grilla5s.View.Activities.ActivityGestionCuestionario"
             android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
             />
     </application>

@@ -20,25 +20,25 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
     private String origen;
     private String idCuestionario;
     private List<String> unaListaTitulos;
-
+    private List<String> listaDeIdEses;
     //CONSTRUNCTOR PARA EDITOR DE CUESTIONARIOS
-    public AdapterPagerEses(FragmentManager fm, String origen, String idCuestionario) {
+    public AdapterPagerEses(FragmentManager fm, String origen, String idCuestionario, List<String> strings) {
         super(fm);
         this.listaFragments = listaFragments;
         this.origen = origen;
         this.idCuestionario = idCuestionario;
+        this.listaDeIdEses=strings;
 
         //INICIALIZO LA LISTA DE FRAGMENT
         listaFragments = new ArrayList<>();
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-
-        for(Integer i=1;i<6;i++){
-
-                listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(i.toString(),origen,idCuestionario));
-
+        for (String idEse :
+                listaDeIdEses) {
+            listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(idEse,origen,idCuestionario));
         }
+
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
         notifyDataSetChanged();

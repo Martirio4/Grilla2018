@@ -155,11 +155,9 @@ public class FragmentPreAudit extends Fragment {
 
     private void popularRecyclerItems() {
         Realm realm = Realm.getDefaultInstance();
-        RealmList<Item> listaItemsOriginales;
-        listaItemsOriginales = new RealmList<>();
+        RealmList<Item> listaItemsOriginales = new RealmList<>();
 
-        adapterItems = new AdapterItems();
-        adapterItems.setContext(getContext());
+        adapterItems = new AdapterItems(getContext());
         adapterItems.setOrigen(origen);
         recyclerPreAudit.setAdapter(adapterItems);
 
@@ -195,15 +193,14 @@ public class FragmentPreAudit extends Fragment {
         adapterItems.setListener(listenerItem);
         adapterItems.setListaItemsOriginales(listaItemsOriginales);
         adapterItems.notifyDataSetChanged();
+
     }
     private void popularRecyclerPreguntas() {
         Realm realm = Realm.getDefaultInstance();
         RealmList<Pregunta> listaPreguntasOriginales = new RealmList<>();
 
          //si el item pertenece a la ese, loo agrego a la lista
-        adapterPreguntas = new AdapterPreguntas();
-        adapterPreguntas.setContext(getContext());
-
+        adapterPreguntas = new AdapterPreguntas(getContext());
         adapterPreguntas.setOrigen(origen);
         recyclerPreAudit.setAdapter(adapterPreguntas);
 
@@ -262,10 +259,10 @@ public class FragmentPreAudit extends Fragment {
     public void onResume() {
         switch (estructuraCuestionario){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
-                adapterItems.notifyDataSetChanged();
+                popularRecyclerItems();
                 break;
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
-                adapterPreguntas.notifyDataSetChanged();
+                popularRecyclerPreguntas();
                 break;
             default:
                 break;
@@ -306,4 +303,6 @@ public class FragmentPreAudit extends Fragment {
         }
 
     }
+
+
 }

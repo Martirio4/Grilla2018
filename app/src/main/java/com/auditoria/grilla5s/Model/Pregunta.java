@@ -2,6 +2,7 @@ package com.auditoria.grilla5s.Model;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 9/2/2018.
@@ -10,6 +11,7 @@ import io.realm.RealmObject;
 public class Pregunta extends RealmObject {
     private String comentario;
     private String textoPregunta;
+    @PrimaryKey
     private String idPregunta;
     private Integer puntaje;
     private String idAudit;

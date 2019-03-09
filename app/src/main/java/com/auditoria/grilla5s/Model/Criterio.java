@@ -1,13 +1,14 @@
 package com.auditoria.grilla5s.Model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by elmar on 10/1/2019.
  */
 
 public class Criterio extends RealmObject {
-
+    @PrimaryKey
     private String idCriterio;
     private String idAudit;
     private String idEse;

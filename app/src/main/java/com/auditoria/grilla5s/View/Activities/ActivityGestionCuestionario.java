@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
-import com.auditoria.grilla5s.View.Fragments.FragmentEditorCuestionarios;
+import com.auditoria.grilla5s.View.Fragments.FragmentGestionCuestionarios;
 
-public class EditarCuestionarioActivity extends AppCompatActivity implements FragmentEditorCuestionarios.Notificable {
+public class ActivityGestionCuestionario extends AppCompatActivity implements FragmentGestionCuestionarios.Notificable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class EditarCuestionarioActivity extends AppCompatActivity implements Fra
     }
 
     private void abrirFragmentEditorBase() {
-        FragmentEditorCuestionarios fragmentEditorBaseCuestionarios = new FragmentEditorCuestionarios();
+        FragmentGestionCuestionarios fragmentEditorBaseCuestionarios = new FragmentGestionCuestionarios();
         android.support.v4.app.FragmentManager fragmentManager= getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.contenedorEditor,fragmentEditorBaseCuestionarios,FuncionesPublicas.FRAGMENT_EDITOR_CUESTIONARIOS);
@@ -58,7 +58,7 @@ public class EditarCuestionarioActivity extends AppCompatActivity implements Fra
         bundle.putString(ActivityPreAuditoria.IDCUESTIONARIO, cuestionario.getIdCuestionario());
         bundle.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.EDITAR_CUESTIONARIO);
 
-        Intent intent = new Intent(EditarCuestionarioActivity.this, ActivityPreAuditoria.class);
+        Intent intent = new Intent(ActivityGestionCuestionario.this, ActivityPreAuditoria.class);
         intent.putExtras(bundle);
 
         startActivity(intent);

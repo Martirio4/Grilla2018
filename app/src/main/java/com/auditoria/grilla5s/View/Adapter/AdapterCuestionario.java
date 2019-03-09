@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.auditoria.grilla5s.Model.Cuestionario;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
-import com.auditoria.grilla5s.View.Fragments.FragmentEditorCuestionarios;
+import com.auditoria.grilla5s.View.Fragments.FragmentGestionCuestionarios;
 
 
 import io.realm.Realm;
@@ -84,7 +84,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
 
         FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
-        final FragmentEditorCuestionarios fragmentManageCuestionarios = (FragmentEditorCuestionarios) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_EDITOR_CUESTIONARIOS);
+        final FragmentGestionCuestionarios fragmentManageCuestionarios = (FragmentGestionCuestionarios) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_EDITOR_CUESTIONARIOS);
 
 
         if (fragmentManageCuestionarios != null && fragmentManageCuestionarios.isVisible()) {

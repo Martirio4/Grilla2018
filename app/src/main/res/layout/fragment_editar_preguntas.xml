@@ -51,21 +51,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
-                <TextView
-                    android:textSize="@dimen/textoAreaRevisarAudit"
-                    android:padding="@dimen/margenChico"
-                    android:background="@drawable/boton_pre_audit"
-                    android:id="@+id/textoPregunta"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/altoRecyclerFotosViejas"
-                    android:layout_marginEnd="@dimen/margenChico"
-                    android:layout_marginStart="@dimen/margenChico"
-                    android:layout_marginTop="@dimen/margenChico"
-                    android:gravity="center"
-                    android:text="@string/enunciado"
-                    android:textColor="@color/primary_text"
-                     />
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="@dimen/textoAreaRevisarAudit"
+                        android:padding="@dimen/margenChico"
+                        android:background="@drawable/boton_pre_audit"
+                        android:id="@+id/textoPregunta"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/altoRecyclerFotosViejas"
+                        android:layout_marginEnd="@dimen/margenChico"
+                        android:layout_marginStart="@dimen/margenChico"
+                        android:layout_marginTop="@dimen/margenChico"
+                        android:gravity="center"
+                        android:text="@string/enunciado"
+                        android:textColor="@color/primary_text"
+                        />
+                    <ImageButton
+                       android:layout_margin="@dimen/margenChico"
+                        android:layout_gravity="end|top"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/botonEliminarPregunta"
+                        android:src="@drawable/ic_close_black_24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </FrameLayout>
+
+
             </LinearLayout>
 
             <TextView
@@ -77,6 +92,8 @@
                 android:layout_height="wrap_content" />
 
             <android.support.v7.widget.RecyclerView
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/paddingBottomRecycler"
                 android:layout_marginTop="@dimen/margenGrande"
                 android:id="@+id/RecyclerVerPreguntas"
                 android:layout_width="match_parent"

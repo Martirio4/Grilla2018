@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,14 +13,15 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Foto;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterPagerPreguntas;
-import com.auditoria.grilla5s.View.Fragments.FragmentPregunta;
-import com.auditoria.grilla5s.View.Fragments.FragmentVerPregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentEditarPregunta;
+import com.auditoria.grilla5s.View.Fragments.FragmentPregunta_;
 import com.auditoria.grilla5s.View.Fragments.FragmentZoom;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -29,13 +29,14 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
-public class ActivityAuditoria extends AppCompatActivity implements FragmentPregunta.Avisable{
+public class ActivityAuditoria extends AppCompatActivity implements FragmentPregunta_.Avisable, FragmentEditarPregunta.Auditable{
 
     public static final String IDAUDITORIA ="IDAUDITORIA";
     public static final String IDITEM="IDITEM";
@@ -57,6 +58,8 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     private String idCuestionario;
     private String tipoEstructura;
     private String idpreguntaClickeada;
+    private AdapterPagerPreguntas adapterPager;
+    private ControllerDatos controllerDatos;
 
 
     @Override
@@ -65,6 +68,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         setContentView(R.layout.activity_auditoria);
         //RECIBO EL INTENT Y EN FUNCION DEL ORIGEN CARGO EL LAYOUT QUE CORRESPONDE
 
+        controllerDatos=new ControllerDatos(this);
         Intent intent= getIntent();
         Bundle bundle= intent.getExtras();
 
@@ -100,17 +104,25 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pregunta>resultPregunta;
+
         switch (origen){
             case FuncionesPublicas.EDITAR_CUESTIONARIO:
                resultPregunta= cargarPreguntasCuestionario();
+               if (resultPregunta.size()==0){
+                   String idPreguntaVacia =controllerDatos.crearPreguntaVacia(idCuestionario,idese,idItem);
+                  resultPregunta =realm.where(Pregunta.class)
+                          .equalTo("idPregunta", idPreguntaVacia)
+                          .findAll();
+               }
+
                break;
             default:
                resultPregunta= cargarPreguntasAuditoria();
                break;
         }
-
         RealmList<Pregunta> listaPreguntasOriginales=new RealmList<>();
         listaPreguntasOriginales.addAll(resultPregunta);
+
 
 
         //      SETEAR EL VIEWPAGER
@@ -118,10 +130,10 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         List<String> laListaDeTitulos=new ArrayList<>();
         for (Integer i=0;i<listaPreguntasOriginales.size();i++){
             Integer aux=i+1;
-            laListaDeTitulos.add(aux.toString()+"°");
+            laListaDeTitulos.add(aux.toString()+FuncionesPublicas.SIMBOLO_ORDINAL);
         }
         pager=findViewById(R.id.viewPagerAuditoria);
-        AdapterPagerPreguntas adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
+        adapterPager = new AdapterPagerPreguntas(getSupportFragmentManager(), listaPreguntasOriginales,origen,idese);
         pager.setAdapter(adapterPager);
         adapterPager.setUnaListaTitulos(laListaDeTitulos);
         adapterPager.notifyDataSetChanged();
@@ -155,6 +167,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
             public void onPageScrollStateChanged(int state) {
             }
         });
+
 
         Integer contador=0;
         for (Pregunta laPreg :
@@ -333,4 +346,23 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
     }
 
+    @Override
+    public void agregarPregunta(CharSequence input, String idEse, String idItem, String idCuestionario) {
+        Pregunta nuevaPregunta= new Pregunta();
+        nuevaPregunta.setTextoPregunta(input.toString());
+        nuevaPregunta.setIdCuestioniario(idCuestionario);
+        nuevaPregunta.setIdEse(idEse);
+        nuevaPregunta.setIdItem(idItem);
+        nuevaPregunta.setIdPregunta(FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+        controllerDatos.agregarPregunta(idCuestionario,nuevaPregunta,adapterPager);
+    }
+
+    public void irAPreguntaAgregada() {
+        pager.setCurrentItem(adapterPager.getCount());
+    }
+
+    @Override
+    public void cerrarFragmentEdicion() {
+        ActivityAuditoria.this.finish();
+    }
 }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Item;
 import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
@@ -34,7 +35,13 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     private AdapterView.OnLongClickListener listenerLong;
     private static String origen;
     private Notificable notificable;
+    private ControllerDatos controllerDatos;
+    private EditText elEdit;
 
+    public AdapterItems(Context context) {
+        this.context = context;
+        this.controllerDatos=new ControllerDatos(context);
+    }
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
@@ -93,7 +100,7 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final Item unItem = listaItemsOriginales.get(position);
-        ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+        final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
         itemViewHolder.cargarItem(unItem,position);
 
         itemViewHolder.botonEliminar.setOnClickListener(new View.OnClickListener() {
@@ -107,12 +114,10 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
                         .content(R.string.itemSeEliminara)
                         .positiveText(R.string.continuar)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            private Context context;
-
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 listaItemsOriginales.remove(position);
-                                FuncionesPublicas.borrarItem(unItem.getIdItem(),unItem.getIdEse(), unItem.getIdCuestionario(), AdapterItems.this);
+                                controllerDatos.borrarItem(unItem.getIdItem(),unItem.getIdEse(), unItem.getIdCuestionario(), AdapterItems.this);
 
                             }
                         })
@@ -129,18 +134,20 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
                         .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
                         .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
                         .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+
                         .content(view.getResources().getString(R.string.favorEditeItem))
                         .input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {
                                 if (input!=null && !input.toString().isEmpty()) {
-                                    FuncionesPublicas.cambiarTextoItem(unItem,input.toString(),context);
+                                    itemViewHolder.textViewDescripcion.setText(input.toString());
+                                    controllerDatos.cambiarTextoItem(unItem,input.toString(),AdapterItems.this);
                                 }
                                 AdapterItems.this.notifyDataSetChanged();
                             }
                         })
                         .build();
-                EditText elEdit = mDialog.getInputEditText();
+                elEdit = mDialog.getInputEditText();
                 if (elEdit!=null) {
                     elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_FLAG_MULTI_LINE |
@@ -152,6 +159,8 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
 
 
     }
+
+
 
     private Activity getRequiredActivity(View req_view) {
         Context context = req_view.getContext();

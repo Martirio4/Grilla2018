@@ -182,7 +182,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
     @Override
     public void abrirEditorDeCuestionarios() {
-        Intent intent = new Intent(this,EditarCuestionarioActivity.class);
+        Intent intent = new Intent(this,ActivityGestionCuestionario.class);
         startActivity(intent);
     }
 

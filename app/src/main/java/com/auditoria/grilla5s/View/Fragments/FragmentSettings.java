@@ -23,6 +23,7 @@ import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.auditoria.grilla5s.DAO.ControllerDatos;
 import com.auditoria.grilla5s.Model.Area;
 import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Model.Ese;
@@ -70,6 +71,7 @@ public class FragmentSettings extends Fragment {
     }
 
     private SharedPreferences config;
+    private ControllerDatos controllerDatos;
 
     public interface Notificable{
         public void abrirEditorDeCuestionarios();
@@ -81,6 +83,7 @@ public class FragmentSettings extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        controllerDatos=new ControllerDatos(getContext());
         config = getActivity().getSharedPreferences("prefs",0);
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_settings, container, false);
@@ -348,55 +351,13 @@ public class FragmentSettings extends Fragment {
                 .start();
     }
 
-    public void borrarBaseDeDatos(){
-        Realm realm = Realm.getDefaultInstance();
 
-
-        realm.executeTransaction(new Realm.Transaction() {
-        @Override
-        public void execute(@NonNull Realm realm) {
-
-            RealmResults<Area> lasAreas=realm.where(Area.class)
-                    .findAll();
-            lasAreas.deleteAllFromRealm();
-
-            RealmResults<Pregunta> lasPreguntas=realm.where(Pregunta.class)
-                    .findAll();
-            lasPreguntas.deleteAllFromRealm();
-
-            RealmResults<Item> losItem=realm.where(Item.class)
-                    .findAll();
-            losItem.deleteAllFromRealm();
-
-            RealmResults<Ese> lasEses=realm.where(Ese.class)
-                    .findAll();
-            lasEses.deleteAllFromRealm();
-
-            RealmResults<Foto> lasFotos=realm.where(Foto.class)
-                    .findAll();
-            lasFotos.deleteAllFromRealm();
-
-            RealmResults<Auditoria> lasAuditorias=realm.where(Auditoria.class)
-                    .findAll();
-            lasAuditorias.deleteAllFromRealm();
-
-            //borrar directorios
-            File path = new File(getContext().getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s" +File.separator+FirebaseAuth.getInstance().getCurrentUser().getEmail());
-           if (deleteDirectory(path)){
-               Snackbar.make(areas,getResources().getString(R.string.confirmaBorrarBaseDeDato), Snackbar.LENGTH_SHORT)
-                       .show();
-           }
-
-            }
-
-        });
-    }
 
     private class BorrarTodo extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... args) {
-            borrarBaseDeDatos();
+            controllerDatos.borrarBaseDatos();
             return null;
         }
 
