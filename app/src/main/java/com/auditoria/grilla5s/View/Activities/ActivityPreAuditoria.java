@@ -47,6 +47,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
     private ViewPager pager;
     private String origen;
     public static String idCuestionario;
+    public static String idEstructura;
 
     private ControllerDatos controllerDatos;
 
@@ -133,7 +134,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
             adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idCuestionario));
         }
         else{
-            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idAudit));
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idAudit, FuncionesPublicas.traerIdEses(origen,idAudit));
         }
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);

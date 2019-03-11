@@ -237,9 +237,13 @@ public class FragmentPregunta_ extends Fragment {
                 .equalTo("idPregunta",idPregunta)
                 .findFirst();
         if (pregunta!=null && pregunta.getPuntaje()!=null){
-            if (pregunta.getPuntaje()!=9) {
-                Integer puntaje=pregunta.getPuntaje();
-                RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje));
+            if (pregunta.getPuntaje()==0) {
+                Toast.makeText(getContext(), "asd", Toast.LENGTH_SHORT).show();
+                //no marca ninguno
+            }
+            else if( pregunta.getPuntaje()!=9){
+             Integer puntaje=pregunta.getPuntaje();
+                RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje-1));
                 unRadioButton.setChecked(true);
             }
             else{
@@ -313,7 +317,7 @@ public class FragmentPregunta_ extends Fragment {
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                     if (checkedId!=-1) {
-                            puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()));
+                            puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()))+1;
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -326,6 +330,7 @@ public class FragmentPregunta_ extends Fragment {
                                 if (preg!=null) {
                                     preg.setPuntaje(puntuacion);
                                 }
+
 
                             }
                         });

@@ -57,7 +57,7 @@ public class ControllerDatos {
                         case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
 //                            CREO EL OBJETO AUDITORIA EN LA REALM Y LE SETEO LOS VALORES DEFAULT USANDO EL MODELO CREADO
                             Auditoria auditoriaNuevaEstructurada = realm.createObject(Auditoria.class, FuncionesPublicas.ID_AUDITORIA + UUID.randomUUID());
-                            //nuevaAuditoria.setIdAuditoria("Audit_" + UUID.randomUUID());
+                           auditoriaNuevaEstructurada.setEstructuraAuditoria(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA);
                             idAuditInstanciada = auditoriaNuevaEstructurada.getIdAuditoria();
                             auditoriaNuevaEstructurada.setFechaAuditoria(determinarFecha());
                             auditoriaNuevaEstructurada.setEsUltimaAuditoria(false);
@@ -123,6 +123,7 @@ public class ControllerDatos {
                             auditoriaNuevaSimple.setEsUltimaAuditoria(false);
                             auditoriaNuevaSimple.setAuditEstaCerrada(false);
                             auditoriaNuevaSimple.setPuntajeFinal(0.0);
+                            auditoriaNuevaSimple.setEstructuraAuditoria(FuncionesPublicas.ESTRUCTURA_SIMPLE);
 
                             for (Ese eseModelo : elCuestionario.getListaEses()
                                     ) {
@@ -736,6 +737,7 @@ public class ControllerDatos {
                 Ese ese1 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                 ese1.setPuntajeEse(0.0);
+                nuevoCuestionario.addEse(ese1);
             }
 
             }

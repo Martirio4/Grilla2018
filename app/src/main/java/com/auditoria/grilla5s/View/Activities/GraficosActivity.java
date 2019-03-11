@@ -180,7 +180,7 @@ public class GraficosActivity extends AppCompatActivity {
                         .findFirst();
                 if (mAudit != null && !mAudit.getAuditEstaCerrada()) {
                     fabMenuGraficos.close(true);
-                    editarAuditoria(idAudit, mAudit.getAreaAuditada().getIdArea());
+                    editarAuditoria(idAudit, mAudit.getAreaAuditada().getIdArea(), mAudit.getEstructuraAuditoria());
                 } else {
                     Snackbar.make(fabEditarAuditoria, getResources().getString(R.string.auditCerradaNoPuedeEditar), Snackbar.LENGTH_SHORT)
                             .setAction(getString(R.string.ok), new View.OnClickListener() {
@@ -254,7 +254,7 @@ public class GraficosActivity extends AppCompatActivity {
                     fabMenuGraficos.close(true);
                     if (auditActual.getAuditEstaCerrada()) {
 
-                        new EnviarXLS().execute();
+                        new EnviarXLS().execute(auditActual.getEstructuraAuditoria());
                     } else {
 
 
@@ -270,7 +270,7 @@ public class GraficosActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                        new EnviarXLS().execute();
+                                        new EnviarXLS().execute(auditActual.getEstructuraAuditoria());
                                     }
                                 })
                                 .negativeText(getResources().getString(R.string.cancel))
@@ -451,17 +451,17 @@ public class GraficosActivity extends AppCompatActivity {
                         switch (cheatLevel){
                             case "alto":
 
-                                i1 = r.nextInt((5-4) + 1)+4;
+                                i1 = r.nextInt((4-3) + 1)+3;
                                 unaPreg.setPuntaje(i1);
                                 break;
                             case "medio":
 
-                                i1 = r.nextInt((4-3) + 1)+3;
+                                i1 = r.nextInt((3-2) + 1)+2;
                                 unaPreg.setPuntaje(i1);
                                 break;
                             case "bajo":
 
-                                i1 = r.nextInt((3) + 1);
+                                i1 = r.nextInt((2-1) + 1)+1;
                                 unaPreg.setPuntaje(i1);
                                 break;
 
@@ -489,14 +489,13 @@ public class GraficosActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void editarAuditoria(String idAudit, String idArea) {
+    public void editarAuditoria(String idAudit, String idArea, String estructuraAuditoria) {
 
         Intent intent = new Intent(this, ActivityPreAuditoria.class);
         Bundle bundle = new Bundle();
         bundle.putString(ActivityPreAuditoria.IDAREA, idArea);
         bundle.putString(ActivityPreAuditoria.ORIGEN, FuncionesPublicas.EDITAR_AUDITORIA);
         bundle.putString(ActivityPreAuditoria.IDAUDIT, idAudit);
-
         intent.putExtras(bundle);
         GraficosActivity.this.finish();
         startActivity(intent);
@@ -948,7 +947,7 @@ public class GraficosActivity extends AppCompatActivity {
         }
     }
 
-    public void crearExcel() {
+    public void crearExcel_estructurado() {
         Integer fila = 0;
         Integer columna = 0;
         Realm realm = Realm.getDefaultInstance();
@@ -1042,7 +1041,7 @@ public class GraficosActivity extends AppCompatActivity {
                     mAudit.getListaEses()) {
 //            escribo el numero de ese
 
-                escribirCelda(columna, fila, unaEse.getIdEse() + "S", "textoNormal2", laHoja);
+                escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHoja);
                 columna = columna + 1;
 
                 //recorro los item de la ese
@@ -1067,7 +1066,7 @@ public class GraficosActivity extends AppCompatActivity {
                     for (Pregunta unaPreg :
                             unItem.getListaPreguntas()) {
 
-                        escribirCelda(columna, fila, String.valueOf(unaPreg.getIdPregunta()), "textoNormalCentrado", laHoja);
+                        escribirCelda(columna, fila, String.valueOf(unItem.getListaPreguntas().indexOf(unaPreg)+1), "textoNormalCentrado", laHoja);
                         columna++;
                         escribirCelda(columna, fila, unaPreg.getTextoPregunta(), "textoNormal", laHoja);
                         columna++;
@@ -1076,7 +1075,7 @@ public class GraficosActivity extends AppCompatActivity {
                         if (unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()!=0 && unaPreg.getPuntaje()!=9 ) {
                             escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), "textoNormalCentrado", laHoja);
                             columna++;
-                            unPuntaje = ((unaPreg.getPuntaje() / 5.00) * 100);
+                            unPuntaje = ((unaPreg.getPuntaje() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100);
                         } else if(unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()==9) {
                             escribirCelda(columna, fila, "-", "textoNormalCentrado", laHoja);
                             columna++;
@@ -1107,10 +1106,10 @@ public class GraficosActivity extends AppCompatActivity {
                         cantPreguntasTotales++;
                     }
                     columna = 0;
-                    escribirCelda(1, fila, getResources().getString(R.string.totalSubitem) +String.valueOf(unItem.getIdItem()), "subTotal", laHoja);
+                    escribirCelda(1, fila, getResources().getString(R.string.totalSubitem) +String.valueOf(unaEse.getListaItem().indexOf(unItem)+1), "subTotal", laHoja);
                     laHoja.mergeCells(1, fila, 4, fila);
                     if (unItem.getPuntajeItem()!=9.9) {
-                        Double punItemDouble = (unItem.getPuntajeItem() / 5) * 100;
+                        Double punItemDouble = (unItem.getPuntajeItem() /FuncionesPublicas.MAXIMO_PUNTAJE) * 100;
                         String puntItemStr = df.format(punItemDouble);
                         escribirCelda(5, fila, puntItemStr + "%", "subTotal", laHoja);
                     } else {
@@ -1124,11 +1123,11 @@ public class GraficosActivity extends AppCompatActivity {
                 laHoja.mergeCells(0, fila - cantPreguntasTotales - cantItem, 0, fila - 1);
                 columna = 0;
 
-                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + unaEse.getIdEse() + "S", "subTotalEse", laHoja);
+                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "subTotalEse", laHoja);
                 laHoja.mergeCells(0, fila, 4, fila);
 
                 if (unaEse.getPuntajeEse()!=9.9) {
-                    Double puntEseDouble = (unaEse.getPuntajeEse() / 5) * 100;
+                    Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100;
                     String puntEseStr = df.format(puntEseDouble);
                     escribirCelda(5, fila, puntEseStr + "%", "subTotalEse", laHoja);
                 } else {
@@ -1190,7 +1189,7 @@ public class GraficosActivity extends AppCompatActivity {
                             ) {
                         if (unaPregunta.getListaFotos() != null && unaPregunta.getListaFotos().size() > 0) {
                             //ESCRIBO LA ESE
-                            escribirCelda(columna, fila, unaEse.getIdEse() + "S", "textoNormal2", laHojaFotos);
+                            escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHojaFotos);
                             columna = columna + 1;
                             //ESCRIBO EL ITEM
                             escribirCelda(columna, fila, unItem.getTextoItem(), "textoNormal", laHojaFotos);
@@ -1263,11 +1262,20 @@ public class GraficosActivity extends AppCompatActivity {
 
 
 
-    private class EnviarXLS extends AsyncTask<Void, Void, Void> {
+    private class EnviarXLS extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... args) {
-            crearExcel();
+        protected Void doInBackground(String... args) {
+            String estructura=args[0];
+            switch(estructura){
+                case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
+                    crearExcel_estructurado();
+                    break;
+                case FuncionesPublicas.ESTRUCTURA_SIMPLE:
+                    crearExcel_simple();
+                    break;
+            }
+
             return null;
         }
 
@@ -1283,6 +1291,287 @@ public class GraficosActivity extends AppCompatActivity {
             super.onPreExecute();
 
         }
+    }
+
+    public void crearExcel_simple() {
+        Integer fila = 0;
+        Integer columna = 0;
+        Realm realm = Realm.getDefaultInstance();
+        Auditoria mAudit = realm.where(Auditoria.class)
+                .equalTo("idAuditoria", idAudit)
+                .findFirst();
+
+//        CREO EL LIBRO CON EL NOMBRE AREA+FECHA
+
+        WritableWorkbook elLibro = crearLibroExcel("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(), "corta") + ".xls");
+        WritableSheet laHoja = crearHoja(elLibro, getResources().getString(R.string.resultados), 0);
+        laHojaFotos = crearHoja(elLibro, getResources().getString(R.string.tabImagenes), 1);
+        WritableSheet laHojaResumen = crearHoja(elLibro, "Resumen", 2);
+
+        //saco el screen y lo convierto en un FILE
+        View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
+        View v = rootView.findViewById(R.id.contenedorGraficos);
+
+        Bitmap unBitmap = screenShot(v);
+        Bitmap scaledBitmap = scaleSinRotar(unBitmap, 250);
+
+        File filesDir = getApplicationContext().getFilesDir();
+        File imageFile = new File(filesDir, "temp" + ".jpg");
+
+        OutputStream os;
+        try {
+            os = new FileOutputStream(imageFile);
+            unBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
+
+//        lo comprimo
+        // Bitmap SunBitmap=Bitmap.createScaledBitmap(unBitmap, 300,510,false);
+        try {
+            fotoComprimida = new Compressor(this)
+                    .setMaxWidth(640)
+                    .setMaxHeight(480)
+                    .setQuality(75)
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                    .compressToFile(imageFile, imageFile.getName().replace(".jpg", ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        WritableImage image = new WritableImage(
+                1, 1, 4, 44, fotoComprimida); //Supports only 'png' images
+        laHojaResumen.addImage(image);
+
+
+        laHoja.setColumnView(3, 11);
+        laHoja.setColumnView(2, 32);
+        laHoja.setColumnView(4, 11);
+        laHoja.setColumnView(5, 32);
+
+
+//        laHoja.setColumnView(23,520);
+//        laHoja.setColumnView(57,520);
+//        laHoja.setColumnView(84,520);
+//        laHoja.setColumnView(110,520);
+//        laHoja.setColumnView(134,520);
+//        laHoja.setColumnView(135,520);
+
+
+        //SETEO LOS TITULOS DE LA HOJA
+        try {
+            escribirCelda(columna, fila, "S", "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titComentario), "titulo", laHoja);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titFotos), "titulo", laHoja);
+            columna = 0;
+            fila = 1;
+
+
+            for (Ese unaEse :
+                    mAudit.getListaEses()) {
+//            escribo el numero de ese
+
+                escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHoja);
+                columna = columna + 1;
+
+                //recorro los item de la ese
+
+                Integer cantItem = unaEse.getListaItem().size();
+                Integer cantPreguntasTotales = 0;
+
+
+                    //recorro las preguntas del item
+                    for (Pregunta unaPreg :
+                            unaEse.getListaPreguntas()) {
+
+                        escribirCelda(columna, fila, String.valueOf(unaEse.getListaPreguntas().indexOf(unaPreg)+1), "textoNormalCentrado", laHoja);
+                        columna++;
+                        escribirCelda(columna, fila, unaPreg.getTextoPregunta(), "textoNormal", laHoja);
+                        columna++;
+                        Double unPuntaje;
+                        //si el puntaje es cero o null pone cero
+                        if (unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()!=0 && unaPreg.getPuntaje()!=9 ) {
+                            escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), "textoNormalCentrado", laHoja);
+                            columna++;
+                            unPuntaje = ((unaPreg.getPuntaje() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100);
+                        } else if(unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()==9) {
+                            escribirCelda(columna, fila, "-", "textoNormalCentrado", laHoja);
+                            columna++;
+                            unPuntaje = (9.9);
+                        }
+                        else {
+                            escribirCelda(columna, fila, "0", "textoNormalCentrado", laHoja);
+                            columna++;
+                            unPuntaje = (0.0);
+                        }
+                        String elPuntaje;
+                        if (unPuntaje==9.9){
+                            elPuntaje="-";
+                            escribirCelda(columna, fila, elPuntaje, "textoNormalCentrado", laHoja);
+                        }
+                        else{
+                            elPuntaje = df.format(unPuntaje);
+                            escribirCelda(columna, fila, elPuntaje + "%", "textoNormalCentrado", laHoja);
+                        }
+
+
+                        columna++;
+                        escribirCelda(columna, fila, unaPreg.getComentario(), "textoNormal", laHoja);
+                        columna++;
+                        escribirCelda(columna, fila, "", "textoNormal", laHoja);
+                        columna = 1;
+                        fila++;
+                        cantPreguntasTotales++;
+                    }
+
+               ///////
+
+                laHoja.mergeCells(0, fila - cantPreguntasTotales - cantItem, 0, fila - 1);
+                columna = 0;
+
+                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "subTotalEse", laHoja);
+                laHoja.mergeCells(0, fila, 4, fila);
+
+                if (unaEse.getPuntajeEse()!=9.9) {
+                    Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100;
+                    String puntEseStr = df.format(puntEseDouble);
+                    escribirCelda(5, fila, puntEseStr + "%", "subTotalEse", laHoja);
+                } else {
+                    escribirCelda(5, fila, "-", "subTotalEse", laHoja);
+                }
+                laHoja.mergeCells(5, fila, 8, fila);
+                columna = 0;
+                fila++;
+            }
+
+            escribirCelda(0, fila, getResources().getString(R.string.totalAudit), "totalAudit", laHoja);
+            laHoja.mergeCells(0, fila, 4, fila);
+
+            if (mAudit.getPuntajeFinal()!=9.9) {
+                Double puntFinalDouble = mAudit.getPuntajeFinal() * 100.00;
+                String puntFinal = df.format(puntFinalDouble);
+                escribirCelda(5, fila, puntFinal + "%", "totalAudit", laHoja);
+            } else {
+                escribirCelda(5, fila,  "-", "totalAudit", laHoja);
+            }
+
+            laHoja.mergeCells(5, fila, 8, fila);
+            columna = 0;
+            fila = 0;
+
+            //mando el mail
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //popular imagenes
+        columna = 0;
+        fila = 0;
+
+        try {
+            escribirCelda(columna, fila, "S", "titulo", laHojaFotos);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHojaFotos);
+            columna = columna + 1;
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHojaFotos);
+            columna++;
+
+            columna = 0;
+            fila = 1;
+            laHojaFotos.setColumnView(1, 32);
+
+
+            for (Ese unaEse : mAudit.getListaEses()
+                    ) {
+                //pongo la S en la primera columna
+
+
+                    for (Pregunta unaPregunta : unaEse.getListaPreguntas()
+                            ) {
+                        if (unaPregunta.getListaFotos() != null && unaPregunta.getListaFotos().size() > 0) {
+                            //ESCRIBO LA ESE
+                            escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHojaFotos);
+                            columna = columna + 1;
+                            //ESCRIBO EL ITEM
+
+                            //ESCRIBO LA PREGUNTA
+                            escribirCelda(columna, fila, unaPregunta.getTextoPregunta(), "textoNormal", laHojaFotos);
+                            columna++;
+                            if (unaPregunta.getPuntaje()==null) {
+
+                                escribirCelda(columna, fila, "-", "textoNormalCentrado", laHojaFotos);
+
+                            } else {
+
+                                escribirCelda(columna, fila, unaPregunta.getPuntaje().toString(), "textoNormalCentrado", laHojaFotos);
+                            }
+                            columna++;
+
+                            laHojaFotos.mergeCells(0, fila, 0, fila + altoFoto + 2);
+                            laHojaFotos.mergeCells(1, fila, 1, fila + altoFoto + 2);
+                            laHojaFotos.mergeCells(2, fila, 2, fila + altoFoto + 2);
+                            laHojaFotos.mergeCells(3, fila, 3, fila + altoFoto + 2);
+                            //PEGO LAS FOTOS5
+                            Integer contador = 1;
+                            for (Foto unaFoto : unaPregunta.getListaFotos()
+                                    ) {
+//                                separacion entre fotos
+                                laHojaFotos.setColumnView(columna, 4);
+                                laHojaFotos.setColumnView(columna + anchoFoto + 1, 4);
+                                //ESCRIBO EL TITULO
+
+                                columna = columna + 1;
+
+                                WritableImage imagen = new WritableImage(
+                                        columna, fila + 1, anchoFoto, altoFoto, new File(unaFoto.getRutaFoto())); //Supports only 'png' images
+                                laHojaFotos.addImage(imagen);
+
+
+                                escribirCelda(columna - 1, 0, getResources().getString(R.string.titFotos) + " " + contador.toString(), "titulo", laHojaFotos);
+                                laHojaFotos.mergeCells(columna - 1, 0, columna + 5, 0);
+
+
+//                                escribo el comentario de la foto y mergeo las celdas esas
+                                escribirCelda(columna, fila + altoFoto + 1, unaFoto.getComentarioFoto(), "textoNormalCentradoSinBorde", laHojaFotos);
+                                laHojaFotos.mergeCells(columna, fila + altoFoto + 1, columna + anchoFoto - 1, fila + altoFoto + 1);
+                                dibujarBordesFoto(columna - 1, fila);
+                                columna = columna + anchoFoto + 1;
+
+                                contador++;
+                            }
+                            fila = fila + altoFoto + 3;
+                            columna = 0;
+
+                        }
+
+                    }
+
+
+            }
+
+            elLibro.write();
+            elLibro.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mandarExcelPorMail("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(), "corta") + ".xls");
+
     }
 
 }

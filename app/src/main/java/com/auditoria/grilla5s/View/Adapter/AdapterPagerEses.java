@@ -5,12 +5,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.auditoria.grilla5s.Model.Auditoria;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Fragments.FragmentPreAudit;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 
 public class AdapterPagerEses extends FragmentStatePagerAdapter {
@@ -21,6 +24,7 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
     private String idCuestionario;
     private List<String> unaListaTitulos;
     private List<String> listaDeIdEses;
+    private String idEstructura;
     //CONSTRUNCTOR PARA EDITOR DE CUESTIONARIOS
     public AdapterPagerEses(FragmentManager fm, String origen, String idCuestionario, List<String> strings) {
         super(fm);
@@ -34,10 +38,29 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        for (String idEse :
-                listaDeIdEses) {
-            listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(idEse,origen,idCuestionario));
+        switch (origen){
+            case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                for (String idEse :
+                        listaDeIdEses) {
+                    listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(idEse,origen,idCuestionario));
+                }
+            break;
+            default:
+                Realm realm = Realm.getDefaultInstance();
+                Auditoria mAudit=realm.where(Auditoria.class)
+                        .equalTo("idAuditoria", idCuestionario)
+                        .findFirst();
+                if (mAudit!=null){
+                    this.idEstructura=mAudit.getEstructuraAuditoria();
+                }
+                for (String idEse :
+                        listaDeIdEses) {
+                    listaFragments.add(FragmentPreAudit.CrearfragmentPreAudit(idEse,origen,idCuestionario,idEstructura));
+                }
+            break;
         }
+
+
 
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.

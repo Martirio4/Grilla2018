@@ -51,6 +51,15 @@ public class AdapterPagerPreguntas extends FragmentStatePagerAdapter {
                 }
 
                 break;
+            default:
+
+                for (Pregunta unaPreg:listaPregunta
+                        ) {
+                    listaFragments.add(FragmentPregunta_.CrearfragmentPregunta(unaPreg, elOrigen, elIdEse));
+                }
+
+                break;
+
 
         }
 

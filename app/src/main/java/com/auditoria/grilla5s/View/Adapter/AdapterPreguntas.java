@@ -186,6 +186,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
     private static class PreguntaViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewNumero;
         private TextView textViewDescripcion;
+        private TextView textoFaltantes;
 
         private ImageButton botonEliminar;
         private ImageButton botonEditar;
@@ -196,6 +197,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
 
             textViewNumero=  itemView.findViewById(R.id.tv_numero_item);
             textViewDescripcion=  itemView.findViewById(R.id.tv_descripcion_item);
+            textoFaltantes= itemView.findViewById(R.id.tagPreguntaFaltante);
 
             botonEliminar = itemView.findViewById(R.id.botonEliminarItem);
             botonEditar=itemView.findViewById(R.id.botonEditarItem);
@@ -205,12 +207,27 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
             Typeface robotoR = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Regular.ttf");
             textViewNumero.setTypeface(robotoR);
             textViewDescripcion.setTypeface(robotoL);
+            textoFaltantes.setTypeface(robotoL);
 
         }
 
         void cargarPregunta(Pregunta unPregunta, Integer ordenCarga) {
             textViewNumero.setText(String.valueOf(ordenCarga+1));
             textViewDescripcion.setText(unPregunta.getTextoPregunta());
+            switch (origen) {
+                case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                break;
+                default:
+                    if (unPregunta.getPuntaje() == null) {
+                        textoFaltantes.setTextColor(ContextCompat.getColor(textoFaltantes.getContext(), R.color.textoRojo));
+                        textoFaltantes.setText(textoFaltantes.getContext().getString(R.string.preguntaIncompleta));
+                    } else {
+                        textoFaltantes.setTextColor(ContextCompat.getColor(textoFaltantes.getContext(), R.color.tile5));
+                        textoFaltantes.setText(textoFaltantes.getContext().getString(R.string.preguntaCompleta));
+
+                    }
+                break;
+            }
         }
 
 

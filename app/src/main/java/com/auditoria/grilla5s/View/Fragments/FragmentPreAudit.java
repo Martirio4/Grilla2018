@@ -31,6 +31,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudit;
+import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idEstructura;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +39,7 @@ import static com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria.idAudi
 public class FragmentPreAudit extends Fragment {
 
     public final static String LAESE = "LAESE";
+    private static final String IDESTRUCTURA = "IDESTRUCTURA";
     private String laEse;
 
     public static final String IDCUESTIONARIO = "IDCUESTIONARIO";
@@ -85,6 +87,9 @@ public class FragmentPreAudit extends Fragment {
             if (elCuestionario !=null){
                 estructuraCuestionario = elCuestionario.getTipoCuestionario();
             }
+            else{
+                estructuraCuestionario=bundle.getString(IDESTRUCTURA);
+            }
 
          }
         else {
@@ -109,6 +114,7 @@ public class FragmentPreAudit extends Fragment {
                     });
                     textoFab.setText(getString(R.string.nuevoItem));
                     break;
+
                 case FuncionesPublicas.ESTRUCTURA_SIMPLE:
                     fabPreAudit.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -244,6 +250,17 @@ public class FragmentPreAudit extends Fragment {
         unBundle.putString(LAESE, laEse);
         unBundle.putString(ORIGEN, origen);
         unBundle.putString(IDCUESTIONARIO, idCuestionario);
+        fragmentPreAudit.setArguments(unBundle);
+
+        return fragmentPreAudit;
+    }
+    public static FragmentPreAudit CrearfragmentPreAudit(String laEse, String origen, String idCuestionario,String idEstructura) {
+        FragmentPreAudit fragmentPreAudit = new FragmentPreAudit();
+        Bundle unBundle = new Bundle();
+        unBundle.putString(LAESE, laEse);
+        unBundle.putString(ORIGEN, origen);
+        unBundle.putString(IDCUESTIONARIO, idCuestionario);
+        unBundle.putString(IDESTRUCTURA,idEstructura);
         fragmentPreAudit.setArguments(unBundle);
 
         return fragmentPreAudit;

@@ -64,7 +64,6 @@ public class FragmentManageAreas extends Fragment {
     private File fotoComprimida;
 
     private Notificable notificable;
-    private FloatingActionMenu fabMenuManage;
     private FloatingActionButton fabAgregarArea;
     private FloatingActionButton fabSalir;
 
@@ -146,21 +145,12 @@ public class FragmentManageAreas extends Fragment {
         };
         adapterArea.setListener(listenerArea);
 
-        fabMenuManage =(FloatingActionMenu) view.findViewById(R.id.agregarArea);
-        fabMenuManage.setMenuButtonColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        fabAgregarArea=new FloatingActionButton(getActivity());
 
+        fabAgregarArea=view.findViewById(R.id.fabNuevaArea);
 
-        fabAgregarArea.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabAgregarArea.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+        fabAgregarArea.setColorNormal(ContextCompat.getColor(getContext(), R.color.colorAccent));;
         fabAgregarArea.setLabelText(getString(R.string.addNewArea));
         fabAgregarArea.setImageResource(R.drawable.ic_note_add_black_24dp);
-        fabMenuManage.addMenuButton(fabAgregarArea);
-
-        fabAgregarArea.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
-                ContextCompat.getColor(getActivity(), R.color.light_grey),
-                ContextCompat.getColor(getActivity(), R.color.white_transparent));
-        fabAgregarArea.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
 
         fabAgregarArea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,7 +159,7 @@ public class FragmentManageAreas extends Fragment {
 
                 if (FuncionesPublicas.isExternalStorageWritable()) {
                     if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        fabMenuManage.close(true);
+
                         EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
                     }
                     else {
@@ -183,7 +173,7 @@ public class FragmentManageAreas extends Fragment {
                                             new PermissionCallback() {
                                                 @Override
                                                 public void permissionGranted() {
-                                                    fabMenuManage.close(true);
+
                                                     EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
                                                 }
 
@@ -202,7 +192,7 @@ public class FragmentManageAreas extends Fragment {
                                     new PermissionCallback() {
                                         @Override
                                         public void permissionGranted() {
-                                            fabMenuManage.close(true);
+
                                             EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
                                         }
 
@@ -228,26 +218,7 @@ public class FragmentManageAreas extends Fragment {
             }
         });
 
-        fabSalir = new FloatingActionButton(getActivity());
-        fabSalir.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fabSalir.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
-        fabSalir.setLabelText(getString(R.string.salir));
-        fabSalir.setImageResource(R.drawable.ic_exit_to_app_black_24dp);
-        fabMenuManage.addMenuButton(fabSalir);
 
-        fabSalir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile3),
-                ContextCompat.getColor(getActivity(), R.color.light_grey),
-                ContextCompat.getColor(getActivity(), R.color.white_transparent));
-        fabSalir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-
-        fabSalir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fabMenuManage.close(true);
-                unAvisable.salirDeAca();
-
-            }
-        });
 
         config = getActivity().getSharedPreferences("prefs",0);
         boolean quiereVerTuto = config.getBoolean("quiereVerTuto",false);
@@ -273,7 +244,6 @@ public class FragmentManageAreas extends Fragment {
 
     private void seguirConTutorial() {
         Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
-        fabMenuManage.open(true);
 
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
 

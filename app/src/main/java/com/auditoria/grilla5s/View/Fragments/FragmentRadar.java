@@ -202,7 +202,7 @@ public class FragmentRadar extends Fragment {
         entries1.add(new RadarEntry(punto5*20));
 
 
-
+//        TARGET
         entries2.add(new RadarEntry(4f*20));
         entries2.add(new RadarEntry(4f*20));
         entries2.add(new RadarEntry(4f*20));

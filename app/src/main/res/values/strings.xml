@@ -703,5 +703,8 @@
     <string name="na">\"n/a\"</string>
     <string name="clicParaCambiarPregunta">Haga click aqui para editar el texto de la pregunta.</string>
     <string name="limpiarTexto">Limpiar</string>
+    <string name="preguntaCompleta">Pregunta completa.</string>
+    <string name="preguntaIncompleta">Pregunta incompleta.</string>
+    <string name="Nueva_Area">Nueva área</string>
 
 </resources>

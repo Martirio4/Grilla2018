@@ -6,7 +6,9 @@ import android.content.ContextWrapper;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,12 +83,11 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
         FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
-
+        viewCelda = layoutInflater.inflate(R.layout.detalle_celda_manage_areas2, parent, false);
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
-            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_manage_areas2, parent, false);
 
         } else {
-            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_manage_areas2, parent, false);
+
             viewCelda.setOnClickListener(this);
         }
         AreaViewHolder areasViewHolder = new AreaViewHolder(viewCelda);
@@ -97,7 +98,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Area unArea = listaAreasOriginales.get(position);
-        AreaViewHolder AreaViewHolder = (AreaViewHolder) holder;
+        final AreaViewHolder AreaViewHolder = (AreaViewHolder) holder;
         AreaViewHolder.cargarArea(unArea);
 
 
@@ -119,44 +120,33 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         AreaViewHolder.fabEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                        //.title(view.getResources().getString(R.string.EditarItem))
-                        //.contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                        //.backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                        //.titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
-                        //.content(view.getResources().getString(R.string.favorEditeItem))
-                        //.inputType(InputType.TYPE_CLASS_TEXT)
-                        /*.input(view.getResources().getString(R.string.comment),unItem.getTituloItem(), new MaterialDialog.InputCallback() {
+                        .title(view.getResources().getString(R.string.EditarItem))
+                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
+                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
+                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+
+                        .content(view.getResources().getString(R.string.favorEditeItem))
+                        .input(view.getResources().getString(R.string.comment),unArea.getNombreArea(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {
-
-
+                                if (input!=null && !input.toString().isEmpty()) {
+                                    AreaViewHolder.nombreArea.setText(input.toString());
+                                    FuncionesPublicas.cambiarTextoArea(unArea,input.toString(),context);
+                                }
+                                AdapterArea.this.notifyDataSetChanged();
                             }
-                        })*/
-                        .customView(R.layout.dialogo_editar,false)
+                        })
                         .build();
-
-                View laView=mDialog.getCustomView();
-                final EditText content= laView.findViewById(R.id.editTextoItem);
-                content.setText(unArea.getNombreArea());
-
-                TextView tituloDialogo=laView.findViewById(R.id.tituloDialogoItem);
-                tituloDialogo.setText(context.getString(R.string.editarArea));
-                tituloDialogo.setFocusableInTouchMode(false);
-
-                TextView botonOk= laView.findViewById(R.id.botonDialogoSi);
-                botonOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (content.getText()!=null && !content.getText().toString().isEmpty()) {
-                            FuncionesPublicas.cambiarTextoArea(unArea,content.getText().toString(),context);
-                        }
-                        AdapterArea.this.notifyDataSetChanged();
-                        mDialog.hide();
-                    }
-                });
+                EditText elEdit = mDialog.getInputEditText();
+                if (elEdit!=null) {
+                    elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_FLAG_MULTI_LINE |
+                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                }
                 mDialog.show();
+
             }
         });
 
@@ -194,7 +184,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
 
     private static class AreaViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
-        private TextView textView;
+        private TextView nombreArea;
         private ImageButton fabEliminar;
         private ImageButton fabEditar;
         private TextView textUltima;
@@ -205,7 +195,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         public AreaViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imagenCamara);
-            textView= (TextView) itemView.findViewById(R.id.nombreArea);
+            nombreArea = (TextView) itemView.findViewById(R.id.nombreArea);
             linearUltima=itemView.findViewById(R.id.linearUltimoPuntaje);
             textUltima=itemView.findViewById(R.id.ultimoPuntaje);
             tagultima=itemView.findViewById(R.id.tagUltimoPuntaje);
@@ -213,7 +203,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
 
 
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
-            textView.setTypeface(robotoL);
+            nombreArea.setTypeface(robotoL);
             textViewTipo.setTypeface(robotoL);
             fabEliminar = itemView.findViewById(R.id.botonEliminar);
             fabEliminar.setVisibility(View.GONE);
@@ -248,7 +238,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
                         .into(imageView);
             }
 
-            textView.setText(unArea.getNombreArea());
+            nombreArea.setText(unArea.getNombreArea());
 
             if (unArea.getIdCuestionario()!=null) {
                 //CARGO EL TIPO DE AREA

@@ -161,7 +161,6 @@ public class AdapterItems extends RecyclerView.Adapter implements View.OnClickLi
     }
 
 
-
     private Activity getRequiredActivity(View req_view) {
         Context context = req_view.getContext();
         while (context instanceof ContextWrapper) {

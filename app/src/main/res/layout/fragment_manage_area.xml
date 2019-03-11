@@ -37,16 +37,34 @@
     </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
-
-    <com.github.clans.fab.FloatingActionMenu
-        app:layout_anchor="@id/linearParaCoordinar"
-        android:id="@+id/agregarArea"
-        android:layout_margin="@dimen/margenGrande"
+    <LinearLayout
+        android:background="@android:color/transparent"
+        android:id="@+id/linearAudit"
         android:layout_gravity="bottom|end"
-        app:layout_anchorGravity="bottom|right|end"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
 
+
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_gravity="center"
+            android:id="@+id/fabNuevaArea"
+            app:fab_label="@string/saveAudit"
+            android:layout_marginStart="@dimen/margenChico"
+            android:layout_marginEnd="@dimen/margenChico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/textoFabPreAudit"
+            android:paddingStart="@dimen/margenChico"
+            android:paddingEnd="@dimen/margenChico"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:text="@string/Nueva_Area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
 </FrameLayout>

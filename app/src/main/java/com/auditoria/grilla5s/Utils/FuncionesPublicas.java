@@ -94,6 +94,7 @@ public class FuncionesPublicas {
     public static final String ID_AUDITORIA = "AUDIT_";
     public static final String SIMBOLO_ORDINAL = "°";
     public static final String IDCUESTIONARIOS_DEFAULT = "CUEDEF_";
+    public static final double MAXIMO_PUNTAJE = 4.0;
 
 
     public static boolean isExternalStorageWritable() {
@@ -319,21 +320,25 @@ public class FuncionesPublicas {
             public void execute(Realm bgRealm) {
                 RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
                         .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
                         .findAll();
                 lasPreguntas.deleteAllFromRealm();
 
                 RealmResults<Item> losItem = bgRealm.where(Item.class)
                         .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
                         .findAll();
                 losItem.deleteAllFromRealm();
 
                 RealmResults<Ese>lasEses=bgRealm.where(Ese.class)
                         .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
                         .findAll();
                 lasEses.deleteAllFromRealm();
 
                 RealmResults<Criterio>losCriterios=bgRealm.where(Criterio.class)
                         .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
                         .not()
                         .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
                         .findAll();
@@ -548,7 +553,7 @@ public class FuncionesPublicas {
                         cantidadItems=cantidadItems+divisorItems;
                     }
 
-                    mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/5.0);
+                    mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/FuncionesPublicas.MAXIMO_PUNTAJE);
                 }
                 if (mAudit != null && tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
                     Double sumatoriaEse = 0.0;
@@ -594,8 +599,6 @@ public class FuncionesPublicas {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
                 .sort("fechaAuditoria", Sort.DESCENDING)
-                .not()
-                .beginsWith("idAuditoria","Audit_modelo")
                 .findAll();
         return resulta2;
     }
@@ -705,6 +708,7 @@ public class FuncionesPublicas {
             case FuncionesPublicas.EDITAR_CUESTIONARIO:
                 listaEses =realm.where(Ese.class)
                         .equalTo("idCuestionario", idAudit)
+                        .isNull("idAudit")
                         .findAll();
                 if (listaEses!=null){
                     for (Ese unaEse :

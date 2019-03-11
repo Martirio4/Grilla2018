@@ -55,7 +55,18 @@
                         android:textAlignment="textStart"
                         android:id="@+id/tv_descripcion_item"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_weight="80"
+                        android:layout_height="0dp" />
+                    <TextView
+                        android:textColor="@color/tile5"
+                        android:textSize="12sp"
+                        android:layout_weight="20"
+                        android:layout_gravity="bottom"
+                        android:id="@+id/tagPreguntaFaltante"
+                        android:paddingStart="@dimen/margenChico"
+                        android:paddingEnd="@dimen/margenChico"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
 
                 </LinearLayout>
         </LinearLayout>

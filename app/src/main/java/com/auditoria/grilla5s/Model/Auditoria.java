@@ -22,7 +22,15 @@ public class Auditoria extends RealmObject {
     private RealmList<Ese> listaEses;
     private Double puntajeFinal;
     private Boolean auditEstaCerrada;
+    private String estructuraAuditoria;
 
+    public String getEstructuraAuditoria() {
+        return estructuraAuditoria;
+    }
+
+    public void setEstructuraAuditoria(String estructuraAuditoria) {
+        this.estructuraAuditoria = estructuraAuditoria;
+    }
 
     public Boolean getAuditEstaCerrada() {
         return auditEstaCerrada;
