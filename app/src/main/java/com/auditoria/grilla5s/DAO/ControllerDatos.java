@@ -70,6 +70,8 @@ public class ControllerDatos {
                                 eseNueva.setIdCuestionario(idCuestionario);
                                 eseNueva.setIdAudit(idAuditInstanciada);
                                 eseNueva.setPuntajeEse(eseModelo.getPuntajeEse());
+                                eseNueva.setNombreEse(eseModelo.getNombreEse());
+                                eseNueva.setNumeroEse(eseModelo.getNumeroEse());
                                 eseNueva.setListaItem(new RealmList<Item>());
 
                                 for (Item itemModelo : eseModelo.getListaItem()
@@ -130,6 +132,8 @@ public class ControllerDatos {
                                 Ese eseNueva = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                                 eseNueva.setIdAudit(idAuditInstanciada);
                                 eseNueva.setPuntajeEse(eseModelo.getPuntajeEse());
+                                eseNueva.setNombreEse(eseModelo.getNombreEse());
+                                eseNueva.setNumeroEse(eseModelo.getNumeroEse());
                                 eseNueva.setListaPreguntas(new RealmList<Pregunta>());
                                 for (Pregunta preguntaModelo : eseModelo.getListaPreguntas()
                                         ) {
@@ -221,6 +225,9 @@ public class ControllerDatos {
                 Ese ese1 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                 ese1.setPuntajeEse(0.0);
+
+                ese1.setNombreEse(FuncionesPublicas.PRIMERA_ESE);
+                ese1.setNumeroEse(1);
                 Pregunta pregunta111 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
                 pregunta111.setPuntaje(null);
                 pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
@@ -240,6 +247,8 @@ public class ControllerDatos {
 //              SEGUNDA ESE
                 Ese ese2 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese2.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese2.setNombreEse(FuncionesPublicas.SEGUNDA_ESE);
+                ese2.setNumeroEse(2);
                 ese2.setPuntajeEse(0.0);
                 Pregunta pregunta121 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
                 pregunta121.setPuntaje(null);
@@ -257,6 +266,8 @@ public class ControllerDatos {
 //              TERCERA ESE
                 Ese ese3 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese3.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese3.setNombreEse(FuncionesPublicas.TERCERA_ESE);
+                ese3.setNumeroEse(3);
                 ese3.setPuntajeEse(0.0);
                 Pregunta pregunta211 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
                 pregunta211.setPuntaje(null);
@@ -274,6 +285,8 @@ public class ControllerDatos {
 //              CUARTA ESE
                 Ese ese4 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese4.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese4.setNombreEse(FuncionesPublicas.CUARTA_ESE);
+                ese4.setNumeroEse(4);
                 ese4.setPuntajeEse(0.0);
                 Pregunta pregunta321 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
                 pregunta321.setPuntaje(null);
@@ -291,6 +304,8 @@ public class ControllerDatos {
 //              QUINTA ESE
                 Ese ese5 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese5.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese5.setNombreEse(FuncionesPublicas.QUINTA_ESE);
+                ese5.setNumeroEse(5);
                 ese5.setPuntajeEse(0.0);
                 Pregunta pregunta411 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
                 pregunta411.setPuntaje(null);
@@ -338,6 +353,8 @@ public class ControllerDatos {
 
                 Ese ese1 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese1.setNombreEse(FuncionesPublicas.PRIMERA_ESE);
+                ese1.setNumeroEse(1);
                 ese1.setPuntajeEse(0.0);
                 //                  PRIMER ITEM
                 Item item11 = realm.createObject(Item.class, FuncionesPublicas.IDITEMS + UUID.randomUUID());
@@ -392,6 +409,8 @@ public class ControllerDatos {
 
                 Ese ese2 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese2.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese2.setNombreEse(FuncionesPublicas.SEGUNDA_ESE);
+                ese2.setNumeroEse(2);
                 ese2.setPuntajeEse(0.0);
 
                 //                        PRIMER ITEM
@@ -456,6 +475,8 @@ public class ControllerDatos {
 
                 Ese ese3 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese3.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese3.setNombreEse(FuncionesPublicas.TERCERA_ESE);
+                ese3.setNumeroEse(3);
                 ese3.setPuntajeEse(0.0);
 
                 //                        PRIMER ITEM
@@ -517,6 +538,8 @@ public class ControllerDatos {
 
                 Ese ese4 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese4.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese4.setNombreEse(FuncionesPublicas.CUARTA_ESE);
+                ese4.setNumeroEse(4);
                 ese4.setPuntajeEse(0.0);
 
                 //                        PRIMER ITEM
@@ -579,6 +602,8 @@ public class ControllerDatos {
                 //QUINTA ESE
                 Ese ese5 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese5.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                ese5.setNombreEse(FuncionesPublicas.QUINTA_ESE);
+                ese5.setNumeroEse(5);
                 ese5.setPuntajeEse(0.0);
                 //                        PRIMER ITEM
                 Item item51 = realm.createObject(Item.class, FuncionesPublicas.IDITEMS + UUID.randomUUID());
@@ -737,6 +762,8 @@ public class ControllerDatos {
                 Ese ese1 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
                 ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                 ese1.setPuntajeEse(0.0);
+                ese1.setNombreEse(traerEses().get(i));
+                ese1.setNumeroEse(i+1);
                 nuevoCuestionario.addEse(ese1);
             }
 
@@ -760,6 +787,10 @@ public class ControllerDatos {
                         .findAll();
                 lasAreas.deleteAllFromRealm();
 
+                RealmResults<Criterio> losCriterios=realm.where(Criterio.class)
+                        .findAll();
+                losCriterios.deleteAllFromRealm();
+
                 RealmResults<Pregunta> lasPreguntas=realm.where(Pregunta.class)
                         .findAll();
                 lasPreguntas.deleteAllFromRealm();
@@ -772,6 +803,7 @@ public class ControllerDatos {
                         .findAll();
                 lasEses.deleteAllFromRealm();
 
+
                 RealmResults<Foto> lasFotos=realm.where(Foto.class)
                         .findAll();
                 lasFotos.deleteAllFromRealm();
@@ -780,15 +812,25 @@ public class ControllerDatos {
                         .findAll();
                 lasAuditorias.deleteAllFromRealm();
 
+                RealmResults<Cuestionario> losCuestionarios=realm.where(Cuestionario.class)
+                        .findAll();
+                losCuestionarios.deleteAllFromRealm();
+
                 //borrar directorios
                 File path = new File(context.getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s" +File.separator+ FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 if (deleteDirectory(path)){
-                    Toast.makeText(context, context.getString(R.string.confirmaBorrarBaseDeDato), Toast.LENGTH_SHORT).show();
                 }
 
             }
 
         });
+
+        //crear cuestionarios default
+        crearCriteriosDefault();
+        crearCuestionariosDefault(context.getString(R.string.areaGeneral),true);
+        crearCuestionariosDefault(context.getString(R.string.areaIndustrial));
+        crearCuestionariosDefault(context.getString(R.string.areaOficina));
+        crearCuestionariosDefault(context.getString(R.string.areaExterna));
 
     }
 

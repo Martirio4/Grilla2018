@@ -484,21 +484,13 @@ public class FuncionesPublicas {
                 Auditoria mAudit = realm.where(Auditoria.class)
                         .equalTo("idAuditoria", idAudit)
                         .findFirst();
-                Pregunta mPreguntA= realm.where(Pregunta.class)
-                        .equalTo("idAudit", idAudit)
-                        .findFirst();
                 //si una pregunta de esta auditoria no tiene idItem, es porque la estructura es simple
-                if (mPreguntA!=null){
-                    if (mPreguntA.getIdItem()==null){
-                        tipoEstructura=FuncionesPublicas.ESTRUCTURA_SIMPLE;
-                    }
-                    else{
-                        tipoEstructura=FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA;
-                    }
+                if (mAudit!=null){
+                    tipoEstructura=mAudit.getEstructuraAuditoria();
                 }
 
                 assert tipoEstructura != null;
-                if (mAudit != null && tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
+                if (tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
                     Double sumatoriaEse = 0.0;
                     Integer divisorEse = 0;
                     Integer cantidadItems =0;

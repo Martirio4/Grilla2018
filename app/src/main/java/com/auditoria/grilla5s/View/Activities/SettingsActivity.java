@@ -85,17 +85,12 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
-
+                .equalTo("areaAuditada.idArea", unArea.getIdArea())
                 .findAll();
 
         for (Auditoria audit:result2
                 ) {
-            if (audit.getAreaAuditada().getIdArea().equals(unArea.getIdArea())){
-
                 FuncionesPublicas.borrarAuditoriaSeleccionada(audit.getIdAuditoria());
-
-            }
-
         }
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -148,7 +143,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
                 .contentColor(ContextCompat.getColor(this, R.color.primary_text))
                 .titleColor(ContextCompat.getColor(this, R.color.tile4))
                 .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
-                .content(getResources().getString(R.string.elArea) + unArea.getNombreArea() +"\n"+ getResources().getString(R.string.deletePermanente)+"\n"+getResources().getString(R.string.deseaContinuar))
+                .content(getResources().getString(R.string.elArea) +" "+ unArea.getNombreArea() +"\n"+ getResources().getString(R.string.deletePermanente)+"\n"+getResources().getString(R.string.deseaContinuar))
                 .positiveText(getResources().getString(R.string.delete))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override

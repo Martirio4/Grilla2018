@@ -32,7 +32,6 @@ import com.auditoria.grilla5s.Model.Pregunta;
 import com.auditoria.grilla5s.R;
 import com.auditoria.grilla5s.Utils.FuncionesPublicas;
 import com.auditoria.grilla5s.View.Adapter.AdapterCriterios;
-import com.auditoria.grilla5s.View.Adapter.AdapterPreguntas;
 import com.github.clans.fab.FloatingActionButton;
 
 import io.realm.Realm;
@@ -210,23 +209,15 @@ public class FragmentEditarPregunta extends Fragment {
     private void cargarTitulosFragment() {
         Realm realm= Realm.getDefaultInstance();
 
-        Integer elInt=0;
+
 //        AGREGO TIULO DE ESE
-        RealmResults<Ese>listaEse=realm.where(Ese.class)
+        Ese laEseTitulo =realm.where(Ese.class)
                 .equalTo("idCuestionario",idCuestionario)
                 .equalTo("idEse", idEse)
-                .findAll();
-        if (listaEse!=null){
-            for (Ese laEse :
-                    listaEse) {
-                if (laEse.getIdEse().equals(idEse)){
-                    elInt=listaEse.indexOf(laEse)+1;
-                    break;
-                }
-            }
+                .findFirst();
+        if (laEseTitulo !=null){
+           criterioTitulo.setText(laEseTitulo.getNombreEse());
         }
-        final ControllerDatos controllerDatos=new ControllerDatos(getContext());
-        criterioTitulo.setText(controllerDatos.traerEses().get(elInt));
 
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:

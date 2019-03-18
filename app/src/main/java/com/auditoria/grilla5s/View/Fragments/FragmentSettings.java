@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -363,8 +364,7 @@ public class FragmentSettings extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            Snackbar.make(borrar, getResources().getString(R.string.confirmaBorrarBaseDeDato), Snackbar.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getContext(), getResources().getString(R.string.confirmaBorrarBaseDeDato), Toast.LENGTH_SHORT).show();
             super.onPostExecute(result);
         }
 

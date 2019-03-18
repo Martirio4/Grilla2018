@@ -7,8 +7,8 @@ android {
         applicationId "com.auditoria.grilla5s"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 3
-        versionName "2.4"
+        versionCode 4
+        versionName "4.0.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

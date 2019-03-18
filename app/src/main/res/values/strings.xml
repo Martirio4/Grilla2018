@@ -295,10 +295,10 @@
     <string name="bienvenido">Gracias por descargar nuestra app.\nQuieres ver el tutorial?</string>
     <string name="quit">Salir</string>
     <string name="delteAreaOk">El área fue eliminada.</string>
-    <string name="deleteTituloDialog">Eliminar área seleccionada</string>
+    <string name="deleteTituloDialog">Eliminar área</string>
     <string name="elArea">El área:</string>
     <string name="deletePermanente">y auditorias relacionadas, seran eliminadas.</string>
-    <string name="deseaContinuar">Desea continuaR?</string>
+    <string name="deseaContinuar">Desea continuar?</string>
     <string name="delete">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="ingreseUsuarioValido">Por favor ingrese nombre de usuario valido</string>
@@ -706,5 +706,7 @@
     <string name="preguntaCompleta">Pregunta completa.</string>
     <string name="preguntaIncompleta">Pregunta incompleta.</string>
     <string name="Nueva_Area">Nueva área</string>
+    <string name="EditarArea">Editar Area</string>
+    <string name="favorEditeArea">Ingrese el nombre del área</string>
 
 </resources>

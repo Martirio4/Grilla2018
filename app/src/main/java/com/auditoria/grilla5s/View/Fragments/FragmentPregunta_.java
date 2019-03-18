@@ -187,23 +187,15 @@ public class FragmentPregunta_ extends Fragment {
 
 
         Realm realm = Realm.getDefaultInstance();
-        Integer elInt=0;
 //        AGREGO TIULO DE ESE
-        RealmResults<Ese>listaEse=realm.where(Ese.class)
+        Ese laEseTitulo=realm.where(Ese.class)
                 .equalTo("idAudit",idAudit)
                 .equalTo("idEse", idEse)
-                .findAll();
-        if (listaEse!=null){
-            for (Ese laEse :
-                    listaEse) {
-                if (laEse.getIdEse().equals(idEse)){
-                    elInt=listaEse.indexOf(laEse)+1;
-                    break;
-                }
-            }
+                .findFirst();
+        if (laEseTitulo!=null){
+            criterioTitulo.setText(laEseTitulo.getNombreEse());
         }
-        ControllerDatos controllerDatos=new ControllerDatos(getContext());
-        criterioTitulo.setText(controllerDatos.traerEses().get(elInt));
+
 //      SI HAY AGREGO TITULO DE ITEM
         Item elItem;
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {

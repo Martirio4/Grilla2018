@@ -233,12 +233,37 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
                 String percentage5 = format.format(unAuditoria.getListaEses().get(4).getPuntajeEse()/5);
                 String percentage6 = format.format(promedio5s);
 
+            if (unAuditoria.getListaEses().get(0).getPuntajeEse()==9.9) {
+                text1s.setText("-");
+            } else {
                 text1s.setText(percentage1);
+            }
+            if (unAuditoria.getListaEses().get(1).getPuntajeEse()==9.9) {
+                text2s.setText("-");
+            } else {
                 text2s.setText(percentage2);
+            }
+            if (unAuditoria.getListaEses().get(2).getPuntajeEse()==9.9) {
+                text3s.setText("-");
+            } else {
                 text3s.setText(percentage3);
+            }
+            if (unAuditoria.getListaEses().get(3).getPuntajeEse()==9.9) {
+                text4s.setText("-");
+            } else {
                 text4s.setText(percentage4);
+            }
+            if (unAuditoria.getListaEses().get(4).getPuntajeEse()==9.9) {
+                text5s.setText("-");
+            } else {
                 text5s.setText(percentage5);
+            }
+
                 textFinal.setText(percentage6);
+
+
+
+
                 textFecha.setText(FuncionesPublicas.dameFechaString(unAuditoria.getFechaAuditoria(),"largo"));
                 textFoto.setText(unAuditoria.getAreaAuditada().getNombreArea());
 

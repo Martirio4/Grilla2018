@@ -471,7 +471,7 @@
     <string name="bienvenido">"Bem vindo "</string>
 
     <string name="delteAreaOk">" Área foi excluída com sucesso"</string>
-    <string name="deleteTituloDialog">Excluir área selecionada</string>
+    <string name="deleteTituloDialog">Excluir área</string>
     <string name="elArea">"A área: "</string>
     <string name="deletePermanente">" e auditorias relacionadas serão permanentemente excluídas."</string>
     <string name="deseaContinuar">Deseja continuar?</string>

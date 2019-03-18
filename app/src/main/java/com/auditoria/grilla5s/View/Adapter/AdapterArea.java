@@ -122,12 +122,12 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
             public void onClick(View view) {
 
                 final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                        .title(view.getResources().getString(R.string.EditarItem))
+                        .title(view.getResources().getString(R.string.EditarArea))
                         .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
                         .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
                         .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
 
-                        .content(view.getResources().getString(R.string.favorEditeItem))
+                        .content(view.getResources().getString(R.string.favorEditeArea))
                         .input(view.getResources().getString(R.string.comment),unArea.getNombreArea(), new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, final CharSequence input) {

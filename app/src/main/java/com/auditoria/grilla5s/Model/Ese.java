@@ -18,8 +18,26 @@ public class Ese extends RealmObject {
     private RealmList<Item> listaItem;
     private RealmList<Pregunta> listaPreguntas;
     private String idCuestionario;
+    private String nombreEse;
+    private Integer numeroEse;
 
     public Ese() {
+    }
+
+    public String getNombreEse() {
+        return nombreEse;
+    }
+
+    public void setNombreEse(String nombreEse) {
+        this.nombreEse = nombreEse;
+    }
+
+    public Integer getNumeroEse() {
+        return numeroEse;
+    }
+
+    public void setNumeroEse(Integer numeroEse) {
+        this.numeroEse = numeroEse;
     }
 
     public String getIdEse() {
