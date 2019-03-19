@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.auditoria.grilla5s">
+    package="com.nomad.mrg5s">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <provider
-            android:name="com.auditoria.grilla5s.GenericFileProvider"
+            android:name="com.nomad.mrg5s.GenericFileProvider"
             android:authorities="${applicationId}.my.package.name.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -23,7 +23,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name="com.auditoria.grilla5s.View.Activities.SplashActivity">
+        <activity android:name="com.nomad.mrg5s.View.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,41 +31,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.ActivityMyAudits"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
+            android:name="com.nomad.mrg5s.View.Activities.ActivityMyAudits"
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.LandingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.LoginActivity"
+            android:name="com.nomad.mrg5s.View.Activities.LoginActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.SettingsActivity"
+            android:name="com.nomad.mrg5s.View.Activities.SettingsActivity"
             android:theme="@style/AppTheme2"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.LandingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.ActivityVerAuditorias"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.GraficosActivity" />
+            android:name="com.nomad.mrg5s.View.Activities.ActivityVerAuditorias"
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.GraficosActivity" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.GraficosActivity"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
+            android:name="com.nomad.mrg5s.View.Activities.GraficosActivity"
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.LandingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria"
+            android:name="com.nomad.mrg5s.View.Activities.ActivityPreAuditoria"
             android:launchMode="singleTop"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity" />
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.LandingActivity" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.LandingActivity"
+            android:name="com.nomad.mrg5s.View.Activities.LandingActivity"
             android:theme="@style/AppTheme2"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.ActivityAuditoria"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.ActivityPreAuditoria"
+            android:name="com.nomad.mrg5s.View.Activities.ActivityAuditoria"
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.ActivityPreAuditoria"
             android:screenOrientation="portrait" />
-        <activity android:name="com.auditoria.grilla5s.View.Activities.ActivityZoom" />
+        <activity android:name="com.nomad.mrg5s.View.Activities.ActivityZoom" />
         <activity
-            android:name="com.auditoria.grilla5s.View.Activities.ActivityGestionCuestionario"
-            android:parentActivityName="com.auditoria.grilla5s.View.Activities.LandingActivity"
+            android:name="com.nomad.mrg5s.View.Activities.ActivityGestionCuestionario"
+            android:parentActivityName="com.nomad.mrg5s.View.Activities.LandingActivity"
             />
     </application>
 

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
-        applicationId "com.auditoria.grilla5s"
+        applicationId "com.nomad.mrg5s"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 4
@@ -20,6 +20,14 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
+    implementation 'com.google.firebase:firebase-database:16.1.0'
+
+
+
+
+
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -43,9 +51,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
     compile 'com.github.tajchert:nammu:1.2.0'
-    compile 'com.google.firebase:firebase-core:16.0.4'
-    compile 'com.google.firebase:firebase-auth:16.0.4'
-    compile 'com.google.firebase:firebase-database:16.0.3'
+
     compile 'de.hdodenhof:circleimageview:2.2.0'
     implementation files('libs/exceLib.jar')
 }

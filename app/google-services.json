@@ -1,79 +1,35 @@
 {
   "project_info": {
-    "project_number": "686074292986",
-    "firebase_url": "https://nuevagrilla5s.firebaseio.com",
-    "project_id": "nuevagrilla5s",
-    "storage_bucket": "nuevagrilla5s.appspot.com"
+    "project_number": "515728918153",
+    "firebase_url": "https://nomadmrg5s.firebaseio.com",
+    "project_id": "nomadmrg5s",
+    "storage_bucket": "nomadmrg5s.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:686074292986:android:3637c80ce5f0c3af",
+        "mobilesdk_app_id": "1:515728918153:android:c163e16c3ab3d49e",
         "android_client_info": {
-          "package_name": "com.auditoria.grilla5s"
+          "package_name": "com.nomad.mrg5s"
         }
       },
       "oauth_client": [
         {
-          "client_id": "686074292986-k5mn49r8ddvuag2k4qprspbu456k5h6v.apps.googleusercontent.com",
+          "client_id": "515728918153-lu0n1m1t5aa5n9ojvqc51dakb8ufc7cc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.auditoria.grilla5s",
-            "certificate_hash": "b0b4e94fe5c09d8849adb6e18a14308771eb6d1a"
-          }
-        },
-        {
-          "client_id": "686074292986-pfnm7fk1arh0ti2uksckmordd8t4ffh4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDWqQuV1bHy2Y8dbisnIq8IeprbNQ_5Vm8"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "686074292986-pfnm7fk1arh0ti2uksckmordd8t4ffh4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:686074292986:android:7bd38a16f89ec922",
-        "android_client_info": {
-          "package_name": "com.auditoria.mge5s"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "686074292986-ko7o54uc8ka87q04qk6clf28s4rdn20p.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.auditoria.mge5s",
+            "package_name": "com.nomad.mrg5s",
             "certificate_hash": "afd91624752b57a40e905547bd56b19d30a3ec09"
           }
         },
         {
-          "client_id": "686074292986-pfnm7fk1arh0ti2uksckmordd8t4ffh4.apps.googleusercontent.com",
+          "client_id": "515728918153-oiplhh38d0fpm2hsdenn6pfen7u557i6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDWqQuV1bHy2Y8dbisnIq8IeprbNQ_5Vm8"
+          "current_key": "AIzaSyBCBIMskJtbyi_9VUy-WffoJAMVOcN3px4"
         }
       ],
       "services": {
@@ -84,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "686074292986-pfnm7fk1arh0ti2uksckmordd8t4ffh4.apps.googleusercontent.com",
+              "client_id": "515728918153-oiplhh38d0fpm2hsdenn6pfen7u557i6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
