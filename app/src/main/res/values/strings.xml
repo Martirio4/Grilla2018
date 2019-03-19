@@ -708,5 +708,6 @@
     <string name="Nueva_Area">Nueva área</string>
     <string name="EditarArea">Editar Area</string>
     <string name="favorEditeArea">Ingrese el nombre del área</string>
+    <string name="versionVieja">Existe una nueva versión nueva. Contacte a Sistemas.</string>
 
 </resources>

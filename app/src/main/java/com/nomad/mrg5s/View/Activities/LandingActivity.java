@@ -191,7 +191,6 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
                             LandingActivity.super.onBackPressed();
                             finishAffinity();
                         }
@@ -232,5 +231,8 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         fragmentTransaction.commit();
     }
 
-
+    @Override
+    public void salirCompleto() {
+        finishAffinity();
+    }
 }

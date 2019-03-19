@@ -4,6 +4,7 @@ package com.nomad.mrg5s.View.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,16 +18,25 @@ import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nomad.mrg5s.R;
+import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.nomad.mrg5s.View.Activities.ActivityMyAudits;
 import com.nomad.mrg5s.View.Activities.SettingsActivity;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 
 /**
@@ -64,6 +74,7 @@ public class FragmentLanding extends Fragment {
 
     public interface Landinable{
        public void irASelecccionAreas();
+       public void salirCompleto();
     }
 
 
@@ -152,27 +163,7 @@ public class FragmentLanding extends Fragment {
 
         lin5.setVisibility(View.GONE);
 
-        //PARA LA PRUEBA DE ANIMACION
-        /*
-        View.OnLongClickListener listenerLong= new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (lin5.getVisibility()==View.VISIBLE){
-                    lin5.setVisibility(View.GONE);
-                }
-                else{
-                    lin5.setVisibility(View.VISIBLE);
-                    animationTarget.startAnimation(animation);
-                }
-                return true;
-            }
-        };
 
-        botonIssue.setOnLongClickListener(listenerLong);
-        lin4.setOnLongClickListener(listenerLong);
-        texto4.setOnLongClickListener(listenerLong);
-        //PARA LA PRUEBA DE ANIMACION
-    */
         config = getActivity().getSharedPreferences("prefs", 0);
         boolean firstRun = config.getBoolean("firstRunLandingFragment", false);
         if (!firstRun){
@@ -181,20 +172,66 @@ public class FragmentLanding extends Fragment {
             editor.putBoolean("firstRunLandingFragment", true);
             editor.commit();
         }
+        else{
+            if (HTTPConnectionManager.isNetworkingOnline(getContext())){
+                DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
 
-/*
-        animationTarget= view.findViewById(R.id.btn_star);
-        animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.rotate_around_center_point);
-        animationTarget.startAnimation(animation);
+                mbase.child("data").child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String versionFireBase=dataSnapshot.getValue().toString();
+                        String versionLocal=null;
+
+                        try {
+                             versionLocal = getContext().getPackageManager()
+                                    .getPackageInfo(getContext().getPackageName(), 0).versionName;
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        if (!versionLocal.equals(versionFireBase)){
+                            avisarVersionVieja();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
 
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        Integer dpi=metrics.densityDpi;
-        Toast.makeText(getActivity(), dpi.toString(), Toast.LENGTH_LONG).show();
-        */
 
 
         return view;
+    }
+
+    private void avisarVersionVieja() {
+
+        new MaterialDialog.Builder(getActivity())
+                .title(getContext().getString(R.string.advertencia))
+                .buttonsGravity(GravityEnum.CENTER)
+                .contentColor(ContextCompat.getColor(getActivity(), R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(getActivity(), R.color.tile1))
+                .titleColor(ContextCompat.getColor(getActivity(), R.color.tile4))
+                .content(getResources().getString(R.string.versionVieja))
+                .positiveText(R.string.ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+
+                    }
+                })
+                .negativeText(getResources().getString(R.string.salir))
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                    landinable.salirCompleto();
+                    }
+                })
+                .show();
     }
 
     public void lanzarTuto() {
