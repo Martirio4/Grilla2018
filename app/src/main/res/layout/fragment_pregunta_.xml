@@ -96,16 +96,13 @@
                         android:layout_weight="20"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp" />
-
-
-
                 </RadioGroup>
 
 
                 <RadioGroup
                     android:orientation="vertical"
                     android:animateLayoutChanges="true"
-                    android:layout_toRightOf="@id/rg0"
+                    android:layout_toEndOf="@id/rg0"
                     android:visibility="visible"
                     android:id="@+id/rg1"
                     android:gravity="start"
@@ -177,7 +174,7 @@
                 </RadioGroup>
 
                 <RadioGroup
-                    android:layout_toRightOf="@id/rg00"
+                    android:layout_toEndOf="@id/rg00"
                     android:id="@+id/rg2"
                     android:gravity="center"
                     android:layout_width="wrap_content"

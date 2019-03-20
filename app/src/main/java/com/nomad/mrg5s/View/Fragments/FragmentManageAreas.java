@@ -303,23 +303,26 @@ public class FragmentManageAreas extends Fragment {
                                 .setCompressFormat(Bitmap.CompressFormat.JPEG)
                                 .setDestinationDirectoryPath(getContext().getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s" +File.separator+FirebaseAuth.getInstance().getCurrentUser().getEmail()+File.separator + "images" + File.separator + "areas")
                                 .compressToFile(fotoOriginal);
+
+                        Foto unaFoto = new Foto();
+                        unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
+                        unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
+                        if (source == EasyImage.ImageSource.CAMERA) {
+                            Boolean seBorro = imageFile.delete();
+                            if (seBorro) {
+                                //   Toast.makeText(getContext(), R.string.seEliminoFoto, Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                // Toast.makeText(getContext(), R.string.noSeEliminoFoto, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        FuncionesPublicas.crearDialogoNombreArea(unaFoto,FragmentManageAreas.this,FuncionesPublicas.MANAGE_AREAS);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    Foto unaFoto = new Foto();
-                    unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
-                    unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
-                    if (source == EasyImage.ImageSource.CAMERA) {
-                        Boolean seBorro = imageFile.delete();
-                        if (seBorro) {
-                         //   Toast.makeText(getContext(), R.string.seEliminoFoto, Toast.LENGTH_SHORT).show();
 
-                        } else {
-                           // Toast.makeText(getContext(), R.string.noSeEliminoFoto, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    FuncionesPublicas.crearDialogoNombreArea(unaFoto,FragmentManageAreas.this,FuncionesPublicas.MANAGE_AREAS);
 
                 }
 

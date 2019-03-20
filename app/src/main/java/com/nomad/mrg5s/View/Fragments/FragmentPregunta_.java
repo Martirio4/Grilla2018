@@ -480,7 +480,7 @@ public class FragmentPregunta_ extends Fragment {
             fabCamara.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (FuncionesPublicas.isExternalStorageWritable()) {
+                    if (FuncionesPublicas.isExternalStorageWritable()&& FuncionesPublicas.hayEspacioEnMemoria()) {
                         if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             fabMenu.close(true);
                             EasyImage.openCamera(FragmentPregunta_.this, 1);
@@ -898,49 +898,52 @@ public class FragmentPregunta_ extends Fragment {
                                     .setQuality(75)
                                     .setCompressFormat(Bitmap.CompressFormat.JPEG)
                                     .setDestinationDirectoryPath(getContext().getExternalFilesDir(null)+ File.separator + "nomad" + File.separator + "audit5s"+ File.separator  + FirebaseAuth.getInstance().getCurrentUser().getEmail() + File.separator + "images" + File.separator + "evidencias")
-                                    .compressToFile(fotoOriginal,fotoOriginal.getName().replace(".jpg",".png"));
+                                    .compressToFile(fotoOriginal,fotoOriginal.getName().replace(".jpg",".png"))
+                            ;
+                            unaFoto=new Foto();
+                            unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
+                            unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
+                            unaFoto.setIdAudit(idAudit);
+                            unaFoto.setIdPregunta(idPregunta);
+
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(@NonNull Realm realm) {
+                                    Pregunta preg = realm.where(Pregunta.class)
+                                            .equalTo("idAudit", idAudit)
+                                            .equalTo("idPregunta",  idPregunta)
+                                            .findFirst();
+
+                                    realm.copyToRealmOrUpdate(unaFoto);
+
+                                    final Foto foto = realm.where(Foto.class)
+                                            .equalTo("idFoto", unaFoto.getIdFoto())
+                                            .findFirst();
+
+                                    if (preg!=null) {
+                                        preg.getListaFotos().add(foto);
+                                    }
+                                    //posible bug dejar esto adentro
+                                }
+                            });
+                            crearDialogoParaModificarComentario(unaFoto);
+                            listaFotos.add(unaFoto);
+                            evidenciaNueva.setVisibility(View.VISIBLE);
+                            adapterFotos.notifyDataSetChanged();
+
+                            Boolean seBorro = imageFile.delete();
+                            if (seBorro) {
+                                //                        Toast.makeText(getContext(), "borrada con exito", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //                        Toast.makeText(getContext(), "No se pudo borrar", Toast.LENGTH_SHORT).show();
+                            }
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        unaFoto=new Foto();
-                        unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
-                        unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
-                        unaFoto.setIdAudit(idAudit);
-                        unaFoto.setIdPregunta(idPregunta);
 
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(@NonNull Realm realm) {
-                                Pregunta preg = realm.where(Pregunta.class)
-                                        .equalTo("idAudit", idAudit)
-                                        .equalTo("idPregunta",  idPregunta)
-                                        .findFirst();
-
-                                    realm.copyToRealmOrUpdate(unaFoto);
-
-                                final Foto foto = realm.where(Foto.class)
-                                        .equalTo("idFoto", unaFoto.getIdFoto())
-                                        .findFirst();
-
-                                if (preg!=null) {
-                                    preg.getListaFotos().add(foto);
-                                }
-                                //posible bug dejar esto adentro
-                            }
-                        });
-                        crearDialogoParaModificarComentario(unaFoto);
-                        listaFotos.add(unaFoto);
-                        evidenciaNueva.setVisibility(View.VISIBLE);
-                        adapterFotos.notifyDataSetChanged();
-
-                        Boolean seBorro = imageFile.delete();
-                        if (seBorro) {
-                            //                        Toast.makeText(getContext(), "borrada con exito", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //                        Toast.makeText(getContext(), "No se pudo borrar", Toast.LENGTH_SHORT).show();
-                        }
                     }
                 }
             }

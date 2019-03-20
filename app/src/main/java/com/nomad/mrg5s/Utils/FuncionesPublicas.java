@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.StatFs;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -423,6 +425,15 @@ public class FuncionesPublicas {
         });
 
 
+    }
+
+    public static boolean hayEspacioEnMemoria() {
+        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        long bytesAvailable;
+        bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
+        long megAvailable = bytesAvailable / (1024 * 1024);
+
+        return megAvailable > 10.0;
     }
 
 
