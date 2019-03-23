@@ -35,7 +35,7 @@ public class FragmentZoom extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_fragment_zoom, container, false);
+        View view= inflater.inflate(R.layout.fragment_zoom, container, false);
         Bundle bundle = getArguments();
 
         if (bundle != null) {

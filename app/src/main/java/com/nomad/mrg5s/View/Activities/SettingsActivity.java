@@ -189,4 +189,13 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,FuncionesPublicas.FRAGMENTMANAGER_AREAS);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void abrirEditorCriterios() {
+        Intent intent = new Intent(this,ActivityGestionCuestionario.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(ActivityGestionCuestionario.ORIGEN,FuncionesPublicas.EDITAR_CRITERIO);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }

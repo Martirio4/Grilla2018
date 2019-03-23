@@ -72,7 +72,7 @@ public class FragmentPreAudit extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_fragment_pre_audit, container, false);
+        View view = inflater.inflate(R.layout.fragment_pre_audit, container, false);
         Bundle bundle = getArguments();
         if (bundle != null) {
             laEse = bundle.getString(LAESE);

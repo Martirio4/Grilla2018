@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -36,8 +34,6 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,7 +41,7 @@ import java.util.List;
 public class FragmentLanding extends Fragment {
 
     private ImageButton botonStart;
-    private ImageButton botonIssue;
+    private ImageButton botonEdicion;
     private ImageButton botonaudits;
     private ImageButton botonSettings;
 
@@ -59,7 +55,6 @@ public class FragmentLanding extends Fragment {
     private LinearLayout lin2;
     private LinearLayout lin3;
     private LinearLayout lin4;
-    private LinearLayout lin5;
     private Landinable landinable;
     private ImageButton animationTarget;
     private Animation animation;
@@ -83,7 +78,7 @@ public class FragmentLanding extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_landing, container, false);
 
-        botonIssue = view.findViewById(R.id.btn_issue);
+        botonEdicion = view.findViewById(R.id.btn_issue);
         botonaudits = view.findViewById(R.id.btn_search);
         botonSettings = view.findViewById(R.id.btn_setting);
         botonStart = view.findViewById(R.id.btn_start);
@@ -98,7 +93,7 @@ public class FragmentLanding extends Fragment {
         lin2 = view.findViewById(R.id.lin2);
         lin3 = view.findViewById(R.id.lin3);
         lin4 = view.findViewById(R.id.line4);
-        lin5 = view.findViewById(R.id.line5);
+
 
         roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         texto1.setTypeface(roboto);
@@ -131,6 +126,7 @@ public class FragmentLanding extends Fragment {
         View.OnClickListener listener4 = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /* //METODO OBSOLETO PARA CONTACTAR DESARROLLADOR
                 Intent send = new Intent(Intent.ACTION_SENDTO);
                 String uriText = "mailto:" + Uri.encode("contacto@benomad.com.ar") +
                         "?subject=" + Uri.encode(getResources().getString(R.string.quieroReportar)) +
@@ -139,6 +135,9 @@ public class FragmentLanding extends Fragment {
 
                 send.setData(uri);
                 startActivity(Intent.createChooser(send, getResources().getString(R.string.enviarMail)));
+                */
+                //METODO PARA ABRIR PANTALLA EDICION CUESTIONARIO Y CRITERIOS
+
 
             }
         };
@@ -157,11 +156,10 @@ public class FragmentLanding extends Fragment {
         texto2.setOnClickListener(listener3);
         lin2.setOnClickListener(listener3);
         
-        botonIssue.setOnClickListener(listener4);
+        botonEdicion.setOnClickListener(listener4);
         lin4.setOnClickListener(listener4);
         texto4.setOnClickListener(listener4);
 
-        lin5.setVisibility(View.GONE);
 
 
         config = getActivity().getSharedPreferences("prefs", 0);

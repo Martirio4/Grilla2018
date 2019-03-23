@@ -66,6 +66,7 @@ public class FragmentSettings extends Fragment {
 
     public interface Notificable{
         public void abrirEditorDeCuestionarios();
+        void abrirEditorCriterios();
 
         void abrirFragmentGestionAreas();
     }
@@ -90,9 +91,12 @@ public class FragmentSettings extends Fragment {
         tuto=view.findViewById(R.id.botonTuto);
         Button editCuestionarios = view.findViewById(R.id.botonRateApp);
         Button salir=view.findViewById(R.id.botonVolver);
+        Button editarCriterios=view.findViewById(R.id.botonEditCriterioDefault);
+
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
 
         editCuestionarios.setTypeface(roboto);
+        editarCriterios.setTypeface(roboto);
         areas.setTypeface(roboto);
         logout.setTypeface(roboto);
         borrar.setTypeface(roboto);
@@ -228,6 +232,13 @@ public class FragmentSettings extends Fragment {
             public void onClick(View view) {
                 //LE DIGO A SETTING ACTIVITY QUE ABRA EL EDITOR DE CUESTIONARIOS
                notificable.abrirEditorDeCuestionarios();
+            }
+        });
+
+        editarCriterios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notificable.abrirEditorCriterios();
             }
         });
 

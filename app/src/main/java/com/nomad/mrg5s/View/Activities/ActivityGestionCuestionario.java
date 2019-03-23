@@ -10,14 +10,24 @@ import android.widget.TextView;
 import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.View.Fragments.FragmentEditarCriteriosDefault;
 import com.nomad.mrg5s.View.Fragments.FragmentGestionCuestionarios;
 
 public class ActivityGestionCuestionario extends AppCompatActivity implements FragmentGestionCuestionarios.Notificable {
+
+    public static final String ORIGEN="ORIGEN";
+    private String elOrigen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_cuestionario);
+
+        Intent elIntent=getIntent();
+        Bundle elBundle=elIntent.getExtras();
+        if (elBundle!=null){
+            elOrigen=elBundle.getString(ORIGEN);
+        }
 
         //SETEAR TOOLBAR
         Toolbar toolbar = findViewById(R.id.my_toolbar);
@@ -33,8 +43,21 @@ public class ActivityGestionCuestionario extends AppCompatActivity implements Fr
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        abrirFragmentEditorBase();
+        if (elOrigen!=null && elOrigen.equals(FuncionesPublicas.EDITAR_CRITERIO)){
+            abrirFragmentEditorCriterios();
+        }
+        else {
+            abrirFragmentEditorBase();
+        }
 
+    }
+
+    private void abrirFragmentEditorCriterios() {
+        FragmentEditarCriteriosDefault fragmentEditorBaseCuestionarios = new FragmentEditarCriteriosDefault();
+        android.support.v4.app.FragmentManager fragmentManager= getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contenedorEditor,fragmentEditorBaseCuestionarios,FuncionesPublicas.FRAGMENT_EDITOR_CRITERIOS);
+        fragmentTransaction.commit();
     }
 
     private void abrirFragmentEditorBase() {

@@ -67,6 +67,36 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/line4"
+        android:background="@color/tile4"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_weight="50"
+        android:layout_height="0dp">
+        <ImageButton
+            android:layout_marginStart="@dimen/margenChico"
+            android:layout_marginEnd="@dimen/margenChico"
+            android:id="@+id/btn_issue"
+            android:src="@drawable/icono_edicion"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:textColor="@color/tile5"
+            android:textSize="@dimen/titulosMain"
+            android:id="@+id/cuartaOpcion"
+            android:layout_marginStart="@dimen/margenChico"
+            android:layout_marginEnd="@dimen/margenChico"
+            android:gravity="start|center_vertical"
+            android:layout_weight="70"
+            android:text="@string/editarCuestionariosMayus"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/lin3"
@@ -85,6 +115,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent" />
+
+
 
             <LinearLayout
                 android:layout_weight="70"
@@ -114,60 +146,6 @@
             </LinearLayout>
 
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/line4"
-            android:background="@color/tile4"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_weight="50"
-            android:layout_height="0dp">
-            <ImageButton
-                android:layout_marginStart="@dimen/margenChico"
-                android:layout_marginEnd="@dimen/margenChico"
-                android:id="@+id/btn_issue"
-                android:src="@drawable/issue"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent" />
 
-            <TextView
-                android:textColor="@color/tile5"
-                android:textSize="@dimen/titulosMain"
-                android:id="@+id/cuartaOpcion"
-                android:layout_marginStart="@dimen/margenChico"
-                android:layout_marginEnd="@dimen/margenChico"
-                android:gravity="start|center_vertical"
-                android:layout_weight="70"
-                android:text="@string/contact"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-    <LinearLayout
-        android:id="@+id/line5"
-        android:background="@color/tile3"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight="50"
-        android:layout_height="0dp">
-        <ImageButton
-            android:layout_marginStart="@dimen/margenChico"
-            android:layout_marginEnd="@dimen/margenChico"
-            android:id="@+id/btn_star"
-            android:src="@drawable/starc"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent" />
 
-        <TextView
-            android:textColor="@color/tile5"
-            android:textSize="@dimen/titulosMain"
-            android:id="@+id/QuintaOpcion"
-            android:layout_marginStart="@dimen/margenChico"
-            android:layout_marginEnd="@dimen/margenChico"
-            android:gravity="start|center_vertical"
-            android:layout_weight="70"
-            android:text="@string/contact"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-    </LinearLayout>
 </LinearLayout>

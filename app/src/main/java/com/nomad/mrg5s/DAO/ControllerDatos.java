@@ -1111,4 +1111,15 @@ public class ControllerDatos {
         });
         return idPreguntaVacia[0];
     }
+
+    public RealmList<Criterio> dameCriteriosDefault() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Criterio> losCrit= realm.where(Criterio.class)
+                .beginsWith("idCriterio",FuncionesPublicas.IDCRITERIOS_DEFAULT)
+                .findAll();
+        RealmList<Criterio> listaCrit = new RealmList<>();
+        listaCrit.addAll(losCrit);
+        return listaCrit;
+
+    }
 }

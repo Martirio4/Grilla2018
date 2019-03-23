@@ -651,7 +651,7 @@
     <string name="areaExterna">área externa</string>
     <string name="definirAreaNueva">Nueva área</string>
     <string name="managaCuestionarios">Gestionar cuestionarios</string>
-    <string name="editarCuestionarios">Editar Cuestionarios</string>
+    <string name="editarCuestionarios">Editar cuestionarios</string>
     <string name="addCuestionario">Nuevo...</string>
     <string name="nombreCuestionario">Ingrese el nombre del nuevo cuestionario</string>
     <string name="cambioRealizado">Cambios realizados</string>
@@ -709,5 +709,9 @@
     <string name="EditarArea">Editar Area</string>
     <string name="favorEditeArea">Ingrese el nombre del área</string>
     <string name="versionVieja">Existe una nueva versión nueva. Contacte a Sistemas.</string>
+    <string name="volver">Volver</string>
+    <string name="tituloEdicionCriterioDefault">Editar criterios estándar</string>
+    <string name="editarCuestionariosMayus">EDITAR CUESTIONARIOS</string>
+    <string name="criteriosEstandar">Criterios estándar</string>
 
 </resources>
