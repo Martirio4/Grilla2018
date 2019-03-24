@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.nomad.mrg5s.View.Activities.ActivityMyAudits;
@@ -82,6 +83,13 @@ public class FragmentLanding extends Fragment {
         botonaudits = view.findViewById(R.id.btn_search);
         botonSettings = view.findViewById(R.id.btn_setting);
         botonStart = view.findViewById(R.id.btn_start);
+        ImageButton botonImportar=view.findViewById(R.id.btn_importar);
+        botonImportar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ControllerDatos(getContext()).traerCuestionariosFirebase();
+            }
+        });
 
         texto1 = view.findViewById(R.id.primeraOpcion);
         texto2 = view.findViewById(R.id.segundaOpcion);
@@ -180,14 +188,19 @@ public class FragmentLanding extends Fragment {
                         String versionFireBase=dataSnapshot.getValue().toString();
                         String versionLocal=null;
 
-                        try {
-                             versionLocal = getContext().getPackageManager()
-                                    .getPackageInfo(getContext().getPackageName(), 0).versionName;
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        if (!versionLocal.equals(versionFireBase)){
-                            avisarVersionVieja();
+                        if (versionFireBase.equals("6.6.6")) {
+                            avisarNoVaMas();
+
+                        } else {
+                            try {
+                                versionLocal = getContext().getPackageManager()
+                                        .getPackageInfo(getContext().getPackageName(), 0).versionName;
+                            } catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            if ( versionLocal!=null && !versionLocal.equals(versionFireBase)){
+                                avisarVersionVieja();
+                            }
                         }
 
                     }
@@ -204,6 +217,25 @@ public class FragmentLanding extends Fragment {
 
 
         return view;
+    }
+
+    private void avisarNoVaMas() {
+        new MaterialDialog.Builder(getActivity())
+                .title(getContext().getString(R.string.advertencia))
+                .buttonsGravity(GravityEnum.CENTER)
+                .cancelable(false)
+                .contentColor(ContextCompat.getColor(getActivity(), R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(getActivity(), R.color.tile1))
+                .titleColor(ContextCompat.getColor(getActivity(), R.color.tile4))
+                .content(getResources().getString(R.string.yaNoUsar))
+                .positiveText(R.string.ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                        landinable.salirCompleto();
+                    }
+                })
+                .show();
     }
 
     private void avisarVersionVieja() {

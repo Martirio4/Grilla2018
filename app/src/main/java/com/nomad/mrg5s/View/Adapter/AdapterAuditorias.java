@@ -98,7 +98,7 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
                             .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
                             .title(R.string.advertencia)
                             .content(R.string.auditoriaSeEliminara)
-                            .positiveText(R.string.continuar)
+                            .positiveText(R.string.ok)
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

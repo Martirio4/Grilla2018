@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
@@ -85,5 +86,17 @@ public class ActivityGestionCuestionario extends AppCompatActivity implements Fr
         intent.putExtras(bundle);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void crearCuestionario(String nombre, String tipoCuestionario) {
+        ControllerDatos controllerDatos=new ControllerDatos(this);
+        controllerDatos.crearNuevoCuestionario(nombre, tipoCuestionario);
+    }
+
+    @Override
+    public void eliminarCuestionario(String idCuestionario) {
+        ControllerDatos controllerDatos=new ControllerDatos(this);
+        controllerDatos.eliminarCuestionario(idCuestionario);
     }
 }

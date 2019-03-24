@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -131,9 +132,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
             fragmentManageAreas.updateAdapter();
-            Snackbar.make(layout,getResources().getString(R.string.delteAreaOk), Snackbar.LENGTH_SHORT)
-                    .show();
-
+            Toast.makeText(this,getResources().getString(R.string.delteAreaOk), Toast.LENGTH_SHORT).show();
         }
     }
     
@@ -144,7 +143,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
                 .titleColor(ContextCompat.getColor(this, R.color.tile4))
                 .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
                 .content(getResources().getString(R.string.elArea) +" "+ unArea.getNombreArea() +"\n"+ getResources().getString(R.string.deletePermanente)+"\n"+getResources().getString(R.string.deseaContinuar))
-                .positiveText(getResources().getString(R.string.delete))
+                .positiveText(getResources().getString(R.string.ok))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

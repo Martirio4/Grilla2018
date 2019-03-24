@@ -235,6 +235,7 @@ public class GraficosActivity extends AppCompatActivity {
         }
 
 
+
         fabGenerarXLS= new FloatingActionButton(this);
         fabGenerarXLS.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
         fabGenerarXLS.setButtonSize(FloatingActionButton.SIZE_MINI);
@@ -344,6 +345,28 @@ public class GraficosActivity extends AppCompatActivity {
 
             }
         });
+
+        FloatingActionButton fabSalir = new FloatingActionButton(this);
+        fabSalir.setColorNormal(ContextCompat.getColor(this, R.color.tile3));
+        fabSalir.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fabSalir.setLabelText(getString(R.string.volver));
+        fabSalir.setImageResource(R.drawable.ic_arrow_back_black_24dp);
+        fabMenuGraficos.addMenuButton(fabSalir);
+
+        fabSalir.setLabelColors(ContextCompat.getColor(this, R.color.tile2),
+                ContextCompat.getColor(this, R.color.light_grey),
+                ContextCompat.getColor(this, R.color.white_transparent));
+        fabSalir.setLabelTextColor(ContextCompat.getColor(this, R.color.primary_text));
+
+        fabSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GraficosActivity.this.onBackPressed();
+            }
+        });
+
+
+
             String user = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
 

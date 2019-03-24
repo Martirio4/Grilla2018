@@ -43,7 +43,6 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        Realm.init(getApplicationContext());
         Nammu.init(getApplicationContext());
         config=this.getSharedPreferences("prefs",0);
 

@@ -2,9 +2,15 @@ package com.nomad.mrg5s.DAO;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nomad.mrg5s.Model.Area;
 import com.nomad.mrg5s.Model.Auditoria;
 import com.nomad.mrg5s.Model.Criterio;
@@ -218,125 +224,130 @@ public class ControllerDatos {
             public void execute(@NonNull Realm realm) {
             Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class, FuncionesPublicas.IDCUESTIONARIOS_DEFAULT + UUID.randomUUID());
 
-                nuevoCuestionario.setNombreCuestionario(nombreArea);
-                nuevoCuestionario.setTipoCuestionario(FuncionesPublicas.ESTRUCTURA_SIMPLE);
+            nuevoCuestionario.setNombreCuestionario(nombreArea);
+            nuevoCuestionario.setTipoCuestionario(FuncionesPublicas.ESTRUCTURA_SIMPLE);
 
 //              PRIMERA ESE
-                Ese ese1 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
-                ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                ese1.setPuntajeEse(0.0);
+            Ese ese1 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
+            ese1.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+            ese1.setPuntajeEse(0.0);
 
-                ese1.setNombreEse(FuncionesPublicas.PRIMERA_ESE);
-                ese1.setNumeroEse(1);
-                Pregunta pregunta111 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta111.setPuntaje(null);
-                pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
-                pregunta111.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta111.setIdEse(ese1.getIdEse());
+            ese1.setNombreEse(FuncionesPublicas.PRIMERA_ESE);
+            ese1.setNumeroEse(1);
+            Pregunta pregunta111 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta111.setPuntaje(null);
+            pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
+            pregunta111.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta111.setIdEse(ese1.getIdEse());
 
 
-                Pregunta pregunta112 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta112.setPuntaje(null);
-                pregunta112.setTextoPregunta(context.getResources().getString(R.string.textoPregunta112));
-                pregunta112.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta112.setIdEse(ese1.getIdEse());
-                ese1.addPregunta(pregunta111);
-                ese1.addPregunta(pregunta112);
+            Pregunta pregunta112 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta112.setPuntaje(null);
+            pregunta112.setTextoPregunta(context.getResources().getString(R.string.textoPregunta112));
+            pregunta112.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta112.setIdEse(ese1.getIdEse());
+            ese1.addPregunta(pregunta111);
+            ese1.addPregunta(pregunta112);
 
 
 //              SEGUNDA ESE
-                Ese ese2 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
-                ese2.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                ese2.setNombreEse(FuncionesPublicas.SEGUNDA_ESE);
-                ese2.setNumeroEse(2);
-                ese2.setPuntajeEse(0.0);
-                Pregunta pregunta121 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta121.setPuntaje(null);
-                pregunta121.setTextoPregunta(context.getResources().getString(R.string.textoPregunta121));
-                pregunta121.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta121.setIdEse(ese1.getIdEse());
-                Pregunta pregunta122 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta122.setPuntaje(null);
-                pregunta122.setTextoPregunta(context.getResources().getString(R.string.textoPregunta122));
-                pregunta122.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta122.setIdEse(ese1.getIdEse());
-                ese2.addPregunta(pregunta121);
-                ese2.addPregunta(pregunta122);
+            Ese ese2 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
+            ese2.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+            ese2.setNombreEse(FuncionesPublicas.SEGUNDA_ESE);
+            ese2.setNumeroEse(2);
+            ese2.setPuntajeEse(0.0);
+            Pregunta pregunta121 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta121.setPuntaje(null);
+            pregunta121.setTextoPregunta(context.getResources().getString(R.string.textoPregunta121));
+            pregunta121.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta121.setIdEse(ese1.getIdEse());
+            Pregunta pregunta122 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta122.setPuntaje(null);
+            pregunta122.setTextoPregunta(context.getResources().getString(R.string.textoPregunta122));
+            pregunta122.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta122.setIdEse(ese1.getIdEse());
+            ese2.addPregunta(pregunta121);
+            ese2.addPregunta(pregunta122);
 
 //              TERCERA ESE
-                Ese ese3 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
-                ese3.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                ese3.setNombreEse(FuncionesPublicas.TERCERA_ESE);
-                ese3.setNumeroEse(3);
-                ese3.setPuntajeEse(0.0);
-                Pregunta pregunta211 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta211.setPuntaje(null);
-                pregunta211.setTextoPregunta(context.getResources().getString(R.string.textoPregunta211));
-                pregunta211.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta211.setIdEse(ese2.getIdEse());
-                Pregunta pregunta212 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta212.setPuntaje(null);
-                pregunta212.setTextoPregunta(context.getResources().getString(R.string.textoPregunta212));
-                pregunta212.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta212.setIdEse(ese2.getIdEse());
-                ese3.addPregunta(pregunta211);
-                ese3.addPregunta(pregunta212);
+            Ese ese3 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
+            ese3.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+            ese3.setNombreEse(FuncionesPublicas.TERCERA_ESE);
+            ese3.setNumeroEse(3);
+            ese3.setPuntajeEse(0.0);
+            Pregunta pregunta211 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta211.setPuntaje(null);
+            pregunta211.setTextoPregunta(context.getResources().getString(R.string.textoPregunta211));
+            pregunta211.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta211.setIdEse(ese2.getIdEse());
+            Pregunta pregunta212 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta212.setPuntaje(null);
+            pregunta212.setTextoPregunta(context.getResources().getString(R.string.textoPregunta212));
+            pregunta212.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta212.setIdEse(ese2.getIdEse());
+            ese3.addPregunta(pregunta211);
+            ese3.addPregunta(pregunta212);
 
 //              CUARTA ESE
-                Ese ese4 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
-                ese4.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                ese4.setNombreEse(FuncionesPublicas.CUARTA_ESE);
-                ese4.setNumeroEse(4);
-                ese4.setPuntajeEse(0.0);
-                Pregunta pregunta321 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta321.setPuntaje(null);
-                pregunta321.setTextoPregunta(context.getResources().getString(R.string.textoPregunta321));
-                pregunta321.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta321.setIdEse(ese3.getIdEse());
-                Pregunta pregunta322 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta322.setPuntaje(null);
-                pregunta322.setTextoPregunta(context.getResources().getString(R.string.textoPregunta322));
-                pregunta322.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta322.setIdEse(ese3.getIdEse());
-                ese4.addPregunta(pregunta321);
-                ese4.addPregunta(pregunta322);
+            Ese ese4 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
+            ese4.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+            ese4.setNombreEse(FuncionesPublicas.CUARTA_ESE);
+            ese4.setNumeroEse(4);
+            ese4.setPuntajeEse(0.0);
+            Pregunta pregunta321 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta321.setPuntaje(null);
+            pregunta321.setTextoPregunta(context.getResources().getString(R.string.textoPregunta321));
+            pregunta321.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta321.setIdEse(ese3.getIdEse());
+            Pregunta pregunta322 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta322.setPuntaje(null);
+            pregunta322.setTextoPregunta(context.getResources().getString(R.string.textoPregunta322));
+            pregunta322.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta322.setIdEse(ese3.getIdEse());
+            ese4.addPregunta(pregunta321);
+            ese4.addPregunta(pregunta322);
 
 //              QUINTA ESE
-                Ese ese5 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
-                ese5.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                ese5.setNombreEse(FuncionesPublicas.QUINTA_ESE);
-                ese5.setNumeroEse(5);
-                ese5.setPuntajeEse(0.0);
-                Pregunta pregunta411 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta411.setPuntaje(null);
-                pregunta411.setTextoPregunta(context.getResources().getString(R.string.textoPregunta411));
-                pregunta411.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta411.setIdEse(ese4.getIdEse());
-                Pregunta pregunta412 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                pregunta412.setPuntaje(null);
-                pregunta412.setTextoPregunta(context.getResources().getString(R.string.textoPregunta412));
-                pregunta412.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                pregunta412.setIdEse(ese4.getIdEse());
-                ese5.addPregunta(pregunta411);
-                ese5.addPregunta(pregunta412);
+            Ese ese5 = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
+            ese5.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+            ese5.setNombreEse(FuncionesPublicas.QUINTA_ESE);
+            ese5.setNumeroEse(5);
+            ese5.setPuntajeEse(0.0);
+            Pregunta pregunta411 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta411.setPuntaje(null);
+            pregunta411.setTextoPregunta(context.getResources().getString(R.string.textoPregunta411));
+            pregunta411.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta411.setIdEse(ese4.getIdEse());
+            Pregunta pregunta412 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
+            pregunta412.setPuntaje(null);
+            pregunta412.setTextoPregunta(context.getResources().getString(R.string.textoPregunta412));
+            pregunta412.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
+            pregunta412.setIdEse(ese4.getIdEse());
+            ese5.addPregunta(pregunta411);
+            ese5.addPregunta(pregunta412);
 
-                if (esEstructuraSimple) {
-                    nuevoCuestionario.addEse(ese1);
-                    nuevoCuestionario.addEse(ese2);
-                    nuevoCuestionario.addEse(ese3);
-                    nuevoCuestionario.addEse(ese4);
-                    nuevoCuestionario.addEse(ese5);
-                }
+            if (esEstructuraSimple) {
+                nuevoCuestionario.addEse(ese1);
+                nuevoCuestionario.addEse(ese2);
+                nuevoCuestionario.addEse(ese3);
+                nuevoCuestionario.addEse(ese4);
+                nuevoCuestionario.addEse(ese5);
+            }
 
-                for (Ese ese : nuevoCuestionario.getListaEses()
-                        ) {
-                    for (Pregunta preg :
-                            ese.getListaPreguntas()) {
-                        cargarCriteriosdDefaultPregunta(realm, preg);
-                    }
+            for (Ese ese : nuevoCuestionario.getListaEses()
+                    ) {
+                for (Pregunta preg :
+                        ese.getListaPreguntas()) {
+                    cargarCriteriosdDefaultPregunta(realm, preg);
                 }
             }
+
+            crearCuestionarioFirebase(nuevoCuestionario);
+            }
         });
+
+
+
         //endregion
     }
 
@@ -672,6 +683,8 @@ public class ControllerDatos {
                     }
                 }
 
+                crearCuestionarioFirebase(nuevoCuestionario);
+
             }
         });
         //endregion
@@ -751,10 +764,11 @@ public class ControllerDatos {
 
     public void crearNuevoCuestionario(final String nombreCuestionario, final String tipoCuestionario) {
         Realm realm = Realm.getDefaultInstance();
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
-            Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class, FuncionesPublicas.IDCUESTIONARIOS + UUID.randomUUID());
+           Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class, FuncionesPublicas.IDCUESTIONARIOS + UUID.randomUUID());
             nuevoCuestionario.setNombreCuestionario(nombreCuestionario);
             nuevoCuestionario.setTipoCuestionario(tipoCuestionario);
 
@@ -771,9 +785,303 @@ public class ControllerDatos {
         });
     }
 
+
+    //--- METODOS FIREBASE
+    public void crearCuestionarioFirebase(Cuestionario elCues) {
+        DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
+
+        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("1-Nombre").setValue(elCues.getNombreCuestionario());
+        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("2-Tipo").setValue(elCues.getTipoCuestionario());
+        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("3-IdCuestionario").setValue(elCues.getIdCuestionario());
+        if (elCues.getTipoCuestionario().equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
+           
+            for (Ese unaEse:
+                    elCues.getListaEses()) {
+                mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("1-IdEse").setValue(unaEse.getIdEse());
+                mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("3-NumeroEse").setValue(String.valueOf( unaEse.getNumeroEse()));
+                mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("2-NombreEse").setValue(unaEse.getNombreEse());
+
+
+                for (Pregunta unaPreg :
+                        unaEse.getListaPreguntas()) {
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("1-IdPregunta").setValue(unaPreg.getIdPregunta());
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("2-TextoPregunta").setValue(unaPreg.getTextoPregunta());
+
+                    for (Criterio unCrit:unaPreg.getListaCriterios()
+                         ) {
+
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                .child(unCrit.getIdCriterio()).child("1-IdCriterio").setValue(unCrit.getIdCriterio());
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                .child(unCrit.getIdCriterio()).child("2-TextoCriterio").setValue(unCrit.getTextoCriterio());
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                .child(unCrit.getIdCriterio()).child("3-PuntajeCriterio").setValue(String.valueOf(unCrit.getPuntajeCriterio()));
+
+                    }
+
+                }
+            }
+        }
+        if (elCues.getTipoCuestionario().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)){
+            for (Ese unaEse:
+                    elCues.getListaEses()) {
+                mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("1-IdEse").setValue(unaEse.getIdEse());
+                mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("3-NumeroEse").setValue(String.valueOf( unaEse.getNumeroEse()));
+                mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("2-NombreEse").setValue(unaEse.getNombreEse());
+
+                for (Item unItem :
+                        unaEse.getListaItem()) {
+
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("1-IdItem").setValue(unItem.getIdItem());
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("2-TituloItem").setValue(unItem.getTituloItem());
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("3-TextoItem").setValue(unItem.getTextoItem());
+                    for (Pregunta unaPreg :
+                           unItem.getListaPreguntas()) {
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("1-IdPregunta").setValue(unaPreg.getIdPregunta());
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("2-TextoPregunta").setValue(unaPreg.getTextoPregunta());
+                        for (Criterio unCrit:unaPreg.getListaCriterios()
+                                ) {
+
+                            mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                    .child(unCrit.getIdCriterio()).child("1-IdCriterio").setValue(unCrit.getIdCriterio());
+                            mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                    .child(unCrit.getIdCriterio()).child("2-TextoCriterio").setValue(unCrit.getTextoCriterio());
+                            mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                    .child(unCrit.getIdCriterio()).child("3-PuntajeCriterio").setValue(String.valueOf(unCrit.getPuntajeCriterio()));
+
+                        }
+
+                    }
+                }
+            }
+        }
+        
+    }
+    public void traerCuestionariosFirebase(){
+        DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
+        mbase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                for (final DataSnapshot cuestionario :
+                        dataSnapshot.getChildren()) {
+                    final String idCuestion = cuestionario.child("3-IdCuestionario").getValue(String.class);
+
+                    //SOLO BAJA LOS CUESTIONARIOS SI NO EXISTEN EN LA REALM LOCAL.
+
+                    if (noExisteCuestionario(idCuestion)) {
+
+                        Realm realm =Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+                                Cuestionario nuevoCuestionario = new Cuestionario();
+
+                                nuevoCuestionario.setIdCuestionario(idCuestion);
+                                nuevoCuestionario.setNombreCuestionario((String) cuestionario.child("1-Nombre").getValue());
+                                nuevoCuestionario.setTipoCuestionario((String) cuestionario.child("2-Tipo").getValue());
+                                nuevoCuestionario.setListaEses(new RealmList<Ese>());
+
+                                for (DataSnapshot ese :
+                                        cuestionario.child("4-Estructura").getChildren()
+                                        ) {
+                                    Ese eseNueva = new Ese();
+                                    eseNueva.setIdEse((String) ese.child("1-IdEse").getValue());
+                                    eseNueva.setPuntajeEse(0.0);
+                                    eseNueva.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                                    eseNueva.setNombreEse((String) ese.child("2-NombreEse").getValue());
+                                    eseNueva.setNumeroEse((Integer.parseInt((String)ese.child("3-NumeroEse").getValue())));
+
+                                    //SI EL CUESTIONARIO ES ESTRUCTURADO
+                                    if (nuevoCuestionario.getTipoCuestionario().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
+                                        eseNueva.setListaPreguntas(null);
+                                        eseNueva.setListaItem(new RealmList<Item>());
+                                        for (DataSnapshot item :
+                                                ese.child("4-Items").getChildren()
+                                                ) {
+                                            Item itemNuevo = new Item();
+                                            itemNuevo.setIdItem((String) item.child("1-IdItem").getValue());
+                                            itemNuevo.setPuntajeItem(0.0);
+                                            itemNuevo.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                                            itemNuevo.setTituloItem((String) item.child("2-TituloItem").getValue());
+                                            itemNuevo.setTextoItem((String) item.child("3-TextoItem").getValue());
+                                            itemNuevo.setIdEse(eseNueva.getIdEse());
+                                            itemNuevo.setListaPreguntas(new RealmList<Pregunta>());
+
+                                            for (DataSnapshot pregunta :
+                                                    item.child("4-Preguntas").getChildren()) {
+
+                                                Pregunta preguntaNueva = new Pregunta();
+                                                preguntaNueva.setTextoPregunta((String) pregunta.child("2-TextoPregunta").getValue());
+                                                preguntaNueva.setIdPregunta((String) pregunta.child("1-IdPregunta").getValue());
+                                                preguntaNueva.setPuntaje(null);
+                                                preguntaNueva.setIdItem(itemNuevo.getIdItem());
+                                                preguntaNueva.setIdEse(eseNueva.getIdEse());
+                                                preguntaNueva.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                                                preguntaNueva.setListaCriterios(new RealmList<Criterio>());
+
+
+                                                for (DataSnapshot criterio :
+                                                        pregunta.child("3-Criterios").getChildren()) {
+
+                                                    Criterio criterioNuevo = new Criterio();
+                                                    criterioNuevo.setIdCriterio((String) criterio.child("1-IdCriterio").getValue());
+                                                    criterioNuevo.setIdEse(eseNueva.getIdEse());
+                                                    criterioNuevo.setIdItem(itemNuevo.getIdItem());
+                                                    criterioNuevo.setIdPregunta(preguntaNueva.getIdPregunta());
+                                                    criterioNuevo.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                                                    criterioNuevo.setTextoCriterio((String) criterio.child("2-TextoCriterio").getValue());
+                                                    criterioNuevo.setPuntajeCriterio((Integer.parseInt((String)criterio.child("3-PuntajeCriterio").getValue())));
+
+                                                    Criterio mCriterio=realm.copyToRealm(criterioNuevo);
+                                                    preguntaNueva.addCriterio(mCriterio);
+                                                }
+                                                Pregunta mPreguntaNueva = realm.copyToRealm(preguntaNueva);
+                                                itemNuevo.addPregunta(mPreguntaNueva);
+                                            }
+                                            Item mItemNuevo=realm.copyToRealm(itemNuevo);
+                                            eseNueva.addItem(mItemNuevo);
+                                        }
+                                        Ese mEseNueva=realm.copyToRealm(eseNueva);
+                                        nuevoCuestionario.addEse(mEseNueva);
+                                    }
+
+                                    //SI EL CUESTIONARIO ES SIMPLE
+                                    else {
+                                        eseNueva.setListaItem(null);
+                                        eseNueva.setListaPreguntas(new RealmList<Pregunta>());
+
+
+                                        for (DataSnapshot pregunta :
+                                                ese.child("4-Preguntas").getChildren()) {
+
+                                            Pregunta preguntaNueva = new Pregunta();
+                                            preguntaNueva.setTextoPregunta((String) pregunta.child("2-TextoPregunta").getValue());
+                                            preguntaNueva.setIdPregunta((String) pregunta.child("1-IdPregunta").getValue());
+                                            preguntaNueva.setPuntaje(null);
+                                            preguntaNueva.setIdEse(eseNueva.getIdEse());
+                                            preguntaNueva.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                                            preguntaNueva.setListaCriterios(new RealmList<Criterio>());
+
+                                            for (DataSnapshot criterio :
+                                                    pregunta.child("3-Criterios").getChildren()) {
+
+                                                Criterio criterioNuevo = new Criterio();
+                                                criterioNuevo.setIdCriterio((String) criterio.child("1-IdCriterio").getValue());
+                                                criterioNuevo.setIdEse(eseNueva.getIdEse());
+                                                criterioNuevo.setIdPregunta(preguntaNueva.getIdPregunta());
+                                                criterioNuevo.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
+                                                criterioNuevo.setTextoCriterio((String) criterio.child("2-TextoCriterio").getValue());
+                                                criterioNuevo.setPuntajeCriterio((Integer.parseInt((String)criterio.child("3-PuntajeCriterio").getValue())));
+
+                                                Criterio mCriterio=realm.copyToRealm(criterioNuevo);
+                                                preguntaNueva.addCriterio(mCriterio);
+                                            }
+                                            Pregunta mPreguntaNueva =realm.copyToRealm(preguntaNueva);
+                                            eseNueva.addPregunta(mPreguntaNueva);
+                                        }
+                                        Ese mEseNueva=realm.copyToRealm(eseNueva);
+                                        nuevoCuestionario.addEse(mEseNueva);
+                                    }
+                                }
+                                realm.copyToRealm(nuevoCuestionario);
+                            }
+                        });
+                    }
+                }
+                Toast.makeText(context, "fin?", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private boolean noExisteCuestionario(String idCuestion) {
+        Realm realm = Realm.getDefaultInstance();
+        Cuestionario elCuestionarioBuscado= realm.where(Cuestionario.class)
+                .equalTo("idCuestionario",idCuestion)
+                .findFirst();
+        if (elCuestionarioBuscado!=null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    //FIREBASE---//
+
+
+
     public void eliminarCuestionario(final String idCuestionario) {
 
-        FuncionesPublicas.eliminarCuestionario(idCuestionario, context);
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                lasPreguntas.deleteAllFromRealm();
+
+                RealmResults<Item> losItem = bgRealm.where(Item.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                losItem.deleteAllFromRealm();
+
+                RealmResults<Ese>lasEses=bgRealm.where(Ese.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                lasEses.deleteAllFromRealm();
+
+                RealmResults<Criterio>losCriterios=bgRealm.where(Criterio.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .not()
+                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
+                        .findAll();
+                losCriterios.deleteAllFromRealm();
+
+                Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findFirst();
+                if (elCuestionario!=null){
+                    elCuestionario.deleteFromRealm();
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(context, context.getString(R.string.cuestionarioEliminado), Toast.LENGTH_SHORT).show();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -1122,4 +1430,6 @@ public class ControllerDatos {
         return listaCrit;
 
     }
+
+
 }

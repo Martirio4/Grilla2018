@@ -7,8 +7,8 @@ android {
         applicationId "com.nomad.mrg5s"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 4
-        versionName "4.0.01"
+        versionCode 5
+        versionName "4.0.20"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

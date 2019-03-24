@@ -713,5 +713,6 @@
     <string name="tituloEdicionCriterioDefault">Editar criterios estándar</string>
     <string name="editarCuestionariosMayus">EDITAR CUESTIONARIOS</string>
     <string name="criteriosEstandar">Criterios estándar</string>
+    <string name="yaNoUsar">No posee permiso para utilizar la app.</string>
 
 </resources>

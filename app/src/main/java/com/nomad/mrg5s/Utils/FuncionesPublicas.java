@@ -309,66 +309,6 @@ public class FuncionesPublicas {
     }
 
 
-
-
-    public static Integer dameEseParaIdItem(Integer idItem){
-        return Integer.parseInt(String.valueOf(idItem).substring(0,1));
-    }
-
-    public static void eliminarCuestionario(final String idCuestionario, final Context context) {
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm bgRealm) {
-                RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                lasPreguntas.deleteAllFromRealm();
-
-                RealmResults<Item> losItem = bgRealm.where(Item.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                losItem.deleteAllFromRealm();
-
-                RealmResults<Ese>lasEses=bgRealm.where(Ese.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                lasEses.deleteAllFromRealm();
-
-                RealmResults<Criterio>losCriterios=bgRealm.where(Criterio.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .not()
-                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
-                        .findAll();
-                losCriterios.deleteAllFromRealm();
-
-                Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .findFirst();
-                if (elCuestionario!=null){
-                    elCuestionario.deleteFromRealm();
-                }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(context, context.getString(R.string.cuestionarioEliminado), Toast.LENGTH_SHORT).show();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-
     public static void cambiarNombreCuestionario(final Cuestionario unCuestionario, final String nuevoTexto, final AdapterCuestionario adapterCuestionario) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -386,9 +326,6 @@ public class FuncionesPublicas {
 
     }
 
-    public static void agregarPregunta(final String idCuestionario, final Pregunta nuevaPregunta, final AdapterPreguntas adapterPreguntas) {
-
-    }
 
 
 

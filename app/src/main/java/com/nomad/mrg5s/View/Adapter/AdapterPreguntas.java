@@ -208,8 +208,12 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
             textViewDescripcion.setText(unPregunta.getTextoPregunta());
             switch (origen) {
                 case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                    botonEditar.setVisibility(View.VISIBLE);
+                    botonEliminar.setVisibility(View.VISIBLE);
                 break;
                 default:
+                    botonEditar.setVisibility(View.GONE);
+                    botonEliminar.setVisibility(View.GONE);
                     if (unPregunta.getPuntaje() == null) {
                         textoFaltantes.setTextColor(ContextCompat.getColor(textoFaltantes.getContext(), R.color.textoRojo));
                         textoFaltantes.setText(textoFaltantes.getContext().getString(R.string.preguntaIncompleta));

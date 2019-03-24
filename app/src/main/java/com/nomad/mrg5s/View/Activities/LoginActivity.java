@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordOlvidada.setVisibility(View.VISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
-        Realm.init(getApplicationContext());
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

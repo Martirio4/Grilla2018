@@ -1,6 +1,5 @@
 package com.nomad.mrg5s.View.Fragments;
 
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,24 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.View.Adapter.AdapterCuestionario;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,17 +36,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
     private RecyclerView recyclerCuestionarios;
     private AdapterCuestionario adapterCuestionario;
     private LinearLayoutManager layoutManager;
-
-
-    private ControllerDatos controllerDatos;
-
-
-    private FragmentManageAreas.Avisable unAvisable;
-
     private TextView textView;
-    private DatabaseReference mDatabase;
-
-    private LinearLayout linearSnackbar;
     private Notificable notificable;
     private TextView textoBotonEditorCuestionarios;
     private FloatingActionButton fabAgregarPregunta;
@@ -65,6 +48,10 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
 
     public interface Notificable{
         void abrirCuestionario(Cuestionario cuestionario);
+
+        void crearCuestionario(String cuestionario, String tipoCuestionario);
+
+        void eliminarCuestionario(String idCuestionario);
     }
 
 
@@ -73,11 +60,9 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_gestion_cuestionarios, container, false);
-        controllerDatos=new ControllerDatos(view.getContext());
+
 
         recyclerCuestionarios=view.findViewById(R.id.recyclerCuestionarios);
-
-        linearSnackbar =view.findViewById(R.id.linearParaCoordinar);
         textoBotonEditorCuestionarios=view.findViewById(R.id.botonAgregarCuestionario);
         textoBotonEditorCuestionarios.setText(getString(R.string.addCuestionario));
 
@@ -199,7 +184,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                 .input(getResources().getString(R.string.cuestionarioName),"", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        controllerDatos.crearNuevoCuestionario(input.toString(), tipoCuestionario);
+                        notificable.crearCuestionario(input.toString(), tipoCuestionario);
                         actualizarDatosRecycler();
                         recyclerCuestionarios.scrollToPosition(adapterCuestionario.getListaCuestionariosOriginales().size()-1);
                     }
@@ -232,7 +217,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             adapterCuestionario.getListaCuestionariosOriginales().remove(unCuestionario);
                             adapterCuestionario.notifyDataSetChanged();
-                            controllerDatos.eliminarCuestionario(unCuestionario.getIdCuestionario());
+                            notificable.eliminarCuestionario(unCuestionario.getIdCuestionario());
                         }
                     })
                     .negativeText(getResources().getString(R.string.cancel))
