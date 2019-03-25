@@ -174,4 +174,32 @@
             android:layout_width="0dp"
             android:layout_height="match_parent" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lin5"
+        android:background="@color/tile1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_weight="50"
+        android:layout_height="0dp">
+
+        <ImageButton
+            android:layout_marginStart="@dimen/margenChico"
+            android:layout_marginEnd="@dimen/margenChico"
+            android:id="@+id/btn_exportar"
+            android:src="@drawable/starting"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+        <TextView
+            android:textColor="@color/tile5"
+            android:textSize="@dimen/titulosMain"
+            android:id="@+id/cuartaOpcion3"
+            android:layout_marginStart="@dimen/margenChico"
+            android:layout_marginEnd="@dimen/margenChico"
+            android:gravity="start|center_vertical"
+            android:layout_weight="70"
+            android:text="Exportar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
     </LinearLayout>

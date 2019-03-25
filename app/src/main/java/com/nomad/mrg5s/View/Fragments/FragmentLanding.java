@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nomad.mrg5s.DAO.ControllerDatos;
+import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.nomad.mrg5s.View.Activities.ActivityMyAudits;
@@ -34,6 +35,10 @@ import com.nomad.mrg5s.View.Activities.SettingsActivity;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 
 /**
@@ -84,10 +89,28 @@ public class FragmentLanding extends Fragment {
         botonSettings = view.findViewById(R.id.btn_setting);
         botonStart = view.findViewById(R.id.btn_start);
         ImageButton botonImportar=view.findViewById(R.id.btn_importar);
+        ImageButton botonExpo = view.findViewById(R.id.btn_exportar);
         botonImportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new ControllerDatos(getContext()).traerCuestionariosFirebase();
+            }
+        });
+        botonExpo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<Cuestionario> losCu = realm.where(Cuestionario.class)
+                        .findAll();
+                RealmList<Cuestionario>lista=new RealmList<>();
+                lista.addAll(losCu);
+
+                ControllerDatos controllerDatos = new ControllerDatos(getContext());
+                for (Cuestionario elCues :
+                        lista) {
+                    controllerDatos.crearCuestionarioFirebase(elCues);
+                }
+
             }
         });
 
