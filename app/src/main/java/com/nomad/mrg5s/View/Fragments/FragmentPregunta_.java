@@ -51,6 +51,7 @@ import id.zelory.compressor.Compressor;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
@@ -259,6 +260,7 @@ public class FragmentPregunta_ extends Fragment {
                     .equalTo("idAudit", idAudit)
                     .equalTo("idEse", idEse)
                     .equalTo("idPregunta", idPregunta)
+                    .sort("puntajeCriterio", Sort.ASCENDING)
                     .findAll();
         }
         else{
@@ -267,6 +269,7 @@ public class FragmentPregunta_ extends Fragment {
                     .equalTo("idEse", idEse)
                     .equalTo("idItem", idItem)
                     .equalTo("idPregunta", idPregunta)
+                    .sort("puntajeCriterio", Sort.ASCENDING)
                     .findAll();
         }
        if (rr_listaCriterio!=null){

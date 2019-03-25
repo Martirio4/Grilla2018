@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.nomad.mrg5s.Model.Area;
 import com.nomad.mrg5s.Model.Auditoria;
 import com.nomad.mrg5s.Model.Criterio;
@@ -859,13 +860,12 @@ public class ControllerDatos {
     }
     public void traerCuestionariosFirebase(){
         DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
-        mbase.addChildEventListener(new ChildEventListener() {
+        mbase.child("Cuestionarios").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
 
-                for (final DataSnapshot cuestionario :
-                        dataSnapshot.getChildren()) {
-                    final String idCuestion = cuestionario.child("3-IdCuestionario").getValue(String.class);
+
+                    final String idCuestion = dataSnapshot.child("3-IdCuestionario").getValue(String.class);
 
                     //SOLO BAJA LOS CUESTIONARIOS SI NO EXISTEN EN LA REALM LOCAL.
 
@@ -879,12 +879,12 @@ public class ControllerDatos {
                                 Cuestionario nuevoCuestionario = new Cuestionario();
 
                                 nuevoCuestionario.setIdCuestionario(idCuestion);
-                                nuevoCuestionario.setNombreCuestionario((String) cuestionario.child("1-Nombre").getValue());
-                                nuevoCuestionario.setTipoCuestionario((String) cuestionario.child("2-Tipo").getValue());
+                                nuevoCuestionario.setNombreCuestionario((String) dataSnapshot.child("1-Nombre").getValue());
+                                nuevoCuestionario.setTipoCuestionario((String) dataSnapshot.child("2-Tipo").getValue());
                                 nuevoCuestionario.setListaEses(new RealmList<Ese>());
 
                                 for (DataSnapshot ese :
-                                        cuestionario.child("4-Estructura").getChildren()
+                                        dataSnapshot.child("4-Estructura").getChildren()
                                         ) {
                                     Ese eseNueva = new Ese();
                                     eseNueva.setIdEse((String) ese.child("1-IdEse").getValue());
@@ -989,7 +989,7 @@ public class ControllerDatos {
                             }
                         });
                     }
-                }
+
                 Toast.makeText(context, "fin?", Toast.LENGTH_SHORT).show();
             }
 
