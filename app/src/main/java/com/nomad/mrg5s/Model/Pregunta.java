@@ -20,6 +20,15 @@ public class Pregunta extends RealmObject {
     private String idCuestionario;
     private RealmList<Foto> listaFotos;
     private RealmList<Criterio>listaCriterios;
+    private Integer orden;
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
+    }
 
     public void setIdCuestionario(String idCuestionario) {
         this.idCuestionario = idCuestionario;

@@ -714,5 +714,8 @@
     <string name="editarCuestionariosMayus">EDITAR CUESTIONARIOS</string>
     <string name="criteriosEstandar">Criterios estándar</string>
     <string name="yaNoUsar">No posee permiso para utilizar la app.</string>
+    <string name="preguntaEliminada">La pregunta fue eliminada</string>
+    <string name="preguntaFueEliminada">La pregunta fue eliminada.</string>
+    <string name="itemFueEliminado">El item fue eliminado.</string>
 
 </resources>

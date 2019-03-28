@@ -21,6 +21,15 @@ public class Item extends RealmObject {
     private String textoItem;
     private String idAudit;
     private String idEse;
+    private Integer orden;
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
+    }
 
     public Item() {
     }

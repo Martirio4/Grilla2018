@@ -189,6 +189,7 @@ public class FragmentPregunta_ extends Fragment {
         Ese laEseTitulo=realm.where(Ese.class)
                 .equalTo("idAudit",idAudit)
                 .equalTo("idEse", idEse)
+                .sort("numeroEse", Sort.ASCENDING)
                 .findFirst();
         if (laEseTitulo!=null){
             criterioTitulo.setText(laEseTitulo.getNombreEse());
@@ -260,7 +261,7 @@ public class FragmentPregunta_ extends Fragment {
                     .equalTo("idAudit", idAudit)
                     .equalTo("idEse", idEse)
                     .equalTo("idPregunta", idPregunta)
-                    .sort("puntajeCriterio", Sort.ASCENDING)
+                    .sort("orden", Sort.ASCENDING)
                     .findAll();
         }
         else{
@@ -269,7 +270,7 @@ public class FragmentPregunta_ extends Fragment {
                     .equalTo("idEse", idEse)
                     .equalTo("idItem", idItem)
                     .equalTo("idPregunta", idPregunta)
-                    .sort("puntajeCriterio", Sort.ASCENDING)
+                    .sort("orden", Sort.ASCENDING)
                     .findAll();
         }
        if (rr_listaCriterio!=null){

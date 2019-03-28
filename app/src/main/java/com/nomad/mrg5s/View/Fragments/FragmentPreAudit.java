@@ -29,6 +29,7 @@ import com.github.clans.fab.FloatingActionButton;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.nomad.mrg5s.View.Activities.ActivityPreAuditoria.idAudit;
 
@@ -172,6 +173,7 @@ public class FragmentPreAudit extends Fragment {
                 RealmResults<Item> listaItems1 = realm.where(Item.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idEse", laEse)
+                        .sort("orden",Sort.ASCENDING)
                         .findAll();
                 listaItemsOriginales.addAll(listaItems1);
                 break;
@@ -179,6 +181,7 @@ public class FragmentPreAudit extends Fragment {
                 RealmResults<Item> listaItems2 = realm.where(Item.class)
                         .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
                         .equalTo("idEse", laEse)
+                        .sort("orden",Sort.ASCENDING)
                         .findAll();
                 listaItemsOriginales.addAll(listaItems2);
 
@@ -214,6 +217,7 @@ public class FragmentPreAudit extends Fragment {
                 RealmResults<Pregunta> listaPreguntas1 = realm.where(Pregunta.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idEse", laEse)
+                        .sort("orden",Sort.ASCENDING)
                         .findAll();
                 listaPreguntasOriginales.addAll(listaPreguntas1);
             break;
@@ -221,6 +225,7 @@ public class FragmentPreAudit extends Fragment {
                 RealmResults<Pregunta> listaPreguntas2 = realm.where(Pregunta.class)
                         .equalTo("idAudit", ActivityPreAuditoria.pedirIdAudit())
                         .equalTo("idEse", laEse)
+                        .sort("orden",Sort.ASCENDING)
                         .findAll();
                 listaPreguntasOriginales.addAll(listaPreguntas2);
             break;

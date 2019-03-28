@@ -92,6 +92,13 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
         final PreguntaViewHolder itemViewHolder = (PreguntaViewHolder) holder;
         itemViewHolder.cargarPregunta(unPregunta,position);
 
+        final Pregunta unaPregunta= new Pregunta();
+        unaPregunta.setIdCuestionario(unPregunta.getIdCuestionario());
+        unaPregunta.setIdItem(unPregunta.getIdItem());
+        unaPregunta.setIdEse(unPregunta.getIdEse());
+        unaPregunta.setIdPregunta(unPregunta.getIdPregunta());
+
+
         itemViewHolder.botonEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +113,7 @@ public class AdapterPreguntas extends RecyclerView.Adapter implements View.OnCli
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 listaPreguntasOriginales.remove(position);
-                                controllerDatos.borrarPregunta(unPregunta, AdapterPreguntas.this);
+                                controllerDatos.borrarPregunta(unaPregunta, AdapterPreguntas.this);
                             }
                         })
                         .negativeText(R.string.cancel)

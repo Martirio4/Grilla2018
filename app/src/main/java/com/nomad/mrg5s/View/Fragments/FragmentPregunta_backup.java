@@ -51,6 +51,7 @@ import id.zelory.compressor.Compressor;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import pl.tajchert.nammu.Nammu;
@@ -62,7 +63,7 @@ import pl.tajchert.nammu.PermissionCallback;
 public class FragmentPregunta_backup extends Fragment {
 
 
-
+//CLASE SUPERDESACTUALIZADA
     public static final String ENUNCIADOPREGUNTA="ENUNCIADOPREGUNTA";
     public static final String IDCUESTIONARIO ="IDCUESTIONARIO";
     public static final String IDPREGUNTA="IDPREGUNTA";
@@ -163,6 +164,7 @@ public class FragmentPregunta_backup extends Fragment {
                     .equalTo("idCuestionario",idCuestionario)
                     .equalTo("idItem",idItem)
                     .equalTo("idEse", idEse)
+                    .sort("orden", Sort.ASCENDING)
                     .findFirst();
         }
 
@@ -172,6 +174,7 @@ public class FragmentPregunta_backup extends Fragment {
                     .equalTo("idAudit",idAudit)
                     .equalTo("idItem",idItem)
                     .equalTo("idEse",idEse)
+                    .sort("orden",Sort.ASCENDING)
                     .findFirst();
         }
 

@@ -124,8 +124,14 @@ public class FragmentEditarPregunta extends Fragment {
                                                  .equalTo("idItem", idItem)
                                                  .equalTo("idPregunta", idpregunta)
                                                  .findFirst();
+
                                          if (mPregunta!=null){
-                                             controllerDatos.borrarPregunta(mPregunta, null);
+                                             Pregunta unaPregunta= new Pregunta();
+                                             unaPregunta.setIdCuestionario(mPregunta.getIdCuestionario());
+                                             unaPregunta.setIdItem(mPregunta.getIdItem());
+                                             unaPregunta.setIdEse(mPregunta.getIdEse());
+                                             unaPregunta.setIdPregunta(mPregunta.getIdPregunta());
+                                             controllerDatos.borrarPregunta(unaPregunta, null);
                                              auditable.cerrarFragmentEdicion();
                                          }
                                      }

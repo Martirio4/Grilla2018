@@ -17,6 +17,15 @@ public class Criterio extends RealmObject {
     private String idCuestionario;
     private String textoCriterio;
     private Integer puntajeCriterio;
+    private Integer orden;
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
+    }
 
     public String getIdAudit() {
         return idAudit;

@@ -34,6 +34,7 @@ import java.util.UUID;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 public class ActivityAuditoria extends AppCompatActivity implements FragmentPregunta_.Avisable, FragmentEditarPregunta.Auditable{
@@ -190,12 +191,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
                         .equalTo("idAudit", idAudit)
                         .equalTo("idItem", idItem)
                         .equalTo("idEse",idese )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
 
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
                 return realm.where(Pregunta.class)
                         .equalTo("idAudit", idAudit)
                         .equalTo("idEse",idese )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
 
             default:
@@ -203,6 +206,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
                         .equalTo("idAudit", idAudit)
                         .equalTo("idItem", idItem)
                         .equalTo("idEse",idese )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
         }
     }
@@ -216,12 +220,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idItem", idItem)
                         .equalTo("idEse",idese )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
 
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
                 return realm.where(Pregunta.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idEse",idese )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
 
             default:
@@ -229,6 +235,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idItem", idItem)
                         .equalTo("idEse",idese )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
         }
     }
