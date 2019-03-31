@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +37,7 @@ import java.util.UUID;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.nomad.mrg5s.View.Fragments.FragmentSettings.deleteDirectory;
 
@@ -241,13 +244,12 @@ public class ControllerDatos {
                     pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
                     pregunta111.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
                     pregunta111.setIdEse(unaEse.getIdEse());
+                    pregunta111.setOrden(j+1);
                     cargarCriteriosdDefaultPregunta(realm,pregunta111);
                     unaEse.addPregunta(pregunta111);
                 }
                 nuevoCuestionario.addEse(unaEse);
-
             }
-            crearCuestionarioFirebase(nuevoCuestionario);
             }
         });
         //endregion
@@ -299,7 +301,7 @@ public class ControllerDatos {
                     }
                     nuevoCuestionario.addEse(unaEse);
                 }
-                crearCuestionarioFirebase(nuevoCuestionario);
+
             }
         });
         //endregion
@@ -308,7 +310,8 @@ public class ControllerDatos {
 
 
 
-    public void crearCriteriosDefault() {
+    public void
+    crearCriteriosDefault() {
         //CUATRO CRITERIOS DEFAULT
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -321,6 +324,7 @@ public class ControllerDatos {
                     unCriterio.setIdEse(null);
                     unCriterio.setIdPregunta(null);
                     unCriterio.setPuntajeCriterio(i + 1);
+                    unCriterio.setOrden(i+1);
                     switch (i) {
                         case 0:
                             unCriterio.setTextoCriterio(context.getString(R.string.criterioPreg1));
@@ -359,6 +363,7 @@ public class ControllerDatos {
                 unCriterio.setIdEse(preg.getIdEse());
                 unCriterio.setIdPregunta(preg.getIdPregunta());
                 unCriterio.setPuntajeCriterio(i + 1);
+                unCriterio.setOrden(i+1);
                 switch (i) {
                     case 0:
                         unCriterio.setTextoCriterio(listaCriteriosDefault.get(i).getTextoCriterio());
@@ -405,14 +410,28 @@ public class ControllerDatos {
 
 
     //--- METODOS FIREBASE
-    public void crearCuestionarioFirebase(Cuestionario elCues) {
+    public void crearCuestionarioFirebase(final Cuestionario elCues) {
         DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
+        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    generarNodosFirebase(elCues);
+                }
+                else{
+                    Toast.makeText(context, context.getString(R.string.errorPruebeNuevamente), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
+    private void generarNodosFirebase(Cuestionario elCues) {
+        DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("1-Nombre").setValue(elCues.getNombreCuestionario());
         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("2-Tipo").setValue(elCues.getTipoCuestionario());
         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("3-IdCuestionario").setValue(elCues.getIdCuestionario());
         if (elCues.getTipoCuestionario().equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
-           
+
             for (Ese unaEse:
                     elCues.getListaEses()) {
                 mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("1-IdEse").setValue(unaEse.getIdEse());
@@ -422,11 +441,12 @@ public class ControllerDatos {
 
                 for (Pregunta unaPreg :
                         unaEse.getListaPreguntas()) {
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("0-OrdenPregunta").setValue(String.valueOf(unaPreg.getOrden()));
                     mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("1-IdPregunta").setValue(unaPreg.getIdPregunta());
                     mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("2-TextoPregunta").setValue(unaPreg.getTextoPregunta());
 
                     for (Criterio unCrit:unaPreg.getListaCriterios()
-                         ) {
+                            ) {
 
                         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
                                 .child(unCrit.getIdCriterio()).child("1-IdCriterio").setValue(unCrit.getIdCriterio());
@@ -434,6 +454,8 @@ public class ControllerDatos {
                                 .child(unCrit.getIdCriterio()).child("2-TextoCriterio").setValue(unCrit.getTextoCriterio());
                         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
                                 .child(unCrit.getIdCriterio()).child("3-PuntajeCriterio").setValue(String.valueOf(unCrit.getPuntajeCriterio()));
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                .child(unCrit.getIdCriterio()).child("0-OrdenCriterio").setValue(String.valueOf(unCrit.getOrden()));
 
                     }
 
@@ -450,11 +472,13 @@ public class ControllerDatos {
                 for (Item unItem :
                         unaEse.getListaItem()) {
 
+                    mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("0-OrdenItem").setValue(String.valueOf(unItem.getOrden()) );
                     mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("1-IdItem").setValue(unItem.getIdItem());
                     mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("2-TituloItem").setValue(unItem.getTituloItem());
                     mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("3-TextoItem").setValue(unItem.getTextoItem());
                     for (Pregunta unaPreg :
-                           unItem.getListaPreguntas()) {
+                            unItem.getListaPreguntas()) {
+                        mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("0-OrdenPregunta").setValue(String.valueOf(unaPreg.getOrden()));
                         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("1-IdPregunta").setValue(unaPreg.getIdPregunta());
                         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("2-TextoPregunta").setValue(unaPreg.getTextoPregunta());
                         for (Criterio unCrit:unaPreg.getListaCriterios()
@@ -466,6 +490,8 @@ public class ControllerDatos {
                                     .child(unCrit.getIdCriterio()).child("2-TextoCriterio").setValue(unCrit.getTextoCriterio());
                             mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
                                     .child(unCrit.getIdCriterio()).child("3-PuntajeCriterio").setValue(String.valueOf(unCrit.getPuntajeCriterio()));
+                            mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("4-Estructura").child(unaEse.getNombreEse()).child("4-Items").child(unItem.getIdItem()).child("4-Preguntas").child(unaPreg.getIdPregunta()).child("3-Criterios")
+                                    .child(unCrit.getIdCriterio()).child("0-OrdenCriterio").setValue(String.valueOf(unCrit.getOrden()));
 
                         }
 
@@ -473,8 +499,8 @@ public class ControllerDatos {
                 }
             }
         }
-        
     }
+
     public void traerCuestionariosFirebase(){
         DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
         mbase.child("Cuestionarios").addChildEventListener(new ChildEventListener() {
@@ -484,11 +510,13 @@ public class ControllerDatos {
 
                     final String idCuestion = dataSnapshot.child("3-IdCuestionario").getValue(String.class);
 
-                    //SOLO BAJA LOS CUESTIONARIOS SI NO EXISTEN EN LA REALM LOCAL.
+                    
 
-                    if (noExisteCuestionario(idCuestion)) {
 
+                        eliminarCuestionarioEnMainThread(idCuestion);
                         Realm realm =Realm.getDefaultInstance();
+
+
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -518,6 +546,7 @@ public class ControllerDatos {
                                                 ese.child("4-Items").getChildren()
                                                 ) {
                                             Item itemNuevo = new Item();
+                                            itemNuevo.setOrden((Integer.parseInt((String)item.child("0-OrdenItem").getValue())));
                                             itemNuevo.setIdItem((String) item.child("1-IdItem").getValue());
                                             itemNuevo.setPuntajeItem(0.0);
                                             itemNuevo.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
@@ -530,6 +559,7 @@ public class ControllerDatos {
                                                     item.child("4-Preguntas").getChildren()) {
 
                                                 Pregunta preguntaNueva = new Pregunta();
+                                                preguntaNueva.setOrden((Integer.parseInt((String)pregunta.child("0-OrdenPregunta").getValue())));
                                                 preguntaNueva.setTextoPregunta((String) pregunta.child("2-TextoPregunta").getValue());
                                                 preguntaNueva.setIdPregunta((String) pregunta.child("1-IdPregunta").getValue());
                                                 preguntaNueva.setPuntaje(null);
@@ -550,17 +580,18 @@ public class ControllerDatos {
                                                     criterioNuevo.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                                                     criterioNuevo.setTextoCriterio((String) criterio.child("2-TextoCriterio").getValue());
                                                     criterioNuevo.setPuntajeCriterio((Integer.parseInt((String)criterio.child("3-PuntajeCriterio").getValue())));
+                                                    criterioNuevo.setPuntajeCriterio((Integer.parseInt((String)criterio.child("0-OrdenCriterio").getValue())));
 
-                                                    Criterio mCriterio=realm.copyToRealm(criterioNuevo);
+                                                    Criterio mCriterio=realm.copyToRealmOrUpdate(criterioNuevo);
                                                     preguntaNueva.addCriterio(mCriterio);
                                                 }
-                                                Pregunta mPreguntaNueva = realm.copyToRealm(preguntaNueva);
+                                                Pregunta mPreguntaNueva = realm.copyToRealmOrUpdate(preguntaNueva);
                                                 itemNuevo.addPregunta(mPreguntaNueva);
                                             }
-                                            Item mItemNuevo=realm.copyToRealm(itemNuevo);
+                                            Item mItemNuevo=realm.copyToRealmOrUpdate(itemNuevo);
                                             eseNueva.addItem(mItemNuevo);
                                         }
-                                        Ese mEseNueva=realm.copyToRealm(eseNueva);
+                                        Ese mEseNueva=realm.copyToRealmOrUpdate(eseNueva);
                                         nuevoCuestionario.addEse(mEseNueva);
                                     }
 
@@ -574,6 +605,7 @@ public class ControllerDatos {
                                                 ese.child("4-Preguntas").getChildren()) {
 
                                             Pregunta preguntaNueva = new Pregunta();
+                                            preguntaNueva.setOrden((Integer.parseInt((String)pregunta.child("0-OrdenPregunta").getValue())));
                                             preguntaNueva.setTextoPregunta((String) pregunta.child("2-TextoPregunta").getValue());
                                             preguntaNueva.setIdPregunta((String) pregunta.child("1-IdPregunta").getValue());
                                             preguntaNueva.setPuntaje(null);
@@ -591,21 +623,22 @@ public class ControllerDatos {
                                                 criterioNuevo.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                                                 criterioNuevo.setTextoCriterio((String) criterio.child("2-TextoCriterio").getValue());
                                                 criterioNuevo.setPuntajeCriterio((Integer.parseInt((String)criterio.child("3-PuntajeCriterio").getValue())));
+                                                criterioNuevo.setPuntajeCriterio((Integer.parseInt((String)criterio.child("0-OrdenCriterio").getValue())));
 
-                                                Criterio mCriterio=realm.copyToRealm(criterioNuevo);
+                                                Criterio mCriterio=realm.copyToRealmOrUpdate(criterioNuevo);
                                                 preguntaNueva.addCriterio(mCriterio);
                                             }
-                                            Pregunta mPreguntaNueva =realm.copyToRealm(preguntaNueva);
+                                            Pregunta mPreguntaNueva =realm.copyToRealmOrUpdate(preguntaNueva);
                                             eseNueva.addPregunta(mPreguntaNueva);
                                         }
-                                        Ese mEseNueva=realm.copyToRealm(eseNueva);
+                                        Ese mEseNueva=realm.copyToRealmOrUpdate(eseNueva);
                                         nuevoCuestionario.addEse(mEseNueva);
                                     }
                                 }
-                                realm.copyToRealm(nuevoCuestionario);
+                                realm.copyToRealmOrUpdate(nuevoCuestionario);
                             }
                         });
-                    }
+
 
                 Toast.makeText(context, "fin?", Toast.LENGTH_SHORT).show();
             }
@@ -697,6 +730,50 @@ public class ControllerDatos {
             @Override
             public void onError(Throwable error) {
                 Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void eliminarCuestionarioEnMainThread(final String idCuestionario ) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                lasPreguntas.deleteAllFromRealm();
+
+                RealmResults<Item> losItem = realm.where(Item.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                losItem.deleteAllFromRealm();
+
+                RealmResults<Ese>lasEses=realm.where(Ese.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                lasEses.deleteAllFromRealm();
+
+                RealmResults<Criterio>losCriterios=realm.where(Criterio.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .not()
+                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
+                        .findAll();
+                losCriterios.deleteAllFromRealm();
+
+                Cuestionario elCuestionario = realm.where(Cuestionario.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findFirst();
+                if (elCuestionario!=null){
+                    elCuestionario.deleteFromRealm();
+                }
             }
         });
 
@@ -930,10 +1007,9 @@ public class ControllerDatos {
     }
 
     public void borrarPregunta(final Pregunta unPregunta, final AdapterPreguntas adapterPreguntas) {
-        Realm backgroundRealm=Realm.getDefaultInstance();
+        final Realm realm=Realm.getDefaultInstance();
 
-
-        backgroundRealm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
                                           @Override
                                           public void execute(@NonNull Realm bgRealm) {
 
@@ -954,7 +1030,6 @@ public class ControllerDatos {
                                                   }
 
 
-
                                                   //reordenar preguntas
 
 
@@ -969,6 +1044,47 @@ public class ControllerDatos {
                             adapterPreguntas.remove(unPregunta);
                             adapterPreguntas.notifyDataSetChanged();
                         }
+//                        SI LA PREGUNTA TIENE ITEM NULL ES UN CUESTIONARIO SIMPLE
+                        if (unPregunta.getIdItem()!=null){
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmResults<Pregunta>pregunasParaReordenar= realm.where(Pregunta.class)
+                                            .equalTo("idCuestionario", unPregunta.getIdCuestionario())
+                                            .equalTo("idEse",unPregunta.getIdEse())
+                                            .equalTo("idItem",unPregunta.getIdItem())
+                                            .sort("orden", Sort.ASCENDING)
+                                            .findAll();
+
+                                    if (pregunasParaReordenar!=null) {
+                                        for (int i =0; i<pregunasParaReordenar.size();i++){
+                                                pregunasParaReordenar.get(i).setOrden(i+1);
+                                        }
+                                    }
+                                }
+                            });
+
+
+                        }
+                        else{
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmResults<Pregunta>pregunasParaReordenar= realm.where(Pregunta.class)
+                                            .equalTo("idCuestionario", unPregunta.getIdCuestionario())
+                                            .equalTo("idEse",unPregunta.getIdEse())
+                                            .sort("orden", Sort.ASCENDING)
+                                            .findAll();
+
+                                    if (pregunasParaReordenar!=null) {
+                                        for (int i =0; i<pregunasParaReordenar.size();i++){
+                                            pregunasParaReordenar.get(i).setOrden(i+1);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
@@ -983,13 +1099,13 @@ public class ControllerDatos {
 
 
     public  void borrarItem(final String idItem, final String idEse, final String idCuestionario, final AdapterItems adapterItems) {
-        final Realm bgrealm = Realm.getDefaultInstance();
-        bgrealm.executeTransactionAsync(new Realm.Transaction() {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(Realm bgRealm) {
                 //BORRO LAS PREGUNTAS DE ESE ITEM
 
-                RealmResults<Criterio> losCriterios=realm.where(Criterio.class)
+                RealmResults<Criterio> losCriterios= bgRealm.where(Criterio.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idItem", idItem)
                         .not()
@@ -997,14 +1113,14 @@ public class ControllerDatos {
                         .findAll();
                 losCriterios.deleteAllFromRealm();
 
-                RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
+                RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
                         .equalTo("idCuestionario", idCuestionario)
                         .equalTo("idItem", idItem)
                         .equalTo("idEse", idEse)
                         .findAll();
                 lasPreguntas.deleteAllFromRealm();
                 //BORRO EL ITEM
-                Item elItem = realm.where(Item.class)
+                Item elItem = bgRealm.where(Item.class)
                         .equalTo("idItem",idItem )
                         .equalTo("idEse", idEse)
                         .equalTo("idCuestionario", idCuestionario)
@@ -1020,6 +1136,27 @@ public class ControllerDatos {
                 if (adapterItems!=null) {
                     adapterItems.notifyDataSetChanged();
                 }
+
+                //REORDENAR LOS ITEM
+               realm.executeTransaction(new Realm.Transaction() {
+                   @Override
+                   public void execute(Realm realm) {
+                       RealmResults<Item> itemParaReordenar = realm.where(Item.class)
+                               .equalTo("idCuestionario",idCuestionario)
+                               .equalTo("idEse",idEse)
+                               .sort("orden", Sort.ASCENDING)
+                               .findAll();
+
+                       if (itemParaReordenar !=null) {
+                           for (int i = 0; i< itemParaReordenar.size(); i++){
+                               itemParaReordenar.get(i).setOrden(i+1);
+                           }
+                       }
+                   }
+               });
+
+
+
             }
         }, new Realm.Transaction.OnError() {
             @Override

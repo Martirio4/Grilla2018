@@ -37,6 +37,7 @@ import com.github.clans.fab.FloatingActionButton;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 /**
@@ -159,6 +160,7 @@ public class FragmentEditarPregunta extends Fragment {
                         .equalTo("idEse", idEse)
                         .equalTo("idItem", idItem)
                         .equalTo("idPregunta",idpregunta )
+                        .sort("orden", Sort.ASCENDING)
                         .findAll();
                 listaCriteriosRealm.addAll(losCriterios1);
                 break;

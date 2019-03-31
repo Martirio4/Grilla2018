@@ -15,6 +15,25 @@ public class Cuestionario extends RealmObject {
     private String tipoCuestionario;
     private String nombreCuestionario;
     private RealmList<Ese> listaEses;
+    private String cradoPor;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    private Integer version;
+
+    public String getCradoPor() {
+        return cradoPor;
+    }
+
+    public void setCradoPor(String cradoPor) {
+        this.cradoPor = cradoPor;
+    }
 
     public String getTipoCuestionario() {
         return tipoCuestionario;
