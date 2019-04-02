@@ -24,7 +24,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name="com.nomad.mrg5s.View.Activities.SplashActivity">
+        <activity android:name="com.nomad.mrg5s.View.Activities.SplashActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

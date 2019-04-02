@@ -409,7 +409,8 @@ public class ControllerDatos {
     }
 
 
-    //--- METODOS FIREBASE
+    //--- METODOS FIREBASE ---START//
+
     public void crearCuestionarioFirebase(final Cuestionario elCues) {
         DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -424,7 +425,6 @@ public class ControllerDatos {
             }
         });
     }
-
     private void generarNodosFirebase(Cuestionario elCues) {
         DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
         mbase.child("Cuestionarios").child(elCues.getIdCuestionario()).child("1-Nombre").setValue(elCues.getNombreCuestionario());
@@ -500,7 +500,6 @@ public class ControllerDatos {
             }
         }
     }
-
     public void traerCuestionariosFirebase(){
         DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
         mbase.child("Cuestionarios").addChildEventListener(new ChildEventListener() {
@@ -664,7 +663,49 @@ public class ControllerDatos {
             }
         });
     }
+    public void eliminarCuestionarioEnMainThread(final String idCuestionario ) {
 
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                lasPreguntas.deleteAllFromRealm();
+
+                RealmResults<Item> losItem = realm.where(Item.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                losItem.deleteAllFromRealm();
+
+                RealmResults<Ese>lasEses=realm.where(Ese.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .findAll();
+                lasEses.deleteAllFromRealm();
+
+                RealmResults<Criterio>losCriterios=realm.where(Criterio.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .isNull("idAudit")
+                        .not()
+                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
+                        .findAll();
+                losCriterios.deleteAllFromRealm();
+
+                Cuestionario elCuestionario = realm.where(Cuestionario.class)
+                        .equalTo("idCuestionario", idCuestionario)
+                        .findFirst();
+                if (elCuestionario!=null){
+                    elCuestionario.deleteFromRealm();
+                }
+            }
+        });
+
+    }
     private boolean noExisteCuestionario(String idCuestion) {
         Realm realm = Realm.getDefaultInstance();
         Cuestionario elCuestionarioBuscado= realm.where(Cuestionario.class)
@@ -677,9 +718,8 @@ public class ControllerDatos {
             return true;
         }
     }
-    //FIREBASE---//
 
-
+    //--- METODOS FIREBASE ---END//
 
     public void eliminarCuestionario(final String idCuestionario) {
 
@@ -730,50 +770,6 @@ public class ControllerDatos {
             @Override
             public void onError(Throwable error) {
                 Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    public void eliminarCuestionarioEnMainThread(final String idCuestionario ) {
-
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<Pregunta> lasPreguntas = realm.where(Pregunta.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                lasPreguntas.deleteAllFromRealm();
-
-                RealmResults<Item> losItem = realm.where(Item.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                losItem.deleteAllFromRealm();
-
-                RealmResults<Ese>lasEses=realm.where(Ese.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                lasEses.deleteAllFromRealm();
-
-                RealmResults<Criterio>losCriterios=realm.where(Criterio.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .not()
-                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
-                        .findAll();
-                losCriterios.deleteAllFromRealm();
-
-                Cuestionario elCuestionario = realm.where(Cuestionario.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .findFirst();
-                if (elCuestionario!=null){
-                    elCuestionario.deleteFromRealm();
-                }
             }
         });
 

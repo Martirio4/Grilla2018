@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,10 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.clans.fab.FloatingActionButton;
 import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.View.Activities.LoginActivity;
@@ -48,12 +51,19 @@ public class FragmentSettings extends Fragment {
     private Button areas;
     private Button borrar;
     private Button tuto;
+    private Button logout;
+    private Button editCuestionarios;
+    private FloatingActionButton fabVolver;
+    private Button editarCriterios;
+
+    private ImageView v_area;
+    private ImageView v_borrar;
+    private ImageView v_tuto;
+    private ImageView v_logout;
+    private ImageView v_editCues;
+    private ImageView v_editCrit;
 
 
-    private ImageView lin1;
-    private ImageView lin2;
-    private ImageView lin3;
-    private ImageView lin4;
     private Notificable notificable;
 
 
@@ -79,19 +89,23 @@ public class FragmentSettings extends Fragment {
         config = getActivity().getSharedPreferences("prefs",0);
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_settings, container, false);
-        lin1=view.findViewById(R.id.targetnum);
-        lin2=view.findViewById(R.id.targetnum2);
-        lin3=view.findViewById(R.id.targetnum3);
-        ImageView lin5 = view.findViewById(R.id.targetnum5);
-        lin4=view.findViewById(R.id.targetnum4);
+
+        v_area = view.findViewById(R.id.tap1);
+        v_borrar = view.findViewById(R.id.tap2);
+        v_tuto = view.findViewById(R.id.tap3);
+        v_logout = view.findViewById(R.id.tap4);
+        v_editCues = view.findViewById(R.id.tap5);
+        v_editCrit = view.findViewById(R.id.tap6);
+
 
         areas=view.findViewById(R.id.botonManageAreas);
-        Button logout=view.findViewById(R.id.botonLogOut);
+        logout=view.findViewById(R.id.botonLogOut);
         borrar=view.findViewById(R.id.botonBorrarTodo);
         tuto=view.findViewById(R.id.botonTuto);
-        Button editCuestionarios = view.findViewById(R.id.botonRateApp);
-        Button salir=view.findViewById(R.id.botonVolver);
-        Button editarCriterios=view.findViewById(R.id.botonEditCriterioDefault);
+        editCuestionarios = view.findViewById(R.id.botonRateApp);
+        fabVolver =view.findViewById(R.id.botonVolver);
+        TextView salir=view.findViewById(R.id.textoFabVolver);
+        editarCriterios=view.findViewById(R.id.botonEditCriterioDefault);
 
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
 
@@ -101,6 +115,7 @@ public class FragmentSettings extends Fragment {
         logout.setTypeface(roboto);
         borrar.setTypeface(roboto);
         salir.setTypeface(roboto);
+
         tuto.setTypeface(roboto);
 
         Boolean textoParaBotonTuto=config.getBoolean("estadoTuto",false);
@@ -181,7 +196,10 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        salir.setOnClickListener(new View.OnClickListener() {
+        salir.setText(salir.getContext().getString(R.string.volver));
+        salir.setTextColor(ContextCompat.getColor(salir.getContext(),R.color.mirgorBlanco));
+        fabVolver.setColorNormal(ContextCompat.getColor(fabVolver.getContext(),R.color.mirgorNaranja));
+        fabVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
@@ -282,11 +300,13 @@ public class FragmentSettings extends Fragment {
     }
 
 
+
     private void seguirConTutorial() {
         Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+
         new TapTargetSequence(getActivity())
                 .targets(
-                        TapTarget.forView(lin1, getResources().getString(R.string.tutorial_tit_area), getResources().getString(R.string.tutorial_desc_area))
+                        TapTarget.forView(v_area, getResources().getString(R.string.tutorial_tit_area), getResources().getString(R.string.tutorial_desc_area))
                                 .transparentTarget(false)
                                 .outerCircleColor(R.color.tutorial2)      // Specify a color for the outer circle
                                 .outerCircleAlpha(0.85f)            // Specify the alpha amount for the outer circle
@@ -296,7 +316,7 @@ public class FragmentSettings extends Fragment {
                                 .tintTarget(false)
                                 .targetRadius(80)
                                 .id(1),                   // Whether to tint the target view's color
-                        TapTarget.forView(lin2, getResources().getString(R.string.tutorial_tit_logout), getResources().getString(R.string.tutorial_desc_logout))
+                        TapTarget.forView(v_logout, getResources().getString(R.string.tutorial_tit_logout), getResources().getString(R.string.tutorial_desc_logout))
                                 .transparentTarget(false)
                                 .outerCircleColor(R.color.tutorial1)
                                 .textColor(R.color.primary_text)
@@ -307,7 +327,7 @@ public class FragmentSettings extends Fragment {
                                 .tintTarget(false)
                                 .targetRadius(80)
                                 .id(2),
-                        TapTarget.forView(lin3, getResources().getString(R.string.tutorial_tit_tuto), getResources().getString(R.string.tutorial_desc_tuto))
+                        TapTarget.forView(v_tuto, getResources().getString(R.string.tutorial_tit_tuto), getResources().getString(R.string.tutorial_desc_tuto))
                                 .transparentTarget(false)
                                 .outerCircleColor(R.color.tutorial2)      // Specify a color for the outer circle
                                 .outerCircleAlpha(0.95f)            // Specify the alpha amount for the outer circle
@@ -316,8 +336,8 @@ public class FragmentSettings extends Fragment {
                                 .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(false)
                                 .targetRadius(80)
-                                .id(4),
-                        TapTarget.forView(lin4, getResources().getString(R.string.tutorial_tit_delete), getResources().getString(R.string.tutorial_desc_delete))
+                                .id(3),
+                        TapTarget.forView(v_borrar, getResources().getString(R.string.tutorial_tit_delete), getResources().getString(R.string.tutorial_desc_delete))
                                 .transparentTarget(false)
                                 .outerCircleColor(R.color.tutorial1)
                                 .textColor(R.color.primary_text)
@@ -328,7 +348,29 @@ public class FragmentSettings extends Fragment {
                                 .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(false)
                                 .targetRadius(80)
-                                .id(3)
+                                .id(4),
+                        TapTarget.forView(v_editCues, getResources().getString(R.string.tutorial_tit_cues), getResources().getString(R.string.tutorial_desc_cues))
+                                .transparentTarget(false)
+                                .outerCircleColor(R.color.tutorial2)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.95f)            // Specify the alpha amount for the outer circle
+                                .textTypeface(roboto)  // Specify a typeface for the text
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(false)
+                                .targetRadius(80)
+                                .id(5),
+                        TapTarget.forView(v_editCrit, getResources().getString(R.string.tutorial_tit_crit), getResources().getString(R.string.tutorial_desc_crit))
+                                .transparentTarget(false)
+                                .outerCircleColor(R.color.tutorial1)
+                                .textColor(R.color.primary_text)
+                                .textColor(R.color.blancoNomad)// Specify a color for the outer circle
+                                .outerCircleAlpha(0.95f)            // Specify the alpha amount for the outer circle
+                                .textTypeface(roboto)  // Specify a typeface for the text
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(false)
+                                .targetRadius(80)
+                                .id(6)
                 )
 
                 .listener(new TapTargetSequence.Listener() {

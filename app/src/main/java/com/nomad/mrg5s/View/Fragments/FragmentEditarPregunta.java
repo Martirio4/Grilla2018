@@ -189,6 +189,7 @@ public class FragmentEditarPregunta extends Fragment {
         adapterCriterios.notifyDataSetChanged();
         cargarTitulosFragment();
 
+        fabAgregarPregunta.setColorNormal(ContextCompat.getColor(fabAgregarPregunta.getContext(), R.color.mirgorNaranja));
         fabAgregarPregunta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

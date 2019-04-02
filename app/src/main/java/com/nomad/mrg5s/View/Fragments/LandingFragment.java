@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,7 +49,6 @@ public class LandingFragment extends Fragment {
     private LinearLayout lin2;
     private LinearLayout lin3;
     private LinearLayout lin4;
-    private LinearLayout lin5;
     private Landinable landinable;
     private ImageButton animationTarget;
     private Animation animation;
@@ -79,14 +79,12 @@ public class LandingFragment extends Fragment {
         texto1 = view.findViewById(R.id.primeraOpcion);
         texto2 = view.findViewById(R.id.segundaOpcion);
         texto3 = view.findViewById(R.id.terceraOpcion);
-        texto31 = view.findViewById(R.id.firstTime);
         texto4 = view.findViewById(R.id.cuartaOpcion);
 
         lin1 = view.findViewById(R.id.lin1);
         lin2 = view.findViewById(R.id.lin2);
         lin3 = view.findViewById(R.id.lin3);
         lin4 = view.findViewById(R.id.line4);
-        lin5 = view.findViewById(R.id.line5);
 
         roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         texto1.setTypeface(roboto);
@@ -149,7 +147,6 @@ public class LandingFragment extends Fragment {
         lin4.setOnClickListener(listener4);
         texto4.setOnClickListener(listener4);
 
-        lin5.setVisibility(View.GONE);
 
 
         config = getActivity().getSharedPreferences("prefs", 0);

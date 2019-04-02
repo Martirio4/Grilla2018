@@ -22,7 +22,7 @@
     <dimen name="altoTarjeta3">94dp</dimen>
     <dimen name="margenMicro">2dp</dimen>
     <dimen name="titulosMain">40sp</dimen>
-    <dimen name="textoSettings">30sp</dimen>
+    <dimen name="textoSettings">20sp</dimen>
     <dimen name="textoAreaRevisarAudit">18sp</dimen>
     <dimen name="textoRecyclerPreAudit">30sp</dimen>
 </resources>

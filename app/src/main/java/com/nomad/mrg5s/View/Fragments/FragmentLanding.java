@@ -88,36 +88,41 @@ public class FragmentLanding extends Fragment {
         botonaudits = view.findViewById(R.id.btn_search);
         botonSettings = view.findViewById(R.id.btn_setting);
         botonStart = view.findViewById(R.id.btn_start);
-        ImageButton botonImportar=view.findViewById(R.id.btn_importar);
-        ImageButton botonExpo = view.findViewById(R.id.btn_exportar);
-        botonImportar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new ControllerDatos(getContext()).traerCuestionariosFirebase();
-            }
-        });
-        botonExpo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmResults<Cuestionario> losCu = realm.where(Cuestionario.class)
-                        .findAll();
-                RealmList<Cuestionario>lista=new RealmList<>();
-                lista.addAll(losCu);
 
-                ControllerDatos controllerDatos = new ControllerDatos(getContext());
-                for (Cuestionario elCues :
-                        lista) {
-                    controllerDatos.crearCuestionarioFirebase(elCues);
+
+        //region PARAFIREBASEDATABASE
+        /*
+            ImageButton botonImportar=view.findViewById(R.id.btn_importar);
+            ImageButton botonExpo = view.findViewById(R.id.btn_exportar);
+            botonImportar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new ControllerDatos(getContext()).traerCuestionariosFirebase();
                 }
+            });
+            botonExpo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmResults<Cuestionario> losCu = realm.where(Cuestionario.class)
+                            .findAll();
+                    RealmList<Cuestionario>lista=new RealmList<>();
+                    lista.addAll(losCu);
 
-            }
-        });
+                    ControllerDatos controllerDatos = new ControllerDatos(getContext());
+                    for (Cuestionario elCues :
+                            lista) {
+                        controllerDatos.crearCuestionarioFirebase(elCues);
+                    }
+
+                }
+            });
+        */
+        //endregion
 
         texto1 = view.findViewById(R.id.primeraOpcion);
         texto2 = view.findViewById(R.id.segundaOpcion);
         texto3 = view.findViewById(R.id.terceraOpcion);
-        texto31 = view.findViewById(R.id.firstTime);
         texto4 = view.findViewById(R.id.cuartaOpcion);
 
         lin1 = view.findViewById(R.id.lin1);
@@ -130,7 +135,6 @@ public class FragmentLanding extends Fragment {
         texto1.setTypeface(roboto);
         texto2.setTypeface(roboto);
         texto3.setTypeface(roboto);
-        texto31.setTypeface(roboto);
         texto4.setTypeface(roboto);
 
         //DECLARO LOS LISTENER QUE VOY A USAR
@@ -172,7 +176,7 @@ public class FragmentLanding extends Fragment {
 
             }
         };
-        
+
         //ASIGNO LISTENER PARA LOS BOTONES
         
         botonStart.setOnClickListener(listener1);

@@ -717,5 +717,9 @@
     <string name="preguntaEliminada">La pregunta fue eliminada</string>
     <string name="preguntaFueEliminada">La pregunta fue eliminada.</string>
     <string name="itemFueEliminado">El item fue eliminado.</string>
+    <string name="tutorial_tit_cues">Edita un cuestionario</string>
+    <string name="tutorial_desc_cues">Desde aqui podrás editar las preguntas del cuestionario</string>
+    <string name="tutorial_tit_crit">Edita los criterios por default</string>
+    <string name="tutorial_desc_crit">Cada pregunta que crees, por defecto recibe estos criterios.</string>
 
 </resources>

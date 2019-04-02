@@ -97,7 +97,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
         FloatingActionButton fabNuevoCuestionario = view.findViewById(R.id.agregarArea);
 
         fabNuevoCuestionario.setButtonSize(FloatingActionButton.SIZE_NORMAL);
-        fabNuevoCuestionario.setColorNormal(ContextCompat.getColor(getContext(), R.color.tile3));
+        fabNuevoCuestionario.setColorNormal(ContextCompat.getColor(getContext(),R.color.mirgorNaranja));
         fabNuevoCuestionario.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
 
 

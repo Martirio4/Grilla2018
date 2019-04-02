@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Grilla2018.iml" filepath="$PROJECT_DIR$/Grilla2018.iml" />
       <module fileurl="file://D:\NOMAD\MGE5S\grillaMirgor\Grilla2018.iml" filepath="D:\NOMAD\MGE5S\grillaMirgor\Grilla2018.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/grillaMirgor.iml" filepath="$PROJECT_DIR$/grillaMirgor.iml" />
       <module fileurl="file://C:\NOMAD\MIRGOR\Grilla2018\grillaMirgor.iml" filepath="C:\NOMAD\MIRGOR\Grilla2018\grillaMirgor.iml" />
       <module fileurl="file://C:\carpetamta\Grilla2018\grillaMirgor.iml" filepath="C:\carpetamta\Grilla2018\grillaMirgor.iml" />
     </modules>

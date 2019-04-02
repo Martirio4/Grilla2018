@@ -197,49 +197,55 @@
         android:layout_weight="30"
         android:layout_width="0dp"
         android:layout_height="@dimen/altoTarjeta">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:textColor="@color/primary_text"
-                android:id="@+id/tagPuntajeFinal"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:layout_marginStart="@dimen/margenChico"
-                android:layout_marginEnd="@dimen/margenChico"
-                android:layout_marginTop="@dimen/margenChico"
-                android:text="@string/puntajeFinal"
-                android:maxLines="2"
+
+
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="30"
-                />
-            <TextView
-                android:textColor="@color/primary_text"
-                android:text="89%"
-                android:textSize="25sp"
-                android:gravity="center"
-                android:id="@+id/textPuntajeFinal"
-                android:layout_marginStart="@dimen/margenChico"
-                android:layout_marginEnd="@dimen/margenChico"
-                android:layout_marginBottom="@dimen/margenChico"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="70"
-                />
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:background="@android:color/transparent"
+                    android:id="@+id/botonEliminarAuditoria"
+                    android:layout_gravity="end|top"
+                    android:src="@drawable/ic_close_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginStart="@dimen/margenMini"
+                    android:layout_marginEnd="@dimen/margenMini"
+                    android:textColor="@color/primary_text"
+                    android:id="@+id/tagPuntajeFinal"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:text="@string/puntajeFinal"
+                    android:maxLines="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:textColor="@color/primary_text"
+                    android:textSize="25sp"
+                    android:gravity="center"
+                    android:id="@+id/textPuntajeFinal"
+                    android:layout_marginStart="@dimen/margenChico"
+                    android:layout_marginEnd="@dimen/margenChico"
+                    android:layout_marginBottom="@dimen/margenChico"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
 
 
 
-        </LinearLayout>
+            </LinearLayout>
+
+
+
+
+
+
 
     </android.support.v7.widget.CardView>
 
-    <ImageButton
-        android:background="@android:color/transparent"
-        android:id="@+id/botonEliminarAuditoria"
-        android:src="@drawable/exitmedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 
 </LinearLayout>
