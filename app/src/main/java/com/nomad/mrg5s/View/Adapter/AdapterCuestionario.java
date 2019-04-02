@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -150,6 +151,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
         private LinearLayout linearUltima;
         private TextView tagultima;
         private TextView textViewTipo;
+        private ImageView tapImage;
 
         public CuestionarioViewHolder(View itemView) {
             super(itemView);
@@ -161,12 +163,16 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
             textViewTipo= itemView.findViewById(R.id.idCuestionario);
             btnEliminar = itemView.findViewById(R.id.botonEliminar);
             btnEditar=itemView.findViewById(R.id.botonEditarItem);
+            tapImage=itemView.findViewById(R.id.tap6);
 
             Typeface robotoL = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textView.setTypeface(robotoL);
             textViewTipo.setTypeface(robotoL);
             btnEliminar.setVisibility(View.VISIBLE);
             btnEditar.setVisibility(View.VISIBLE);
+
+            imageView.setVisibility(View.GONE);
+            tapImage.setVisibility(View.VISIBLE);
 
         }
 

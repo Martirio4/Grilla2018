@@ -91,9 +91,9 @@ public class FragmentSettings extends Fragment {
         View view= inflater.inflate(R.layout.fragment_settings, container, false);
 
         v_area = view.findViewById(R.id.tap1);
-        v_borrar = view.findViewById(R.id.tap2);
+        v_logout = view.findViewById(R.id.tap2);
         v_tuto = view.findViewById(R.id.tap3);
-        v_logout = view.findViewById(R.id.tap4);
+        v_borrar= view.findViewById(R.id.tap4);
         v_editCues = view.findViewById(R.id.tap5);
         v_editCrit = view.findViewById(R.id.tap6);
 
@@ -307,7 +307,7 @@ public class FragmentSettings extends Fragment {
         new TapTargetSequence(getActivity())
                 .targets(
                         TapTarget.forView(v_area, getResources().getString(R.string.tutorial_tit_area), getResources().getString(R.string.tutorial_desc_area))
-                                .transparentTarget(false)
+                                .transparentTarget(true)
                                 .outerCircleColor(R.color.tutorial2)      // Specify a color for the outer circle
                                 .outerCircleAlpha(0.85f)            // Specify the alpha amount for the outer circle
                                 .textTypeface(roboto)  // Specify a typeface for the text
@@ -317,7 +317,7 @@ public class FragmentSettings extends Fragment {
                                 .targetRadius(80)
                                 .id(1),                   // Whether to tint the target view's color
                         TapTarget.forView(v_logout, getResources().getString(R.string.tutorial_tit_logout), getResources().getString(R.string.tutorial_desc_logout))
-                                .transparentTarget(false)
+                                .transparentTarget(true)
                                 .outerCircleColor(R.color.tutorial1)
                                 .textColor(R.color.primary_text)
                                 .outerCircleAlpha(0.95f)            // Specify the alpha amount for the outer circle
@@ -328,7 +328,7 @@ public class FragmentSettings extends Fragment {
                                 .targetRadius(80)
                                 .id(2),
                         TapTarget.forView(v_tuto, getResources().getString(R.string.tutorial_tit_tuto), getResources().getString(R.string.tutorial_desc_tuto))
-                                .transparentTarget(false)
+                                .transparentTarget(true)
                                 .outerCircleColor(R.color.tutorial2)      // Specify a color for the outer circle
                                 .outerCircleAlpha(0.95f)            // Specify the alpha amount for the outer circle
                                 .textTypeface(roboto)  // Specify a typeface for the text
@@ -338,7 +338,7 @@ public class FragmentSettings extends Fragment {
                                 .targetRadius(80)
                                 .id(3),
                         TapTarget.forView(v_borrar, getResources().getString(R.string.tutorial_tit_delete), getResources().getString(R.string.tutorial_desc_delete))
-                                .transparentTarget(false)
+                                .transparentTarget(true)
                                 .outerCircleColor(R.color.tutorial1)
                                 .textColor(R.color.primary_text)
                                 .textColor(R.color.blancoNomad)// Specify a color for the outer circle
@@ -350,7 +350,7 @@ public class FragmentSettings extends Fragment {
                                 .targetRadius(80)
                                 .id(4),
                         TapTarget.forView(v_editCues, getResources().getString(R.string.tutorial_tit_cues), getResources().getString(R.string.tutorial_desc_cues))
-                                .transparentTarget(false)
+                                .transparentTarget(true)
                                 .outerCircleColor(R.color.tutorial2)      // Specify a color for the outer circle
                                 .outerCircleAlpha(0.95f)            // Specify the alpha amount for the outer circle
                                 .textTypeface(roboto)  // Specify a typeface for the text
@@ -360,7 +360,7 @@ public class FragmentSettings extends Fragment {
                                 .targetRadius(80)
                                 .id(5),
                         TapTarget.forView(v_editCrit, getResources().getString(R.string.tutorial_tit_crit), getResources().getString(R.string.tutorial_desc_crit))
-                                .transparentTarget(false)
+                                .transparentTarget(true)
                                 .outerCircleColor(R.color.tutorial1)
                                 .textColor(R.color.primary_text)
                                 .textColor(R.color.blancoNomad)// Specify a color for the outer circle

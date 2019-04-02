@@ -24,6 +24,7 @@ import com.nomad.mrg5s.Model.Pregunta;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.View.Activities.ActivityAuditoria;
+import com.nomad.mrg5s.View.Adapter.AdapterCuestionario;
 import com.nomad.mrg5s.View.Adapter.AdapterItems;
 import com.nomad.mrg5s.View.Adapter.AdapterPagerPreguntas;
 import com.nomad.mrg5s.View.Adapter.AdapterPreguntas;
