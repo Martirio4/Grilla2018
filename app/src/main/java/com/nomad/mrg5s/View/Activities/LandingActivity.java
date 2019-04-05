@@ -190,8 +190,8 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            LandingActivity.super.onBackPressed();
-                            finishAffinity();
+
+                            LandingActivity.this.finishAffinity();
                         }
                     })
                     .negativeText(R.string.cancel)
@@ -233,5 +233,17 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
     @Override
     public void salirCompleto() {
         finishAffinity();
+    }
+
+    @Override
+    public void abrirSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void abrirMisAudits() {
+        Intent intent = new Intent(this, ActivityMyAudits.class);
+        startActivity(intent);
     }
 }

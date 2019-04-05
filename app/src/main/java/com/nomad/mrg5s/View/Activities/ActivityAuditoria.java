@@ -3,8 +3,10 @@ package com.nomad.mrg5s.View.Activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.Model.Auditoria;
 import com.nomad.mrg5s.Model.Foto;
@@ -265,7 +269,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         Auditoria maAudit=realm.where(Auditoria.class)
                 .equalTo("idAuditoria",idAudit)
                 .findFirst();
-
         Intent intent=new Intent(this, GraficosActivity.class);
         Bundle bundle=new Bundle();
         bundle.putString(GraficosActivity.AUDIT, idAudit);
@@ -276,7 +279,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
         intent.putExtras(bundle);
         startActivity(intent);
         ActivityAuditoria.this.finish();
-
     }
 
 
@@ -290,7 +292,43 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()){
+            case R.id.action_close:
+                new MaterialDialog.Builder(this)
+                        .title(getString(R.string.advertencia))
+                        .title(getResources().getString(R.string.advertencia))
+                        .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                        .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                        .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                        .content(getResources().getString(R.string.auditoriaSinTerminar) + "\n" + getResources().getString(R.string.continuar))
+                        .positiveText(getResources().getString(R.string.si))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                volverLanding();
+                            }
+                        })
+                        .negativeText(getResources().getString(R.string.cancel))
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        })
+                        .show();
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
+
+    public boolean volverLanding(){
+        Intent intent = new Intent(ActivityAuditoria.this, LandingActivity.class);
+        startActivity(intent);
+        ActivityAuditoria.this.finish();
+        return true;
     }
 
     @Override
@@ -298,7 +336,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         FragmentManager fragmentManager =  getSupportFragmentManager();
         FragmentZoom fragmentZoom = (FragmentZoom) fragmentManager.findFragmentByTag("zoom");
-
 
         if (fragmentZoom != null && fragmentZoom.isVisible()) {
             fragmentManager.popBackStack();

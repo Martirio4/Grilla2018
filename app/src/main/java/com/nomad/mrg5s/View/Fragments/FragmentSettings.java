@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -79,6 +78,8 @@ public class FragmentSettings extends Fragment {
         void abrirEditorCriterios();
 
         void abrirFragmentGestionAreas();
+
+        void hacerLogout();
     }
 
 
@@ -88,7 +89,7 @@ public class FragmentSettings extends Fragment {
         controllerDatos=new ControllerDatos(getContext());
         config = getActivity().getSharedPreferences("prefs",0);
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_settings, container, false);
+        View view= inflater.inflate(R.layout.fragment_settings_copia, container, false);
 
         v_area = view.findViewById(R.id.tap1);
         v_logout = view.findViewById(R.id.tap2);
@@ -148,10 +149,7 @@ public class FragmentSettings extends Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                FirebaseAuth.getInstance().signOut();
-                                Intent intent = new Intent(getContext().getApplicationContext(), LoginActivity.class);
-                                startActivity(intent);
-                                getActivity().finishAffinity();
+                                notificable.hacerLogout();
                             }
                         })
                         .negativeText(getResources().getString(R.string.cancel))
@@ -197,7 +195,7 @@ public class FragmentSettings extends Fragment {
         });
 
         salir.setText(salir.getContext().getString(R.string.volver));
-        salir.setTextColor(ContextCompat.getColor(salir.getContext(),R.color.mirgorBlanco));
+        salir.setTextColor(ContextCompat.getColor(salir.getContext(),R.color.primary_text));
         fabVolver.setColorNormal(ContextCompat.getColor(fabVolver.getContext(),R.color.mirgorNaranja));
         fabVolver.setOnClickListener(new View.OnClickListener() {
             @Override

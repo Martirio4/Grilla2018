@@ -4,18 +4,20 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.nomad.mrg5s.Model.Area;
 import com.nomad.mrg5s.Model.Auditoria;
 import com.nomad.mrg5s.Model.Foto;
@@ -54,6 +56,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         }
 
 
@@ -63,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         FragmentSettings fragmentManageAreas = new FragmentSettings();
         FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,FuncionesPublicas.FRAGMENTMANAGER_AREAS);
+        fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,FuncionesPublicas.FRAGMENT_SETTINGS);
         fragmentTransaction.commit();
     }
 
@@ -76,9 +79,20 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case   android.R.id.home:
+                   onBackPressed();
+                    return true;
+            case R.id.action_close:
+                SettingsActivity.this.finish();
 
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
-
+    }
 
     //este metodo anda bien?
     public void borrarDefinitivamente(final Area unArea){
@@ -170,8 +184,17 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManageAreas fragmentGestionAreas =(FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
+
+        if (fragmentGestionAreas !=null && fragmentGestionAreas.isVisible()){
+                fragmentManager.popBackStackImmediate();
+        }
+        else{
+            super.onBackPressed();
+            this.finish();
+        }
+
     }
 
     @Override
@@ -186,6 +209,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.contenedorSettings, fragmentManageAreas,FuncionesPublicas.FRAGMENTMANAGER_AREAS);
+        fragmentTransaction.addToBackStack(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
         fragmentTransaction.commit();
     }
 
@@ -196,5 +220,19 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         bundle.putString(ActivityGestionCuestionario.ORIGEN,FuncionesPublicas.EDITAR_CRITERIO);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void hacerLogout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        this.finishAffinity();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.appbar, menu);
+        return true;
     }
 }

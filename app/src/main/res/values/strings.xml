@@ -6,7 +6,7 @@
     <string name="firstTime">Primera vez, click aquí</string>
     <string name="myAudits">AUDITORIAS</string>
     <string name="settings">AJUSTES</string>
-    <string name="settingsMin">Ajustes</string>
+    <string name="settingsMin">AJUSTES</string>
     <string name="criterio11">Materiales innecesarios</string>
     <string name="criterio12">Herramientas innecesarias</string>
     <string name="criterio13">Máquinas o equipos innecesarios</string>
@@ -217,7 +217,7 @@
     <string name="auditResultFor">Resultado para:</string>
     <string name="titulo">Titulo:</string>
     <string name="manageAuditAreas">Gestión de áreas</string>
-    <string name="databaseAuditDelete">borrar base de datos</string>
+    <string name="databaseAuditDelete">Borrar base de datos</string>
     <string name="goBack">Volver</string>
     <string name="enunciado">Enunciado</string>
     <string name="clicToAddComment">click aquí para agregar comentario</string>

@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/textoTituloManage"
         android:textColor="@color/primary_text"
-        android:textSize="20sp"
+        android:textSize="@dimen/textoTitulosInternos"
         android:layout_marginTop="@dimen/margenChico"
         android:gravity="center"
         android:text="@string/manageAreas"

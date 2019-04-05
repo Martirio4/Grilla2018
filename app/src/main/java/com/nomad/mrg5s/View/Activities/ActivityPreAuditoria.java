@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -240,15 +241,66 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();    //Call the back button's method
-            return true;
+
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();    //Call the back button's method
+                return true;
+            case R.id.action_close:
+
+                switch (origen) {
+                    case FuncionesPublicas.REVISAR:
+                        volverLanding();
+                    break;
+                    case FuncionesPublicas.EDITAR_CUESTIONARIO:
+                        volverLanding();
+                    break;
+                    default:
+                        new MaterialDialog.Builder(this)
+                        .title(getString(R.string.advertencia))
+                        .title(getResources().getString(R.string.advertencia))
+                        .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                        .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                        .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                        .content(getResources().getString(R.string.auditoriaSinTerminar) + "\n" + getResources().getString(R.string.continuar))
+                        .positiveText(getResources().getString(R.string.si))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                volverLanding();
+                            }
+                        })
+                        .negativeText(getResources().getString(R.string.cancel))
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        })
+                        .show();
+                    break;
+                }
+
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
 
-        return super.onOptionsItemSelected(item);
+
+
     }
 
+    public boolean volverLanding(){
+        Intent intent = new Intent(ActivityPreAuditoria.this, LandingActivity.class);
+        startActivity(intent);
+        ActivityPreAuditoria.this.finish();
+        return true;
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.appbar, menu);
+        return true;
+    }
 
     @Override
     public void actualizarPuntaje(String idAudit) {

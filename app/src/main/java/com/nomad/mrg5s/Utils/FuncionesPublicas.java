@@ -97,7 +97,7 @@ public class FuncionesPublicas {
     public static final double MAXIMO_PUNTAJE = 4.0;
     public static final String EDITAR_CRITERIO = "EDITAR_CRITERIO";
     public static final String FRAGMENT_EDITOR_CRITERIOS = "FRAGMENT_EDITOR_CRITERIOS";
-
+    public static final String FRAGMENT_SETTINGS = "FRAGMENT_SETTINGS";
 
 
     public static boolean isExternalStorageWritable() {

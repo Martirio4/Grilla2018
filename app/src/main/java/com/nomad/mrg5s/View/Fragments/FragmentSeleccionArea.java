@@ -143,6 +143,7 @@ public class FragmentSeleccionArea extends Fragment {
         
         fabNuevaArea=view.findViewById(R.id.fabNuevaArea);
         fabNuevaArea.setImageResource(R.drawable.ic_note_add_black_24dp);
+        fabNuevaArea.setColorNormal(ContextCompat.getColor(fabNuevaArea.getContext(),R.color.mirgorNaranja));
         fabNuevaArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

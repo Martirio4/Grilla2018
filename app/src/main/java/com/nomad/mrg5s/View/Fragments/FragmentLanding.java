@@ -74,8 +74,10 @@ public class FragmentLanding extends Fragment {
     }
 
     public interface Landinable{
-       public void irASelecccionAreas();
-       public void salirCompleto();
+       void irASelecccionAreas();
+       void salirCompleto();
+       void abrirSettings();
+       void abrirMisAudits();
     }
 
 
@@ -147,15 +149,15 @@ public class FragmentLanding extends Fragment {
         View.OnClickListener listener2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent intent = new Intent(v.getContext(), SettingsActivity.class);
-              startActivity(intent);
+                landinable.abrirSettings();
+
             }
         };
         View.OnClickListener listener3 = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ActivityMyAudits.class);
-                startActivity(intent);
+                landinable.abrirMisAudits();
+
             }
         };
         View.OnClickListener listener4 = new View.OnClickListener() {

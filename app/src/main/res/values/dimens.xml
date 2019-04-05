@@ -22,6 +22,8 @@
 
     <dimen name="margenMini">4dp</dimen>
     <dimen name="altoTarjeta3">94dp</dimen>
+    <dimen name="altoTarjeta4">94dp</dimen>
+
     <dimen name="altoCriterios">75dp</dimen>
     <dimen name="margenMicro">2dp</dimen>
     <dimen name="titulosMain">40sp</dimen>
@@ -31,4 +33,5 @@
     <dimen name="circuloRecyclerPreAudit">38sp</dimen>
     <dimen name="altoBullet">100dp</dimen>
     <dimen name="anchoBullet">20dp</dimen>
+    <dimen name="textoTitulosInternos">20sp</dimen>
 </resources>
