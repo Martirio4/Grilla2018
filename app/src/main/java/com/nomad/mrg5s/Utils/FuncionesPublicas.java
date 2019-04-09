@@ -98,6 +98,7 @@ public class FuncionesPublicas {
     public static final String EDITAR_CRITERIO = "EDITAR_CRITERIO";
     public static final String FRAGMENT_EDITOR_CRITERIOS = "FRAGMENT_EDITOR_CRITERIOS";
     public static final String FRAGMENT_SETTINGS = "FRAGMENT_SETTINGS";
+    public static final String ID_FOTO = "FOTO_";
 
 
     public static boolean isExternalStorageWritable() {
@@ -373,7 +374,7 @@ public class FuncionesPublicas {
         bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
         long megAvailable = bytesAvailable / (1024 * 1024);
 
-        return megAvailable > 10.0;
+        return megAvailable > 15.0;
     }
 
 
@@ -543,10 +544,24 @@ public class FuncionesPublicas {
                 .findAll();
         return resulta2;
     }
-
+    
+    public static void modificarNombreArea(final Area unArea, final String s){
+      Realm realm = Realm.getDefaultInstance();
+      realm.executeTransaction(new Realm.Transaction() {
+          @Override
+          public void execute(Realm realm) {
+              
+              Area mArea= realm.where(Area.class)
+                      .equalTo("idArea", unArea.getIdArea())
+                      .findFirst();
+              if (mArea!=null){
+                  mArea.setNombreArea(s);
+              }
+          }
+      });
+    }
     public static void crearDialogoNombreArea(final Foto unaFoto, final Fragment fragment, final String origen){
 
-        
         new MaterialDialog.Builder(fragment.getContext())
                 .title(fragment.getContext().getResources().getString(R.string.addNewArea))
                 .inputRange(1,40)
@@ -561,8 +576,7 @@ public class FuncionesPublicas {
 
                         final Area unArea = new Area();
                         unArea.setNombreArea(input.toString());
-                        unArea.setFotoArea(unaFoto);
-                        unArea.setIdArea("area" + UUID.randomUUID());
+                        unArea.setIdArea(FuncionesPublicas.IDAREAS + UUID.randomUUID());
 
 
                         //guardo nueva area en Realm
@@ -570,7 +584,9 @@ public class FuncionesPublicas {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                Area realmArea = realm.copyToRealm(unArea);
+                                Foto mFoto =realm.copyToRealm(unaFoto);
+                                unArea.setFotoArea(mFoto);
+                                realm.copyToRealm(unArea);
                             }
                         });
                         RealmResults<Cuestionario> losCuestionarios = realm.where(Cuestionario.class)
@@ -683,8 +699,15 @@ public class FuncionesPublicas {
         }
         return laLista;
     }
-    
-    
+    public static Boolean hayLugarYPuedoEscribir(Context context,View view){
+        if (isExternalStorageWritable()&&hayEspacioEnMemoria()&&hayPermisoParaEscribir(context,view)){
+            return true;
+        }
+        else{
+            return false;
+        }
 
+
+    }
 
 }

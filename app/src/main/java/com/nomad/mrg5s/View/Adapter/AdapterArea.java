@@ -106,49 +106,33 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
         FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
         FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
-
+        //solo permito editar y borrar areas desde manageAreas
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
 
             AreaViewHolder.fabEliminar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     eliminable = (Eliminable) getRequiredActivity(v);
-                    eliminable.EliminarArea(unArea);
+                    if (eliminable!=null) {
+                        eliminable.EliminarArea(unArea);
+                    }
                 }
             });
-        }
-        AreaViewHolder.fabEditar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                        .title(view.getResources().getString(R.string.EditarArea))
-                        .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                        .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                        .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
-
-                        .content(view.getResources().getString(R.string.favorEditeArea))
-                        .input(view.getResources().getString(R.string.comment),unArea.getNombreArea(), new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, final CharSequence input) {
-                                if (input!=null && !input.toString().isEmpty()) {
-                                    AreaViewHolder.nombreArea.setText(input.toString());
-                                    FuncionesPublicas.cambiarTextoArea(unArea,input.toString(),context);
-                                }
-                                AdapterArea.this.notifyDataSetChanged();
-                            }
-                        })
-                        .build();
-                EditText elEdit = mDialog.getInputEditText();
-                if (elEdit!=null) {
-                    elEdit.setInputType(InputType.TYPE_CLASS_TEXT |
-                            InputType.TYPE_TEXT_FLAG_MULTI_LINE |
-                            InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+            AreaViewHolder.fabEditar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    eliminable = (Eliminable) getRequiredActivity(view);
+                    if (eliminable!=null) {
+                        eliminable.editarArea(unArea);
+                    }
                 }
-                mDialog.show();
+            });
 
-            }
-        });
+
+
+        }
+
 
     }
 
@@ -270,5 +254,6 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
     public interface Eliminable {
         void EliminarArea(Area unArea);
 
+        void editarArea(Area unArea);
     }
 }

@@ -13,7 +13,7 @@ import com.nomad.mrg5s.View.Fragments.FragmentZoom;
 
 import io.realm.Realm;
 
-public class ActivityZoom extends AppCompatActivity {
+public class ActivityZoom extends AppCompatActivity implements FragmentZoom.Zoomeable {
     public static final String IDFOTO="IDFOTO";
     private String idFoto;
 
@@ -44,4 +44,8 @@ public class ActivityZoom extends AppCompatActivity {
 
     }
 
+    @Override
+    public void cerrarZoom() {
+        ActivityZoom.this.finish();
+    }
 }

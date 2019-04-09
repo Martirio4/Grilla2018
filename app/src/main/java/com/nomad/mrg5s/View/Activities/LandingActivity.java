@@ -66,10 +66,11 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         if (!firstRun){
             ControllerDatos controllerDatos=new ControllerDatos(this);
             controllerDatos.crearCriteriosDefault();
-            controllerDatos.crearCuestionariosDefault(getString(R.string.areaGeneral),true);
-            controllerDatos.crearCuestionariosDefault(getString(R.string.areaIndustrial));
-            controllerDatos.crearCuestionariosDefault(getString(R.string.areaOficina));
-            controllerDatos.crearCuestionariosDefault(getString(R.string.areaExterna));
+
+            controllerDatos.crearCuestionariosDefault(getString(R.string.oficina),true);
+            controllerDatos.crearCuestionariosDefault(getString(R.string.produccion),true);
+            controllerDatos.crearCuestionariosDefault(getString(R.string.logistica),true);
+            controllerDatos.crearCuestionariosDefault(getString(R.string.baño),true);
 
             SharedPreferences.Editor editor = config.edit();
             editor.putBoolean("firstRun", true);

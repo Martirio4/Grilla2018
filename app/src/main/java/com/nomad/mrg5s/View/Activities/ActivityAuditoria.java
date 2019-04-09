@@ -23,6 +23,7 @@ import com.nomad.mrg5s.Model.Foto;
 import com.nomad.mrg5s.Model.Pregunta;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.Utils.ResultListener;
 import com.nomad.mrg5s.View.Adapter.AdapterPagerPreguntas;
 import com.nomad.mrg5s.View.Fragments.FragmentEditarPregunta;
 import com.nomad.mrg5s.View.Fragments.FragmentPregunta_;
@@ -295,27 +296,34 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         switch (item.getItemId()){
             case R.id.action_close:
-                new MaterialDialog.Builder(this)
-                        .title(getString(R.string.advertencia))
-                        .title(getResources().getString(R.string.advertencia))
-                        .contentColor(ContextCompat.getColor(this, R.color.primary_text))
-                        .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                        .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
-                        .content(getResources().getString(R.string.auditoriaSinTerminar) + "\n" + getResources().getString(R.string.continuar))
-                        .positiveText(getResources().getString(R.string.si))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                volverLanding();
-                            }
-                        })
-                        .negativeText(getResources().getString(R.string.cancel))
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            }
-                        })
-                        .show();
+                if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)||origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)) {
+                    new MaterialDialog.Builder(this)
+                            .title(getString(R.string.advertencia))
+                            .title(getResources().getString(R.string.advertencia))
+                            .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                            .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                            .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                            .content(getResources().getString(R.string.auditoriaSinTerminar) + "\n" + getResources().getString(R.string.continuar))
+                            .positiveText(getResources().getString(R.string.si))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    volverLanding();
+
+                                }
+                            })
+                            .negativeText(getResources().getString(R.string.cancel))
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                }
+                            })
+                            .show();
+                }
+                else {
+                    volverLanding();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -392,13 +400,26 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public void agregarPregunta(CharSequence input, String idEse, String idItem, String idCuestionario) {
-        Pregunta nuevaPregunta= new Pregunta();
+        final Pregunta nuevaPregunta= new Pregunta();
         nuevaPregunta.setTextoPregunta(input.toString());
         nuevaPregunta.setIdCuestioniario(idCuestionario);
         nuevaPregunta.setIdEse(idEse);
         nuevaPregunta.setIdItem(idItem);
         nuevaPregunta.setIdPregunta(FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-        controllerDatos.agregarPregunta(idCuestionario,nuevaPregunta,adapterPager);
+        controllerDatos.agregarPregunta(idCuestionario, nuevaPregunta, new ResultListener<Boolean>() {
+            @Override
+            public void finish(Boolean resultado) {
+                if (resultado) {
+                    adapterPager.addPregunta(nuevaPregunta);
+                    adapterPager.notifyDataSetChanged();
+                    irAPreguntaAgregada();
+                    Toast.makeText(ActivityAuditoria.this, ActivityAuditoria.this.getString(R.string.laPreguntaFueAgregada), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(ActivityAuditoria.this, ActivityAuditoria.this.getString(R.string.laPreguntaNoSeAgrego), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void irAPreguntaAgregada() {
@@ -409,4 +430,6 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     public void cerrarFragmentEdicion() {
         ActivityAuditoria.this.finish();
     }
+
+
 }

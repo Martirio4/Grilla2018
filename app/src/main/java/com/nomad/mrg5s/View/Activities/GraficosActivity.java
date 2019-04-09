@@ -251,7 +251,7 @@ public class GraficosActivity extends AppCompatActivity {
         fabGenerarXLS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (FuncionesPublicas.isExternalStorageWritable()) {
+                if (FuncionesPublicas.hayLugarYPuedoEscribir(GraficosActivity.this,fabGenerarXLS)){
                     fabMenuGraficos.close(true);
                     if (auditActual.getAuditEstaCerrada()) {
 
@@ -281,16 +281,17 @@ public class GraficosActivity extends AppCompatActivity {
                                     }
                                 })
                                 .show();
-                        
+
                     }
-                } else {
+                }
+                else {
                     new MaterialDialog.Builder(v.getContext())
-                            .title(getResources().getString(R.string.titNoMemoria))
+                            .title(getResources().getString(R.string.error))
                             .contentColor(ContextCompat.getColor(v.getContext(), R.color.primary_text))
                             .backgroundColor(ContextCompat.getColor(v.getContext(), R.color.tile1))
                             .positiveText(getResources().getString(R.string.ok))
                             .titleColor(ContextCompat.getColor(v.getContext(), R.color.tile4))
-                            .content(getResources().getString(R.string.noMemoria))
+                            .content(getResources().getString(R.string.problemaMemoriaEspacio))
                             .show();
                 }
             }

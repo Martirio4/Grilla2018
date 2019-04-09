@@ -13,6 +13,7 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,6 +24,7 @@ import com.nomad.mrg5s.Model.Item;
 import com.nomad.mrg5s.Model.Pregunta;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.Utils.ResultListener;
 import com.nomad.mrg5s.View.Adapter.AdapterItems;
 import com.nomad.mrg5s.View.Adapter.AdapterPagerEses;
 import com.nomad.mrg5s.View.Adapter.AdapterPreguntas;
@@ -320,13 +322,24 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                         if (input!=null && !input.toString().isEmpty()) {
-                            Item nuevoItem= new Item();
+                            final Item nuevoItem= new Item();
                             nuevoItem.setTituloItem(input.toString());
                             nuevoItem.setIdCuestionario(idCuestionario);
                             nuevoItem.setIdEse(laEse);
                             nuevoItem.setListaPreguntas(new RealmList<Pregunta>());
                             nuevoItem.setIdItem(FuncionesPublicas.IDITEMS + UUID.randomUUID());
-                            controllerDatos.agregarItem(idCuestionario,nuevoItem,elAdapter);
+                            controllerDatos.agregarItem(idCuestionario, nuevoItem, elAdapter, new ResultListener<Boolean>() {
+                                @Override
+                                public void finish(Boolean resultado) {
+                                    if (resultado) {
+                                        elAdapter.addItem(nuevoItem);
+                                        elAdapter.notifyDataSetChanged();
+                                        Toast.makeText(ActivityPreAuditoria.this,ActivityPreAuditoria.this.getString(R.string.elItemFueAgregado), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ActivityPreAuditoria.this,ActivityPreAuditoria.this.getString(R.string.elItemNoSeAgrego), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
 
                     }
@@ -346,13 +359,25 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
                         if (input!=null && !input.toString().isEmpty()) {
-                            Pregunta nuevaPregunta= new Pregunta();
+                            final Pregunta nuevaPregunta= new Pregunta();
                             nuevaPregunta.setTextoPregunta(input.toString());
                             nuevaPregunta.setIdCuestioniario(idCuestionario);
                             nuevaPregunta.setIdEse(laEse);
                             nuevaPregunta.setIdItem(null);
                             nuevaPregunta.setIdPregunta(FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                            controllerDatos.agregarPregunta(idCuestionario,nuevaPregunta,adapterPreguntas);
+                            controllerDatos.agregarPregunta(idCuestionario, nuevaPregunta,  new ResultListener<Boolean>() {
+                                @Override
+                                public void finish(Boolean resultado) {
+                                    if (resultado){
+                                        adapterPreguntas.addPregunta(nuevaPregunta);
+                                        adapterPreguntas.notifyDataSetChanged();
+                                        Toast.makeText(ActivityPreAuditoria.this, ActivityPreAuditoria.this.getString(R.string.laPreguntaFueAgregada), Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        Toast.makeText(ActivityPreAuditoria.this, ActivityPreAuditoria.this.getString(R.string.laPreguntaNoSeAgrego), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
 
                     }

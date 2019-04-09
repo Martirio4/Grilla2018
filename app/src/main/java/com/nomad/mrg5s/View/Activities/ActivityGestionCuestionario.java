@@ -15,6 +15,7 @@ import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.Utils.ResultListener;
 import com.nomad.mrg5s.View.Fragments.FragmentEditarCriteriosDefault;
 import com.nomad.mrg5s.View.Fragments.FragmentGestionCuestionarios;
 import com.nomad.mrg5s.View.Fragments.FragmentManageAreas;
@@ -97,13 +98,13 @@ public class ActivityGestionCuestionario extends AppCompatActivity implements Fr
     }
 
     @Override
-    public void crearCuestionario(String nombre, String tipoCuestionario) {
+    public void crearCuestionario(String nombre, String tipoCuestionario, ResultListener<Boolean>listenerCompletado) {
         ControllerDatos controllerDatos=new ControllerDatos(this);
-        controllerDatos.crearNuevoCuestionario(nombre, tipoCuestionario);
+        controllerDatos.crearNuevoCuestionario(listenerCompletado,nombre, tipoCuestionario);
     }
 
     @Override
-    public void eliminarCuestionario(String idCuestionario) {
+    public void eliminarCuestionario( String idCuestionario) {
         ControllerDatos controllerDatos=new ControllerDatos(this);
         controllerDatos.eliminarCuestionario(idCuestionario);
     }

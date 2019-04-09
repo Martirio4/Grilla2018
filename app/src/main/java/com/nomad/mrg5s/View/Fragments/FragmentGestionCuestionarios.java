@@ -16,11 +16,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.Utils.ResultListener;
 import com.nomad.mrg5s.View.Adapter.AdapterCuestionario;
 import com.github.clans.fab.FloatingActionButton;
 import io.realm.Realm;
@@ -49,7 +52,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
     public interface Notificable{
         void abrirCuestionario(Cuestionario cuestionario);
 
-        void crearCuestionario(String cuestionario, String tipoCuestionario);
+        void crearCuestionario(String cuestionario, String tipoCuestionario, ResultListener<Boolean> listenerCompletado);
 
         void eliminarCuestionario(String idCuestionario);
     }
@@ -184,9 +187,17 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                 .input(getResources().getString(R.string.cuestionarioName),"", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        notificable.crearCuestionario(input.toString(), tipoCuestionario);
-                        actualizarDatosRecycler();
-                        recyclerCuestionarios.scrollToPosition(adapterCuestionario.getListaCuestionariosOriginales().size()-1);
+                        notificable.crearCuestionario(input.toString(), tipoCuestionario, new ResultListener<Boolean>() {
+                            @Override
+                            public void finish(Boolean resultado) {
+                                if (resultado) {
+                                    actualizarDatosRecycler();
+                                    recyclerCuestionarios.scrollToPosition(adapterCuestionario.getListaCuestionariosOriginales().size()-1);
+                                    Toast.makeText(getContext(), getContext().getString(R.string.cuestionarioCreado), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
                     }
                 }).show();
     }
@@ -215,9 +226,11 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //esto esta mal que actualice solo si la eliminacion fue exitosa
                             adapterCuestionario.getListaCuestionariosOriginales().remove(unCuestionario);
                             adapterCuestionario.notifyDataSetChanged();
                             notificable.eliminarCuestionario(unCuestionario.getIdCuestionario());
+
                         }
                     })
                     .negativeText(getResources().getString(R.string.cancel))

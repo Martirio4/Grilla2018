@@ -301,7 +301,7 @@ public class FragmentPregunta_ extends Fragment {
         fabMenu.setMenuButtonColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
 
 
-        if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA) || origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)) {
+        if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA) || origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)||origen.equals(FuncionesPublicas.REVISAR)) {
 //        HANDLE RADIOGROUP
             //LISTENER PARA EL RADIOGROUP
 
@@ -484,64 +484,17 @@ public class FragmentPregunta_ extends Fragment {
             fabCamara.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (FuncionesPublicas.isExternalStorageWritable()&& FuncionesPublicas.hayEspacioEnMemoria()) {
-                        if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            fabMenu.close(true);
-                            EasyImage.openCamera(FragmentPregunta_.this, 1);
-                        }
-                        else {
-
-    //                      PIDO PERMISO PARA USAR LA MEMORIA EXTERNA
-
-                            if (Nammu.shouldShowRequestPermissionRationale(FragmentPregunta_.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                //User already refused to give us this permission or removed it
-                                //Now he/she can mark "never ask again" (sic!)
-                                Snackbar.make(getView(), getResources().getString(R.string.appNecesitaPermiso),
-                                        Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string.ok), new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
-                                        Nammu.askForPermission(FragmentPregunta_.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                                new PermissionCallback() {
-                                                    @Override
-                                                    public void permissionGranted() {
-                                                        fabMenu.close(true);
-                                                        EasyImage.openCamera(FragmentPregunta_.this, 1);
-                                                    }
-
-                                                    @Override
-                                                    public void permissionRefused() {
-                                                        Toast.makeText(getContext(), getResources().getString(R.string.damePermiso), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                    }
-                                }).show();
-                            } else {
-                                //First time asking for permission
-                                // or phone doesn't offer permission
-                                // or user marked "never ask again"
-                                Nammu.askForPermission(FragmentPregunta_.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                        new PermissionCallback() {
-                                            @Override
-                                            public void permissionGranted() {
-                                                fabMenu.close(true);
-                                                EasyImage.openCamera(FragmentPregunta_.this, 1);
-                                            }
-
-                                            @Override
-                                            public void permissionRefused() {
-                                                Toast.makeText(getContext(), getResources().getString(R.string.damePermiso), Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-                            }
-                        }
+                    if (FuncionesPublicas.hayLugarYPuedoEscribir(getContext(),fabCamara)){
+                        fabMenu.close(true);
+                        EasyImage.openCamera(FragmentPregunta_.this, 1);
                     }
                     else {
                         new MaterialDialog.Builder(getContext())
-                                .title(getResources().getString(R.string.titNoMemoria))
+                                .title(getResources().getString(R.string.error))
                                 .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                                 .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
                                 .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
-                                .content(getResources().getString(R.string.noMemoria))
+                                .content(getResources().getString(R.string.problemaMemoriaEspacio))
                                 .positiveText(getResources().getString(R.string.ok))
                                 .show();
                     }

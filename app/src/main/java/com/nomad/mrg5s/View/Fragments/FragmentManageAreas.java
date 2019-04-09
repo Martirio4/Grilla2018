@@ -87,17 +87,7 @@ public class FragmentManageAreas extends Fragment {
         public void salirDeAca();
     }
 
-    public void updateAdapter() {
-        //String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Realm realm= Realm.getDefaultInstance();
-        RealmResults<Area> result3 = realm.where(Area.class)
-             //las areas son de todos los usuarios//   .equalTo("usuario",usuario)
-                .findAll();
-        listaAreas=new RealmList<>();
-        listaAreas.addAll(result3);
-        adapterArea.setListaAreasOriginales(listaAreas);
-        adapterArea.notifyDataSetChanged();
-    }
+
 
     public interface Notificable{
         public void comenzarAuditoria(Area unArea);
@@ -154,64 +144,17 @@ public class FragmentManageAreas extends Fragment {
         fabAgregarArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
-
-                if (FuncionesPublicas.isExternalStorageWritable()) {
-                    if (Nammu.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                        EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
-                    }
-                    else {
-                        if (Nammu.shouldShowRequestPermissionRationale(FragmentManageAreas.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            //User already refused to give us this permission or removed it
-                            //Now he/she can mark "never ask again" (sic!)
-                            Snackbar.make(getView(), getResources().getString(R.string.appNecesitaPermiso),
-                                    Snackbar.LENGTH_INDEFINITE).setAction(getResources().getString(R.string.ok), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    Nammu.askForPermission(FragmentManageAreas.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                            new PermissionCallback() {
-                                                @Override
-                                                public void permissionGranted() {
-
-                                                    EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
-                                                }
-
-                                                @Override
-                                                public void permissionRefused() {
-                                                    Toast.makeText(getContext(), getResources().getString(R.string.permisoParaFotos), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                }
-                            }).show();
-                        } else {
-                            //First time asking for permission
-                            // or phone doesn't offer permission
-                            // or user marked "never ask again"
-                            Nammu.askForPermission(FragmentManageAreas.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    new PermissionCallback() {
-                                        @Override
-                                        public void permissionGranted() {
-
-                                            EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
-                                        }
-
-                                        @Override
-                                        public void permissionRefused() {
-                                            Toast.makeText(getContext(), getResources().getString(R.string.permisoParaFotos), Toast.LENGTH_SHORT).show();
-
-                                        }
-                                    });
-                        }
-                    }
+                if (FuncionesPublicas.hayLugarYPuedoEscribir(FragmentManageAreas.this.getContext(),v)){
+                    EasyImage.openChooserWithGallery(FragmentManageAreas.this, getResources().getString(R.string.seleccionaImagen), 1);
                 }
                 else {
                     new MaterialDialog.Builder(getContext())
-                            .title(getResources().getString(R.string.titNoMemoria))
+                            .title(getResources().getString(R.string.error))
                             .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                             .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
                             .titleColor(ContextCompat.getColor(getContext(), R.color.tile4))
                             .positiveText(getResources().getString(R.string.ok))
-                            .content(getResources().getString(R.string.noMemoria))
+                            .content(getResources().getString(R.string.problemaMemoriaEspacio))
                            .show();
                 }
             }
@@ -305,7 +248,7 @@ public class FragmentManageAreas extends Fragment {
                                 .compressToFile(fotoOriginal);
 
                         Foto unaFoto = new Foto();
-                        unaFoto.setIdFoto("foto_"+ UUID.randomUUID());
+                        unaFoto.setIdFoto(FuncionesPublicas.ID_FOTO+ UUID.randomUUID());
                         unaFoto.setRutaFoto(fotoComprimida.getAbsolutePath());
                         if (source == EasyImage.ImageSource.CAMERA) {
                             Boolean seBorro = imageFile.delete();
@@ -357,5 +300,17 @@ public class FragmentManageAreas extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void updateAdapter() {
+        //String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Realm realm= Realm.getDefaultInstance();
+        RealmResults<Area> result3 = realm.where(Area.class)
+                //las areas son de todos los usuarios//   .equalTo("usuario",usuario)
+                .findAll();
+        listaAreas=new RealmList<>();
+        listaAreas.addAll(result3);
+        adapterArea.setListaAreasOriginales(listaAreas);
+        adapterArea.notifyDataSetChanged();
     }
 }

@@ -9,8 +9,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,18 +22,26 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nomad.mrg5s.Model.Area;
 import com.nomad.mrg5s.Model.Auditoria;
+import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.Model.Foto;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.View.Adapter.AdapterArea;
 import com.nomad.mrg5s.View.Fragments.FragmentManageAreas;
+import com.nomad.mrg5s.View.Fragments.FragmentSeleccionArea;
 import com.nomad.mrg5s.View.Fragments.FragmentSettings;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.nomad.mrg5s.Utils.FuncionesPublicas.MANAGE_AREAS;
+import static com.nomad.mrg5s.Utils.FuncionesPublicas.SELECCION_AREAS;
 
 public class SettingsActivity extends AppCompatActivity implements FragmentSettings.Notificable, AdapterArea.Eliminable, FragmentManageAreas.Avisable{
 
@@ -77,6 +87,91 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
        crearDialogoBorrarArea(unArea);
 
+    }
+
+    @Override
+    public void editarArea(final Area unArea) {
+        new MaterialDialog.Builder(this)
+                .title(this.getResources().getString(R.string.addNewArea))
+                .inputRange(1,40)
+                .contentColor(ContextCompat.getColor(this, R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
+                .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                .content(this.getResources().getString(R.string.nombreArea))
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input(this.getResources().getString(R.string.areaName),"", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, final CharSequence input) {
+                        FuncionesPublicas.modificarNombreArea(unArea,input.toString());
+                        Realm realm =Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+//                                LLAMO A LOS CUESTIONARIOS PARA DAR LAS OPCIONES
+                                RealmResults<Cuestionario> losCuestionarios = realm.where(Cuestionario.class)
+                                        .findAll();
+                                List<String> unaListaNombre=new ArrayList<>();
+                                final List<String> unaListaId=new ArrayList<>();
+                                for (Cuestionario elCuestionario :
+                                        losCuestionarios) {
+                                    unaListaNombre.add(elCuestionario.getNombreCuestionario());
+                                    unaListaId.add(elCuestionario.getIdCuestionario());
+                                }
+
+//                                LE DOY LAS OPCIONES AL USUARIO
+
+                                new MaterialDialog.Builder(SettingsActivity.this)
+                                        .title(R.string.tipoArea)
+                                        .backgroundColor(ContextCompat.getColor(SettingsActivity.this, R.color.tile1))
+                                        .items(unaListaNombre)
+                                        .titleColor(ContextCompat.getColor(SettingsActivity.this, R.color.tile4))
+                                        .cancelable(false)
+                                        .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                                            @Override
+                                            public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
+                                                Realm realm =Realm.getDefaultInstance();
+                                                realm.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(@NonNull Realm realm) {
+                                                        Area realmArea1= realm.where(Area.class)
+                                                                .equalTo("idArea", unArea.getIdArea())
+                                                                .findFirst();
+                                                        if (realmArea1!=null) {
+                                                            //ASIGNO ID DE CUESTIONARIO AL AREA
+                                                            realmArea1.setIdCuestionario(unaListaId.get(which));
+                                                        }
+                                                        else{
+                                                            Toast.makeText(SettingsActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+                                                Toast.makeText(SettingsActivity.this, SettingsActivity.this.getString(R.string.areaSeModifico), Toast.LENGTH_SHORT).show();
+                                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                                FragmentManageAreas fragmentManageAreas = (FragmentManageAreas)fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
+
+                                                if (fragmentManageAreas!=null && fragmentManageAreas.isVisible()){
+                                                    fragmentManageAreas.updateAdapter();
+                                                }
+
+                                                return true;
+                                            }
+                                        })
+                                        .positiveText(R.string.ok)
+                                        .show();
+                                
+                            }
+                        });
+
+                        final Area unArea = new Area();
+                        unArea.setNombreArea(input.toString());
+                        unArea.setIdArea(FuncionesPublicas.IDAREAS + UUID.randomUUID());
+                        
+                        
+                       
+                    }
+                }).show();
     }
 
     @Override
