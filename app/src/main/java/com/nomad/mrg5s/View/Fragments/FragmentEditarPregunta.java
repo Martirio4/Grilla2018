@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -101,6 +102,7 @@ public class FragmentEditarPregunta extends Fragment {
          btn_eliminarPregunta=view.findViewById(R.id.botonEliminarPregunta);
          fabAgregarPregunta=view.findViewById(R.id.fabNuevaPregunta);
          textoPregunta = view.findViewById(R.id.textoPregunta);
+
          criterioTitulo = view.findViewById(R.id.tituloCriterio);
          criterioDescripcion = view.findViewById(R.id.descripcionCriterio);
 

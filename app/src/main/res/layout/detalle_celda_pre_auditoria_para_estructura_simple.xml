@@ -47,9 +47,10 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMaxTextSize="@dimen/textoAreaRevisarAudit"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dignissim metus felis, a dictum odio gravida in. In quam arcu, placerat ut est vel, accumsan maximus sem. In hac habitasse platea dictumst. Nam id leo sapien. Nam in lorem non ipsum consectetur bibendum. Mauris sit amet risus"
-                        android:maxLines="3"
                         android:padding="@dimen/margenChico"
                         android:gravity="start|center_vertical"
                         android:textAlignment="textStart"

@@ -249,7 +249,7 @@ public class ControllerDatos {
 
                         //calcularTexto
 
-                        String nombreString = nombreArea+"_"+String.valueOf(i)+"_"+String.valueOf(j)+"_";
+                        String nombreString = nombreArea+"_"+String.valueOf(i+1)+"_"+String.valueOf(j+1)+"_";
                         Integer idString= context.getResources().getIdentifier(nombreString,"string",context.getPackageName());
 
                         if (idString!=0){
@@ -259,17 +259,17 @@ public class ControllerDatos {
                             pregunta111.setTextoPregunta(context.getString(R.string.error));
                         }
 
-                        for (int k = 0; k < 4; i++) {
+                        for (int k = 0; k < 4; k++) {
 
                             Criterio unCriterio = realm.createObject(Criterio.class, FuncionesPublicas.IDCRITERIOS + UUID.randomUUID());
                             unCriterio.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
                             unCriterio.setIdEse(unaEse.getIdEse());
                             unCriterio.setIdPregunta(pregunta111.getIdPregunta());
-                            unCriterio.setPuntajeCriterio(i + 1);
-                            unCriterio.setOrden(i + 1);
+                            unCriterio.setPuntajeCriterio(k + 1);
+                            unCriterio.setOrden(k + 1);
 
                             String nombreStringCrit = nombreArea+"_"+String.valueOf(i+1)+"_"+String.valueOf(j+1)+"_"+String.valueOf(k+1);
-                            Integer idStringCrit= context.getResources().getIdentifier(nombreString,"string",context.getPackageName());
+                            Integer idStringCrit= context.getResources().getIdentifier(nombreStringCrit,"string",context.getPackageName());
 
                             if (idStringCrit!=0){
                                 unCriterio.setTextoCriterio(context.getString(idStringCrit));
@@ -862,14 +862,14 @@ public class ControllerDatos {
             }
 
         });
-
+/*
         //crear cuestionarios default
         crearCriteriosDefault();
         crearCuestionariosDefault(context.getString(R.string.areaGeneral), true);
         crearCuestionariosDefault(context.getString(R.string.areaIndustrial));
         crearCuestionariosDefault(context.getString(R.string.areaOficina));
         crearCuestionariosDefault(context.getString(R.string.areaExterna));
-
+*/
     }
     public void agregarPregunta(final String idCuestionario, final Pregunta nuevaPregunta, final ResultListener<Boolean> listenerCompletado) {
         final Realm realm = Realm.getDefaultInstance();
