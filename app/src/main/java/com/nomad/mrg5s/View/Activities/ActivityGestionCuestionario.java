@@ -20,7 +20,7 @@ import com.nomad.mrg5s.View.Fragments.FragmentEditarCriteriosDefault;
 import com.nomad.mrg5s.View.Fragments.FragmentGestionCuestionarios;
 import com.nomad.mrg5s.View.Fragments.FragmentManageAreas;
 
-public class ActivityGestionCuestionario extends AppCompatActivity implements FragmentGestionCuestionarios.Notificable {
+public class ActivityGestionCuestionario extends AppCompatActivity implements FragmentGestionCuestionarios.Notificable, FragmentEditarCriteriosDefault.Cerrable {
 
     public static final String ORIGEN="ORIGEN";
     private String elOrigen;
@@ -130,5 +130,10 @@ public class ActivityGestionCuestionario extends AppCompatActivity implements Fr
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void cerrarEsto() {
+        ActivityGestionCuestionario.this.finish();
     }
 }

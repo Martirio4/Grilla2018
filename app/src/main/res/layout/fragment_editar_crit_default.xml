@@ -52,8 +52,9 @@
 
         <com.github.clans.fab.FloatingActionButton
             android:src="@drawable/ic_arrow_back_black_24dp"
+            app:fab_colorNormal="@color/mirgorNaranja"
             android:layout_gravity="center"
-            android:id="@+id/fabGuardarAudit"
+            android:id="@+id/fabCerrarEditCriterios"
             app:fab_label="@string/saveAudit"
             android:layout_marginStart="@dimen/margenChico"
             android:layout_marginEnd="@dimen/margenChico"

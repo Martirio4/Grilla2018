@@ -36,6 +36,7 @@ import com.nomad.mrg5s.Model.Pregunta;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.View.Activities.ActivityAuditoria;
+import com.nomad.mrg5s.View.Adapter.AdapterCriterios;
 import com.nomad.mrg5s.View.Adapter.AdapterFotos;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -96,20 +97,17 @@ public class FragmentPregunta_ extends Fragment {
 
     private TextView textViewCommentNuevo;
     private TextView textViewCommentViejo;
-    private RadioGroup rg1;
     private TextView tituloAuditVieja;
 
     private TextView evidenciaNueva;
 
-    private RadioGroup rg2;
 
 
     private FloatingActionMenu fabMenu;
     private FloatingActionButton fabCamara;
     private FloatingActionButton fabGuardar;
 
-    private RadioGroup.OnCheckedChangeListener listener1;
-    private RadioGroup.OnCheckedChangeListener listener2;
+
 
     private ImageView separador;
     private ImageView separadorInvertido;
@@ -118,6 +116,19 @@ public class FragmentPregunta_ extends Fragment {
     private Foto unaFoto;
     private RecyclerView recyclerFotosViejas;
     private String origen;
+
+    private RecyclerView recyclerCriterios;
+    private AdapterCriterios adapterCriterios;
+
+    private ImageView boton1;
+    private ImageView boton2;
+    private ImageView boton3;
+    private ImageView boton4;
+
+    private TextView criterio1;
+    private TextView criterio2;
+    private TextView criterio3;
+    private TextView criterio4;
 
 
     public FragmentPregunta_() {
@@ -137,7 +148,7 @@ public class FragmentPregunta_ extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view= inflater.inflate(R.layout.fragment_pregunta_, container, false);
+        final View view= inflater.inflate(R.layout.fragment_pregunta_alt, container, false);
 
 
 
@@ -156,19 +167,15 @@ public class FragmentPregunta_ extends Fragment {
             idEse=bundle.getString(IDESE);
         }
 
-        rg1= view.findViewById(R.id.rg1);
-        rg2= view.findViewById(R.id.rg2);
-        AppCompatRadioButton rb0 = view.findViewById(R.id.item0);
-        AppCompatRadioButton rb1 = view.findViewById(R.id.item1);
-        AppCompatRadioButton rb2 = view.findViewById(R.id.item2);
-        AppCompatRadioButton rb3 = view.findViewById(R.id.item3);
-        AppCompatRadioButton rb6 = view.findViewById(R.id.itemNA);
+        boton1=view.findViewById(R.id.circuloApretado);
+        boton2=view.findViewById(R.id.circuloApretado2);
+        boton3=view.findViewById(R.id.circuloApretado3);
+        boton4=view.findViewById(R.id.circuloApretado4);
 
-        TextView tagrb0 = view.findViewById(R.id.tagRg0);
-        TextView tagrb1 = view.findViewById(R.id.tagRg1);
-        TextView tagrb2 = view.findViewById(R.id.tagRg2);
-        TextView tagrb3 = view.findViewById(R.id.tagRg3);
-        TextView tagrb6 = view.findViewById(R.id.tagRgNa);
+        criterio1=view.findViewById(R.id.tv_descripcion_item);
+        criterio2=view.findViewById(R.id.tv_descripcion_item2);
+        criterio3=view.findViewById(R.id.tv_descripcion_item3);
+        criterio4=view.findViewById(R.id.tv_descripcion_item4);
 
         TextView textoPregunta = view.findViewById(R.id.textoPregunta);
         textViewCommentNuevo = view.findViewById(R.id.tv_comment_nuevo);
@@ -223,32 +230,7 @@ public class FragmentPregunta_ extends Fragment {
 
         //---SI LA AUDITORIA YA ESTABA EMPEZADA QUE COMPLETE LOS RADIOBUTTONS Y LOS COMENTARIOS GENERALES---//
 
-        Pregunta pregunta = realm.where(Pregunta.class)
-                .equalTo("idAudit",idAudit)
-                .equalTo("idPregunta",idPregunta)
-                .findFirst();
-        if (pregunta!=null && pregunta.getPuntaje()!=null){
-            if (pregunta.getPuntaje()==0) {
-                Toast.makeText(getContext(), "asd", Toast.LENGTH_SHORT).show();
-                //no marca ninguno
-            }
-            else if( pregunta.getPuntaje()!=9){
-             Integer puntaje=pregunta.getPuntaje();
-                RadioButton unRadioButton=(RadioButton) (rg1.getChildAt(puntaje-1));
-                unRadioButton.setChecked(true);
-            }
-            else{
-                RadioButton unRadioButton=(RadioButton) (rg2.getChildAt(0));
-                unRadioButton.setChecked(true);
-            }
-        }
-        if (pregunta!=null&&pregunta.getComentario()!=null){
-            tagCommentNuevo.setVisibility(View.VISIBLE);
-            textViewCommentNuevo.setVisibility(View.VISIBLE);
-            textViewCommentNuevo.setText(pregunta.getComentario());
-            evidenciaNueva.setVisibility(View.VISIBLE);
 
-        }
 
         textoPregunta.setText(enunciado);
 
@@ -273,26 +255,12 @@ public class FragmentPregunta_ extends Fragment {
                     .sort("orden", Sort.ASCENDING)
                     .findAll();
         }
-       if (rr_listaCriterio!=null){
-            RealmList<Criterio>listaCriterio=new RealmList<>();
-            listaCriterio.addAll(rr_listaCriterio);
-           tagrb0.setText(String.valueOf(listaCriterio.get(0).getPuntajeCriterio()));
-           tagrb1.setText(String.valueOf(listaCriterio.get(1).getPuntajeCriterio()));
-           tagrb2.setText(String.valueOf(listaCriterio.get(2).getPuntajeCriterio()));
-           tagrb3.setText(String.valueOf(listaCriterio.get(3).getPuntajeCriterio()));
-
-           rb0.setText(listaCriterio.get(0).getTextoCriterio());
-           rb1.setText(listaCriterio.get(1).getTextoCriterio());
-           rb2.setText(listaCriterio.get(2).getTextoCriterio());
-           rb3.setText(listaCriterio.get(3).getTextoCriterio());
-
-       }
-       tagrb6.setText("--");
-       rb6.setText(getContext().getString(R.string.na));
-
-
-
-
+        RealmList<Criterio> listacriterio = new RealmList<>();
+        listacriterio.addAll(rr_listaCriterio);
+        criterio1.setText(listacriterio.get(0).getTextoCriterio());
+        criterio2.setText(listacriterio.get(1).getTextoCriterio());
+        criterio3.setText(listacriterio.get(2).getTextoCriterio());
+        criterio4.setText(listacriterio.get(3).getTextoCriterio());
 
 
 
@@ -300,68 +268,68 @@ public class FragmentPregunta_ extends Fragment {
         fabMenu= view.findViewById(R.id.fab_menu);
         fabMenu.setMenuButtonColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
 
+//        SI ESTOY EN MODO EDITAR LA AUDITORIA SETEO LOS LISTENER PARA LOS BOTONES, SINO NO LO CARGO
+        if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA) || origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)){
+            boton1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    borrarTodosApretados();
+                    boton1.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
+                    if (criterio1.getText().toString().equals(FuncionesPublicas.N_A)){
+                        registrarPuntaje(9);
+                    }
+                    else{
+                        registrarPuntaje(1);
+                    }
+                }
+            });
+            boton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    borrarTodosApretados();
+                    boton2.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
+                    if (criterio2.getText().toString().equals(FuncionesPublicas.N_A)){
+                        registrarPuntaje(9);
+                    }
+                    else{
+                        registrarPuntaje(2);
+                    }
+                }
+            });
+            boton3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    borrarTodosApretados();
+                    boton3.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
+                    if (criterio3.getText().toString().equals(FuncionesPublicas.N_A)){
+                        registrarPuntaje(9);
+                    }
+                    else{
+                        registrarPuntaje(3);
+                    }
+                }
+            });
+            boton4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    borrarTodosApretados();
+                    boton4.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
+                    if (criterio4.getText().toString().equals(FuncionesPublicas.N_A)){
+                        registrarPuntaje(9);
+                    }
+                    else{
+                        registrarPuntaje(4);
+                    }
+                }
+            });
+        }
+
 
         if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA) || origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)||origen.equals(FuncionesPublicas.REVISAR)) {
-//        HANDLE RADIOGROUP
-            //LISTENER PARA EL RADIOGROUP
 
-            listener1= new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                    if (checkedId!=-1) {
-                            puntuacion =rg1.indexOfChild(view.findViewById(rg1.getCheckedRadioButtonId()))+1;
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(@NonNull Realm realm) {
-
-                                Pregunta preg = realm.where(Pregunta.class)
-                                        .equalTo("idAudit",idAudit)
-                                        .equalTo("idPregunta",idPregunta)
-                                        .findFirst();
-                                if (preg!=null) {
-                                    preg.setPuntaje(puntuacion);
-                                }
+            //RECYCLERVIEW CRITERIOS
 
 
-                            }
-                        });
-
-                        limpiarRadioGroups(1);
-
-                    }
-                }
-            };
-
-            listener2 =new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                    if (checkedId !=-1) {
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(@NonNull Realm realm) {
-
-                                Pregunta preg = realm.where(Pregunta.class)
-                                        .equalTo("idAudit",idAudit)
-                                        .equalTo("idPregunta", idPregunta)
-                                        .findFirst();
-                                if (preg!=null) {
-                                    preg.setPuntaje(9);
-                                }
-
-                            }
-                        });
-                        limpiarRadioGroups(2);
-
-                    }
-                }
-            };
-
-            rg1.setOnCheckedChangeListener(listener1);
-            rg2.setOnCheckedChangeListener(listener2);
 
 
 
@@ -617,24 +585,102 @@ public class FragmentPregunta_ extends Fragment {
 
 //        SI ES SOLO REVISION BLOQUEO TODAS LAS EDICIONES
         if (origen.equals(FuncionesPublicas.REVISAR) || origen .equals(FuncionesPublicas.EDITAR_CUESTIONARIO)){
-            rb0.setEnabled(false);
-            rb1.setEnabled(false);
-            rb3.setEnabled(false);
 
-            rb2.setEnabled(false);
-            rb6.setEnabled(false);
            fabMenu.setVisibility(View.GONE);
         }
         else{
-            rb0.setEnabled(true);
-            rb1.setEnabled(true);
-            rb3.setEnabled(true);
 
-            rb2.setEnabled(true);
-            rb6.setEnabled(true);
             fabMenu.setVisibility(View.VISIBLE);
         }
+
+        //COMPLETAR PREGUNTAS EMPEZADAS
+        Pregunta pregunta = realm.where(Pregunta.class)
+                .equalTo("idAudit",idAudit)
+                .equalTo("idPregunta",idPregunta)
+                .findFirst();
+        if (pregunta!=null && pregunta.getPuntaje()!=null){
+
+
+            Integer puntaje=pregunta.getPuntaje();
+            switch (puntaje){
+                case 1:
+                    borrarTodosApretados();
+                    boton1.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                    break;
+                case 2:
+                    borrarTodosApretados();
+                    boton2.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                    break;
+                case 3:
+                    borrarTodosApretados();
+                    boton3.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                    break;
+                case 4:
+                    borrarTodosApretados();
+                    boton4.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                    break;
+                case 9:
+                    borrarTodosApretados();
+                    if (criterio1.getText().toString().equals(FuncionesPublicas.N_A)){
+                        boton1.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                        break;
+                    }
+                    if (criterio2.getText().toString().equals(FuncionesPublicas.N_A)){
+                        boton2.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                        break;
+                    }
+                    if (criterio3.getText().toString().equals(FuncionesPublicas.N_A)){
+                        boton3.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                        break;
+                    }
+                    if (criterio4.getText().toString().equals(FuncionesPublicas.N_A)){
+                        boton4.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_apretado));
+                        break;
+                    }
+                    else{
+                        break;
+                    }
+                default:
+                    boton1.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_suelto));
+                    boton2.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_suelto));
+                    boton3.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_suelto));
+                    boton4.setBackground(view.getContext().getResources().getDrawable(R.drawable.boton_suelto));
+                    break;
+            }
+        }
+        if (pregunta!=null&&pregunta.getComentario()!=null){
+            tagCommentNuevo.setVisibility(View.VISIBLE);
+            textViewCommentNuevo.setVisibility(View.VISIBLE);
+            textViewCommentNuevo.setText(pregunta.getComentario());
+            evidenciaNueva.setVisibility(View.VISIBLE);
+
+        }
+
         return view;
+    }
+
+    private void registrarPuntaje(final int i) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Pregunta mPregunta=realm.where(Pregunta.class)
+                        .equalTo("idPregunta",idPregunta)
+                        .findFirst();
+                if (mPregunta!=null){
+                    mPregunta.setPuntaje(i);
+                }
+            }
+        });
+
+    }
+
+    private void borrarTodosApretados() {
+        boton1.setBackground(ContextCompat.getDrawable(boton1.getContext(),R.drawable.boton_suelto));
+        boton2.setBackground(ContextCompat.getDrawable(boton1.getContext(),R.drawable.boton_suelto));
+        boton3.setBackground(ContextCompat.getDrawable(boton1.getContext(),R.drawable.boton_suelto));
+        boton4.setBackground(ContextCompat.getDrawable(boton1.getContext(),R.drawable.boton_suelto));
     }
 
     private void cargarFotosViejas() {
@@ -643,6 +689,28 @@ public class FragmentPregunta_ extends Fragment {
 
         Realm realm = Realm.getDefaultInstance();
         String idArea=null;
+        Integer ordenPregunta=0;
+        Integer ordenItem=0;
+        Integer ordenEse=0;
+
+        Ese eseActual = realm.where(Ese.class)
+                .equalTo("idEse", idEse)
+                .findFirst();
+        if (eseActual!=null){
+            ordenEse=eseActual.getNumeroEse()-1;
+        }
+        Pregunta preguntaActual=realm.where(Pregunta.class)
+                .equalTo("idPregunta",idPregunta)
+                .findFirst();
+        if (preguntaActual!=null){
+            ordenPregunta=preguntaActual.getOrden()-1;
+        }
+        Item itemActual=realm.where(Item.class)
+                .equalTo("idItem", idItem)
+                .findFirst();
+        if (itemActual!=null){
+            ordenItem=itemActual.getOrden()-1;
+        }
         Auditoria auditActual= realm. where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();
@@ -659,13 +727,26 @@ public class FragmentPregunta_ extends Fragment {
         for (Auditoria unAudit:allAudits
              ) {
             if (unAudit.getAreaAuditada().getIdArea().equals(idArea)&&unAudit.getEsUltimaAuditoria()){
-                 laPreguntaVieja = realm.where(Pregunta.class)
-                        .equalTo("idAudit",unAudit.getIdAuditoria())
-                        .equalTo("idPregunta", idPregunta)
-                        .findFirst();
-                 //SI LA PREGUNTA VIEJA TIENE FOTOS
 
-                    if (laPreguntaVieja!=null&&laPreguntaVieja.getListaFotos().size()>0){
+                if (unAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)) {
+                    String idPreguntaVieja = unAudit.getListaEses().get(ordenEse).getListaPreguntas().get(ordenPregunta).getIdPregunta();
+                    laPreguntaVieja=realm.where(Pregunta.class)
+                            .equalTo("idAudit", unAudit.getIdAuditoria())
+                            .equalTo("idPregunta",idPreguntaVieja)
+                            .findFirst();
+                }
+                else {
+                    String idPreguntaVieja = unAudit.getListaEses().get(ordenEse).getListaItem().get(ordenItem).getListaPreguntas().get(ordenPregunta).getIdPregunta();
+                    laPreguntaVieja=realm.where(Pregunta.class)
+                            .equalTo("idAudit", unAudit.getIdAuditoria())
+                            .equalTo("idPregunta",idPreguntaVieja)
+                            .findFirst();
+                }
+
+
+                    //SI LA PREGUNTA VIEJA TIENE FOTOS
+
+                    if (laPreguntaVieja != null && laPreguntaVieja.getListaFotos().size() > 0) {
                         tituloAuditVieja.setVisibility(View.VISIBLE);
                         separadorInvertido.setVisibility(View.VISIBLE);
                         separador.setVisibility(View.VISIBLE);
@@ -673,21 +754,19 @@ public class FragmentPregunta_ extends Fragment {
                         adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
                         adapterFotosViejas.notifyDataSetChanged();
 
-                        if (laPreguntaVieja.getComentario()!=null && !laPreguntaVieja.getComentario().isEmpty()){
+                        if (laPreguntaVieja.getComentario() != null && !laPreguntaVieja.getComentario().isEmpty()) {
                             tagCommentViejo.setVisibility(View.VISIBLE);
                             textViewCommentViejo.setVisibility(View.VISIBLE);
                             textViewCommentViejo.setText(laPreguntaVieja.getComentario());
                         }
-                    }
-                    else {
-                        if (laPreguntaVieja!=null && laPreguntaVieja.getComentario()!=null && !laPreguntaVieja.getComentario().isEmpty()){
+                    } else {
+                        if (laPreguntaVieja != null && laPreguntaVieja.getComentario() != null && !laPreguntaVieja.getComentario().isEmpty()) {
                             separadorInvertido.setVisibility(View.VISIBLE);
                             separador.setVisibility(View.VISIBLE);
                             tagCommentViejo.setVisibility(View.VISIBLE);
                             textViewCommentViejo.setVisibility(View.VISIBLE);
                             textViewCommentViejo.setText(laPreguntaVieja.getComentario());
-                        }
-                        else{
+                        } else {
                             separadorInvertido.setVisibility(View.GONE);
                             separador.setVisibility(View.GONE);
                             tituloAuditVieja.setVisibility(View.GONE);
@@ -695,28 +774,15 @@ public class FragmentPregunta_ extends Fragment {
                             textViewCommentViejo.setVisibility(View.GONE);
                         }
                     }
+                }
 
 
             }
-        }
+
         adapterFotosViejas.setListaFotosOriginales(listaFotosViejas);
-       adapterFotosViejas.notifyDataSetChanged();
+        adapterFotosViejas.notifyDataSetChanged();
     }
 
-    public void limpiarRadioGroups(Integer cualToque){
-        switch (cualToque){
-            case 1:
-                rg2.setOnCheckedChangeListener(null);
-                rg2.clearCheck();
-                rg2.setOnCheckedChangeListener(listener2);
-                break;
-            case 2:
-                rg1.setOnCheckedChangeListener(null);
-                rg1.clearCheck();
-                rg1.setOnCheckedChangeListener(listener1);
-                break;
-        }
-    }
 
     private void seguirConTutorial() {
         Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");

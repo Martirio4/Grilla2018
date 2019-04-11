@@ -253,7 +253,7 @@
     <string name="EditarPregunta">Editar Pregunta</string>
     <string name="EditarCriterio">Editar Criterio</string>
     <string name="favorEditeCriterio">Edite el texto del criterio.</string>
-    <string name="na">\"n/a\"</string>
+    <string name="na">\"N/A\"</string>
     <string name="clicParaCambiarPregunta">Haga click aqui para editar el texto de la pregunta.</string>
     <string name="limpiarTexto">Limpiar</string>
     <string name="preguntaCompleta">Pregunta completa.</string>

@@ -1,6 +1,7 @@
 package com.nomad.mrg5s.View.Fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.Model.Criterio;
 import com.nomad.mrg5s.R;
@@ -28,6 +30,11 @@ public class FragmentEditarCriteriosDefault extends Fragment {
 
     private RecyclerView recyclerCriterios;
     private AdapterCriterios adapterCriterios;
+    private FloatingActionButton fabVolver;
+    private Cerrable cerrable;
+    public interface Cerrable{
+        void cerrarEsto();
+    }
 
 
     @Override
@@ -37,6 +44,7 @@ public class FragmentEditarCriteriosDefault extends Fragment {
         View view = inflater.inflate(R.layout.fragment_editar_crit_default, container, false);
 
         recyclerCriterios = view.findViewById(R.id.recyclercritDefault);
+        fabVolver=view.findViewById(R.id.fabCerrarEditCriterios);
         adapterCriterios = new AdapterCriterios();
         adapterCriterios.setContext(getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
@@ -44,10 +52,23 @@ public class FragmentEditarCriteriosDefault extends Fragment {
         recyclerCriterios.setAdapter(adapterCriterios);
         adapterCriterios.setListaCriteriosOriginales(dameCriteriosDefault());
 
+        fabVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cerrable.cerrarEsto();
+            }
+        });
+
 
 
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.cerrable= (Cerrable)context;
     }
 
     private RealmList<Criterio> dameCriteriosDefault() {

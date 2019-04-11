@@ -94,6 +94,7 @@ public class ControllerDatos {
                                     itemNuevo.setPuntajeItem(itemModelo.getPuntajeItem());
                                     itemNuevo.setTituloItem(itemModelo.getTituloItem());
                                     itemNuevo.setTextoItem(itemModelo.getTextoItem());
+                                    itemNuevo.setOrden(itemModelo.getOrden());
                                     itemNuevo.setListaPreguntas(new RealmList<Pregunta>());
 
                                     for (Pregunta preguntaModelo : itemModelo.getListaPreguntas()
@@ -105,6 +106,7 @@ public class ControllerDatos {
                                         preguntaNueva.setIdEse(eseNueva.getIdEse());
                                         preguntaNueva.setTextoPregunta(preguntaModelo.getTextoPregunta());
                                         preguntaNueva.setPuntaje(preguntaModelo.getPuntaje());
+                                        preguntaNueva.setOrden(preguntaModelo.getOrden());
                                         preguntaNueva.setListaCriterios(new RealmList<Criterio>());
 
                                         for (Criterio criterioModelo :
@@ -117,6 +119,7 @@ public class ControllerDatos {
                                             criterioNuevo.setIdPregunta(preguntaNueva.getIdPregunta());
                                             criterioNuevo.setPuntajeCriterio(criterioModelo.getPuntajeCriterio());
                                             criterioNuevo.setTextoCriterio(criterioModelo.getTextoCriterio());
+                                            criterioNuevo.setOrden(criterioModelo.getOrden());
                                             preguntaNueva.addCriterio(criterioNuevo);
                                         }
                                         itemNuevo.addPregunta(preguntaNueva);
@@ -154,6 +157,7 @@ public class ControllerDatos {
                                     preguntaNueva.setIdEse(eseNueva.getIdEse());
                                     preguntaNueva.setTextoPregunta(preguntaModelo.getTextoPregunta());
                                     preguntaNueva.setPuntaje(preguntaModelo.getPuntaje());
+                                    preguntaNueva.setOrden(preguntaModelo.getOrden());
                                     preguntaNueva.setListaCriterios(new RealmList<Criterio>());
                                     for (Criterio criterioModelo :
                                             preguntaModelo.getListaCriterios()) {
@@ -165,6 +169,7 @@ public class ControllerDatos {
                                         criterioNuevo.setIdPregunta(preguntaNueva.getIdPregunta());
                                         criterioNuevo.setPuntajeCriterio(criterioModelo.getPuntajeCriterio());
                                         criterioNuevo.setTextoCriterio(criterioModelo.getTextoCriterio());
+                                        criterioNuevo.setOrden(criterioModelo.getOrden());
                                         preguntaNueva.addCriterio(criterioNuevo);
                                     }
                                     eseNueva.addPregunta(preguntaNueva);
@@ -944,7 +949,7 @@ public class ControllerDatos {
                                                       .equalTo("idCuestionario", idCuestionario)
                                                       .equalTo("idEse", nuevoItem.getIdEse())
                                                       .findAll();
-                                              mItem.setOrden(losItem.size());
+                                              mItem.setOrden(losItem.size()+1);
 
                                               final Ese laEse = bgRealm.where(Ese.class)
                                                       .equalTo("idCuestionario", idCuestionario)
@@ -1185,6 +1190,13 @@ public class ControllerDatos {
                 pregunta111.setIdCuestioniario(idCuestionario);
                 pregunta111.setIdEse(idese);
                 pregunta111.setIdItem(idItem);
+
+                RealmResults<Pregunta>lasPreguntas =realm.where(Pregunta.class)
+                        .equalTo("idCuestionario",idCuestionario)
+                        .equalTo("idEse", idese)
+                        .equalTo("idItem", idItem)
+                        .findAll();
+                pregunta111.setOrden(lasPreguntas.size());
 
                 cargarCriteriosdDefaultPregunta(realm, pregunta111);
 

@@ -99,6 +99,7 @@ public class FuncionesPublicas {
     public static final String FRAGMENT_EDITOR_CRITERIOS = "FRAGMENT_EDITOR_CRITERIOS";
     public static final String FRAGMENT_SETTINGS = "FRAGMENT_SETTINGS";
     public static final String ID_FOTO = "FOTO_";
+    public static final String N_A = "N/A";
 
 
     public static boolean isExternalStorageWritable() {
