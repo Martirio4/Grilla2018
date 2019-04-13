@@ -78,7 +78,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
         recyclerCuestionarios.setLayoutManager(layoutManager);
         recyclerCuestionarios.setAdapter(adapterCuestionario);
 
-        actualizarDatosRecycler();
+        actualizarDatosRecycler(view.getContext());
 
         textView= view.findViewById(R.id.textoTituloManage);
         Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
@@ -165,7 +165,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                         tipoCuestionario=FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA;
                         break;
                 }
-                darNombreCuestionario(tipoCuestionario);
+                darNombreCuestionario(tipoCuestionario,view.getContext());
                 mDialog.hide();
             }
         });
@@ -175,8 +175,8 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
 
     }
 
-    public void darNombreCuestionario(final String tipoCuestionario){
-        new MaterialDialog.Builder(getContext())
+    public void darNombreCuestionario(final String tipoCuestionario, final Context context){
+        new MaterialDialog.Builder(context)
                 .title(getResources().getString(R.string.addCuestionario))
                 .inputRange(1,40)
                 .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
@@ -191,7 +191,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                             @Override
                             public void finish(Boolean resultado) {
                                 if (resultado) {
-                                    actualizarDatosRecycler();
+                                    actualizarDatosRecycler(context);
                                     recyclerCuestionarios.scrollToPosition(adapterCuestionario.getListaCuestionariosOriginales().size()-1);
                                     Toast.makeText(getContext(), getContext().getString(R.string.cuestionarioCreado), Toast.LENGTH_SHORT).show();
                                 }
@@ -202,8 +202,15 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                 }).show();
     }
 
-    private void actualizarDatosRecycler() {
-        Realm realm = Realm.getDefaultInstance();
+    private void actualizarDatosRecycler(Context context) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Cuestionario> result2 = realm.where(Cuestionario.class)
                 //las areas son para todos los usuarios// .equalTo("usuario",usuario)
                 .findAll();

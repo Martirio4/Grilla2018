@@ -166,7 +166,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
                                                 FragmentManageAreas fragmentManageAreas = (FragmentManageAreas)fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
                                                 if (fragmentManageAreas!=null && fragmentManageAreas.isVisible()){
-                                                    fragmentManageAreas.updateAdapter();
+                                                    fragmentManageAreas.updateAdapter(SettingsActivity.this);
                                                 }
 
                                                 return true;
@@ -261,7 +261,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
         FragmentManageAreas fragmentManageAreas = (FragmentManageAreas) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENTMANAGER_AREAS);
 
         if (fragmentManageAreas != null && fragmentManageAreas.isVisible()) {
-            fragmentManageAreas.updateAdapter();
+            fragmentManageAreas.updateAdapter(SettingsActivity.this);
             Toast.makeText(this,getResources().getString(R.string.delteAreaOk), Toast.LENGTH_SHORT).show();
         }
     }

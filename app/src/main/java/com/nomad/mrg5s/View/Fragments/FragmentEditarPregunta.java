@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -97,7 +96,7 @@ public class FragmentEditarPregunta extends Fragment {
             idEse = bundle.getString(IDESE);
             idpregunta=bundle.getString(IDPREGUNTA);
         }
-        traerTipoEstructura();
+        traerTipoEstructura(view.getContext());
 
          btn_eliminarPregunta=view.findViewById(R.id.botonEliminarPregunta);
          fabAgregarPregunta=view.findViewById(R.id.fabNuevaPregunta);
@@ -108,19 +107,26 @@ public class FragmentEditarPregunta extends Fragment {
 
          btn_eliminarPregunta.setOnClickListener(new View.OnClickListener() {
              @Override
-             public void onClick(View view) {
+             public void onClick(View v) {
 
-                         new MaterialDialog.Builder(view.getContext())
-                                 .backgroundColor(ContextCompat.getColor(view.getContext(), R.color.tile1))
-                                 .contentColor(ContextCompat.getColor(view.getContext(), R.color.primary_text))
-                                 .titleColor(ContextCompat.getColor(view.getContext(), R.color.tile4))
+                         new MaterialDialog.Builder(v.getContext())
+                                 .backgroundColor(ContextCompat.getColor(v.getContext(), R.color.tile1))
+                                 .contentColor(ContextCompat.getColor(v.getContext(), R.color.primary_text))
+                                 .titleColor(ContextCompat.getColor(v.getContext(), R.color.tile4))
                                  .title(R.string.advertencia)
                                  .content(R.string.preguntaSeElimina)
                                  .positiveText(R.string.eliminar)
                                  .onPositive(new MaterialDialog.SingleButtonCallback() {
                                      @Override
                                      public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                         Realm realm = Realm.getDefaultInstance();
+                                         Realm realm = null;
+                                         try {
+                                             realm = Realm.getDefaultInstance();
+                                         } catch (Exception e) {
+                                             e.printStackTrace();
+                                             Realm.init(view.getContext().getApplicationContext());
+                                             realm=Realm.getDefaultInstance();
+                                         }
                                          Pregunta mPregunta=realm.where(Pregunta.class)
                                                  .equalTo("idCuestionario", idCuestionario)
                                                  .equalTo("idEse", idEse)
@@ -153,7 +159,14 @@ public class FragmentEditarPregunta extends Fragment {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerPreguntas.setLayoutManager(linearLayoutManager);
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(view.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmList<Criterio> listaCriteriosRealm =new RealmList<>();
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
@@ -189,7 +202,7 @@ public class FragmentEditarPregunta extends Fragment {
         adapterCriterios.setListaCriteriosOriginales(listaCriteriosRealm);
         recyclerPreguntas.setAdapter(adapterCriterios);
         adapterCriterios.notifyDataSetChanged();
-        cargarTitulosFragment();
+        cargarTitulosFragment(view.getContext());
 
         fabAgregarPregunta.setColorNormal(ContextCompat.getColor(fabAgregarPregunta.getContext(), R.color.mirgorNaranja));
         fabAgregarPregunta.setOnClickListener(new View.OnClickListener() {
@@ -217,8 +230,15 @@ public class FragmentEditarPregunta extends Fragment {
         return view;
     }
 
-    private void cargarTitulosFragment() {
-        Realm realm= Realm.getDefaultInstance();
+    private void cargarTitulosFragment(Context context) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
 
 
 //        AGREGO TIULO DE ESE
@@ -329,8 +349,15 @@ public class FragmentEditarPregunta extends Fragment {
 
 
 
-    private void traerTipoEstructura() {
-        Realm realm= Realm.getDefaultInstance();
+    private void traerTipoEstructura(Context context) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         Cuestionario elCues=realm.where(Cuestionario.class)
                 .equalTo("idCuestionario", idCuestionario)
                 .findFirst();

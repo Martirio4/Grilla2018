@@ -108,7 +108,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
         //TRAIGO LA LISTA DE PREGUNTAS
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityAuditoria.this.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Pregunta>resultPregunta;
 
         switch (origen){
@@ -189,7 +196,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     }
 
     private RealmResults<Pregunta> cargarPreguntasAuditoria() {
-        Realm realm= Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityAuditoria.this.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
                 return realm.where(Pregunta.class)
@@ -217,7 +231,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
     }
 
     private RealmResults<Pregunta> cargarPreguntasCuestionario() {
-        Realm realm= Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityAuditoria.this.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
 
         switch (tipoEstructura){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
@@ -266,7 +287,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public void cerrarAuditoria() {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityAuditoria.this.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         Auditoria maAudit=realm.where(Auditoria.class)
                 .equalTo("idAuditoria",idAudit)
                 .findFirst();
@@ -364,7 +392,14 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public void borrarFoto(final Foto unaFoto) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityAuditoria.this.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

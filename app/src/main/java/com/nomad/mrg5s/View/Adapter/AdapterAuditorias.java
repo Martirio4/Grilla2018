@@ -203,35 +203,54 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
 
         public void cargarAuditoria(Auditoria unAuditoria) {
 
-
+            Double promedio5s;
+            Double puntaje1;
+            Double puntaje2;
+            Double puntaje3;
+            Double puntaje4;
+            Double puntaje5;
 
                 //COMIENZA CALCULO PUNTAJES
 
-                Double promedio5s = unAuditoria.getPuntajeFinal();
-
+            if (unAuditoria.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)){
+                 promedio5s = unAuditoria.getPuntajeFinal();
+                puntaje1=unAuditoria.getListaEses().get(0).getPuntajeEse()/5;
+                puntaje2=unAuditoria.getListaEses().get(1).getPuntajeEse()/5;
+                puntaje3=unAuditoria.getListaEses().get(2).getPuntajeEse()/5;
+                puntaje4=unAuditoria.getListaEses().get(3).getPuntajeEse()/5;
+                puntaje5=unAuditoria.getListaEses().get(4).getPuntajeEse()/5;
+            }
+            else{
+                promedio5s=unAuditoria.getPuntajeFinal()/100;
+                puntaje1=unAuditoria.getListaEses().get(0).getPuntajeEse()/20;
+                puntaje2=unAuditoria.getListaEses().get(1).getPuntajeEse()/20;
+                puntaje3=unAuditoria.getListaEses().get(2).getPuntajeEse()/20;
+                puntaje4=unAuditoria.getListaEses().get(3).getPuntajeEse()/20;
+                puntaje5=unAuditoria.getListaEses().get(4).getPuntajeEse()/20;
+            }
                 //FIN CALCULO PUNTAJES
 
-                if (promedio5s <=0.5f){
-                    tarjetaPutaje.setBackgroundColor(ContextCompat.getColor(context, R.color.semaRojo));
+            if (promedio5s <=0.5f){
+                tarjetaPutaje.setBackgroundColor(ContextCompat.getColor(context, R.color.semaRojo));
+            }
+            else{
+                if (promedio5s <0.8f){
+                    tarjetaPutaje.setBackgroundColor(ContextCompat.getColor(context,R.color.semaAmarillo));
                 }
                 else{
-                    if (promedio5s <0.8f){
-                        tarjetaPutaje.setBackgroundColor(ContextCompat.getColor(context,R.color.semaAmarillo));
-                    }
-                    else{
-                        tarjetaPutaje.setBackgroundColor(ContextCompat.getColor(context,R.color.semaVerde));
-                    }
+                    tarjetaPutaje.setBackgroundColor(ContextCompat.getColor(context,R.color.semaVerde));
                 }
+            }
 
 
-                Locale locale = new Locale("en","US");
-                NumberFormat format = NumberFormat.getPercentInstance(locale);
-                String percentage1 = format.format(unAuditoria.getListaEses().get(0).getPuntajeEse()/5);
-                String percentage2 = format.format(unAuditoria.getListaEses().get(1).getPuntajeEse()/5);
-                String percentage3 = format.format(unAuditoria.getListaEses().get(2).getPuntajeEse()/5);
-                String percentage4 = format.format(unAuditoria.getListaEses().get(3).getPuntajeEse()/5);
-                String percentage5 = format.format(unAuditoria.getListaEses().get(4).getPuntajeEse()/5);
-                String percentage6 = format.format(promedio5s);
+            Locale locale = new Locale("en","US");
+            NumberFormat format = NumberFormat.getPercentInstance(locale);
+            String percentage1 = format.format(puntaje1);
+            String percentage2 = format.format(puntaje2);
+            String percentage3 = format.format(puntaje3);
+            String percentage4 = format.format(puntaje4);
+            String percentage5 = format.format(puntaje5);
+            String percentage6 = format.format(promedio5s);
 
             if (unAuditoria.getListaEses().get(0).getPuntajeEse()==9.9) {
                 text1s.setText("-");
@@ -258,20 +277,19 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
             } else {
                 text5s.setText(percentage5);
             }
+            textFinal.setText(percentage6);
+            textFecha.setText(FuncionesPublicas.dameFechaString(unAuditoria.getFechaAuditoria(),"largo"));
+            textFoto.setText(unAuditoria.getAreaAuditada().getNombreArea());
 
-                textFinal.setText(percentage6);
+            File f =new File(unAuditoria.getAreaAuditada().getFotoArea().getRutaFoto());
+            Picasso.with(imageView.getContext())
+                    .load(f)
+                    .into(imageView);
 
 
+        }
 
 
-                textFecha.setText(FuncionesPublicas.dameFechaString(unAuditoria.getFechaAuditoria(),"largo"));
-                textFoto.setText(unAuditoria.getAreaAuditada().getNombreArea());
-
-                File f =new File(unAuditoria.getAreaAuditada().getFotoArea().getRutaFoto());
-                Picasso.with(imageView.getContext())
-                        .load(f)
-                        .into(imageView);
-            }
 
         }
 

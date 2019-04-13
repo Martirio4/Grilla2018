@@ -99,7 +99,7 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Area unArea = listaAreasOriginales.get(position);
         final AreaViewHolder AreaViewHolder = (AreaViewHolder) holder;
-        AreaViewHolder.cargarArea(unArea);
+        AreaViewHolder.cargarArea(unArea, context);
 
 
         FragmentActivity unaActivity = (FragmentActivity) context;
@@ -211,8 +211,15 @@ public class AdapterArea extends RecyclerView.Adapter implements View.OnClickLis
 
         }
 
-        public void cargarArea(Area unArea) {
-            Realm realm = Realm.getDefaultInstance();
+        public void cargarArea(Area unArea, Context context) {
+            Realm realm = null;
+            try {
+                realm = Realm.getDefaultInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Realm.init(context.getApplicationContext());
+                realm=Realm.getDefaultInstance();
+            }
 
             if (unArea.getFotoArea()!=null) {
                 //CARGO LA IMAGEN DEL AREA

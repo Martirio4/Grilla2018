@@ -24,6 +24,7 @@ import com.nomad.mrg5s.Model.Area;
 import com.nomad.mrg5s.Model.Foto;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.View.Activities.ActivityAuditoria;
 import com.nomad.mrg5s.View.Adapter.AdapterArea;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -104,7 +105,14 @@ public class FragmentManageAreas extends Fragment {
 
        // String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(view.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Area> result2 = realm.where(Area.class)
                //las areas son para todos los usuarios// .equalTo("usuario",usuario)
                 .findAll();
@@ -302,9 +310,16 @@ public class FragmentManageAreas extends Fragment {
         Nammu.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    public void updateAdapter() {
+    public void updateAdapter(Context context) {
         //String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Realm realm= Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Area> result3 = realm.where(Area.class)
                 //las areas son de todos los usuarios//   .equalTo("usuario",usuario)
                 .findAll();

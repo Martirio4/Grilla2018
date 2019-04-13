@@ -295,12 +295,12 @@ public class FragmentPregunta_ extends Fragment {
                 public void onClick(View view) {
                     borrarTodosApretados();
                     boton2.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
-                    if (criterio2.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9,view.getContext());
-                    }
-                    else{
+                  //  if (criterio2.getText().toString().equals(FuncionesPublicas.N_A)){
+//                        registrarPuntaje(9,view.getContext());
+//                    }
+//                    else{
                         registrarPuntaje(2,view.getContext());
-                    }
+//                    }
                 }
             });
             boton3.setOnClickListener(new View.OnClickListener() {
@@ -308,12 +308,12 @@ public class FragmentPregunta_ extends Fragment {
                 public void onClick(View view) {
                     borrarTodosApretados();
                     boton3.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
-                    if (criterio3.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9,view.getContext());
-                    }
-                    else{
+//                    if (criterio3.getText().toString().equals(FuncionesPublicas.N_A)){
+//                        registrarPuntaje(9,view.getContext());
+//                    }
+//                    else{
                         registrarPuntaje(3,view.getContext());
-                    }
+//                    }
                 }
             });
             boton4.setOnClickListener(new View.OnClickListener() {
@@ -321,12 +321,12 @@ public class FragmentPregunta_ extends Fragment {
                 public void onClick(View view) {
                     borrarTodosApretados();
                     boton4.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
-                    if (criterio4.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9,view.getContext());
-                    }
-                    else{
+//                    if (criterio4.getText().toString().equals(FuncionesPublicas.N_A)){
+//                        registrarPuntaje(9,view.getContext());
+//                    }
+//                    else{
                         registrarPuntaje(4,view.getContext());
-                    }
+//                    }
                 }
             });
         }

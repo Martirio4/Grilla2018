@@ -95,6 +95,8 @@ public class FuncionesPublicas {
     public static final String SIMBOLO_ORDINAL = "°";
     public static final String IDCUESTIONARIOS_DEFAULT = "CUEDEF_";
     public static final double MAXIMO_PUNTAJE = 4.0;
+    public static final double MAXIMO_PUNTAJE_ESE_SIMPLE = 20.0;
+    public static final double MAXIMO_PUNTAJE_PREGUNTA_SIMPLE = 4.0;
     public static final String EDITAR_CRITERIO = "EDITAR_CRITERIO";
     public static final String FRAGMENT_EDITOR_CRITERIOS = "FRAGMENT_EDITOR_CRITERIOS";
     public static final String FRAGMENT_SETTINGS = "FRAGMENT_SETTINGS";
@@ -444,6 +446,7 @@ public class FuncionesPublicas {
                 assert tipoEstructura != null;
                 if (tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
                     Double sumatoriaEse = 0.0;
+
                     Integer divisorEse = 0;
                     Integer cantidadItems =0;
                     for (Ese unaEse : mAudit.getListaEses()) {
@@ -502,6 +505,8 @@ public class FuncionesPublicas {
                 if (mAudit != null && tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
                     Double sumatoriaEse = 0.0;
                     Integer divisorEse = 0;
+                    Integer sumaTotal=0;
+
 
                     for (Ese unaEse : mAudit.getListaEses()) {
 
@@ -526,13 +531,16 @@ public class FuncionesPublicas {
                         }
                         else{
 
-                            unaEse.setPuntajeEse((sumatoriaPreguntas/divisorPreguntas)*1.0);
+//                            unaEse.setPuntajeEse((sumatoriaPreguntas/divisorPreguntas)*1.0);
+                            unaEse.setPuntajeEse(sumatoriaPreguntas*1.0);
                             sumatoriaEse = sumatoriaEse + unaEse.getPuntajeEse();
+                            sumaTotal =sumaTotal+sumatoriaPreguntas;
                             divisorEse++;
                         }
                     }
                     //chequear esta linea
-                    mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/5.0);
+//                    mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/5.0);
+                    mAudit.setPuntajeFinal(sumaTotal*1.0);
                 }
             }
         });
@@ -549,6 +557,20 @@ public class FuncionesPublicas {
         }
         RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
                 .sort("fechaAuditoria", Sort.DESCENDING)
+                .findAll();
+        return resulta2;
+    }
+
+    public static RealmResults<Auditoria> traerAuditoriasOrdenadasRanking(Context context){
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+        }
+        RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
+                .sort("puntajeFinal", Sort.DESCENDING)
                 .findAll();
         return resulta2;
     }
@@ -655,7 +677,7 @@ public class FuncionesPublicas {
 
                                         if (origen.equals(MANAGE_AREAS)){
                                             FragmentManageAreas elFragment = (FragmentManageAreas) fragment;
-                                            elFragment.updateAdapter();
+                                            elFragment.updateAdapter(elFragment.getContext());
                                         }
                                         else if (origen.equals(SELECCION_AREAS)){
                                             FragmentSeleccionArea elFragment = (FragmentSeleccionArea) fragment;

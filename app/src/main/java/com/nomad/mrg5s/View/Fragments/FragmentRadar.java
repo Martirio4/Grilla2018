@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nomad.mrg5s.R;
+import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.Utils.RadarMarkerView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
@@ -42,6 +43,8 @@ public class FragmentRadar extends Fragment {
     public static final String  PUNJTAJE4="PUNTAJE4";
     public static final String  PUNJTAJE5="PUNTAJE5";
     public static final String  COMPLETO="COMPLETO";
+    public static final String  ESTRUCTURA="ESTRUCTURA";
+
 
 
     public static final String  AREA="AREA";
@@ -51,6 +54,7 @@ public class FragmentRadar extends Fragment {
     private Double punt3;
     private Double punt4;
     private Double punt5;
+    private String estructura;
     private Boolean completo;
 
 
@@ -76,6 +80,7 @@ public class FragmentRadar extends Fragment {
             punt5=unBundle.getDouble(PUNJTAJE5);
             areaAuditada = unBundle.getString(AREA);
             completo=unBundle.getBoolean(COMPLETO);
+            estructura=unBundle.getString(ESTRUCTURA);
         }
 
         if (punt1==9.9){
@@ -194,12 +199,20 @@ public class FragmentRadar extends Fragment {
         Float punto5= Float.parseFloat(punt5.toString());
 
 
-
-        entries1.add(new RadarEntry(punto1*20));
-        entries1.add(new RadarEntry(punto2*20));
-        entries1.add(new RadarEntry(punto3*20));
-        entries1.add(new RadarEntry(punto4*20));
-        entries1.add(new RadarEntry(punto5*20));
+        if (estructura.equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
+            entries1.add(new RadarEntry(punto1*20));
+            entries1.add(new RadarEntry(punto2*20));
+            entries1.add(new RadarEntry(punto3*20));
+            entries1.add(new RadarEntry(punto4*20));
+            entries1.add(new RadarEntry(punto5*20));
+        }
+        if (estructura.equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
+            entries1.add(new RadarEntry(punto1*20*4));
+            entries1.add(new RadarEntry(punto2*20*4));
+            entries1.add(new RadarEntry(punto3*20*4));
+            entries1.add(new RadarEntry(punto4*20*4));
+            entries1.add(new RadarEntry(punto5*20*4));
+        }
 
 
 //        TARGET

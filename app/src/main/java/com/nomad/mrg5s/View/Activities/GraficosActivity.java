@@ -672,29 +672,54 @@ public class GraficosActivity extends AppCompatActivity {
                 .findFirst();
         auditActual = laAudit;
 
-        if (laAudit != null) {
+        if (laAudit != null && laAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
             promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
             promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse();
             promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse();
             promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse();
             promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse();
 
-        FragmentRadar graficoFragment = new FragmentRadar();
-        Bundle bundle = new Bundle();
-        bundle.putDouble(FragmentRadar.PUNJTAJE1, promedioSeiri);
-        bundle.putDouble(FragmentRadar.PUNJTAJE2, promedioSeiton);
-        bundle.putDouble(FragmentRadar.PUNJTAJE3, promedioSeiso);
-        bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu);
-        bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke);
-        bundle.putString(FragmentRadar.AREA, laAudit.getAreaAuditada().getNombreArea());
-        bundle.putBoolean(FragmentRadar.COMPLETO, laAudit.getAuditEstaCerrada());
+            FragmentRadar graficoFragment = new FragmentRadar();
+            Bundle bundle = new Bundle();
+            bundle.putDouble(FragmentRadar.PUNJTAJE1, promedioSeiri);
+            bundle.putDouble(FragmentRadar.PUNJTAJE2, promedioSeiton);
+            bundle.putDouble(FragmentRadar.PUNJTAJE3, promedioSeiso);
+            bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu);
+            bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke);
+            bundle.putString(FragmentRadar.AREA, laAudit.getAreaAuditada().getNombreArea());
+            bundle.putBoolean(FragmentRadar.COMPLETO, laAudit.getAuditEstaCerrada());
 
-        graficoFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.contenedorGraficos, graficoFragment, FuncionesPublicas.FRAGMENT_RADAR);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+            graficoFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.contenedorGraficos, graficoFragment, FuncionesPublicas.FRAGMENT_RADAR);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+        if (laAudit != null && laAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)) {
+            promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
+            promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse();
+            promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse();
+            promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse();
+            promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse();
+
+            FragmentRadar graficoFragment = new FragmentRadar();
+            Bundle bundle = new Bundle();
+            bundle.putDouble(FragmentRadar.PUNJTAJE1, promedioSeiri/20);
+            bundle.putDouble(FragmentRadar.PUNJTAJE2, promedioSeiton/20);
+            bundle.putDouble(FragmentRadar.PUNJTAJE3, promedioSeiso/20);
+            bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu/20);
+            bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke/20);
+            bundle.putString(FragmentRadar.AREA, laAudit.getAreaAuditada().getNombreArea());
+            bundle.putBoolean(FragmentRadar.COMPLETO, laAudit.getAuditEstaCerrada());
+            bundle.putString(FragmentRadar.ESTRUCTURA, laAudit.getEstructuraAuditoria());
+
+            graficoFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.contenedorGraficos, graficoFragment, FuncionesPublicas.FRAGMENT_RADAR);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 
@@ -718,8 +743,14 @@ public class GraficosActivity extends AppCompatActivity {
                 .findFirst();
 
         if (laAudit != null) {
+            if (laAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)){
+                bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal());
+            }
+            else{
+                //100 es el puntaje maximo posible
+                bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal()/100);
+            }
 
-            bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal());
         }
 
         fragmentBarrasApiladas.setArguments(bundle);
@@ -856,7 +887,7 @@ public class GraficosActivity extends AppCompatActivity {
             //center align the cells' contents
             headerFormat.setAlignment(Alignment.CENTRE);
             headerFormat.setBackground(Colour.BLUE_GREY);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THICK);
+            headerFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
             newCell.setCellFormat(headerFormat);
         }
         if (headerCell.equals("subTotal")) {
@@ -889,7 +920,7 @@ public class GraficosActivity extends AppCompatActivity {
             //center align the cells' contents
             headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
             headerFormat.setWrap(true);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THICK);
+            headerFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
             headerFormat.setBackground(Colour.PALE_BLUE);
             newCell.setCellFormat(headerFormat);
         }
@@ -1435,6 +1466,10 @@ public class GraficosActivity extends AppCompatActivity {
 
         //SETEO LOS TITULOS DE LA HOJA
         try {
+            //CREO EL ENCABEZADO
+
+
+            //titulos de la grilla
             escribirCelda(columna, fila, "S", "titulo", laHoja);
             columna = columna + 1;
             escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), "titulo", laHoja);
@@ -1446,8 +1481,7 @@ public class GraficosActivity extends AppCompatActivity {
             escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), "titulo", laHoja);
             columna = columna + 1;
             escribirCelda(columna, fila, getResources().getString(R.string.titComentario), "titulo", laHoja);
-            columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titFotos), "titulo", laHoja);
+
             columna = 0;
             fila = 1;
 
@@ -1465,7 +1499,7 @@ public class GraficosActivity extends AppCompatActivity {
                 Integer cantPreguntasTotales = 0;
 
 
-                    //recorro las preguntas del item
+                    //recorro las preguntas de la ese
                     for (Pregunta unaPreg :
                             unaEse.getListaPreguntas()) {
 
@@ -1478,7 +1512,7 @@ public class GraficosActivity extends AppCompatActivity {
                         if (unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()!=0 && unaPreg.getPuntaje()!=9 ) {
                             escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), "textoNormalCentrado", laHoja);
                             columna++;
-                            unPuntaje = ((unaPreg.getPuntaje() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100);
+                            unPuntaje = ((unaPreg.getPuntaje() / FuncionesPublicas.MAXIMO_PUNTAJE_PREGUNTA_SIMPLE) * 100);
                         } else if(unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()==9) {
                             escribirCelda(columna, fila, "-", "textoNormalCentrado", laHoja);
                             columna++;
@@ -1502,8 +1536,6 @@ public class GraficosActivity extends AppCompatActivity {
 
                         columna++;
                         escribirCelda(columna, fila, unaPreg.getComentario(), "textoNormal", laHoja);
-                        columna++;
-                        escribirCelda(columna, fila, "", "textoNormal", laHoja);
                         columna = 1;
                         fila++;
                         cantPreguntasTotales++;
@@ -1518,13 +1550,13 @@ public class GraficosActivity extends AppCompatActivity {
                 laHoja.mergeCells(0, fila, 4, fila);
 
                 if (unaEse.getPuntajeEse()!=9.9) {
-                    Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100;
+                    Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE_ESE_SIMPLE) * 100;
                     String puntEseStr = df.format(puntEseDouble);
                     escribirCelda(5, fila, puntEseStr + "%", "subTotalEse", laHoja);
                 } else {
                     escribirCelda(5, fila, "-", "subTotalEse", laHoja);
                 }
-                laHoja.mergeCells(5, fila, 8, fila);
+              //  laHoja.mergeCells(5, fila, 6, fila);
                 columna = 0;
                 fila++;
             }
@@ -1533,14 +1565,14 @@ public class GraficosActivity extends AppCompatActivity {
             laHoja.mergeCells(0, fila, 4, fila);
 
             if (mAudit.getPuntajeFinal()!=9.9) {
-                Double puntFinalDouble = mAudit.getPuntajeFinal() * 100.00;
+                Double puntFinalDouble = mAudit.getPuntajeFinal();
                 String puntFinal = df.format(puntFinalDouble);
                 escribirCelda(5, fila, puntFinal + "%", "totalAudit", laHoja);
             } else {
                 escribirCelda(5, fila,  "-", "totalAudit", laHoja);
             }
 
-            laHoja.mergeCells(5, fila, 8, fila);
+           // laHoja.mergeCells(5, fila, 6, fila);
             columna = 0;
             fila = 0;
 

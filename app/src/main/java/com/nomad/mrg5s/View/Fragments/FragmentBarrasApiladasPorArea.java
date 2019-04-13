@@ -81,7 +81,14 @@ public class FragmentBarrasApiladasPorArea extends Fragment {
 
         TextView tituloFragment= view.findViewById(R.id.tituloAreaHistorico);
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(view.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         Area unArea = realm.where(Area.class)
                 .equalTo("idArea",idArea)
                 .findFirst();
@@ -141,7 +148,12 @@ public class FragmentBarrasApiladasPorArea extends Fragment {
         listaFechas=new ArrayList<>();
         for (Auditoria unAudit:todasAudits
                 ) {
-            double puntDouble=unAudit.getPuntajeFinal();
+            double puntDouble;
+            if (unAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
+                puntDouble = unAudit.getPuntajeFinal();
+            } else {
+                puntDouble=unAudit.getPuntajeFinal()/100;
+            }
             float punFloat=(float)puntDouble;
 
             punFloat=(Math.round(punFloat*100));
