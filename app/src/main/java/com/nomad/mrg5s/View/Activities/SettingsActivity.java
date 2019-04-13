@@ -102,8 +102,15 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
                 .input(this.getResources().getString(R.string.areaName),"", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, final CharSequence input) {
-                        FuncionesPublicas.modificarNombreArea(unArea,input.toString());
-                        Realm realm =Realm.getDefaultInstance();
+                        FuncionesPublicas.modificarNombreArea(unArea,input.toString(),SettingsActivity.this);
+                        Realm realm = null;
+                        try {
+                            realm = Realm.getDefaultInstance();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Realm.init(SettingsActivity.this.getApplicationContext());
+                            realm = Realm.getDefaultInstance();
+                        }
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -130,7 +137,14 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
                                         .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                                             @Override
                                             public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
-                                                Realm realm =Realm.getDefaultInstance();
+                                                Realm realm = null;
+                                                try {
+                                                    realm = Realm.getDefaultInstance();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                    Realm.init(SettingsActivity.this.getApplicationContext());
+                                                    realm = Realm.getDefaultInstance();
+                                                }
                                                 realm.executeTransaction(new Realm.Transaction() {
                                                     @Override
                                                     public void execute(@NonNull Realm realm) {
@@ -192,7 +206,14 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
     //este metodo anda bien?
     public void borrarDefinitivamente(final Area unArea){
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(SettingsActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
 
         RealmResults<Auditoria> result2 = realm.where(Auditoria.class)
                 .equalTo("areaAuditada.idArea", unArea.getIdArea())
@@ -200,7 +221,7 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
 
         for (Auditoria audit:result2
                 ) {
-                FuncionesPublicas.borrarAuditoriaSeleccionada(audit.getIdAuditoria());
+                FuncionesPublicas.borrarAuditoriaSeleccionada(audit.getIdAuditoria(),SettingsActivity.this);
         }
 
         realm.executeTransaction(new Realm.Transaction() {

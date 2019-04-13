@@ -39,7 +39,7 @@ public class FragmentMyAudits extends Fragment {
     public void updateAdapter() {
         listaAuditorias=new RealmList<>();
         adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
-        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas());
+        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas(getContext()));
         adapterAudits.setListaAuditsOriginales(listaAuditorias);
         adapterAudits.notifyDataSetChanged();
     }
@@ -58,7 +58,7 @@ public class FragmentMyAudits extends Fragment {
         String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         listaAuditorias=new RealmList<>();
-        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas());
+        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas(getContext()));
         recyclerAreas= view.findViewById(R.id.recyclerArea);
         adapterAudits= new AdapterAuditorias();
         adapterAudits.setContext(getContext());

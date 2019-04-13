@@ -103,7 +103,7 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     listaAuditsOriginales.remove(position);
-                                    if (FuncionesPublicas.borrarAuditoriaSeleccionada(unAuditoria.getIdAuditoria())) {
+                                    if (FuncionesPublicas.borrarAuditoriaSeleccionada(unAuditoria.getIdAuditoria(),context)) {
                                         Toast.makeText(context, context.getString(R.string.auditEliminada), Toast.LENGTH_SHORT).show();
                                     }
                                     AdapterAuditorias.this.notifyDataSetChanged();

@@ -110,8 +110,15 @@ public class FuncionesPublicas {
         return false;
     }
 
-    public static Boolean borrarAuditoriaSeleccionada(final String idAudit) {
-        Realm realm = Realm.getDefaultInstance();
+    public static Boolean borrarAuditoriaSeleccionada(final String idAudit, Context context) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
 
        realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -221,8 +228,15 @@ public class FuncionesPublicas {
         return sdf.format(fecha);
     }
 
-    public static Boolean completoTodosLosPuntos(final String idAudit) {
-        Realm realm = Realm.getDefaultInstance();
+    public static Boolean completoTodosLosPuntos(final String idAudit, Context context) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Pregunta> result2 = realm.where(Pregunta.class)
                 .equalTo("idAudit", idAudit)
                 .findAll();
@@ -278,7 +292,14 @@ public class FuncionesPublicas {
 
 
     public static void agregarItem(final String idCuestionario, final Item unItem, final AdapterItems adapterItems){
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(adapterItems.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm bgRealm) {
@@ -312,7 +333,14 @@ public class FuncionesPublicas {
 
 
     public static void cambiarNombreCuestionario(final Cuestionario unCuestionario, final String nuevoTexto, final AdapterCuestionario adapterCuestionario) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(adapterCuestionario.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -334,7 +362,14 @@ public class FuncionesPublicas {
 
 
     public static void cambiarTextoArea(final Area unArea, final String s, final Context context) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -350,7 +385,14 @@ public class FuncionesPublicas {
     }
 
     public static void cambiarTextoCriterio(final Criterio unCriterio, final String s, final Context context) {
-        Realm realm =Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm   .executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -365,68 +407,27 @@ public class FuncionesPublicas {
                 }
             }
         });
-
-
     }
 
-    public static boolean hayEspacioEnMemoria() {
+    private static boolean hayEspacioEnMemoria() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         long bytesAvailable;
         bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
         long megAvailable = bytesAvailable / (1024 * 1024);
-
         return megAvailable > 15.0;
     }
 
 
-    public static class Subidor extends AsyncTask< String, Void, Void> {
+    public static void calcularPuntajesAuditoria(final String idAudit, Context context) {
 
-        @Override
-        protected Void doInBackground(String... args) {
-            String laAudit=args[0];
-            subirAuditFirebase(laAudit);
-            return null;
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
         }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-    }
-
-    private static void subirAuditFirebase( String idAudit) {
-        //TRAIGO LA AUDITORIA
-        Realm realm = Realm.getDefaultInstance();
-        Auditoria mAudit= realm.where(Auditoria.class)
-                .equalTo("idAuditoria", idAudit)
-                .findFirst();
-        //BUSCO LA BASE DE DATOS
-        FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
-        DatabaseReference reference=mdatabase.getReference().child("auditorias").child(idAudit);
-
-        reference.child("id").setValue(idAudit);
-        reference.child("fecha").setValue(FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(),"largo"));
-        reference.child("usuario").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        reference.child("idarea").setValue(mAudit.getAreaAuditada().getIdArea());
-        reference.child("nombrearea").setValue(mAudit.getAreaAuditada().getNombreArea());
-        reference.child("punt1S").setValue(mAudit.getListaEses().get(0).getPuntajeEse());
-        reference.child("punt2S").setValue(mAudit.getListaEses().get(1).getPuntajeEse());
-        reference.child("punt3S").setValue(mAudit.getListaEses().get(2).getPuntajeEse());
-        reference.child("punt4S").setValue(mAudit.getListaEses().get(3).getPuntajeEse());
-        reference.child("punt5S").setValue(mAudit.getListaEses().get(4).getPuntajeEse());
-        reference.child("puntajeFinal").setValue(mAudit.getPuntajeFinal());
-
-
-    }
-    public static void calcularPuntajesAuditoria(final String idAudit) {
-
-        Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
@@ -538,16 +539,28 @@ public class FuncionesPublicas {
     }
 
 
-    public static RealmResults<Auditoria> traerAuditoriasOrdenadas(){
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmResults<Auditoria> traerAuditoriasOrdenadas(Context context){
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+        }
         RealmResults<Auditoria> resulta2 = realm.where(Auditoria.class)
                 .sort("fechaAuditoria", Sort.DESCENDING)
                 .findAll();
         return resulta2;
     }
     
-    public static void modificarNombreArea(final Area unArea, final String s){
-      Realm realm = Realm.getDefaultInstance();
+    public static void modificarNombreArea(final Area unArea, final String s,Context context){
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
       realm.executeTransaction(new Realm.Transaction() {
           @Override
           public void execute(Realm realm) {
@@ -581,7 +594,13 @@ public class FuncionesPublicas {
 
 
                         //guardo nueva area en Realm
-                        Realm realm = Realm.getDefaultInstance();
+                        Realm realm = null;
+                        try {
+                            realm = Realm.getDefaultInstance();
+                        } catch (Exception e) {
+                            Realm.init(fragment.getContext().getApplicationContext());
+                            realm=Realm.getDefaultInstance();
+                        }
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -611,7 +630,13 @@ public class FuncionesPublicas {
                                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                                     @Override
                                     public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
-                                        Realm realm =Realm.getDefaultInstance();
+                                        Realm realm = null;
+                                        try {
+                                            realm = Realm.getDefaultInstance();
+                                        } catch (Exception e) {
+                                            Realm.init(fragment.getContext().getApplicationContext());
+                                            realm=Realm.getDefaultInstance();
+                                        }
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(@NonNull Realm realm) {
@@ -634,7 +659,7 @@ public class FuncionesPublicas {
                                         }
                                         else if (origen.equals(SELECCION_AREAS)){
                                             FragmentSeleccionArea elFragment = (FragmentSeleccionArea) fragment;
-                                            elFragment.updateAdapter();
+                                            elFragment.updateAdapter(view.getContext());
                                         }
                                         else{
                                             //do nothing
@@ -657,9 +682,16 @@ public class FuncionesPublicas {
 
     }
 
-    public static List<String> traerIdEses(String origen, String idAudit){
+    public static List<String> traerIdEses(String origen, String idAudit, Context context){
         List<String> laLista=new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm= Realm.getDefaultInstance();
+        }
         RealmResults<Ese>listaEses;
 
         switch (origen){
@@ -707,8 +739,6 @@ public class FuncionesPublicas {
         else{
             return false;
         }
-
-
     }
 
 }

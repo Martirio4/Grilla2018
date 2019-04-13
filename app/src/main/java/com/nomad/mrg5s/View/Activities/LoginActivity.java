@@ -284,7 +284,14 @@ public class LoginActivity extends AppCompatActivity {
                                     .toLowerCase());
                             nuevoUsuario.setPass(editPass.getText().toString());
                             guardarUsuarioDatabase();
-                            Realm realm = Realm.getDefaultInstance();
+                            Realm realm = null;
+                            try {
+                                realm = Realm.getDefaultInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Realm.init(LoginActivity.this.getApplicationContext());
+                                realm = Realm.getDefaultInstance();
+                            }
                             RealmResults<Usuario> mResults = realm.where(Usuario.class)
                                     .equalTo("mail", email)
                                     .findAll();

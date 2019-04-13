@@ -1,6 +1,7 @@
 package com.nomad.mrg5s.View.Adapter;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -26,7 +27,7 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
     private List<String> listaDeIdEses;
     private String idEstructura;
     //CONSTRUNCTOR PARA EDITOR DE CUESTIONARIOS
-    public AdapterPagerEses(FragmentManager fm, String origen, String idCuestionario, List<String> strings) {
+    public AdapterPagerEses(FragmentManager fm, String origen, String idCuestionario, List<String> strings, Context context) {
         super(fm);
         this.listaFragments = listaFragments;
         this.origen = origen;
@@ -46,7 +47,14 @@ public class AdapterPagerEses extends FragmentStatePagerAdapter {
                 }
             break;
             default:
-                Realm realm = Realm.getDefaultInstance();
+                Realm realm = null;
+                try {
+                    realm = Realm.getDefaultInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Realm.init(context.getApplicationContext());
+                    realm=Realm.getDefaultInstance();
+                }
                 Auditoria mAudit=realm.where(Auditoria.class)
                         .equalTo("idAuditoria", idCuestionario)
                         .findFirst();

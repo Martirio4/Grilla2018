@@ -26,7 +26,14 @@ public class ActivityZoom extends AppCompatActivity implements FragmentZoom.Zoom
             Bundle bundle=intent.getExtras();
             idFoto=bundle.getString(IDFOTO);
 
-            Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityZoom.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
             Foto mFoto= realm.where(Foto.class)
                     .equalTo("idFoto",idFoto)
                     .findFirst();

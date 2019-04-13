@@ -174,7 +174,14 @@ public class GraficosActivity extends AppCompatActivity {
         fabEditarAuditoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Realm realm = Realm.getDefaultInstance();
+                Realm realm = null;
+                try {
+                    realm = Realm.getDefaultInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Realm.init(GraficosActivity.this.getApplicationContext());
+                    realm = Realm.getDefaultInstance();
+                }
                 Auditoria mAudit = realm.where(Auditoria.class)
                         .equalTo("idAuditoria", idAudit)
                         .findFirst();
@@ -224,7 +231,14 @@ public class GraficosActivity extends AppCompatActivity {
 
         //SI LA AUDITORIA ESTA CERRADA HABILITO BOTON REVISAR SI LA AUDIT ESTA INCOMPLETA HBILITO BOTON EDITAR
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(GraficosActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         Auditoria mAudit = realm.where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();
@@ -328,7 +342,7 @@ public class GraficosActivity extends AppCompatActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (FuncionesPublicas.borrarAuditoriaSeleccionada(idAudit)) {
+                                if (FuncionesPublicas.borrarAuditoriaSeleccionada(idAudit,GraficosActivity.this)) {
                                     Intent intent = new Intent(GraficosActivity.this, ActivityMyAudits.class);
                                     startActivity(intent);
                                     GraficosActivity.this.finish();
@@ -456,7 +470,14 @@ public class GraficosActivity extends AppCompatActivity {
     }
 
     private void chetearPregunta(){
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(GraficosActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -636,9 +657,16 @@ public class GraficosActivity extends AppCompatActivity {
 
     public void cargarGraficoRadar() {
 
-        FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
+        FuncionesPublicas.calcularPuntajesAuditoria(idAudit, GraficosActivity.this);
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(GraficosActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         Auditoria laAudit = realm.where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();
@@ -677,7 +705,14 @@ public class GraficosActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(GraficosActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         Auditoria laAudit = realm.where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();
@@ -974,7 +1009,14 @@ public class GraficosActivity extends AppCompatActivity {
     public void crearExcel_estructurado() {
         Integer fila = 0;
         Integer columna = 0;
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(GraficosActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         Auditoria mAudit = realm.where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();
@@ -1320,7 +1362,14 @@ public class GraficosActivity extends AppCompatActivity {
     public void crearExcel_simple() {
         Integer fila = 0;
         Integer columna = 0;
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(GraficosActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         Auditoria mAudit = realm.where(Auditoria.class)
                 .equalTo("idAuditoria", idAudit)
                 .findFirst();

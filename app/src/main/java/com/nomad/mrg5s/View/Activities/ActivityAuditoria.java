@@ -395,7 +395,7 @@ public class ActivityAuditoria extends AppCompatActivity implements FragmentPreg
 
     @Override
     public void actualizarPuntaje(String idAudit) {
-        FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
+        FuncionesPublicas.calcularPuntajesAuditoria(idAudit,ActivityAuditoria.this);
     }
 
     @Override

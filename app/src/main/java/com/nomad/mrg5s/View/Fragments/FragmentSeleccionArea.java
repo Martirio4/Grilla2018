@@ -83,9 +83,16 @@ public class FragmentSeleccionArea extends Fragment {
         textoSinAreas =view.findViewById(R.id.textoSinAreas);
         //String usuario= FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        tengoQueMostrarTextoSinAreas();
+        tengoQueMostrarTextoSinAreas(view.getContext());
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(view.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Area> result2 = realm.where(Area.class)
                 //las areas son de todos los usuarios//    .equalTo("usuario", usuario)
                 .findAll();
@@ -212,8 +219,15 @@ public class FragmentSeleccionArea extends Fragment {
         return view;
     }
 
-    private void tengoQueMostrarTextoSinAreas() {
-        Realm realm = Realm.getDefaultInstance();
+    private void tengoQueMostrarTextoSinAreas(Context context) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Area> result2 = realm.where(Area.class)
                 //las areas son de todos los usuarios//    .equalTo("usuario", usuario)
                 .findAll();
@@ -314,9 +328,16 @@ public class FragmentSeleccionArea extends Fragment {
         }
     }
 
-    public void updateAdapter() {
+    public void updateAdapter(Context context) {
         //String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Realm realm= Realm.getDefaultInstance();
+        Realm realm= null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Area> result3 = realm.where(Area.class)
                 //las areas son de todos los usuarios//   .equalTo("usuario",usuario)
                 .findAll();

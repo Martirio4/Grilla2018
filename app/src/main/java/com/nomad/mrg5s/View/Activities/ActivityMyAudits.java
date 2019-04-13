@@ -123,7 +123,14 @@ public class ActivityMyAudits extends AppCompatActivity implements FragmentRanki
 
     @Override
     public void graficarArea(Area unArea, String elOrigen) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(ActivityMyAudits.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         RealmResults<Auditoria> todasAudits = realm.where(Auditoria.class)
                 .equalTo("areaAuditada.idArea",unArea.getIdArea())
                 .sort("fechaAuditoria")

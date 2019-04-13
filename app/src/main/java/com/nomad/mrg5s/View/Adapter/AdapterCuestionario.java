@@ -44,6 +44,10 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
         this.listenerLong = unLongListener;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
     }
@@ -81,7 +85,7 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Cuestionario unCuestionario = listaCuestionariosOriginales.get(position);
         CuestionarioViewHolder CuestionarioViewHolder = (CuestionarioViewHolder) holder;
-        CuestionarioViewHolder.cargarCuestionario(unCuestionario);
+        CuestionarioViewHolder.cargarCuestionario(unCuestionario,context);
 
         FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = unaActivity.getSupportFragmentManager();
@@ -176,19 +180,24 @@ public class AdapterCuestionario extends RecyclerView.Adapter implements View.On
 
         }
 
-        public void cargarCuestionario(Cuestionario unCuestionario) {
+        public void cargarCuestionario(Cuestionario unCuestionario,Context context) {
 
             textView.setText(unCuestionario.getNombreCuestionario());
 
 
-
-            Realm realm = Realm.getDefaultInstance();
+            Realm realm = null;
+            try {
+                realm = Realm.getDefaultInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Realm.init(context.getApplicationContext());
+                realm=Realm.getDefaultInstance();
+            }
             RealmResults<Cuestionario> losCuestionarios =realm.where(Cuestionario.class)
                     .equalTo("idCuestionario",unCuestionario.getIdCuestionario())
                     .findAll();
 
             if (losCuestionarios !=null){
-
                 textUltima.setText("");
             }
 

@@ -90,7 +90,14 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
 
     @Override
     public void comenzarAuditoria(Area unArea) {
-        Realm realm=Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(LandingActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         Cuestionario elCuestionario = realm.where(Cuestionario.class)
                 .equalTo("idCuestionario", unArea.getIdCuestionario())
                 .findFirst();
@@ -104,7 +111,14 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
     }
 
     private void pedirCuestionario(final Area unArea) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(LandingActivity.this.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
         RealmResults<Cuestionario> losCuestionarios = realm.where(Cuestionario.class)
                 .findAll();
 
@@ -125,7 +139,14 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
-                        Realm realm =Realm.getDefaultInstance();
+                        Realm realm = null;
+                        try {
+                            realm = Realm.getDefaultInstance();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Realm.init(LandingActivity.this.getApplicationContext());
+                            realm = Realm.getDefaultInstance();
+                        }
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(@NonNull Realm realm) {

@@ -30,7 +30,7 @@ public class FragmentRanking extends Fragment {
     public void updateAdapter() {
         listaAuditorias=new RealmList<>();
         adapterAudits.setListaAuditsOriginales(new RealmList<Auditoria>());
-        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas());
+        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas(getContext()));
         adapterAudits.setListaAuditsOriginales(listaAuditorias);
         adapterAudits.notifyDataSetChanged();
 
@@ -51,7 +51,7 @@ public class FragmentRanking extends Fragment {
         View view= inflater.inflate(R.layout.fragment_my_audits, container, false);
 
         listaAuditorias=new RealmList<>();
-        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas());
+        listaAuditorias.addAll(FuncionesPublicas.traerAuditoriasOrdenadas(getContext()));
         recyclerAreas= view.findViewById(R.id.recyclerArea);
         adapterAudits= new AdapterAuditorias();
         adapterAudits.setContext(getContext());

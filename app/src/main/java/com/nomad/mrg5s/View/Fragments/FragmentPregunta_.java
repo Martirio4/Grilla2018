@@ -191,7 +191,14 @@ public class FragmentPregunta_ extends Fragment {
         linear=view.findViewById(R.id.vistaCentral);
 
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(view.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
 //        AGREGO TIULO DE ESE
         Ese laEseTitulo=realm.where(Ese.class)
                 .equalTo("idAudit",idAudit)
@@ -276,10 +283,10 @@ public class FragmentPregunta_ extends Fragment {
                     borrarTodosApretados();
                     boton1.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
                     if (criterio1.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9);
+                        registrarPuntaje(9,view.getContext());
                     }
                     else{
-                        registrarPuntaje(1);
+                        registrarPuntaje(1,view.getContext());
                     }
                 }
             });
@@ -289,10 +296,10 @@ public class FragmentPregunta_ extends Fragment {
                     borrarTodosApretados();
                     boton2.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
                     if (criterio2.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9);
+                        registrarPuntaje(9,view.getContext());
                     }
                     else{
-                        registrarPuntaje(2);
+                        registrarPuntaje(2,view.getContext());
                     }
                 }
             });
@@ -302,10 +309,10 @@ public class FragmentPregunta_ extends Fragment {
                     borrarTodosApretados();
                     boton3.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
                     if (criterio3.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9);
+                        registrarPuntaje(9,view.getContext());
                     }
                     else{
-                        registrarPuntaje(3);
+                        registrarPuntaje(3,view.getContext());
                     }
                 }
             });
@@ -315,10 +322,10 @@ public class FragmentPregunta_ extends Fragment {
                     borrarTodosApretados();
                     boton4.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.boton_apretado));
                     if (criterio4.getText().toString().equals(FuncionesPublicas.N_A)){
-                        registrarPuntaje(9);
+                        registrarPuntaje(9,view.getContext());
                     }
                     else{
-                        registrarPuntaje(4);
+                        registrarPuntaje(4,view.getContext());
                     }
                 }
             });
@@ -341,7 +348,7 @@ public class FragmentPregunta_ extends Fragment {
             recyclerFotos.setLayoutManager(layoutManager);
             adapterFotos= new AdapterFotos();
             adapterFotos.setContext(getContext());
-            listaFotos=cargarFotos();
+            listaFotos=cargarFotos(view.getContext());
             adapterFotos.setListaFotosOriginales(listaFotos);
             recyclerFotos.setAdapter(adapterFotos);
 
@@ -363,7 +370,14 @@ public class FragmentPregunta_ extends Fragment {
                     RealmList<Foto> unaLista=adapterFotos.getListaFotosOriginales();
                     final Foto unaFoto=unaLista.get(posicion);
 
-                    Realm realm=Realm.getDefaultInstance();
+                    Realm realm = null;
+                    try {
+                        realm = Realm.getDefaultInstance();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Realm.init(view.getContext().getApplicationContext());
+                        realm=Realm.getDefaultInstance();
+                    }
                     Auditoria mAudit= null;
                     if (unaFoto != null) {
                         mAudit = realm.where(Auditoria.class)
@@ -420,7 +434,7 @@ public class FragmentPregunta_ extends Fragment {
             adapterFotosViejas.setContext(getContext());
 
 //      ESTE METODO LE CARGA LAS FOTOS VIEJAS Y EL COMENTARIO GRAL
-            cargarFotosViejas();
+            cargarFotosViejas(view.getContext());
             recyclerFotosViejas.setAdapter(adapterFotosViejas);
             View.OnClickListener listenerZoomViejo=new View.OnClickListener() {
                 @Override
@@ -485,7 +499,7 @@ public class FragmentPregunta_ extends Fragment {
             fabComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    crearDialogoCommentGeneral();
+                    crearDialogoCommentGeneral(view.getContext());
 
                     fabMenu.close(true);
                 }
@@ -550,7 +564,7 @@ public class FragmentPregunta_ extends Fragment {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    FuncionesPublicas.borrarAuditoriaSeleccionada(ActivityAuditoria.idAudit);
+                                    FuncionesPublicas.borrarAuditoriaSeleccionada(ActivityAuditoria.idAudit,getContext());
                                     //aca lo que pasa si voy para atras
 
                                     avisable.salirDeAca();
@@ -659,9 +673,16 @@ public class FragmentPregunta_ extends Fragment {
         return view;
     }
 
-    private void registrarPuntaje(final int i) {
+    private void registrarPuntaje(final int i,Context context) {
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -683,11 +704,18 @@ public class FragmentPregunta_ extends Fragment {
         boton4.setBackground(ContextCompat.getDrawable(boton1.getContext(),R.drawable.boton_suelto));
     }
 
-    private void cargarFotosViejas() {
+    private void cargarFotosViejas(Context context) {
         RealmList<Foto>listaFotosViejas=new RealmList<>();
         Pregunta laPreguntaVieja;
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         String idArea=null;
         Integer ordenPregunta=0;
         Integer ordenItem=0;
@@ -849,7 +877,7 @@ public class FragmentPregunta_ extends Fragment {
 
     private void corroborarFinalizacionAuditoria(String idAudit) {
 
-        if (FuncionesPublicas.completoTodosLosPuntos(idAudit)){
+        if (FuncionesPublicas.completoTodosLosPuntos(idAudit,getContext())){
             avisable.cerrarAuditoria();
             avisable.actualizarPuntaje(idAudit);
             //avisable.cargarAuditoriaEnFirebase(idAudit);
@@ -929,7 +957,14 @@ public class FragmentPregunta_ extends Fragment {
                             unaFoto.setIdAudit(idAudit);
                             unaFoto.setIdPregunta(idPregunta);
 
-                            Realm realm = Realm.getDefaultInstance();
+                            Realm realm = null;
+                            try {
+                                realm = Realm.getDefaultInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Realm.init(getContext().getApplicationContext());
+                                realm=Realm.getDefaultInstance();
+                            }
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(@NonNull Realm realm) {
@@ -950,7 +985,7 @@ public class FragmentPregunta_ extends Fragment {
                                     //posible bug dejar esto adentro
                                 }
                             });
-                            crearDialogoParaModificarComentario(unaFoto);
+                            crearDialogoParaModificarComentario(unaFoto,getContext());
                             listaFotos.add(unaFoto);
                             evidenciaNueva.setVisibility(View.VISIBLE);
                             adapterFotos.notifyDataSetChanged();
@@ -994,10 +1029,17 @@ public class FragmentPregunta_ extends Fragment {
 
     }
 
-    public RealmList<Foto> cargarFotos(){
+    public RealmList<Foto> cargarFotos(Context context){
         RealmList<Foto> unaLista= new RealmList<>();
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         Pregunta preg=realm.where(Pregunta.class)
                 .equalTo("idAudit", idAudit)
                 .equalTo("idPregunta",idPregunta)
@@ -1021,9 +1063,9 @@ public class FragmentPregunta_ extends Fragment {
     }
 
 
-    public void crearDialogoParaModificarComentario(final Foto laFotoParaComentar){
+    public void crearDialogoParaModificarComentario(final Foto laFotoParaComentar, final Context context){
 
-        new MaterialDialog.Builder(getContext())
+        new MaterialDialog.Builder(context)
                 .title(getResources().getString(R.string.agregarComentario))
                 .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                 .backgroundColor(ContextCompat.getColor(getContext(), R.color.tile1))
@@ -1035,7 +1077,14 @@ public class FragmentPregunta_ extends Fragment {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, final CharSequence input) {
 
-                        Realm realm= Realm.getDefaultInstance();
+                        Realm realm = null;
+                        try {
+                            realm = Realm.getDefaultInstance();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Realm.init(context.getApplicationContext());
+                            realm=Realm.getDefaultInstance();
+                        }
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -1054,7 +1103,7 @@ public class FragmentPregunta_ extends Fragment {
                 }).show();
     }
 
-    public void crearDialogoCommentGeneral(){
+    public void crearDialogoCommentGeneral(Context context){
         new MaterialDialog.Builder(getContext())
                 .title(getResources().getString(R.string.agregarComentario))
                 .contentColor(ContextCompat.getColor(getContext(), R.color.primary_text))
@@ -1077,7 +1126,14 @@ public class FragmentPregunta_ extends Fragment {
                             textViewCommentNuevo.setVisibility(View.GONE);
                         }
 
-                        Realm realm= Realm.getDefaultInstance();
+                        Realm realm = null;
+                        try {
+                            realm = Realm.getDefaultInstance();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Realm.init(getContext().getApplicationContext());
+                            realm=Realm.getDefaultInstance();
+                        }
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(@NonNull Realm realm) {

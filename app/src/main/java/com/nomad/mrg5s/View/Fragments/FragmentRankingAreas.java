@@ -47,7 +47,14 @@ public class FragmentRankingAreas extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_my_audits, container, false);
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(view.getContext().getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Area> result2=realm.where(Area.class)
                 .findAll();
 

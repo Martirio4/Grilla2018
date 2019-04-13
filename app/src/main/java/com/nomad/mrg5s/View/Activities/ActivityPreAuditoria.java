@@ -79,7 +79,14 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
             //      INSTANCIO LA AUDITORIA Y LE CARGO EL AREA
 
-            Realm realm = Realm.getDefaultInstance();
+            Realm realm = null;
+            try {
+                realm = Realm.getDefaultInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Realm.init(ActivityPreAuditoria.this.getApplicationContext());
+                realm = Realm.getDefaultInstance();
+            }
             Area elArea=realm.where(Area.class)
                     .equalTo("idArea",idArea)
                     .findFirst();
@@ -131,13 +138,13 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
         pager=findViewById(R.id.viewPagerPreAuditoria);
 
         if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA)) {
-            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idAudit));
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idAudit,ActivityPreAuditoria.this),ActivityPreAuditoria.this);
         }
         if (origen.equals(FuncionesPublicas.EDITAR_CUESTIONARIO)) {
-            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idCuestionario));
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idCuestionario, FuncionesPublicas.traerIdEses(origen,idCuestionario,ActivityPreAuditoria.this),ActivityPreAuditoria.this);
         }
         else{
-            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idAudit, FuncionesPublicas.traerIdEses(origen,idAudit));
+            adapterPager = new AdapterPagerEses(getSupportFragmentManager(),origen, idAudit, FuncionesPublicas.traerIdEses(origen,idAudit,ActivityPreAuditoria.this),ActivityPreAuditoria.this);
         }
         adapterPager.setUnaListaTitulos(controllerDatos.traerEses());
         pager.setAdapter(adapterPager);
@@ -306,7 +313,7 @@ public class ActivityPreAuditoria extends AppCompatActivity implements FragmentP
 
     @Override
     public void actualizarPuntaje(String idAudit) {
-        FuncionesPublicas.calcularPuntajesAuditoria(idAudit);
+        FuncionesPublicas.calcularPuntajesAuditoria(idAudit,ActivityPreAuditoria.this);
     }
 
     @Override

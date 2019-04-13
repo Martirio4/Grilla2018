@@ -80,7 +80,14 @@ public class FragmentPreAudit extends Fragment {
             origen = bundle.getString(ORIGEN);
             idCuestionario = bundle.getString(IDCUESTIONARIO);
 
-            Realm realm= Realm.getDefaultInstance();
+            Realm realm= null;
+            try {
+                realm = Realm.getDefaultInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Realm.init(view.getContext().getApplicationContext());
+                realm=Realm.getDefaultInstance();
+            }
             Cuestionario elCuestionario = realm.where(Cuestionario.class)
                 .equalTo("idCuestionario",idCuestionario)
                 .findFirst();
@@ -144,23 +151,30 @@ public class FragmentPreAudit extends Fragment {
         recyclerPreAudit.setLayoutManager(linearLayoutManager);
 
 //      INSTANCIO EL ADAPTER SEGUN CORRESPONDA Y LE CARGO SU SET DE DATOS Y SU LISTENER
-        instanciarAdapter_CargarDatos_CargarListener();
+        instanciarAdapter_CargarDatos_CargarListener(view.getContext());
         return view;
     }
 
-    private void instanciarAdapter_CargarDatos_CargarListener() {
+    private void instanciarAdapter_CargarDatos_CargarListener(Context context) {
         switch (estructuraCuestionario){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
-                popularRecyclerItems();
+                popularRecyclerItems(context);
                 break;
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
-                popularRecyclerPreguntas();
+                popularRecyclerPreguntas(context);
                 break;
         }
     }
 
-    private void popularRecyclerItems() {
-        Realm realm = Realm.getDefaultInstance();
+    private void popularRecyclerItems(Context context) {
+        Realm realm= null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmList<Item> listaItemsOriginales = new RealmList<>();
 
         adapterItems = new AdapterItems(getContext());
@@ -203,8 +217,15 @@ public class FragmentPreAudit extends Fragment {
         adapterItems.notifyDataSetChanged();
 
     }
-    private void popularRecyclerPreguntas() {
-        Realm realm = Realm.getDefaultInstance();
+    private void popularRecyclerPreguntas(Context context) {
+        Realm realm= null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmList<Pregunta> listaPreguntasOriginales = new RealmList<>();
 
          //si el item pertenece a la ese, loo agrego a la lista
@@ -280,10 +301,10 @@ public class FragmentPreAudit extends Fragment {
     public void onResume() {
         switch (estructuraCuestionario){
             case FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA:
-                popularRecyclerItems();
+                popularRecyclerItems(getContext());
                 break;
             case FuncionesPublicas.ESTRUCTURA_SIMPLE:
-                popularRecyclerPreguntas();
+                popularRecyclerPreguntas(getContext());
                 break;
             default:
                 break;
@@ -293,7 +314,7 @@ public class FragmentPreAudit extends Fragment {
 
     private void corroborarFinalizacionAuditoria(final String idAudit) {
 
-        if (FuncionesPublicas.completoTodosLosPuntos(idAudit)) {
+        if (FuncionesPublicas.completoTodosLosPuntos(idAudit,getContext())) {
             auditable.cerrarAuditoria();
             auditable.actualizarPuntaje(idAudit);
             //auditable.cargarAuditoriaEnFirebase(idAudit);
