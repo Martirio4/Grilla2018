@@ -271,7 +271,6 @@
 
 
     <LinearLayout
-        android:id="@+id/linearAudit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -290,6 +289,7 @@
             app:fab_label="@string/saveAudit" />
 
         <TextView
+            android:visibility="gone"
             android:textColor="@color/primary_text"
             android:id="@+id/textoFabVolver"
             android:layout_width="wrap_content"

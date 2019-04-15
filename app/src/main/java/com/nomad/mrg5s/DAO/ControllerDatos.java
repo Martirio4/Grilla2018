@@ -294,56 +294,7 @@ public class ControllerDatos {
     }
 
 
-    public void crearCuestionariosDefault(final String nombreArea) {
-        //region CREACION CUESTIONARIO SIMPLE
-        Realm nBgRealm = Realm.getDefaultInstance();
 
-        nBgRealm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class, FuncionesPublicas.IDCUESTIONARIOS_DEFAULT + UUID.randomUUID());
-                nuevoCuestionario.setNombreCuestionario(nombreArea);
-                nuevoCuestionario.setTipoCuestionario(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA);
-                nuevoCuestionario.setListaEses(new RealmList<Ese>());
-
-                for (int i = 0; i < 5; i++) {
-                    Ese unaEse = realm.createObject(Ese.class, FuncionesPublicas.IDESES + UUID.randomUUID());
-                    unaEse.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                    unaEse.setPuntajeEse(0.0);
-                    unaEse.setNombreEse(traerEses().get(i));
-                    unaEse.setNumeroEse(i + 1);
-                    unaEse.setListaItem(new RealmList<Item>());
-
-                    for (int k = 0; k < 5; k++) {
-                        Item item11 = realm.createObject(Item.class, FuncionesPublicas.IDITEMS + UUID.randomUUID());
-                        item11.setTituloItem(context.getResources().getString(R.string.criterio11));
-                        item11.setTextoItem(context.getResources().getString(R.string.texto11));
-                        item11.setIdEse(unaEse.getIdEse());
-                        item11.setIdCuestionario(nuevoCuestionario.getIdCuestionario());
-                        item11.setPuntajeItem(0.0);
-                        item11.setOrden(k + 1);
-                        item11.setListaPreguntas(new RealmList<Pregunta>());
-
-                        for (int j = 0; j < 5; j++) {
-                            Pregunta pregunta111 = realm.createObject(Pregunta.class, FuncionesPublicas.IDPREGUNTAS + UUID.randomUUID());
-                            pregunta111.setPuntaje(null);
-                            pregunta111.setTextoPregunta(context.getResources().getString(R.string.textoPregunta111));
-                            pregunta111.setIdItem(item11.getIdItem());
-                            pregunta111.setIdCuestioniario(nuevoCuestionario.getIdCuestionario());
-                            pregunta111.setIdEse(unaEse.getIdEse());
-                            item11.addPregunta(pregunta111);
-                            pregunta111.setOrden(j + 1);
-                            cargarCriteriosdDefaultPregunta(realm, pregunta111);
-                        }
-                        unaEse.addItem(item11);
-                    }
-                    nuevoCuestionario.addEse(unaEse);
-                }
-
-            }
-        });
-        //endregion
-    }
 
 
     public void

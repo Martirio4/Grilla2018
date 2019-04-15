@@ -102,7 +102,6 @@ public class FragmentRadar extends Fragment {
 
         Typeface robotoR = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
         TextView textoTitulo= view.findViewById(R.id.textoAreaResultado);
-        TextView tagTitulo=view.findViewById(R.id.tagRadarChart);
         TextView textViewIncompleto = view.findViewById(R.id.textoIncompleto);
 
         if (completo){
@@ -113,7 +112,6 @@ public class FragmentRadar extends Fragment {
         }
 
         textoTitulo.setTypeface(robotoR);
-        tagTitulo.setTypeface(robotoR);
         textViewIncompleto.setTypeface(robotoR);
 
         textoTitulo.setText(areaAuditada);

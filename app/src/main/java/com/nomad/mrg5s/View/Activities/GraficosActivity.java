@@ -18,9 +18,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -121,6 +125,24 @@ public class GraficosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graficos);
+
+
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        Typeface robotoR = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+        TextView unText=toolbar.findViewById(R.id.textoToolbar);
+        unText.setTypeface(robotoR);
+        unText.setTextColor(getResources().getColor(R.color.blancoNomad));
+        unText.setText(getResources().getText(R.string.resultados));
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        }
+
+
         config = getSharedPreferences("prefs", 0);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         promedioSeiso = 0.0;
@@ -1676,6 +1698,27 @@ public class GraficosActivity extends AppCompatActivity {
         }
 
         mandarExcelPorMail("5S Report-" + mAudit.getAreaAuditada().getNombreArea() + "-" + FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(), "corta") + ".xls");
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.appbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case   android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_close:
+                GraficosActivity.this.finish();
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 

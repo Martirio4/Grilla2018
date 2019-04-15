@@ -206,6 +206,9 @@ public class FragmentSettings extends Fragment {
             }
         });
 
+        // saco los fab
+        fabVolver.setVisibility(View.GONE);
+
         tuto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

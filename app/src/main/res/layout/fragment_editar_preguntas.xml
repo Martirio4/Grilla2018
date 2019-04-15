@@ -7,7 +7,6 @@
     tools:context="com.nomad.mrg5s.View.Activities.ActivityAuditoria">
 
     <ScrollView
-        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -111,7 +110,6 @@
 
     <LinearLayout
         android:background="@android:color/transparent"
-        android:id="@+id/linearAudit"
         android:layout_gravity="bottom|end"
         android:orientation="vertical"
         android:layout_width="wrap_content"

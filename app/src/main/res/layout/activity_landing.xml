@@ -9,7 +9,6 @@
     >
 
     <LinearLayout
-        android:id="@+id/cosas"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,8 +21,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:theme="@style/ToolbarTheme"
+            >
 
 
             <TextView
@@ -39,7 +38,6 @@
         </android.support.v7.widget.Toolbar>
         <LinearLayout
             android:orientation="vertical"
-            android:id="@+id/contenedor_landing_conToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

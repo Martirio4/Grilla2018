@@ -15,7 +15,6 @@
 
     <color name="light_grey">#EEEEEE</color>
     <color name="white_transparent">#99FFFFFF</color>
-    <color name="black">#000</color>
 
 
     <color name="semaVerde">#2ecc71</color>
@@ -29,14 +28,6 @@
     <color name="bueno">#effde3</color>
     <color name="excelente">#e3fde3</color>
 
-    <color name="tile1.">#e3f2fd</color>
-    <color name="tile2.">#64b5f6</color>
-    <color name="tile3.">#2196f3</color>
-    <color name="tile4.">#1976d2</color>
-    <color name="tile4.5.">#0f6ac3</color>
-    <color name="tile5.">#0d47a1</color>
-    <color name="tile6.">#1a237e</color>
-
     <color name="tile1">#F6F5E8</color>
     <color name="tile2">#7986cb</color>
     <color name="tile3">#5c6bc0</color>
@@ -44,13 +35,6 @@
     <color name="tile4.5">#3949ab</color>
     <color name="tile5">#303f9f</color>
     <color name="tile6">#283593</color>
-
-    <color name="escala5">#20B14A</color>
-    <color name="escala4">#A7CD39</color>
-    <color name="escala3">#FED403</color>
-    <color name="escala2">#FFB812</color>
-    <color name="escala1">#F36F24</color>
-    <color name="escala0">#EE1B3B</color>
 
 
     <color name="mirgorAzul">#414F9E</color>

@@ -9,13 +9,13 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/ResultadoFinal"
         android:textSize="20sp"
-        android:textColor="@color/tile4"
+        android:textColor="@color/mirgorAzul"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ImageView
         android:layout_marginEnd="@dimen/margenGrande"
         android:layout_marginStart="@dimen/margenGrande"
-        android:background="@color/colorAccent"
+        android:background="@color/mirgorNaranja"
         android:layout_width="match_parent"
         android:layout_height="2dp" />
 

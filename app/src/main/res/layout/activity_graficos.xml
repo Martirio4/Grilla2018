@@ -5,35 +5,59 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.nomad.mrg5s.View.Activities.GraficosActivity">
-    <LinearLayout
-        android:visibility="gone"
-        android:orientation="vertical"
-       android:id="@+id/alphaLayer"
-        android:background="@color/blancoNomad"
-        android:alpha="0.5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </LinearLayout>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+
     <LinearLayout
-        android:id="@+id/contenedorGraficos"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        >
+
+        <android.support.v7.widget.Toolbar
+
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ToolbarTheme">
+
+
+            <TextView
+                android:textColor="@color/blancoNomad"
+                android:textSize="20sp"
+                android:id="@+id/textoToolbar"
+                android:gravity="start"
+                android:layout_marginStart="@dimen/margenChico"
+                android:layout_marginEnd="@dimen/margenChico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/contenedorGraficos"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:id="@+id/progressBar"
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
 
     </LinearLayout>
-</ScrollView>
-    <ProgressBar
-        android:visibility="gone"
-        android:indeterminate="true"
-        android:id="@+id/progressBar"
-        android:layout_gravity="center"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
-
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menuSalida"
         android:layout_gravity="bottom|end"

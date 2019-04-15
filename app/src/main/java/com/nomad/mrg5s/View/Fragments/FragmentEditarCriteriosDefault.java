@@ -58,6 +58,7 @@ public class FragmentEditarCriteriosDefault extends Fragment {
                 cerrable.cerrarEsto();
             }
         });
+        fabVolver.setVisibility(View.GONE);
 
 
 

@@ -8,11 +8,8 @@
     <dimen name="altoTarjetaVieja">80dp</dimen>
     <dimen name="anchoTarjetaVieja">100dp</dimen>
 
-    <dimen name="altoTarjeta21">150dp</dimen>
-    <dimen name="anchoTarjeta21">200dp</dimen>
     <dimen name="altoRecyclerFotosActuales">200dp</dimen>
     <dimen name="altoRecyclerFotosViejas">100dp</dimen>
-    <dimen name="altoTextoComentarioActuales">30dp</dimen>
     <dimen name="margenGrande">16dp</dimen>
     <dimen name="margenTextoViejo">72dp</dimen>
 
@@ -30,8 +27,6 @@
     <dimen name="textoSettings">20sp</dimen>
     <dimen name="textoAreaRevisarAudit">18sp</dimen>
     <dimen name="textoRecyclerPreAudit">30sp</dimen>
-    <dimen name="circuloRecyclerPreAudit">38sp</dimen>
-    <dimen name="altoBullet">100dp</dimen>
     <dimen name="anchoBullet">20dp</dimen>
     <dimen name="textoTitulosInternos">20sp</dimen>
 </resources>

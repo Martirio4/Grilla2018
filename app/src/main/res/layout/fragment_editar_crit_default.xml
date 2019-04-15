@@ -19,7 +19,6 @@
             android:layout_margin="@dimen/margenGrande"
             android:gravity="center"
             android:text="@string/tituloEdicionCriterioDefault"
-            android:id="@+id/tituloEdicionCriterioDefault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <android.support.v7.widget.RecyclerView
@@ -42,7 +41,6 @@
    
     <LinearLayout
         android:background="@android:color/transparent"
-        android:id="@+id/linearAudit"
         android:layout_gravity="bottom|end"
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -61,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:visibility="gone"
         android:id="@+id/textoFabPreAudit"
         android:paddingStart="@dimen/margenChico"
         android:paddingEnd="@dimen/margenChico"

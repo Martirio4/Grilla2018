@@ -121,7 +121,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
     private void crearDialogoNuevoCuestionario(View view) {
 
         final MaterialDialog mDialog = new MaterialDialog.Builder(view.getContext())
-                .cancelable(false)
+                .cancelable(true)
                 .customView(R.layout.dialogo_estructura,false)
                 .build();
 

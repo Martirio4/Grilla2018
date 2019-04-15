@@ -200,13 +200,18 @@ public class FragmentLanding extends Fragment {
 
 
         config = getActivity().getSharedPreferences("prefs", 0);
+        avisarPruebas();
+
+
+
         boolean firstRun = config.getBoolean("firstRunLandingFragment", false);
         if (!firstRun){
             crearDialogoBienvenida();
             SharedPreferences.Editor editor = config.edit();
             editor.putBoolean("firstRunLandingFragment", true);
             editor.commit();
-        }
+        } /* //REVISION DE VERSION PONER OK EN VERSION PRODUCCION
+
         else{
             if (HTTPConnectionManager.isNetworkingOnline(getContext())){
                 DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
@@ -220,7 +225,8 @@ public class FragmentLanding extends Fragment {
                         if (versionFireBase.equals("6.6.6")) {
                             avisarNoVaMas();
 
-                        } else {
+                        }
+                        else {
                             try {
                                 versionLocal = getContext().getPackageManager()
                                         .getPackageInfo(getContext().getPackageName(), 0).versionName;
@@ -244,8 +250,27 @@ public class FragmentLanding extends Fragment {
 
 
 
-
+*/
         return view;
+    }
+
+    private void avisarPruebas() {
+        new MaterialDialog.Builder(getActivity())
+                .title(getContext().getString(R.string.advertencia))
+                .buttonsGravity(GravityEnum.CENTER)
+                .cancelable(false)
+                .contentColor(ContextCompat.getColor(getActivity(), R.color.primary_text))
+                .backgroundColor(ContextCompat.getColor(getActivity(), R.color.tile1))
+                .titleColor(ContextCompat.getColor(getActivity(), R.color.tile4))
+                .content(getResources().getString(R.string.versionDePrueba))
+                .positiveText(R.string.ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+
+                    }
+                })
+                .show();
     }
 
     private void avisarNoVaMas() {
