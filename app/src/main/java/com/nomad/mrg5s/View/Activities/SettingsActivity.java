@@ -92,12 +92,12 @@ public class SettingsActivity extends AppCompatActivity implements FragmentSetti
     @Override
     public void editarArea(final Area unArea) {
         new MaterialDialog.Builder(this)
-                .title(this.getResources().getString(R.string.addNewArea))
+                .title(this.getResources().getString(R.string.editarArea))
                 .inputRange(1,40)
                 .contentColor(ContextCompat.getColor(this, R.color.primary_text))
                 .backgroundColor(ContextCompat.getColor(this, R.color.tile1))
                 .titleColor(ContextCompat.getColor(this, R.color.tile4))
-                .content(this.getResources().getString(R.string.nombreArea))
+                .content(this.getResources().getString(R.string.nuevoNombreArea))
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input(this.getResources().getString(R.string.areaName),"", new MaterialDialog.InputCallback() {
                     @Override

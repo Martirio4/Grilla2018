@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nomad.mrg5s.Model.Usuario;
 import com.nomad.mrg5s.R;
@@ -219,9 +220,11 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         Intent unIntent = new Intent(this, LandingActivity.class);
         startActivity(unIntent);
+
         Toast.makeText(this, getResources().getString(R.string.bienVenida) + " " + mAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
         LoginActivity.this.finish();
     }
+
 
     @Override
     protected void onRestart() {

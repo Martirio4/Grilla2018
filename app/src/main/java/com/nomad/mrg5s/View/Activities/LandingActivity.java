@@ -204,8 +204,9 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
             lanzarLandingFragment();
         } else {
             new MaterialDialog.Builder(this)
-                    .contentColor(ContextCompat.getColor(this, R.color.primary_text))
-                    .titleColor(ContextCompat.getColor(this, R.color.tile4))
+                    .contentColor(ContextCompat.getColor(LandingActivity.this, R.color.primary_text))
+                    .backgroundColor(ContextCompat.getColor(LandingActivity.this, R.color.tile1))
+                    .titleColor(ContextCompat.getColor(LandingActivity.this, R.color.tile4))
                     .title(R.string.quit)
                     .content(R.string.des_quit)
                     .positiveText(R.string.quit)
@@ -268,4 +269,5 @@ public class LandingActivity extends AppCompatActivity implements FragmentLandin
         Intent intent = new Intent(this, ActivityMyAudits.class);
         startActivity(intent);
     }
+
 }

@@ -31,6 +31,7 @@ import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.nomad.mrg5s.View.Activities.ActivityMyAudits;
+import com.nomad.mrg5s.View.Activities.LoginActivity;
 import com.nomad.mrg5s.View.Activities.SettingsActivity;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -200,7 +201,7 @@ public class FragmentLanding extends Fragment {
 
 
         config = getActivity().getSharedPreferences("prefs", 0);
-        avisarPruebas();
+
 
 
 
@@ -254,24 +255,7 @@ public class FragmentLanding extends Fragment {
         return view;
     }
 
-    private void avisarPruebas() {
-        new MaterialDialog.Builder(getActivity())
-                .title(getContext().getString(R.string.advertencia))
-                .buttonsGravity(GravityEnum.CENTER)
-                .cancelable(false)
-                .contentColor(ContextCompat.getColor(getActivity(), R.color.primary_text))
-                .backgroundColor(ContextCompat.getColor(getActivity(), R.color.tile1))
-                .titleColor(ContextCompat.getColor(getActivity(), R.color.tile4))
-                .content(getResources().getString(R.string.versionDePrueba))
-                .positiveText(R.string.ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
 
-                    }
-                })
-                .show();
-    }
 
     private void avisarNoVaMas() {
         new MaterialDialog.Builder(getActivity())
