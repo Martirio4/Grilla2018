@@ -212,6 +212,7 @@ public class FragmentLanding extends Fragment {
             editor.putBoolean("firstRunLandingFragment", true);
             editor.commit();
         } /* //REVISION DE VERSION PONER OK EN VERSION PRODUCCION
+        
 
         else{
             if (HTTPConnectionManager.isNetworkingOnline(getContext())){
