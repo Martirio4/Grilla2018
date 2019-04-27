@@ -55,7 +55,6 @@ public class FragmentLanding extends Fragment {
     private TextView texto1;
     private TextView texto2;
     private TextView texto3;
-    private TextView texto31;
     private TextView texto4;
 
     private LinearLayout lin1;
@@ -63,8 +62,6 @@ public class FragmentLanding extends Fragment {
     private LinearLayout lin3;
     private LinearLayout lin4;
     private Landinable landinable;
-    private ImageButton animationTarget;
-    private Animation animation;
 
     private Typeface roboto;
 
@@ -164,18 +161,6 @@ public class FragmentLanding extends Fragment {
         View.OnClickListener listener4 = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /* //METODO OBSOLETO PARA CONTACTAR DESARROLLADOR
-                Intent send = new Intent(Intent.ACTION_SENDTO);
-                String uriText = "mailto:" + Uri.encode("contacto@benomad.com.ar") +
-                        "?subject=" + Uri.encode(getResources().getString(R.string.quieroReportar)) +
-                        "&body=" + Uri.encode(getResources().getString(R.string.textoIssue));
-                Uri uri = Uri.parse(uriText);
-
-                send.setData(uri);
-                startActivity(Intent.createChooser(send, getResources().getString(R.string.enviarMail)));
-                */
-                //METODO PARA ABRIR PANTALLA EDICION CUESTIONARIO Y CRITERIOS
-
 
             }
         };
@@ -211,9 +196,8 @@ public class FragmentLanding extends Fragment {
             SharedPreferences.Editor editor = config.edit();
             editor.putBoolean("firstRunLandingFragment", true);
             editor.commit();
-        } /* //REVISION DE VERSION PONER OK EN VERSION PRODUCCION
-        
-
+        }
+        //REVISION DE VERSION PONER OK EN VERSION PRODUCCION
         else{
             if (HTTPConnectionManager.isNetworkingOnline(getContext())){
                 DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
@@ -221,38 +205,32 @@ public class FragmentLanding extends Fragment {
                 mbase.child("data").child("version").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String versionFireBase=dataSnapshot.getValue().toString();
-                        String versionLocal=null;
+                        if (dataSnapshot.getValue()!=null) {
+                            String versionFireBase=dataSnapshot.getValue().toString();
+                            String versionLocal=null;
+                            if (versionFireBase.equals("6.6.6")) {
+                                avisarNoVaMas();
 
-                        if (versionFireBase.equals("6.6.6")) {
-                            avisarNoVaMas();
-
-                        }
-                        else {
-                            try {
-                                versionLocal = getContext().getPackageManager()
-                                        .getPackageInfo(getContext().getPackageName(), 0).versionName;
-                            } catch (PackageManager.NameNotFoundException e) {
-                                e.printStackTrace();
                             }
-                            if ( versionLocal!=null && !versionLocal.equals(versionFireBase)){
-                                avisarVersionVieja();
+                            else {
+                                try {
+                                    versionLocal = getContext().getPackageManager()
+                                            .getPackageInfo(getContext().getPackageName(), 0).versionName;
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                if ( versionLocal!=null && !versionLocal.equals(versionFireBase)){
+                                    avisarVersionVieja();
+                                }
                             }
                         }
-
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
             }
         }
-
-
-
-*/
         return view;
     }
 

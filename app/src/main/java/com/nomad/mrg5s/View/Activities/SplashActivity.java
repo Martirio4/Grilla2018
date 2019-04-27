@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-              avisarPruebas();
+             // avisarPruebas();
 
             }
         }, SPLASH_DISPLAY_LENGHT);
