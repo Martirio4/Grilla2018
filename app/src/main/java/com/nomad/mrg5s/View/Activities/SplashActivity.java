@@ -33,6 +33,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
 
              // avisarPruebas();
+                irALogin();
 
             }
         }, SPLASH_DISPLAY_LENGHT);
@@ -51,12 +52,16 @@ public class SplashActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        Intent mainIntent = new Intent(SplashActivity.this,LoginActivity.class);
-                        SplashActivity.this.startActivity(mainIntent);
-                        SplashActivity.this.finish();
+                        irALogin();
                     }
                 })
                 .show();
+    }
+
+    private void irALogin(){
+        Intent mainIntent = new Intent(SplashActivity.this,LoginActivity.class);
+        SplashActivity.this.startActivity(mainIntent);
+        SplashActivity.this.finish();
     }
 
 

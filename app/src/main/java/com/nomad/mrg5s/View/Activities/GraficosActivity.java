@@ -3,6 +3,7 @@ package com.nomad.mrg5s.View.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -946,6 +947,16 @@ public class GraficosActivity extends AppCompatActivity {
             headerFormat.setBackground(Colour.PALE_BLUE);
             newCell.setCellFormat(headerFormat);
         }
+        if (headerCell.equals("tituloExcel")) {
+            //give header cells size 10 Arial bolded
+            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 14);
+            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
+            //center align the cells' contents
+            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+            headerFormat.setWrap(true);
+
+            newCell.setCellFormat(headerFormat);
+        }
         if (headerCell.equals("textoNormal")) {
             //give header cells size 10 Arial bolded
             WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
@@ -1457,6 +1468,8 @@ public class GraficosActivity extends AppCompatActivity {
 //        lo comprimo
         // Bitmap SunBitmap=Bitmap.createScaledBitmap(unBitmap, 300,510,false);
         try {
+
+
             fotoComprimida = new Compressor(this)
                     .setMaxWidth(640)
                     .setMaxHeight(480)
@@ -1476,6 +1489,9 @@ public class GraficosActivity extends AppCompatActivity {
         laHoja.setColumnView(2, 32);
         laHoja.setColumnView(4, 11);
         laHoja.setColumnView(5, 32);
+        laHoja.setColumnView(6, 11);
+        laHoja.setColumnView(7, 11);
+        laHoja.setColumnView(8, 11);
 
 
 //        laHoja.setColumnView(23,520);
@@ -1486,9 +1502,58 @@ public class GraficosActivity extends AppCompatActivity {
 //        laHoja.setColumnView(135,520);
 
 
-        //SETEO LOS TITULOS DE LA HOJA
+
+    //CREO EL ENCABEZADO
+        //pongo el logo de mirgro
+            File filesDir2 = getApplicationContext().getFilesDir();
+            File imageFile2 = new File(filesDir, "temp" + ".jpg");
+
+            OutputStream os2;
+            try {
+                os2 = new FileOutputStream(imageFile);
+                Bitmap unBitmap2=BitmapFactory.decodeResource(getResources(),R.drawable.logo_mirg_peque);
+
+                unBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, os2);
+                os2.flush();
+                os2.close();
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+            }
+
+
+            try {
+
+                fotoComprimida = new Compressor(this)
+                        .setMaxWidth(640)
+                        .setMaxHeight(480)
+                        .setQuality(75)
+                        .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .compressToFile(imageFile2, imageFile2.getName().replace(".jpg", ".png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            WritableImage image2 = new WritableImage(
+                    0, 0, 2, 2, fotoComprimida); //Supports only 'png' images
+            laHoja.addImage(image2);
+        //pongo el titulo
+        try{
+            laHoja.mergeCells(2,0,4,1);
+            escribirCelda(2,0,getResources().getString(R.string.tituloExcel),"tituloExcel",laHoja);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+        fila=3;
+
         try {
-            //CREO EL ENCABEZADO
+
 
 
             //titulos de la grilla
@@ -1505,7 +1570,7 @@ public class GraficosActivity extends AppCompatActivity {
             escribirCelda(columna, fila, getResources().getString(R.string.titComentario), "titulo", laHoja);
 
             columna = 0;
-            fila = 1;
+            fila = 4;
 
 
             for (Ese unaEse :

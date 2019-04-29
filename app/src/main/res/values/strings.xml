@@ -741,6 +741,7 @@
     <string name="baño_5_5_4">Se cumple el plan de tareas y se agregan acciones para resolver las no conformidades.</string>
     <string name="editarArea">Editar área</string>
     <string name="nuevoNombreArea">Ingrese el nuevo nombre.</string>
+    <string name="tituloExcel">Auditoría de zona 5S</string>
 
 
 </resources>
