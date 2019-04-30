@@ -1,6 +1,7 @@
 package com.nomad.mrg5s.View.Fragments;
 
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -265,4 +267,7 @@ public class FragmentRadar extends Fragment {
     }
 
 
+    public Bitmap dameScreenShot() {
+       return FuncionesPublicas.getBitmapFromView(Objects.requireNonNull(FragmentRadar.this.getView()));
+    }
 }

@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -108,6 +109,8 @@ public class GraficosActivity extends AppCompatActivity {
     private Double promedioShitsuke;
     private PDFWriter writer;
     private File fotoComprimida;
+    private File fotoLogoMirgor;
+    private File fotoRadar;
     private WritableSheet laHojaFotos;
     private SharedPreferences config;
     private Integer sumatoriaPreguntas;
@@ -901,146 +904,179 @@ public class GraficosActivity extends AppCompatActivity {
                               WritableSheet sheet) throws RowsExceededException, WriteException {
         //create a new cell with contents at position
         Label newCell = new Label(columnPosition, rowPosition, contents);
-
-        if (headerCell.equals("titulo")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
-            headerFont.setColour(Colour.WHITE);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setAlignment(Alignment.CENTRE);
-            headerFormat.setBackground(Colour.BLUE_GREY);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
-            newCell.setCellFormat(headerFormat);
+        WritableFont headerFont;
+        WritableCellFormat headerFormat;
+        switch (headerCell){
+            case FuncionesPublicas.CELDA_TITULO:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
+                headerFont.setColour(Colour.WHITE);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setAlignment(Alignment.CENTRE);
+                headerFormat.setBackground(Colour.BLUE_GREY);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_SUBTOTAL:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setAlignment(Alignment.LEFT);
+                headerFormat.setBackground(Colour.VERY_LIGHT_YELLOW);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_SUBTOTAL_ESE:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 14);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setBackground(Colour.YELLOW);
+                headerFormat.setWrap(true);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TOTAL_AUDIT:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 14);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setWrap(true);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+                headerFormat.setBackground(Colour.PALE_BLUE);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TITULO_EXCEL:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 14);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setAlignment(Alignment.CENTRE);
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setBorder(Border.ALL,BorderLineStyle.THIN);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setWrap(true);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 8);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setWrap(false);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL_2:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 16);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setAlignment(Alignment.CENTRE);
+                headerFormat.setWrap(true);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL_3:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setWrap(false);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL_4:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setAlignment(Alignment.RIGHT);
+                headerFormat.setWrap(false);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 12);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setAlignment(Alignment.CENTRE);
+                headerFormat.setWrap(true);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO_SIN_BORDES:
+                //give header cells size 10 Arial bolded
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                //center align the cells' contents
+                headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+                headerFormat.setAlignment(Alignment.CENTRE);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_BORDE_INFERIOR:
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                headerFormat.setBorder(Border.BOTTOM, BorderLineStyle.THIN);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_BORDE_LATERAL:
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_BORDE_GRUESO:
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                headerFormat.setBorder(Border.ALL, BorderLineStyle.THICK);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_BORDE_SUPERIOR:
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                headerFormat.setBorder(Border.TOP, BorderLineStyle.THIN);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_BORDE_SUPERIOR_ULTIMA_CELDA:
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                headerFormat.setBorder(Border.TOP, BorderLineStyle.THIN);
+                headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+            case FuncionesPublicas.CELDA_ULTIMA_CELDA:
+                headerFont = new WritableFont(WritableFont.ARIAL, 10);
+                headerFormat = new WritableCellFormat(headerFont);
+                headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
+                headerFormat.setBorder(Border.BOTTOM, BorderLineStyle.THIN);
+                headerFormat.setWrap(true);
+                newCell.setCellFormat(headerFormat);
+                break;
+                
         }
-        if (headerCell.equals("subTotal")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setAlignment(Alignment.LEFT);
-            headerFormat.setBackground(Colour.VERY_LIGHT_YELLOW);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-            newCell.setCellFormat(headerFormat);
-        }
-
-        if (headerCell.equals("subTotalEse")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 14);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setBackground(Colour.YELLOW);
-            headerFormat.setWrap(true);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-            newCell.setCellFormat(headerFormat);
-        }
-
-        if (headerCell.equals("totalAudit")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 14);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setWrap(true);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
-            headerFormat.setBackground(Colour.PALE_BLUE);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("tituloExcel")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 14);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setWrap(true);
-
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("textoNormal")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setWrap(true);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("textoNormal2")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 16);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setAlignment(Alignment.CENTRE);
-            headerFormat.setWrap(true);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("textoNormalCentrado")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 12);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setAlignment(Alignment.CENTRE);
-            headerFormat.setWrap(true);
-            headerFormat.setBorder(Border.ALL, BorderLineStyle.THIN);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("textoNormalCentradoSinBorde")) {
-            //give header cells size 10 Arial bolded
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            //center align the cells' contents
-            headerFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-            headerFormat.setAlignment(Alignment.CENTRE);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("bordeInferior")) {
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-
-            headerFormat.setBorder(Border.BOTTOM, BorderLineStyle.THIN);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("bordeLateral")) {
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-
-            headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("ultimaCelda")) {
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-            headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
-            headerFormat.setBorder(Border.BOTTOM, BorderLineStyle.THIN);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("bordeSuperior")) {
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-
-            headerFormat.setBorder(Border.TOP, BorderLineStyle.THIN);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-        if (headerCell.equals("bordeSuperiorUltimaCelda")) {
-            WritableFont headerFont = new WritableFont(WritableFont.ARIAL, 10);
-            WritableCellFormat headerFormat = new WritableCellFormat(headerFont);
-
-            headerFormat.setBorder(Border.TOP, BorderLineStyle.THIN);
-            headerFormat.setBorder(Border.RIGHT, BorderLineStyle.THIN);
-            headerFormat.setWrap(true);
-            newCell.setCellFormat(headerFormat);
-        }
-
         sheet.addCell(newCell);
     }
 
@@ -1048,21 +1084,21 @@ public class GraficosActivity extends AppCompatActivity {
         try {
 //            dibujarBordesFoto
             for (Integer i = 0; i < 7; i++) {
-                escribirCelda(numColumna + i, numFila + altoFoto + 2, "", "bordeInferior", laHojaFotos);
+                escribirCelda(numColumna + i, numFila + altoFoto + 2, "", FuncionesPublicas.CELDA_BORDE_INFERIOR, laHojaFotos);
             }
             for (Integer i = 0; i < 7; i++) {
                 if (i == 6) {
-                    escribirCelda(numColumna + i, numFila, "", "bordeSuperiorUltimaCelda", laHojaFotos);
+                    escribirCelda(numColumna + i, numFila, "", FuncionesPublicas.CELDA_BORDE_SUPERIOR_ULTIMA_CELDA, laHojaFotos);
                 } else {
-                    escribirCelda(numColumna + i, numFila, "", "bordeSuperior", laHojaFotos);
+                    escribirCelda(numColumna + i, numFila, "", FuncionesPublicas.CELDA_BORDE_SUPERIOR, laHojaFotos);
                 }
             }
 //            linea lateral
             for (Integer i = 0; i < 13; i++) {
                 if (i == 12) {
-                    escribirCelda(numColumna + anchoFoto + 1, numFila + i, "", "ultimaCelda", laHojaFotos);
+                    escribirCelda(numColumna + anchoFoto + 1, numFila + i, "", FuncionesPublicas.CELDA_ULTIMA_CELDA, laHojaFotos);
                 } else {
-                    escribirCelda(numColumna + anchoFoto + 1, numFila + i, "", "bordeLateral", laHojaFotos);
+                    escribirCelda(numColumna + anchoFoto + 1, numFila + i, "", FuncionesPublicas.CELDA_BORDE_LATERAL, laHojaFotos);
                 }
             }
         } catch (WriteException e) {
@@ -1146,23 +1182,23 @@ public class GraficosActivity extends AppCompatActivity {
 
         //SETEO LOS TITULOS DE LA HOJA
         try {
-            escribirCelda(columna, fila, "S", "titulo", laHoja);
+            escribirCelda(columna, fila, "S", FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titCriterio), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titCriterio), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titItem), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titItem), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titComentario), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titComentario), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titFotos), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titFotos), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = 0;
             fila = 1;
 
@@ -1171,7 +1207,7 @@ public class GraficosActivity extends AppCompatActivity {
                     mAudit.getListaEses()) {
 //            escribo el numero de ese
 
-                escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHoja);
+                escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", FuncionesPublicas.CELDA_TEXTO_NORMAL_2, laHoja);
                 columna = columna + 1;
 
                 //recorro los item de la ese
@@ -1185,65 +1221,65 @@ public class GraficosActivity extends AppCompatActivity {
 //
 //                merge columna criterio
                     laHoja.mergeCells(columna, fila, columna, fila + cantPreguntas - 1);
-                    escribirCelda(columna, fila, unItem.getTituloItem(), "textoNormal", laHoja);
+                    escribirCelda(columna, fila, unItem.getTituloItem(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
                     columna++;
 //                merge columna item
                     laHoja.mergeCells(columna, fila, columna, fila + cantPreguntas - 1);
-                    escribirCelda(columna, fila, unItem.getTextoItem(), "textoNormal", laHoja);
+                    escribirCelda(columna, fila, unItem.getTextoItem(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
                     columna++;
 
                     //recorro las preguntas del item
                     for (Pregunta unaPreg :
                             unItem.getListaPreguntas()) {
 
-                        escribirCelda(columna, fila, String.valueOf(unItem.getListaPreguntas().indexOf(unaPreg)+1), "textoNormalCentrado", laHoja);
+                        escribirCelda(columna, fila, String.valueOf(unItem.getListaPreguntas().indexOf(unaPreg)+1), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                         columna++;
-                        escribirCelda(columna, fila, unaPreg.getTextoPregunta(), "textoNormal", laHoja);
+                        escribirCelda(columna, fila, unaPreg.getTextoPregunta(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
                         columna++;
                         Double unPuntaje;
                         //si el puntaje es cero o null pone cero
                         if (unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()!=0 && unaPreg.getPuntaje()!=9 ) {
-                            escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                             columna++;
                             unPuntaje = ((unaPreg.getPuntaje() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100);
                         } else if(unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()==9) {
-                            escribirCelda(columna, fila, "-", "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, "-", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                             columna++;
                             unPuntaje = (9.9);
                         }
                         else {
-                            escribirCelda(columna, fila, "0", "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, "0", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                             columna++;
                             unPuntaje = (0.0);
                         }
                         String elPuntaje;
                         if (unPuntaje==9.9){
                             elPuntaje="-";
-                            escribirCelda(columna, fila, elPuntaje, "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, elPuntaje, FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                         }
                         else{
                             elPuntaje = df.format(unPuntaje);
-                            escribirCelda(columna, fila, elPuntaje + "%", "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, elPuntaje + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                         }
 
 
                         columna++;
-                        escribirCelda(columna, fila, unaPreg.getComentario(), "textoNormal", laHoja);
+                        escribirCelda(columna, fila, unaPreg.getComentario(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
                         columna++;
-                        escribirCelda(columna, fila, "", "textoNormal", laHoja);
+                        escribirCelda(columna, fila, "", FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
                         columna = 3;
                         fila++;
                         cantPreguntasTotales++;
                     }
                     columna = 0;
-                    escribirCelda(1, fila, getResources().getString(R.string.totalSubitem) +String.valueOf(unaEse.getListaItem().indexOf(unItem)+1), "subTotal", laHoja);
+                    escribirCelda(1, fila, getResources().getString(R.string.totalSubitem) +String.valueOf(unaEse.getListaItem().indexOf(unItem)+1), FuncionesPublicas.CELDA_SUBTOTAL, laHoja);
                     laHoja.mergeCells(1, fila, 4, fila);
                     if (unItem.getPuntajeItem()!=9.9) {
                         Double punItemDouble = (unItem.getPuntajeItem() /FuncionesPublicas.MAXIMO_PUNTAJE) * 100;
                         String puntItemStr = df.format(punItemDouble);
-                        escribirCelda(5, fila, puntItemStr + "%", "subTotal", laHoja);
+                        escribirCelda(5, fila, puntItemStr + "%", FuncionesPublicas.CELDA_SUBTOTAL, laHoja);
                     } else {
-                        escribirCelda(5, fila, "-", "subTotal", laHoja);
+                        escribirCelda(5, fila, "-", FuncionesPublicas.CELDA_SUBTOTAL, laHoja);
                     }
                     laHoja.mergeCells(5, fila, 8, fila);
                     columna = 1;
@@ -1253,30 +1289,30 @@ public class GraficosActivity extends AppCompatActivity {
                 laHoja.mergeCells(0, fila - cantPreguntasTotales - cantItem, 0, fila - 1);
                 columna = 0;
 
-                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "subTotalEse", laHoja);
+                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
                 laHoja.mergeCells(0, fila, 4, fila);
 
                 if (unaEse.getPuntajeEse()!=9.9) {
                     Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE) * 100;
                     String puntEseStr = df.format(puntEseDouble);
-                    escribirCelda(5, fila, puntEseStr + "%", "subTotalEse", laHoja);
+                    escribirCelda(5, fila, puntEseStr + "%", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
                 } else {
-                    escribirCelda(5, fila, "-", "subTotalEse", laHoja);
+                    escribirCelda(5, fila, "-", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
                 }
                 laHoja.mergeCells(5, fila, 8, fila);
                 columna = 0;
                 fila++;
             }
 
-            escribirCelda(0, fila, getResources().getString(R.string.totalAudit), "totalAudit", laHoja);
+            escribirCelda(0, fila, getResources().getString(R.string.totalAudit), FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
             laHoja.mergeCells(0, fila, 4, fila);
 
             if (mAudit.getPuntajeFinal()!=9.9) {
                 Double puntFinalDouble = mAudit.getPuntajeFinal() * 100.00;
                 String puntFinal = df.format(puntFinalDouble);
-                escribirCelda(5, fila, puntFinal + "%", "totalAudit", laHoja);
+                escribirCelda(5, fila, puntFinal + "%", FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
             } else {
-                escribirCelda(5, fila,  "-", "totalAudit", laHoja);
+                escribirCelda(5, fila,  "-", FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
             }
 
             laHoja.mergeCells(5, fila, 8, fila);
@@ -1295,13 +1331,13 @@ public class GraficosActivity extends AppCompatActivity {
         fila = 0;
 
         try {
-            escribirCelda(columna, fila, "S", "titulo", laHojaFotos);
+            escribirCelda(columna, fila, "S", FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titItem), "titulo", laHojaFotos);
+            escribirCelda(columna, fila, getResources().getString(R.string.titItem), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHojaFotos);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHojaFotos);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna++;
 
             columna = 0;
@@ -1319,21 +1355,21 @@ public class GraficosActivity extends AppCompatActivity {
                             ) {
                         if (unaPregunta.getListaFotos() != null && unaPregunta.getListaFotos().size() > 0) {
                             //ESCRIBO LA ESE
-                            escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHojaFotos);
+                            escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", FuncionesPublicas.CELDA_TEXTO_NORMAL_2, laHojaFotos);
                             columna = columna + 1;
                             //ESCRIBO EL ITEM
-                            escribirCelda(columna, fila, unItem.getTextoItem(), "textoNormal", laHojaFotos);
+                            escribirCelda(columna, fila, unItem.getTextoItem(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHojaFotos);
                             columna++;
                             //ESCRIBO LA PREGUNTA
-                            escribirCelda(columna, fila, unaPregunta.getTextoPregunta(), "textoNormal", laHojaFotos);
+                            escribirCelda(columna, fila, unaPregunta.getTextoPregunta(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHojaFotos);
                             columna++;
                             if (unaPregunta.getPuntaje()==null) {
 
-                                escribirCelda(columna, fila, "-", "textoNormalCentrado", laHojaFotos);
+                                escribirCelda(columna, fila, "-", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHojaFotos);
 
                             } else {
 
-                                escribirCelda(columna, fila, unaPregunta.getPuntaje().toString(), "textoNormalCentrado", laHojaFotos);
+                                escribirCelda(columna, fila, unaPregunta.getPuntaje().toString(), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHojaFotos);
                             }
                             columna++;
 
@@ -1357,12 +1393,12 @@ public class GraficosActivity extends AppCompatActivity {
                                 laHojaFotos.addImage(imagen);
 
 
-                                escribirCelda(columna - 1, 0, getResources().getString(R.string.titFotos) + " " + contador.toString(), "titulo", laHojaFotos);
+                                escribirCelda(columna - 1, 0, getResources().getString(R.string.titFotos) + " " + contador.toString(), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
                                 laHojaFotos.mergeCells(columna - 1, 0, columna + 5, 0);
 
 
 //                                escribo el comentario de la foto y mergeo las celdas esas
-                                escribirCelda(columna, fila + altoFoto + 1, unaFoto.getComentarioFoto(), "textoNormalCentradoSinBorde", laHojaFotos);
+                                escribirCelda(columna, fila + altoFoto + 1, unaFoto.getComentarioFoto(), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO_SIN_BORDES, laHojaFotos);
                                 laHojaFotos.mergeCells(columna, fila + altoFoto + 1, columna + anchoFoto - 1, fila + altoFoto + 1);
                                 dibujarBordesFoto(columna - 1, fila);
                                 columna = columna + anchoFoto + 1;
@@ -1485,11 +1521,13 @@ public class GraficosActivity extends AppCompatActivity {
         laHojaResumen.addImage(image);
 
 
+        laHoja.setColumnView(0, 11);
+        laHoja.setColumnView(1, 11);
         laHoja.setColumnView(3, 11);
         laHoja.setColumnView(2, 32);
         laHoja.setColumnView(4, 11);
-        laHoja.setColumnView(5, 32);
-        laHoja.setColumnView(6, 11);
+        laHoja.setColumnView(5, 25);
+        laHoja.setColumnView(6, 25);
         laHoja.setColumnView(7, 11);
         laHoja.setColumnView(8, 11);
 
@@ -1506,11 +1544,11 @@ public class GraficosActivity extends AppCompatActivity {
     //CREO EL ENCABEZADO
         //pongo el logo de mirgro
             File filesDir2 = getApplicationContext().getFilesDir();
-            File imageFile2 = new File(filesDir, "temp" + ".jpg");
+            File imageFile2 = new File(filesDir2, "temp2" + ".jpg");
 
             OutputStream os2;
             try {
-                os2 = new FileOutputStream(imageFile);
+                os2 = new FileOutputStream(imageFile2);
                 Bitmap unBitmap2=BitmapFactory.decodeResource(getResources(),R.drawable.logo_mirg_peque);
 
                 unBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, os2);
@@ -1523,7 +1561,7 @@ public class GraficosActivity extends AppCompatActivity {
 
             try {
 
-                fotoComprimida = new Compressor(this)
+                fotoLogoMirgor = new Compressor(this)
                         .setMaxWidth(640)
                         .setMaxHeight(480)
                         .setQuality(75)
@@ -1534,50 +1572,127 @@ public class GraficosActivity extends AppCompatActivity {
             }
 
             WritableImage image2 = new WritableImage(
-                    0, 0, 2, 2, fotoComprimida); //Supports only 'png' images
+                    0, 0, 2, 2, fotoLogoMirgor); //Supports only 'png' images
             laHoja.addImage(image2);
         //pongo el titulo
         try{
             laHoja.mergeCells(2,0,4,1);
-            escribirCelda(2,0,getResources().getString(R.string.tituloExcel),"tituloExcel",laHoja);
+            laHoja.mergeCells(5,0,6,1);
+            escribirCelda(2,0,getResources().getString(R.string.tituloExcel),FuncionesPublicas.CELDA_TITULO_EXCEL,laHoja);
+            escribirCelda(5,0,"",FuncionesPublicas.CELDA_TITULO_EXCEL,laHoja);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-
-
-
-
-
         fila=3;
 
         try {
+            //Datos Auditoria
+            escribirCelda(0,fila,getResources().getString(R.string.unidadNegocio),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            //PUNTAJE MAXIMO
+            escribirCelda(5,fila,getResources().getString(R.string.puntajeMaximo),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            fila++;
+            escribirCelda(0,fila,getResources().getString(R.string.fecha),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            escribirCelda(2,fila,FuncionesPublicas.dameFechaString(mAudit.getFechaAuditoria(),FuncionesPublicas.FECHA_LARGA),FuncionesPublicas.CELDA_TEXTO_NORMAL_3,laHoja);
+            //PUNTAJE PROMEDIO
+            escribirCelda(5,fila,getResources().getString(R.string.puntajePromedio),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            fila++;
+            escribirCelda(0,fila,getResources().getString(R.string.zona),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            escribirCelda(2,fila,mAudit.getAreaAuditada().getNombreArea(),FuncionesPublicas.CELDA_TEXTO_NORMAL_3,laHoja);
+            //calificacion final
+            escribirCelda(5,fila,getResources().getString(R.string.calificacionFinal),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            fila++;
+            escribirCelda(0,fila,getResources().getString(R.string.piloto),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+           //1S
+            escribirCelda(5,fila,"1S",FuncionesPublicas.CELDA_TEXTO_NORMAL_4,laHoja);
+            fila++;
+            escribirCelda(0,fila,getResources().getString(R.string.auditor),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            if (mAuth.getCurrentUser()!=null) {
+                escribirCelda(2,fila, mAuth.getCurrentUser().getEmail(),FuncionesPublicas.CELDA_TEXTO_NORMAL_3,laHoja);
+            }
+            //2S
+            escribirCelda(5,fila,"2S",FuncionesPublicas.CELDA_TEXTO_NORMAL_4,laHoja);
+            fila++;
+            escribirCelda(0,fila,getResources().getString(R.string.lineaProduccion),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            //3S
+            escribirCelda(5,fila,"3S",FuncionesPublicas.CELDA_TEXTO_NORMAL_4,laHoja);
+            fila++;
+             escribirCelda(0,fila,getResources().getString(R.string.totalPersonas),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            //4S
+            escribirCelda(5,fila,"4S",FuncionesPublicas.CELDA_TEXTO_NORMAL_4,laHoja);
+             fila++;
+            escribirCelda(0,fila,getResources().getString(R.string.superficieTotal),FuncionesPublicas.CELDA_TEXTO_NORMAL_SIN_BORDE,laHoja);
+            //5S
+            escribirCelda(5,fila,"5S",FuncionesPublicas.CELDA_TEXTO_NORMAL_4,laHoja);
+            fila= fila+2;
+
+            //FOTO DEL RADAR
+
+            File filesDir3 = getApplicationContext().getFilesDir();
+            File imageFile3 = new File(filesDir3, "temp3" + ".jpg");
+
+            OutputStream os3;
+            try {
+
+
+                FragmentManager fragmentManager=getSupportFragmentManager();
+                FragmentRadar fragmentRadar = (FragmentRadar) fragmentManager.findFragmentByTag(FuncionesPublicas.FRAGMENT_RADAR);
+                if(fragmentRadar!=null){
+                    Bitmap unBitmap3=fragmentRadar.dameScreenShot();
+                    os3 = new FileOutputStream(imageFile3);
+                    unBitmap3.compress(Bitmap.CompressFormat.JPEG, 100, os3);
+                    os3.flush();
+                    os3.close();
+
+                    fotoRadar = new Compressor(this)
+                            .setMaxWidth(640)
+                            .setMaxHeight(480)
+                            .setQuality(75)
+                            .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                            .compressToFile(imageFile3, imageFile3.getName().replace(".jpg", ".png"));
+
+                    WritableImage image3 = new WritableImage(
+                            3, 3, 2, 8, fotoRadar); //Supports only 'png' images
+                    laHoja.addImage(image3);
+                    laHoja.mergeCells(3, 3, 4, 10);
+
+
+                }
+
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+            }
 
 
 
-            //titulos de la grilla
-            escribirCelda(columna, fila, "S", "titulo", laHoja);
+
+
+
+            //TITULOS DE LA GRILLA
+            escribirCelda(columna, fila, "S", FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titNumPregunta), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPorcentaje), FuncionesPublicas.CELDA_TITULO, laHoja);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titComentario), "titulo", laHoja);
+            escribirCelda(columna, fila, getResources().getString(R.string.titComentario), FuncionesPublicas.CELDA_TITULO, laHoja);
+            laHoja.mergeCells(columna,fila,columna+1,fila);
 
             columna = 0;
-            fila = 4;
+            fila ++;
 
 
             for (Ese unaEse :
                     mAudit.getListaEses()) {
 //            escribo el numero de ese
 
-                escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHoja);
+                escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", FuncionesPublicas.CELDA_TEXTO_NORMAL_2, laHoja);
                 columna = columna + 1;
 
                 //recorro los item de la ese
@@ -1590,39 +1705,40 @@ public class GraficosActivity extends AppCompatActivity {
                     for (Pregunta unaPreg :
                             unaEse.getListaPreguntas()) {
 
-                        escribirCelda(columna, fila, String.valueOf(unaEse.getListaPreguntas().indexOf(unaPreg)+1), "textoNormalCentrado", laHoja);
+                        escribirCelda(columna, fila, String.valueOf(unaEse.getListaPreguntas().indexOf(unaPreg)+1), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                         columna++;
-                        escribirCelda(columna, fila, unaPreg.getTextoPregunta(), "textoNormal", laHoja);
+                        escribirCelda(columna, fila, unaPreg.getTextoPregunta(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
                         columna++;
                         Double unPuntaje;
                         //si el puntaje es cero o null pone cero
                         if (unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()!=0 && unaPreg.getPuntaje()!=9 ) {
-                            escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, unaPreg.getPuntaje().toString(), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                             columna++;
                             unPuntaje = ((unaPreg.getPuntaje() / FuncionesPublicas.MAXIMO_PUNTAJE_PREGUNTA_SIMPLE) * 100);
                         } else if(unaPreg.getPuntaje()!=null && unaPreg.getPuntaje()==9) {
-                            escribirCelda(columna, fila, "-", "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, "-", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                             columna++;
                             unPuntaje = (9.9);
                         }
                         else {
-                            escribirCelda(columna, fila, "0", "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, "0", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                             columna++;
                             unPuntaje = (0.0);
                         }
                         String elPuntaje;
                         if (unPuntaje==9.9){
                             elPuntaje="-";
-                            escribirCelda(columna, fila, elPuntaje, "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, elPuntaje, FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                         }
                         else{
                             elPuntaje = df.format(unPuntaje);
-                            escribirCelda(columna, fila, elPuntaje + "%", "textoNormalCentrado", laHoja);
+                            escribirCelda(columna, fila, elPuntaje + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHoja);
                         }
 
 
                         columna++;
-                        escribirCelda(columna, fila, unaPreg.getComentario(), "textoNormal", laHoja);
+                        escribirCelda(columna, fila, unaPreg.getComentario(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHoja);
+                        laHoja.mergeCells(columna,fila,columna+1,fila);
                         columna = 1;
                         fila++;
                         cantPreguntasTotales++;
@@ -1633,30 +1749,62 @@ public class GraficosActivity extends AppCompatActivity {
                 laHoja.mergeCells(0, fila - cantPreguntasTotales - cantItem, 0, fila - 1);
                 columna = 0;
 
-                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "subTotalEse", laHoja);
+                escribirCelda(0, fila, getResources().getString(R.string.totalEse) + " " + String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
                 laHoja.mergeCells(0, fila, 4, fila);
+                laHoja.mergeCells(5, fila, 6, fila);
 
                 if (unaEse.getPuntajeEse()!=9.9) {
                     Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE_ESE_SIMPLE) * 100;
                     String puntEseStr = df.format(puntEseDouble);
-                    escribirCelda(5, fila, puntEseStr + "%", "subTotalEse", laHoja);
+                    escribirCelda(5, fila, puntEseStr + "%", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
+                    switch (unaEse.getNumeroEse()){
+                        case 1:
+                            escribirCelda(6,6, puntEseStr + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                        break;
+                        case 2:
+                            escribirCelda(6,7, puntEseStr + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                            break;
+                        case 3:
+                            escribirCelda(6,8, puntEseStr + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                            break;
+                        case 4:
+                            escribirCelda(6,9, puntEseStr + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                            break;
+                        case 5:
+                            escribirCelda(6,10, puntEseStr + "%", FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                            break;
+                    }
                 } else {
-                    escribirCelda(5, fila, "-", "subTotalEse", laHoja);
+                    escribirCelda(5, fila, "-", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
                 }
               //  laHoja.mergeCells(5, fila, 6, fila);
                 columna = 0;
                 fila++;
             }
 
-            escribirCelda(0, fila, getResources().getString(R.string.totalAudit), "totalAudit", laHoja);
+            escribirCelda(0, fila, getResources().getString(R.string.totalAudit), FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
             laHoja.mergeCells(0, fila, 4, fila);
+            laHoja.mergeCells(5, fila, 6, fila);
 
             if (mAudit.getPuntajeFinal()!=9.9) {
                 Double puntFinalDouble = mAudit.getPuntajeFinal();
                 String puntFinal = df.format(puntFinalDouble);
-                escribirCelda(5, fila, puntFinal + "%", "totalAudit", laHoja);
+                escribirCelda(5, fila, puntFinal + "%", FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
+                escribirCelda(6,3,String.valueOf(puntFinalDouble),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                escribirCelda(6,4,String.valueOf(puntFinalDouble/5),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+               if (puntFinalDouble/5<=5){
+                   escribirCelda(6,5,getResources().getString(R.string.puntajeMAlo),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+               }
+               else if (puntFinalDouble/5<=10){
+                   escribirCelda(6,5,getResources().getString(R.string.puntajeMedio),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+               }
+               else if(puntFinalDouble/5<=15)
+                   escribirCelda(6,5,getResources().getString(R.string.puntajeBueno),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                else{
+                   escribirCelda(6,5,getResources().getString(R.string.puntajeExcelente),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+               }
             } else {
-                escribirCelda(5, fila,  "-", "totalAudit", laHoja);
+                escribirCelda(5, fila,  "-", FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
             }
 
            // laHoja.mergeCells(5, fila, 6, fila);
@@ -1675,11 +1823,11 @@ public class GraficosActivity extends AppCompatActivity {
         fila = 0;
 
         try {
-            escribirCelda(columna, fila, "S", "titulo", laHojaFotos);
+            escribirCelda(columna, fila, "S", FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), "titulo", laHojaFotos);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPregunta), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna = columna + 1;
-            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), "titulo", laHojaFotos);
+            escribirCelda(columna, fila, getResources().getString(R.string.titPuntaje), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
             columna++;
 
             columna = 0;
@@ -1696,20 +1844,20 @@ public class GraficosActivity extends AppCompatActivity {
                             ) {
                         if (unaPregunta.getListaFotos() != null && unaPregunta.getListaFotos().size() > 0) {
                             //ESCRIBO LA ESE
-                            escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", "textoNormal2", laHojaFotos);
+                            escribirCelda(columna, fila, String.valueOf(mAudit.getListaEses().indexOf(unaEse)+1) + "S", FuncionesPublicas.CELDA_TEXTO_NORMAL_2, laHojaFotos);
                             columna = columna + 1;
                             //ESCRIBO EL ITEM
 
                             //ESCRIBO LA PREGUNTA
-                            escribirCelda(columna, fila, unaPregunta.getTextoPregunta(), "textoNormal", laHojaFotos);
+                            escribirCelda(columna, fila, unaPregunta.getTextoPregunta(), FuncionesPublicas.CELDA_TEXTO_NORMAL, laHojaFotos);
                             columna++;
                             if (unaPregunta.getPuntaje()==null) {
 
-                                escribirCelda(columna, fila, "-", "textoNormalCentrado", laHojaFotos);
+                                escribirCelda(columna, fila, "-", FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHojaFotos);
 
                             } else {
 
-                                escribirCelda(columna, fila, unaPregunta.getPuntaje().toString(), "textoNormalCentrado", laHojaFotos);
+                                escribirCelda(columna, fila, unaPregunta.getPuntaje().toString(), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO, laHojaFotos);
                             }
                             columna++;
 
@@ -1733,12 +1881,12 @@ public class GraficosActivity extends AppCompatActivity {
                                 laHojaFotos.addImage(imagen);
 
 
-                                escribirCelda(columna - 1, 0, getResources().getString(R.string.titFotos) + " " + contador.toString(), "titulo", laHojaFotos);
+                                escribirCelda(columna - 1, 0, getResources().getString(R.string.titFotos) + " " + contador.toString(), FuncionesPublicas.CELDA_TITULO, laHojaFotos);
                                 laHojaFotos.mergeCells(columna - 1, 0, columna + 5, 0);
 
 
 //                                escribo el comentario de la foto y mergeo las celdas esas
-                                escribirCelda(columna, fila + altoFoto + 1, unaFoto.getComentarioFoto(), "textoNormalCentradoSinBorde", laHojaFotos);
+                                escribirCelda(columna, fila + altoFoto + 1, unaFoto.getComentarioFoto(), FuncionesPublicas.CELDA_TEXTO_NORMAL_CENTRADO_SIN_BORDES, laHojaFotos);
                                 laHojaFotos.mergeCells(columna, fila + altoFoto + 1, columna + anchoFoto - 1, fila + altoFoto + 1);
                                 dibujarBordesFoto(columna - 1, fila);
                                 columna = columna + anchoFoto + 1;

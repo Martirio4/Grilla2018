@@ -3,6 +3,10 @@ package com.nomad.mrg5s.Utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StatFs;
@@ -102,6 +106,25 @@ public class FuncionesPublicas {
     public static final String FRAGMENT_SETTINGS = "FRAGMENT_SETTINGS";
     public static final String ID_FOTO = "FOTO_";
     public static final String N_A = "N/A";
+    public static final String FECHA_LARGA = "FECHA_LARGA";
+    public static final String CELDA_TITULO = "CELDA_TITULO";
+    public static final String CELDA_SUBTOTAL = "CELDA_SUBTOTAL";
+    public static final String CELDA_SUBTOTAL_ESE = "CELDA_SUBTOTAL_ESE";
+    public static final String CELDA_TOTAL_AUDIT = "CELDA_TOTAL_AUDIT";
+    public static final String CELDA_TITULO_EXCEL = "CELDA_TITULO_EXCEL";
+    public static final String CELDA_TEXTO_NORMAL = "CELDA_TEXTO_NORMAL";
+    public static final String CELDA_TEXTO_NORMAL_SIN_BORDE = "CELDA_TEXTO_NORMAL_SIN_BORDE";
+    public static final String CELDA_TEXTO_NORMAL_2 = "CELDA_TEXTO_NORMAL_2";
+    public static final String CELDA_TEXTO_NORMAL_CENTRADO = "CELDA_TEXTO_NORMAL_CENTRADO";
+    public static final String CELDA_TEXTO_NORMAL_CENTRADO_SIN_BORDES = "CELDA_TEXTO_NORMAL_CENTRADO_SIN_BORDES";
+    public static final String CELDA_BORDE_INFERIOR = "CELDA_BORDE_INFERIOR";
+    public static final String CELDA_BORDE_LATERAL = "CELDA_BORDE_LATERAL";
+    public static final String CELDA_BORDE_SUPERIOR = "CELDA_BORDE_SUPERIOR";
+    public static final String CELDA_BORDE_SUPERIOR_ULTIMA_CELDA = "CELDA_BORDE_SUPERIOR_ULTIMA_CELDA";
+    public static final String CELDA_ULTIMA_CELDA = "CELDA_ULTIMA_CELDA";
+    public static final String CELDA_TEXTO_NORMAL_3 ="CELDA_TEXTO_NORMAL_3" ;
+    public static final String CELDA_BORDE_GRUESO = "CELDA_BORDE_GRUESO";
+    public static final String CELDA_TEXTO_NORMAL_4 = "CELDA_TEXTO_NORMAL_4";
 
 
     public static boolean isExternalStorageWritable() {
@@ -222,7 +245,7 @@ public class FuncionesPublicas {
 
     public static String dameFechaString(Date fecha, String largo) {
         SimpleDateFormat sdf;
-        if (largo.equals("largo")) {
+        if (largo.equals(FuncionesPublicas.FECHA_LARGA)) {
             sdf = new SimpleDateFormat("dd-MM-yyyy");
         } else {
             sdf = new SimpleDateFormat("dd-MM-yy");
@@ -761,6 +784,25 @@ public class FuncionesPublicas {
         else{
             return false;
         }
+    }
+
+    public static Bitmap getBitmapFromView(View view) {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null)
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        else
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        // draw the view on the canvas
+        view.draw(canvas);
+        //return the bitmap
+        return returnedBitmap;
     }
 
 }

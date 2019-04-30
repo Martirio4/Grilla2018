@@ -742,6 +742,21 @@
     <string name="editarArea">Editar área</string>
     <string name="nuevoNombreArea">Ingrese el nuevo nombre.</string>
     <string name="tituloExcel">Auditoría de zona 5S</string>
+    <string name="unidadNegocio">Unidad de negocio:</string>
+    <string name="fecha">Fecha:</string>
+    <string name="zona">Zona:</string>
+    <string name="piloto">Piloto:</string>
+    <string name="auditor">Auditor:</string>
+    <string name="lineaProduccion">Línea de producción:</string>
+    <string name="totalPersonas">Total de personas en el sector:</string>
+    <string name="superficieTotal">Superficie total estimada [m2]:</string>
+    <string name="puntajeMaximo">Puntaje Total (Máximo 100 puntos):</string>
+    <string name="puntajePromedio">Puntaje promedio (Máximo 20 puntos):</string>
+    <string name="calificacionFinal">Calificación final (sobre el promedio):</string>
+    <string name="puntajeMAlo">Malo. Mejorar urgente.</string>
+    <string name="puntajeMedio">Insuficiente.</string>
+    <string name="puntajeBueno">Bueno. Puede mejorar.</string>
+    <string name="puntajeExcelente">Excelente.</string>
 
 
 </resources>
