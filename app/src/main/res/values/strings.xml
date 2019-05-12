@@ -757,6 +757,11 @@
     <string name="puntajeMedio">Insuficiente.</string>
     <string name="puntajeBueno">Bueno. Puede mejorar.</string>
     <string name="puntajeExcelente">Excelente.</string>
+    <string name="sincronizar">Sincronizar</string>
+    <string name="sincronizarMAnual">No hay conexión, sincronice para compartir cuestionarios.</string>
+    <string name="cuestionariosImportados">Los cuestionarios fueron importados.</string>
+    <string name="noSeRealizoImportacion">No hay coneción a internet. Intente nuevamente.</string>
+    <string name="seRequiereInternet">No hay Conexión a internet. Intente nuevamente.</string>
 
 
 </resources>

@@ -23,6 +23,7 @@ import com.nomad.mrg5s.Model.Item;
 import com.nomad.mrg5s.Model.Pregunta;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.nomad.mrg5s.Utils.ResultListener;
 import com.nomad.mrg5s.View.Activities.ActivityAuditoria;
 import com.nomad.mrg5s.View.Adapter.AdapterCuestionario;
@@ -48,6 +49,7 @@ public class ControllerDatos {
 
     private Context context;
     private String idAuditInstanciada;
+    private String idCuestionarioNuevo;
 
     public ControllerDatos(Context context) {
         this.context = context;
@@ -55,7 +57,14 @@ public class ControllerDatos {
 
     //region CREAR UNA NUEVA AUDITORIA Y LE COPIA LA ESTRUCTURA DE UNA AUDIT MODELO
     public String instanciarAuditoria(final String idCuestionario) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
@@ -226,7 +235,14 @@ public class ControllerDatos {
 
     public void crearCuestionariosDefault(final String nombreArea, final Boolean esEstructuraSimple) {
         //region CREACION CUESTIONARIO SIMPLE
-        Realm nBgRealm = Realm.getDefaultInstance();
+        Realm nBgRealm = null;
+        try {
+            nBgRealm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            nBgRealm=Realm.getDefaultInstance();
+        }
 
         nBgRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -300,7 +316,14 @@ public class ControllerDatos {
     public void
     crearCriteriosDefault() {
         //CUATRO CRITERIOS DEFAULT
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -373,12 +396,20 @@ public class ControllerDatos {
     }
 
     public void crearNuevoCuestionario(final ResultListener<Boolean> listenerCompletado, final String nombreCuestionario, final String tipoCuestionario) {
-        Realm laRealm = Realm.getDefaultInstance();
+        Realm laRealm = null;
+        try {
+            laRealm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            laRealm=Realm.getDefaultInstance();
+        }
 
         laRealm.executeTransactionAsync(new Realm.Transaction() {
                                             @Override
                                             public void execute(@NonNull Realm realm) {
                                                 Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class, FuncionesPublicas.IDCUESTIONARIOS + UUID.randomUUID());
+                                                idCuestionarioNuevo=nuevoCuestionario.getIdCuestionario();
                                                 nuevoCuestionario.setNombreCuestionario(nombreCuestionario);
                                                 nuevoCuestionario.setTipoCuestionario(tipoCuestionario);
 
@@ -395,8 +426,26 @@ public class ControllerDatos {
                 , new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
                         listenerCompletado.finish(true);
+                        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+                            Realm realm = null;
+                            try {
+                                realm = Realm.getDefaultInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Realm.init(context.getApplicationContext());
+                                realm=Realm.getDefaultInstance();
+                            }
+                            Cuestionario nuevoCuestionario = realm.where(Cuestionario.class)
+                                    .equalTo("idCuestionario", idCuestionarioNuevo)
+                                    .findFirst();
+                            if (nuevoCuestionario!=null){
+                                crearCuestionarioFirebase(nuevoCuestionario);
+                            }
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.sincronizarMAnual), Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
@@ -497,21 +546,25 @@ public class ControllerDatos {
             }
         }
     }
-    public void traerCuestionariosFirebase() {
+    public void traerCuestionariosFirebase(final ResultListener<Boolean> listenerCompletado) {
         DatabaseReference mbase = FirebaseDatabase.getInstance().getReference();
         mbase.child("Cuestionarios").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
 
-
                 final String idCuestion = dataSnapshot.child("3-IdCuestionario").getValue(String.class);
 
-
                 eliminarCuestionarioEnMainThread(idCuestion);
-                Realm realm = Realm.getDefaultInstance();
+                Realm realmbg = null;
+                try {
+                    realmbg = Realm.getDefaultInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Realm.init(context.getApplicationContext());
+                    realmbg=Realm.getDefaultInstance();
+                }
 
-
-                realm.executeTransaction(new Realm.Transaction() {
+                realmbg.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -631,10 +684,18 @@ public class ControllerDatos {
                         }
                         realm.copyToRealmOrUpdate(nuevoCuestionario);
                     }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        listenerCompletado.finish(true);
+
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                       listenerCompletado.finish(false);
+                    }
                 });
-
-
-                Toast.makeText(context, "fin?", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -660,7 +721,14 @@ public class ControllerDatos {
     }
     public void eliminarCuestionarioEnMainThread(final String idCuestionario) {
 
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -703,7 +771,14 @@ public class ControllerDatos {
     }
 
     private boolean noExisteCuestionario(String idCuestion) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         Cuestionario elCuestionarioBuscado = realm.where(Cuestionario.class)
                 .equalTo("idCuestionario", idCuestion)
                 .findFirst();
@@ -718,61 +793,83 @@ public class ControllerDatos {
 
     public void eliminarCuestionario(final String idCuestionario) {
 
-        Realm realm = Realm.getDefaultInstance();
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            Realm realm = null;
+            try {
+                realm = Realm.getDefaultInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Realm.init(context.getApplicationContext());
+                realm=Realm.getDefaultInstance();
+            }
 
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm bgRealm) {
-                RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                lasPreguntas.deleteAllFromRealm();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm bgRealm) {
+                    RealmResults<Pregunta> lasPreguntas = bgRealm.where(Pregunta.class)
+                            .equalTo("idCuestionario", idCuestionario)
+                            .isNull("idAudit")
+                            .findAll();
+                    lasPreguntas.deleteAllFromRealm();
 
-                RealmResults<Item> losItem = bgRealm.where(Item.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                losItem.deleteAllFromRealm();
+                    RealmResults<Item> losItem = bgRealm.where(Item.class)
+                            .equalTo("idCuestionario", idCuestionario)
+                            .isNull("idAudit")
+                            .findAll();
+                    losItem.deleteAllFromRealm();
 
-                RealmResults<Ese> lasEses = bgRealm.where(Ese.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .findAll();
-                lasEses.deleteAllFromRealm();
+                    RealmResults<Ese> lasEses = bgRealm.where(Ese.class)
+                            .equalTo("idCuestionario", idCuestionario)
+                            .isNull("idAudit")
+                            .findAll();
+                    lasEses.deleteAllFromRealm();
 
-                RealmResults<Criterio> losCriterios = bgRealm.where(Criterio.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .isNull("idAudit")
-                        .not()
-                        .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
-                        .findAll();
-                losCriterios.deleteAllFromRealm();
+                    RealmResults<Criterio> losCriterios = bgRealm.where(Criterio.class)
+                            .equalTo("idCuestionario", idCuestionario)
+                            .isNull("idAudit")
+                            .not()
+                            .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
+                            .findAll();
+                    losCriterios.deleteAllFromRealm();
 
-                Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
-                        .equalTo("idCuestionario", idCuestionario)
-                        .findFirst();
-                if (elCuestionario != null) {
-                    elCuestionario.deleteFromRealm();
+                    Cuestionario elCuestionario = bgRealm.where(Cuestionario.class)
+                            .equalTo("idCuestionario", idCuestionario)
+                            .findFirst();
+                    if (elCuestionario != null) {
+                        elCuestionario.deleteFromRealm();
+                    }
                 }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(context, context.getString(R.string.cuestionarioEliminado), Toast.LENGTH_SHORT).show();
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(context, context.getString(R.string.cuestionarioEliminado), Toast.LENGTH_SHORT).show();
+                    borrarCuestionarioFirebase(idCuestionario);
 
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
-            }
-        });
+                }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    Toast.makeText(context, context.getString(R.string.cuestionarioNoEliminado), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(context, context.getString(R.string.seRequiereInternet), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
+    private void borrarCuestionarioFirebase(String idCuestionario) {
+    }
+
     public void borrarBaseDatos() {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(@NonNull Realm realm) {
@@ -828,7 +925,14 @@ public class ControllerDatos {
 */
     }
     public void agregarPregunta(final String idCuestionario, final Pregunta nuevaPregunta, final ResultListener<Boolean> listenerCompletado) {
-        final Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransactionAsync(new Realm.Transaction() {
                                           @Override
                                           public void execute(Realm bgRealm) {
@@ -889,7 +993,14 @@ public class ControllerDatos {
     }
 
     public void agregarItem(final String idCuestionario, final Item nuevoItem, final AdapterItems elAdapter, final ResultListener<Boolean> listenerCompletado) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransactionAsync(new Realm.Transaction() {
                                           @Override
                                           public void execute(Realm bgRealm) {
@@ -928,7 +1039,14 @@ public class ControllerDatos {
     }
 
     public void borrarPregunta(final Pregunta unPregunta, final AdapterPreguntas adapterPreguntas) {
-        final Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
 
         realm.executeTransactionAsync(new Realm.Transaction() {
                                           @Override
@@ -967,6 +1085,14 @@ public class ControllerDatos {
                         }
 //                        SI LA PREGUNTA TIENE ITEM NULL ES UN CUESTIONARIO SIMPLE
                         if (unPregunta.getIdItem() != null) {
+                            Realm realm;
+                            try {
+                                realm = Realm.getDefaultInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Realm.init(context.getApplicationContext());
+                                realm=Realm.getDefaultInstance();
+                            }
                             realm.executeTransactionAsync(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -987,6 +1113,14 @@ public class ControllerDatos {
 
 
                         } else {
+                            Realm realm;
+                            try {
+                                realm = Realm.getDefaultInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Realm.init(context.getApplicationContext());
+                                realm=Realm.getDefaultInstance();
+                            }
                             realm.executeTransactionAsync(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -1017,7 +1151,14 @@ public class ControllerDatos {
     }
 
     public void borrarItem(final String idItem, final String idEse, final String idCuestionario, final AdapterItems adapterItems) {
-        final Realm realm = Realm.getDefaultInstance();
+       Realm realm;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
@@ -1056,6 +1197,14 @@ public class ControllerDatos {
                 }
 
                 //REORDENAR LOS ITEM
+                Realm realm;
+                try {
+                    realm = Realm.getDefaultInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Realm.init(context.getApplicationContext());
+                    realm=Realm.getDefaultInstance();
+                }
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -1086,7 +1235,14 @@ public class ControllerDatos {
     }
 
     public void cambiarTextoItem(final Item unItem, final String s, final AdapterItems elAdapter) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -1107,7 +1263,14 @@ public class ControllerDatos {
     }
 
     public void cambiarTextoPregunta(final Pregunta unaPregunta, final String s, final AdapterPreguntas elAdapter) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -1128,7 +1291,14 @@ public class ControllerDatos {
     }
 
     public String crearPreguntaVacia(final String idCuestionario, final String idese, final String idItem) {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         final String[] idPreguntaVacia = new String[1];
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -1165,7 +1335,14 @@ public class ControllerDatos {
     }
 
     public RealmList<Criterio> dameCriteriosDefault() {
-        Realm realm = Realm.getDefaultInstance();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Realm.init(context.getApplicationContext());
+            realm=Realm.getDefaultInstance();
+        }
         RealmResults<Criterio> losCrit = realm.where(Criterio.class)
                 .beginsWith("idCriterio", FuncionesPublicas.IDCRITERIOS_DEFAULT)
                 .findAll();

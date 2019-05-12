@@ -184,6 +184,8 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:visibility="gone"
+                android:id="@+id/card_edit_cuestionarios"
                 android:layout_marginStart="@dimen/margenChico"
                 android:layout_marginEnd="@dimen/margenChico"
                 android:layout_marginTop="@dimen/margenMini"
@@ -224,6 +226,8 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:visibility="gone"
+                android:id="@+id/card_criterios"
                 android:layout_marginStart="@dimen/margenChico"
                 android:layout_marginEnd="@dimen/margenChico"
                 android:layout_marginTop="@dimen/margenMini"

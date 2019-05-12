@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,9 @@ public class FragmentSettings extends Fragment {
         v_editCues = view.findViewById(R.id.tap5);
         v_editCrit = view.findViewById(R.id.tap6);
 
+        CardView cardCriterio=view.findViewById(R.id.card_criterios);
+        CardView cardEdicion=view.findViewById(R.id.card_edit_cuestionarios);
+
 
         areas=view.findViewById(R.id.botonManageAreas);
         logout=view.findViewById(R.id.botonLogOut);
@@ -116,8 +120,17 @@ public class FragmentSettings extends Fragment {
         logout.setTypeface(roboto);
         borrar.setTypeface(roboto);
         salir.setTypeface(roboto);
-
         tuto.setTypeface(roboto);
+
+        Boolean esSuperUsuario =config.getBoolean("esSuperUsuario",false);
+        if (esSuperUsuario){
+            cardCriterio.setVisibility(View.VISIBLE);
+            cardEdicion.setVisibility(View.VISIBLE);
+        }
+        else{
+            cardCriterio.setVisibility(View.GONE);
+            cardEdicion.setVisibility(View.GONE);
+        }
 
         Boolean textoParaBotonTuto=config.getBoolean("estadoTuto",false);
         if (textoParaBotonTuto){

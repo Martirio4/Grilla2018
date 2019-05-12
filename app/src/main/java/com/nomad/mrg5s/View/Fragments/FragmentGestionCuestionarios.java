@@ -20,15 +20,22 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.clans.fab.FloatingActionMenu;
+import com.nomad.mrg5s.DAO.ControllerDatos;
 import com.nomad.mrg5s.Model.Cuestionario;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
+import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.nomad.mrg5s.Utils.ResultListener;
 import com.nomad.mrg5s.View.Adapter.AdapterCuestionario;
 import com.github.clans.fab.FloatingActionButton;
+
+import java.util.ResourceBundle;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,10 +46,8 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
     private RecyclerView recyclerCuestionarios;
     private AdapterCuestionario adapterCuestionario;
     private LinearLayoutManager layoutManager;
-    private TextView textView;
     private Notificable notificable;
-    private TextView textoBotonEditorCuestionarios;
-    private FloatingActionButton fabAgregarPregunta;
+    private ControllerDatos controllerDatos;
 
 
     public FragmentGestionCuestionarios() {
@@ -63,14 +68,13 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_gestion_cuestionarios, container, false);
-
+        controllerDatos=new ControllerDatos(view.getContext());
 
         recyclerCuestionarios=view.findViewById(R.id.recyclerCuestionarios);
-        textoBotonEditorCuestionarios=view.findViewById(R.id.botonAgregarCuestionario);
-        textoBotonEditorCuestionarios.setText(getString(R.string.addCuestionario));
+        TextView textoBotonEditorCuestionarios = view.findViewById(R.id.botonAgregarCuestionario);
+        textoBotonEditorCuestionarios.setVisibility(View.GONE);
 
         // String usuario=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
 
         adapterCuestionario= new AdapterCuestionario();
         adapterCuestionario.setContext(getContext());
@@ -80,7 +84,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
 
         actualizarDatosRecycler(view.getContext());
 
-        textView= view.findViewById(R.id.textoTituloManage);
+        TextView textView = view.findViewById(R.id.textoTituloManage);
         Typeface roboto = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         textView.setTypeface(roboto);
 
@@ -97,22 +101,93 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
         adapterCuestionario.setListener(listenerCuestionario);
 
 
-        FloatingActionButton fabNuevoCuestionario = view.findViewById(R.id.agregarArea);
+        final FloatingActionMenu fabMenu = view.findViewById(R.id.agregarArea);
+        fabMenu.setMenuButtonColorNormal(ContextCompat.getColor(view.getContext(),R.color.colorAccent));
 
-        fabNuevoCuestionario.setButtonSize(FloatingActionButton.SIZE_NORMAL);
-        fabNuevoCuestionario.setColorNormal(ContextCompat.getColor(getContext(),R.color.mirgorNaranja));
+        FloatingActionButton fabNuevoCuestionario = new FloatingActionButton(view.getContext());
+        fabNuevoCuestionario.setColorNormal(ContextCompat.getColor(view.getContext(), R.color.tile3));
+        fabNuevoCuestionario.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fabNuevoCuestionario.setLabelText(getString(R.string.addCuestionario));
         fabNuevoCuestionario.setImageResource(R.drawable.ic_nuevo_cuestionario_black_24dp);
+        fabMenu.addMenuButton(fabNuevoCuestionario);
 
-
+        fabNuevoCuestionario.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        fabNuevoCuestionario.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
 
 
         fabNuevoCuestionario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-            crearDialogoNuevoCuestionario(view);
-                
+                fabMenu.close(true);
+                crearDialogoNuevoCuestionario(view);
+
             }
         });
+
+        FloatingActionButton fabSincronizar = new FloatingActionButton(view.getContext());
+        fabSincronizar.setColorNormal(ContextCompat.getColor(view.getContext(), R.color.tile3));
+        fabSincronizar.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fabSincronizar.setLabelText(getString(R.string.sincronizar));
+        fabSincronizar.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
+        fabMenu.addMenuButton(fabSincronizar);
+
+        fabSincronizar.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        fabSincronizar.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+
+        fabSincronizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.close(true);
+
+                for (Cuestionario elCuestionario :
+                        listaCuestionarios) {
+                    controllerDatos.crearCuestionarioFirebase(elCuestionario);
+                }
+
+            }
+        });
+
+        FloatingActionButton fabImportar = new FloatingActionButton(view.getContext());
+        fabImportar.setColorNormal(ContextCompat.getColor(view.getContext(), R.color.tile3));
+        fabImportar.setButtonSize(FloatingActionButton.SIZE_MINI);
+        fabImportar.setLabelText("importar");
+        fabImportar.setImageResource(R.drawable.ic_arrow_back_black_24dp);
+        fabMenu.addMenuButton(fabImportar);
+
+        fabImportar.setLabelColors(ContextCompat.getColor(getActivity(), R.color.tile2),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        fabImportar.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+
+        fabImportar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.close(true);
+                if (HTTPConnectionManager.isNetworkingOnline(view.getContext())) {
+                    controllerDatos.traerCuestionariosFirebase(new ResultListener<Boolean>() {
+                        @Override
+                        public void finish(Boolean resultado) {
+                            if (resultado){
+                                actualizarDatosRecycler(view.getContext());
+                                Toast.makeText(view.getContext(), view.getContext().getString(R.string.cuestionariosImportados), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(view.getContext(), view.getContext().getString(R.string.noSeRealizoImportacion), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
+
+
 
 
         return view;
@@ -130,8 +205,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
         final ImageView imagenSimple = laView.findViewById(R.id.img_simple);
         final ImageView imagenEstructurado = laView.findViewById(R.id.img_estructurado);
         final RadioGroup radioGroup =laView.findViewById(R.id.rg_estructura);
-        final AppCompatRadioButton rb_Simple=laView.findViewById(R.id.rbEstructuraSimple);
-        final AppCompatRadioButton rb_Estructurada=laView.findViewById(R.id.rbEstructuraEstructurada);
+
 
         radioGroup.check(R.id.rbEstructuraSimple);
 

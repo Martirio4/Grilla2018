@@ -2,6 +2,7 @@ package com.nomad.mrg5s.View.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nomad.mrg5s.Model.Usuario;
 import com.nomad.mrg5s.R;
+import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.Utils.HTTPConnectionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -54,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private String contraseña;
     private TextView passwordOlvidada;
     private Usuario nuevoUsuario;
+    private SharedPreferences config;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         passwordOlvidada = findViewById(R.id.passwordOlvidada);
         passwordOlvidada.setVisibility(View.VISIBLE);
-
+        config =getSharedPreferences("prefs", 0);
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -217,6 +220,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void irALanding() {
+
+        String mailActual= mAuth.getCurrentUser().getEmail();
+
+        if (mailActual.equals(FuncionesPublicas.NOMAD)||mailActual.equals(FuncionesPublicas.MAUROMIRGOR)||mailActual.equals(FuncionesPublicas.HERNANMIRGOR)){
+            SharedPreferences.Editor editor = config.edit();
+            editor.putBoolean("esSuperUsuario", true);
+            editor.commit();
+        }
+
         progressBar.setVisibility(View.GONE);
         Intent unIntent = new Intent(this, LandingActivity.class);
         startActivity(unIntent);

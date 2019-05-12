@@ -273,7 +273,7 @@ public class FragmentPregunta_ extends Fragment {
 
         //agregar los fabs al menu
         fabMenu= view.findViewById(R.id.fab_menu);
-        fabMenu.setMenuButtonColorNormal(ContextCompat.getColor(getContext(),R.color.colorAccent));
+        fabMenu.setMenuButtonColorNormal(ContextCompat.getColor(view.getContext(),R.color.colorAccent));
 
 //        SI ESTOY EN MODO EDITAR LA AUDITORIA SETEO LOS LISTENER PARA LOS BOTONES, SINO NO LO CARGO
         if (origen.equals(FuncionesPublicas.NUEVA_AUDITORIA) || origen.equals(FuncionesPublicas.EDITAR_AUDITORIA)){
