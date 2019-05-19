@@ -150,6 +150,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
 
             }
         });
+        fabSincronizar.setVisibility(View.GONE);
 
         FloatingActionButton fabImportar = new FloatingActionButton(view.getContext());
         fabImportar.setColorNormal(ContextCompat.getColor(view.getContext(), R.color.tile3));
@@ -182,6 +183,7 @@ public class FragmentGestionCuestionarios extends Fragment implements AdapterCue
                 }
             }
         });
+        fabImportar.setVisibility(View.GONE);
 
 
 

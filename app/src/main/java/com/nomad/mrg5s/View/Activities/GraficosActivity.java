@@ -1579,7 +1579,7 @@ public class GraficosActivity extends AppCompatActivity {
             laHoja.mergeCells(2,0,4,1);
             laHoja.mergeCells(5,0,6,1);
             escribirCelda(2,0,getResources().getString(R.string.tituloExcel),FuncionesPublicas.CELDA_TITULO_EXCEL,laHoja);
-            escribirCelda(5,0,"",FuncionesPublicas.CELDA_TITULO_EXCEL,laHoja);
+            escribirCelda(5,0,mAudit.getAreaAuditada().getNombreArea(),FuncionesPublicas.CELDA_TITULO_EXCEL,laHoja);
         }
         catch (Exception e) {
             e.printStackTrace();

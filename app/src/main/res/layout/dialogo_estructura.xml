@@ -30,22 +30,25 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:padding="@dimen/margenChico"
                 android:id="@+id/img_simple"
                 android:background="@drawable/boton3"
                 android:src="@drawable/simple"
-                android:layout_weight="50"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:visibility="gone"
                 android:layout_weight="5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/img_estructurado"
                 android:background="@drawable/boton3"
                 android:src="@drawable/complicado"
@@ -60,9 +63,10 @@
 
 
             <RadioGroup
+                android:layout_gravity="center"
                 android:id="@+id/rg_estructura"
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <android.support.v7.widget.AppCompatRadioButton
                     android:text="@string/estructuraSimplificada"
@@ -73,10 +77,12 @@
                     android:layout_weight="50"
                     android:layout_height="wrap_content" />
                 <ImageView
+                    android:visibility="gone"
                     android:layout_weight="10"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
                 <android.support.v7.widget.AppCompatRadioButton
+                    android:visibility="gone"
                     android:text="@string/estructuraEstructurada"
                     android:textColorHighlight="@color/colorAccent"
                     app:buttonTint="@color/tile4"

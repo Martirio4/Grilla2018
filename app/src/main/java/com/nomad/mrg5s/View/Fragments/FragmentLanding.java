@@ -202,7 +202,7 @@ public class FragmentLanding extends Fragment {
             if (HTTPConnectionManager.isNetworkingOnline(getContext())){
                 DatabaseReference mbase= FirebaseDatabase.getInstance().getReference();
 
-                mbase.child("data").child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+                mbase.child("data").child("versionproduccion").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue()!=null) {
