@@ -1,7 +1,9 @@
 package com.nomad.mrg5s.View.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +13,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -18,7 +21,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -48,8 +50,10 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -64,6 +68,7 @@ import jxl.format.Border;
 import jxl.format.BorderLineStyle;
 import jxl.format.Colour;
 import jxl.format.VerticalAlignment;
+import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
@@ -123,6 +128,8 @@ public class GraficosActivity extends AppCompatActivity {
     private DecimalFormat df;
 
     private String cheatLevel;
+    private File targetFile;
+    private WritableWorkbook copy;
     
 
     @Override
@@ -864,6 +871,8 @@ public class GraficosActivity extends AppCompatActivity {
         GraficosActivity.this.finish();
     }
 
+
+
     public WritableWorkbook crearLibroExcel(String fileName) {
         //exports must use a temp file while writing to avoid memory hogging
         WorkbookSettings wbSettings = new WorkbookSettings();
@@ -881,17 +890,19 @@ public class GraficosActivity extends AppCompatActivity {
         }
         //create a standard java.io.File object for the Workbook to use
         File wbfile = new File(dir, fileName);
-
-        WritableWorkbook wb = null;
-
+//
         try {
-            //create a new WritableWorkbook using the java.io.File and
-            //WorkbookSettings from above
-            wb = Workbook.createWorkbook(wbfile, wbSettings);
-        } catch (IOException ex) {
-
+            WorkbookSettings opciones= new WorkbookSettings();
+            opciones.setEncoding("iso-8859-1");
+            Workbook existingWorkbook = Workbook.getWorkbook(getAssets().open("basefile/baseexcel.xls"),opciones);// This opens up a read-only copy of the workbook
+            copy = Workbook.createWorkbook(wbfile,existingWorkbook);
+             // This opens up a writable workbook so that we can edit the copy
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return wb;
+
+        return copy;
+
     }
 
     public WritableSheet crearHoja(WritableWorkbook wb,
@@ -1549,7 +1560,7 @@ public class GraficosActivity extends AppCompatActivity {
             OutputStream os2;
             try {
                 os2 = new FileOutputStream(imageFile2);
-                Bitmap unBitmap2=BitmapFactory.decodeResource(getResources(),R.drawable.logo_mirg_peque);
+                Bitmap unBitmap2=BitmapFactory.decodeResource(getResources(),R.drawable.logo_mirg_peque2);
 
                 unBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, os2);
                 os2.flush();

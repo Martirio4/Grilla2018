@@ -7,7 +7,7 @@
     >
 <ImageView
     android:scaleType="centerCrop"
-    android:src="@drawable/splash2"
+    android:src="@drawable/splash3"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
     <TextView

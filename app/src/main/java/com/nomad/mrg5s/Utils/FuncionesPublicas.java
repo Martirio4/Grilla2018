@@ -126,7 +126,7 @@ public class FuncionesPublicas {
     public static final String CELDA_BORDE_GRUESO = "CELDA_BORDE_GRUESO";
     public static final String CELDA_TEXTO_NORMAL_4 = "CELDA_TEXTO_NORMAL_4";
 
-    public static final String NOMAD = "martin@gol.com";
+    public static final String DEV = "risomartin@gmail.com";
     public static final String HERNANMIRGOR  = "Hernan.Busto@mirgor.com.ar";
     public static final String MAUROMIRGOR = "Mauro.Gonzalez@mirgor.com.ar";
 

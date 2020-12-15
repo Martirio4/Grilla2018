@@ -249,7 +249,7 @@ public class ControllerDatos {
             public void execute(@NonNull Realm realm) {
                 Cuestionario nuevoCuestionario = realm.createObject(Cuestionario.class, FuncionesPublicas.IDCUESTIONARIOS_DEFAULT + UUID.randomUUID());
 
-                nuevoCuestionario.setNombreCuestionario(nombreArea);
+                nuevoCuestionario.setNombreCuestionario(clasificarNombresArea(nombreArea));
                 nuevoCuestionario.setTipoCuestionario(FuncionesPublicas.ESTRUCTURA_SIMPLE);
                 nuevoCuestionario.setListaEses(new RealmList<Ese>());
 
@@ -293,7 +293,11 @@ public class ControllerDatos {
                             Integer idStringCrit= context.getResources().getIdentifier(nombreStringCrit,"string",context.getPackageName());
 
                             if (idStringCrit!=0){
-                                unCriterio.setTextoCriterio(context.getString(idStringCrit));
+                                try {
+                                    unCriterio.setTextoCriterio(context.getString(idStringCrit));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                             else{
                                 unCriterio.setTextoCriterio(context.getString(R.string.error));
@@ -309,9 +313,20 @@ public class ControllerDatos {
         //endregion
     }
 
-
-
-
+    private String clasificarNombresArea(String nombreArea) {
+        if (nombreArea.equals("oficina")){
+            return "Oficinas";
+        }
+        else if (nombreArea.equals("produccion")){
+            return "Produccion";
+        }
+        else if (nombreArea.equals("logistica")){
+            return"Logística - Talleres";
+        }else if (nombreArea.equals("banio")){
+            return"Baños - Descansos";
+        }
+        return null;
+    }
 
     public void
     crearCriteriosDefault() {

@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nomad.mrg5s.Model.Usuario;
 import com.nomad.mrg5s.R;
@@ -223,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String mailActual= mAuth.getCurrentUser().getEmail();
 
-        if (mailActual.equals(FuncionesPublicas.NOMAD)||mailActual.equals(FuncionesPublicas.MAUROMIRGOR)||mailActual.equals(FuncionesPublicas.HERNANMIRGOR)){
+        if (mailActual.equals(FuncionesPublicas.DEV)||mailActual.equals(FuncionesPublicas.MAUROMIRGOR)||mailActual.equals(FuncionesPublicas.HERNANMIRGOR)){
             SharedPreferences.Editor editor = config.edit();
             editor.putBoolean("esSuperUsuario", true);
             editor.commit();
