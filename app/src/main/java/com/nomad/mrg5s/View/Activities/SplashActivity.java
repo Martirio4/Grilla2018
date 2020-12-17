@@ -39,24 +39,7 @@ public class SplashActivity extends AppCompatActivity {
         }, SPLASH_DISPLAY_LENGHT);
 
     }
-    private void avisarPruebas() {
-        new MaterialDialog.Builder(SplashActivity.this)
-                .title(SplashActivity.this.getString(R.string.advertencia))
-                .buttonsGravity(GravityEnum.CENTER)
-                .cancelable(false)
-                .contentColor(ContextCompat.getColor(SplashActivity.this, R.color.primary_text))
-                .backgroundColor(ContextCompat.getColor(SplashActivity.this, R.color.tile1))
-                .titleColor(ContextCompat.getColor(SplashActivity.this, R.color.tile4))
-                .content(getResources().getString(R.string.versionDePrueba))
-                .positiveText(R.string.ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        irALogin();
-                    }
-                })
-                .show();
-    }
+
 
     private void irALogin(){
         Intent mainIntent = new Intent(SplashActivity.this,LoginActivity.class);

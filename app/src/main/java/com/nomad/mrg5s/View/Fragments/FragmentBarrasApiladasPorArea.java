@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.nomad.mrg5s.Model.Area;
 import com.nomad.mrg5s.Model.Auditoria;
+import com.nomad.mrg5s.Model.Ese;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.nomad.mrg5s.Utils.MyAxisValueFormatterEquis;
@@ -152,7 +153,12 @@ public class FragmentBarrasApiladasPorArea extends Fragment {
             if (unAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
                 puntDouble = unAudit.getPuntajeFinal();
             } else {
-                puntDouble=unAudit.getPuntajeFinal()/100;
+                double puntajeIdeal=0.0;
+                for (Ese unaeses :
+                        unAudit.getListaEses()) {
+                    puntajeIdeal=puntajeIdeal+unaeses.getListaPreguntas().size()*4;
+                }
+                puntDouble=unAudit.getPuntajeFinal()/puntajeIdeal;
             }
             float punFloat=(float)puntDouble;
 

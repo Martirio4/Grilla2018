@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nomad.mrg5s.Model.Auditoria;
+import com.nomad.mrg5s.Model.Ese;
 import com.nomad.mrg5s.R;
 import com.nomad.mrg5s.Utils.FuncionesPublicas;
 import com.squareup.picasso.Picasso;
@@ -221,12 +222,18 @@ public class AdapterAuditorias extends RecyclerView.Adapter implements View.OnCl
                 puntaje5=unAuditoria.getListaEses().get(4).getPuntajeEse()/5;
             }
             else{
-                promedio5s=unAuditoria.getPuntajeFinal()/100;
-                puntaje1=unAuditoria.getListaEses().get(0).getPuntajeEse()/20;
-                puntaje2=unAuditoria.getListaEses().get(1).getPuntajeEse()/20;
-                puntaje3=unAuditoria.getListaEses().get(2).getPuntajeEse()/20;
-                puntaje4=unAuditoria.getListaEses().get(3).getPuntajeEse()/20;
-                puntaje5=unAuditoria.getListaEses().get(4).getPuntajeEse()/20;
+                double puntajeIdeal=0.0;
+                for (Ese unaeses :
+                        unAuditoria.getListaEses()) {
+                    puntajeIdeal=puntajeIdeal+unaeses.getListaPreguntas().size()*4;
+                }
+
+                promedio5s=unAuditoria.getPuntajeFinal()/puntajeIdeal;
+                puntaje1=unAuditoria.getListaEses().get(0).getPuntajeEse()/(unAuditoria.getListaEses().get(0).getListaPreguntas().size()*4);
+                puntaje2=unAuditoria.getListaEses().get(1).getPuntajeEse()/(unAuditoria.getListaEses().get(1).getListaPreguntas().size()*4);
+                puntaje3=unAuditoria.getListaEses().get(2).getPuntajeEse()/(unAuditoria.getListaEses().get(2).getListaPreguntas().size()*4);
+                puntaje4=unAuditoria.getListaEses().get(3).getPuntajeEse()/(unAuditoria.getListaEses().get(3).getListaPreguntas().size()*4);
+                puntaje5=unAuditoria.getListaEses().get(4).getPuntajeEse()/(unAuditoria.getListaEses().get(4).getListaPreguntas().size()*4);
             }
                 //FIN CALCULO PUNTAJES
 

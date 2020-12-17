@@ -532,13 +532,13 @@ public class FuncionesPublicas {
                 if (mAudit != null && tipoEstructura.equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)){
                     Double sumatoriaEse = 0.0;
                     Integer divisorEse = 0;
-                    Integer sumaTotal=0;
+                    Double sumaTotal=0.0;
 
 
                     for (Ese unaEse : mAudit.getListaEses()) {
 
-                        Integer sumatoriaPreguntas = 0;
-                        Integer divisorPreguntas = 0;
+                        Double sumatoriaPreguntas = 0.0;
+                        Double divisorPreguntas = 0.0;
 
                         for (Pregunta unaPregunta : unaEse.getListaPreguntas()) {
 
@@ -558,7 +558,6 @@ public class FuncionesPublicas {
                         }
                         else{
 
-//                            unaEse.setPuntajeEse((sumatoriaPreguntas/divisorPreguntas)*1.0);
                             unaEse.setPuntajeEse(sumatoriaPreguntas*1.0);
                             sumatoriaEse = sumatoriaEse + unaEse.getPuntajeEse();
                             sumaTotal =sumaTotal+sumatoriaPreguntas;
@@ -566,7 +565,6 @@ public class FuncionesPublicas {
                         }
                     }
                     //chequear esta linea
-//                    mAudit.setPuntajeFinal((sumatoriaEse /divisorEse )/5.0);
                     mAudit.setPuntajeFinal(sumaTotal*1.0);
                 }
             }

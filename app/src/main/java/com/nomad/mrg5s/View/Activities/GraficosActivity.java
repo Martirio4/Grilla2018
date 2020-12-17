@@ -706,11 +706,11 @@ public class GraficosActivity extends AppCompatActivity {
         auditActual = laAudit;
 
         if (laAudit != null && laAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_ESTRUCTURADA)) {
-            promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
-            promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse();
-            promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse();
-            promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse();
-            promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse();
+            promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse()/(laAudit.getListaEses().get(0).getListaPreguntas().size()*4);
+            promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse()/(laAudit.getListaEses().get(1).getListaPreguntas().size()*4);
+            promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse()/(laAudit.getListaEses().get(2).getListaPreguntas().size()*4);
+            promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse()/(laAudit.getListaEses().get(3).getListaPreguntas().size()*4);
+            promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse()/(laAudit.getListaEses().get(4).getListaPreguntas().size()*4);
 
             FragmentRadar graficoFragment = new FragmentRadar();
             Bundle bundle = new Bundle();
@@ -730,19 +730,20 @@ public class GraficosActivity extends AppCompatActivity {
             fragmentTransaction.commit();
         }
         if (laAudit != null && laAudit.getEstructuraAuditoria().equals(FuncionesPublicas.ESTRUCTURA_SIMPLE)) {
-            promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse();
-            promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse();
-            promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse();
-            promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse();
-            promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse();
+            promedioSeiri = laAudit.getListaEses().get(0).getPuntajeEse()/(laAudit.getListaEses().get(0).getListaPreguntas().size()*4);
+            promedioSeiton = laAudit.getListaEses().get(1).getPuntajeEse()/(laAudit.getListaEses().get(1).getListaPreguntas().size()*4);
+            promedioSeiso = laAudit.getListaEses().get(2).getPuntajeEse()/(laAudit.getListaEses().get(2).getListaPreguntas().size()*4);
+            promedioSeiketsu = laAudit.getListaEses().get(3).getPuntajeEse()/(laAudit.getListaEses().get(3).getListaPreguntas().size()*4);
+            promedioShitsuke = laAudit.getListaEses().get(4).getPuntajeEse()/(laAudit.getListaEses().get(4).getListaPreguntas().size()*4);
+
 
             FragmentRadar graficoFragment = new FragmentRadar();
             Bundle bundle = new Bundle();
-            bundle.putDouble(FragmentRadar.PUNJTAJE1, promedioSeiri/20);
-            bundle.putDouble(FragmentRadar.PUNJTAJE2, promedioSeiton/20);
-            bundle.putDouble(FragmentRadar.PUNJTAJE3, promedioSeiso/20);
-            bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu/20);
-            bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke/20);
+            bundle.putDouble(FragmentRadar.PUNJTAJE1, promedioSeiri);
+            bundle.putDouble(FragmentRadar.PUNJTAJE2, promedioSeiton);
+            bundle.putDouble(FragmentRadar.PUNJTAJE3, promedioSeiso);
+            bundle.putDouble(FragmentRadar.PUNJTAJE4, promedioSeiketsu);
+            bundle.putDouble(FragmentRadar.PUNJTAJE5, promedioShitsuke);
             bundle.putString(FragmentRadar.AREA, laAudit.getAreaAuditada().getNombreArea());
             bundle.putBoolean(FragmentRadar.COMPLETO, laAudit.getAuditEstaCerrada());
             bundle.putString(FragmentRadar.ESTRUCTURA, laAudit.getEstructuraAuditoria());
@@ -780,8 +781,13 @@ public class GraficosActivity extends AppCompatActivity {
                 bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal());
             }
             else{
-                //100 es el puntaje maximo posible
-                bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal()/100);
+
+                double puntajeIdeal=0.0;
+                for (Ese unaeses :
+                        laAudit.getListaEses()) {
+                    puntajeIdeal=puntajeIdeal+unaeses.getListaPreguntas().size()*4;
+                }
+                bundle.putDouble(FragmentBarrasApiladas.PUNTAJE_AUDITORIA, laAudit.getPuntajeFinal()/puntajeIdeal);
             }
 
         }
@@ -1765,7 +1771,8 @@ public class GraficosActivity extends AppCompatActivity {
                 laHoja.mergeCells(5, fila, 6, fila);
 
                 if (unaEse.getPuntajeEse()!=9.9) {
-                    Double puntEseDouble = (unaEse.getPuntajeEse() / FuncionesPublicas.MAXIMO_PUNTAJE_ESE_SIMPLE) * 100;
+
+                    Double puntEseDouble = (unaEse.getPuntajeEse() / (unaEse.getListaPreguntas().size()*4)) * 100;
                     String puntEseStr = df.format(puntEseDouble);
                     escribirCelda(5, fila, puntEseStr + "%", FuncionesPublicas.CELDA_SUBTOTAL_ESE, laHoja);
                     switch (unaEse.getNumeroEse()){
@@ -1798,11 +1805,18 @@ public class GraficosActivity extends AppCompatActivity {
             laHoja.mergeCells(5, fila, 6, fila);
 
             if (mAudit.getPuntajeFinal()!=9.9) {
-                Double puntFinalDouble = mAudit.getPuntajeFinal();
+
+                double puntajeIdeal=0.0;
+                for (Ese unaeses :
+                        mAudit.getListaEses()) {
+                    puntajeIdeal=puntajeIdeal+unaeses.getListaPreguntas().size()*4;
+                }
+
+                Double puntFinalDouble = (mAudit.getPuntajeFinal()/puntajeIdeal)*100;
                 String puntFinal = df.format(puntFinalDouble);
                 escribirCelda(5, fila, puntFinal + "%", FuncionesPublicas.CELDA_TOTAL_AUDIT, laHoja);
-                escribirCelda(6,3,String.valueOf(puntFinalDouble),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
-                escribirCelda(6,4,String.valueOf(puntFinalDouble/5),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                escribirCelda(6,3,String.valueOf(mAudit.getPuntajeFinal()),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
+                escribirCelda(6,4,String.valueOf(mAudit.getPuntajeFinal()/5),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
                if (puntFinalDouble/5<=5){
                    escribirCelda(6,5,getResources().getString(R.string.puntajeMAlo),FuncionesPublicas.CELDA_TEXTO_NORMAL_3, laHoja);
                }
